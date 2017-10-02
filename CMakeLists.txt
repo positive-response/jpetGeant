@@ -5,17 +5,34 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
+set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # add geant4 with vis drivers
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
 find_package(ROOT REQUIRED)
-
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 
+                #                REFLEX_GENERATE_DICTIONARY(JPetMCClasses include/Event.hh)
+                #                add_library(JPetMCClassesDict SHARED ${sources} JPetMCClasses.cxx)
+                #                set(libsuffix .so)
+                #                set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
+                #                set_target_properties(JPetMCClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
+                #                target_link_libraries(JPetMCClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+                #
+                ##include(${ROOT_USE_FILE}) -- below workaround 
+                #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
+                ##
+                ##
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/Event.hh)
+#---Create a shared library with geneated dictionary
+add_library(JPetMCClassesDict SHARED src/Event.cc JPetMCClasses.cxx )
+target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
+
+
+#---Create  a main program using the library
 add_executable(jpet_mc ${sources} ${headers})
-target_link_libraries(jpet_mc ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+target_link_libraries(jpet_mc ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} JPetMCClassesDict)

@@ -22,8 +22,8 @@ class HistoManager
     private:
         TFile*   fRootFile;
         TH1D*    fHisto[MaxHisto];
-        TTree*   fNtuple1; 
-        TTree*   fNtuple2;
+        TTree*   fTree; 
+        TBranch* fBranch;
 
 };
 
