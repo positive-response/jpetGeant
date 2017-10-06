@@ -2,7 +2,7 @@
 
 ParticleBlock::ParticleBlock()
 {
-        fParticleId = 10;
+        fParticlePDGId = 0;
 }
 
 ParticleBlock::~ParticleBlock()

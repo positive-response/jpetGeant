@@ -14,7 +14,7 @@ class ParticleBlock : public TObject
         ~ParticleBlock();
 
     private:
-        G4int fParticleId;
+        G4int fParticlePDGId;
 
     ClassDef(ParticleBlock,1)     
 };

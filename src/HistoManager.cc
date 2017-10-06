@@ -36,15 +36,6 @@ void HistoManager::Book()
      fEvent = new  Event();
 
     fBranch = fTree->Branch("event", &fEvent);
-//    fBranch = fTree->Branch("event", &fEvent,64000,0);
-//    fBranch->SetAutoDelete(kFALSE);
-//
-
-//    fNtuple1->Branch("Eabs", &fEabs, "Eabs/D");
-//    fNtuple1->Branch("Egap", &fEgap, "Egap/D");
-//
-//     fNtuple2 = new TTree("Ntuple2", "TrackL");  
-//     fNtuple2->Branch("Labs", &fLabs, "Labs/D");
 
 
 }
