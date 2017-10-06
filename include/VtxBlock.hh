@@ -13,6 +13,8 @@ class VtxBlock : public TObject
     public:
         VtxBlock();
         ~VtxBlock();
+        void SetMotherId(G4int val) { fMotherId = val; }
+        void SetTime(G4double val) { fTime = val; }
 
 
     private:
@@ -25,7 +27,7 @@ class VtxBlock : public TObject
         G4int           fMaterial;
 
 
-//        ClassDef(VtxBlock,1)
+        ClassDef(VtxBlock,1)
 
 };
 

@@ -2,11 +2,12 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
-#include "Event.hh"
 #include <vector>
 
 
 ClassImp(Event)
+ClassImp(VtxBlock)
+ClassImp(ParticleBlock)
 
 HistoManager::HistoManager()
 {}
@@ -32,11 +33,12 @@ void HistoManager::Book()
     fTree = new TTree("TreeMC", "Tree keeps output from Geant simulation");
     fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
 
-//    VtxBlock *event = new VtxBlock();
-//    fBranch = fTree->Branch("event", &event,64000,1);
+     fEvent = new  Event();
+
+    fBranch = fTree->Branch("event", &fEvent);
+//    fBranch = fTree->Branch("event", &fEvent,64000,0);
 //    fBranch->SetAutoDelete(kFALSE);
 //
-//    fTree->Fill();
 
 //    fNtuple1->Branch("Eabs", &fEabs, "Eabs/D");
 //    fNtuple1->Branch("Egap", &fEgap, "Egap/D");
@@ -47,6 +49,10 @@ void HistoManager::Book()
 
 }
 
+void HistoManager::FillTree()
+{
+    fTree->Fill();
+}
 
 void HistoManager::Save()
 {

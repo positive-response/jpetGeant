@@ -2,6 +2,8 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
+#include "EventAction.hh"
+#include "Event.hh"
 
 ActionInitialization::ActionInitialization()
      : G4VUserActionInitialization()
@@ -14,6 +16,7 @@ void ActionInitialization::BuildForMaster() const
 {
     HistoManager*  histo = new HistoManager();
     SetUserAction(new RunAction(histo));
+
 }
 
 void ActionInitialization::Build() const
@@ -21,6 +24,7 @@ void ActionInitialization::Build() const
     HistoManager*  histo = new HistoManager();
     SetUserAction(new RunAction(histo));
 
+    SetUserAction(new EventAction(histo));
     SetUserAction(new PrimaryGeneratorAction);
 }
 

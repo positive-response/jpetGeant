@@ -4,20 +4,23 @@
 #include "ParticleBlock.hh"
 #include "VtxBlock.hh"
 #include "TObject.h"
+#include "ParticleBlock.hh"
 
-//class VtxBlock;
-//class ParticleBlock;
 
 class Event : public TObject
 {
     private:
-        //VtxBlock    fVtx;
-        G4int   someConst;
+        VtxBlock*   fVtx;
+        ParticleBlock*  fParticles;
 
 
     public:
         Event();
         ~Event();
+        void Clean();
+
+        VtxBlock* GetVtxBlock() const {return fVtx;}
+        ParticleBlock* GetParticleBlock() const {return fParticles;}
 
         ClassDef(Event,1)
 };

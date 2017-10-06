@@ -3,8 +3,17 @@
 
 Event::Event()
 {
-    someConst = 5;
+    fVtx = new VtxBlock(); 
+    fParticles = new ParticleBlock();
 }
 
 Event::~Event()
 {}
+
+void Event::Clean()
+{
+//    fVtx.Clean();
+//    fParticles.Clean();
+}
+
+

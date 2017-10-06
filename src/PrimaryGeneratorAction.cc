@@ -15,8 +15,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     G4int nofParticles = 1;
     //G4double *energy = new G4double[nofParticles] ;
     G4double energy = 10*MeV;
-//    G4ThreeVector *position = new G4ThreeVector[nofParticles];
-//    G4ThreeVector *momentumDirection = new G4ThreeVector[nofParticles];
+    G4ThreeVector position = G4ThreeVector(5.0,5.0,5.0);
 
 
     fParticleGun  = new G4ParticleGun(nofParticles);
@@ -27,7 +26,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     fParticleGun->SetParticleDefinition(particle);
 
     fParticleGun->SetParticleEnergy(energy);
-//    fParticleGun->SetParticlePosition(position);
+    fParticleGun->SetParticlePosition(position);
 //    fParticleGun->SetParticleMomentumDirection(momentumDirection);
 
 
