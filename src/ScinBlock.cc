@@ -7,3 +7,8 @@ ScinBlock::ScinBlock()
 
 ScinBlock::~ScinBlock()
 {}
+
+void ScinBlock::Clean()
+{
+    fScinPDGId = 0;
+}

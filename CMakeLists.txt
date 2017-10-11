@@ -43,9 +43,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                 #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
                 ##
                 ##
-                ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/SavedEvent.hh include/TrkBlock.hh include/ScinBlock.hh)
+                ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/TrkBlock.hh include/ScinBlock.hh)
 #---Create a shared library with geneated dictionary
-add_library(JPetMCClassesDict SHARED src/SavedEvent.cc src/TrkBlock.cc src/ScinBlock.cc JPetMCClasses.cxx )
+add_library(JPetMCClassesDict SHARED  src/TrkBlock.cc src/ScinBlock.cc JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 

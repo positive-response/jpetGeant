@@ -14,10 +14,11 @@ class TrkBlock : public TObject
         TrkBlock();
         ~TrkBlock();
         void Clean();
-        void Fill(Trajectory* traj);
+        void Fill(G4int id, Trajectory* traj);
 
 
     private:
+     G4int                          fEvtID;
      G4int                        fTrackID;                           
      G4int                        fParentID;                     
 //     G4String                     fParticleName;                    

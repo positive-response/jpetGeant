@@ -12,6 +12,7 @@ class ScinBlock : public TObject
     public:
         ScinBlock();
         ~ScinBlock();
+        void Clean();
 
     private:
         G4int fScinPDGId;

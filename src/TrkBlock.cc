@@ -11,10 +11,11 @@ TrkBlock::~TrkBlock()
 
 void TrkBlock::Clean()
 {
-      fTrackID        =   0;                           
-      fParentID       =   0;                     
+      fEvtID        = -1;
+      fTrackID        =   -1;                           
+      fParentID       =   -1;                     
 //      fParticleName   = "none";                    
-      fPDGCharge      = 0.0;                        
+      fPDGCharge      = 0.4;                        
       fPDGEncoding    = 0;                      
       fTime           = 0; 
       fMaterial       = 0;
@@ -24,8 +25,9 @@ void TrkBlock::Clean()
 
 }
 
-void TrkBlock::Fill(Trajectory* traj)
+void TrkBlock::Fill(G4int id, Trajectory* traj)
 {
+      fEvtID = id;
 //    G4cout << "trackid" <<  traj->GetTrackID()  <<  G4endl;
       fTrackID        = traj->GetTrackID() ;                           
 //    G4cout << "parentid" <<  traj->GetParentID()  <<  G4endl;

@@ -5,37 +5,33 @@
 
 #include "Trajectory.hh"
 #include "G4TrajectoryContainer.hh"
+#include "G4EventManager.hh"
 
 
 EventAction::EventAction(HistoManager* histo )
+     :G4UserEventAction(), 
+     fScinCollID(-1)
 {
 
     fHisto = histo;
 }
 
 EventAction::~EventAction()
-{}
+{
+}
+
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
-    fEvent->Clean();
 }
 
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
 //     G4PrimaryParticle* primary = anEvent->GetPrimaryVertex(0)->GetPrimary(0);
 
+     G4int id =  anEvent->GetEventID();
+     
      // save information about all primary particles 
-     const G4int vtxNum  = anEvent->GetNumberOfPrimaryVertex();
-     
-
-     G4PrimaryVertex* primVtx = anEvent->GetPrimaryVertex(0);
-     G4int particlesNum =  primVtx->GetNumberOfParticle();
-
-     G4PrimaryParticle* particle = primVtx->GetPrimary(0);
-     G4int pdgNumber = particle->GetG4code()->GetPDGEncoding();
-     
-     G4double x =  primVtx->GetX0();
 
      G4TrajectoryContainer* trajectoryContainer = anEvent->GetTrajectoryContainer();
      G4int trackNum = 0; 
@@ -49,13 +45,8 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
      {
 
          Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[i]); 
-         pdgNumber = vec->GetTrackID();
-
-//         fHisto->GetEvent()->GetTrkBlock()->SetMotherId(pdgNumber);
-         fHisto->GetEvent()->GetTrkBlock()->Fill(vec);
-        
-         fHisto->FillTree();
-
+         fHisto->GetTrkBlock()->Fill(id,vec);
+         fHisto->FillTrk();
      }
 
 //     Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[0]); 
