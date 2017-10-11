@@ -45,16 +45,22 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
         "-------------------------------------------------" << G4endl;
      G4cout << trackNum <<  G4endl;
 
+     for (G4int i=0; i<trackNum; i++)
+     {
 
+         Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[i]); 
+         pdgNumber = vec->GetTrackID();
+
+//         fHisto->GetEvent()->GetTrkBlock()->SetMotherId(pdgNumber);
+         fHisto->GetEvent()->GetTrkBlock()->Fill(vec);
+        
+         fHisto->FillTree();
+
+     }
 
 //     Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[0]); 
 //     pdgNumber = vec->GetTrackID();
 
 
-     fHisto->GetEvent()->GetVtxBlock()->SetMotherId(pdgNumber);
-     fHisto->GetEvent()->GetVtxBlock()->SetTime(30.2);
-
-
-     fHisto->FillTree();
 
 }

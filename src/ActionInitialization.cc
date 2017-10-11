@@ -3,7 +3,6 @@
 #include "RunAction.hh"
 #include "HistoManager.hh"
 #include "EventAction.hh"
-#include "Event.hh"
 #include "TrackingAction.hh"
 
 ActionInitialization::ActionInitialization()
@@ -22,11 +21,11 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
+    SetUserAction(new PrimaryGeneratorAction);
     HistoManager*  histo = new HistoManager();
     SetUserAction(new RunAction(histo));
+    SetUserAction(new EventAction(histo));
 
     SetUserAction(new TrackingAction);
-    SetUserAction(new EventAction(histo));
-    SetUserAction(new PrimaryGeneratorAction);
 }
 

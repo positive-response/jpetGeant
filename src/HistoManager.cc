@@ -5,9 +5,9 @@
 #include <vector>
 
 
-ClassImp(Event)
-ClassImp(VtxBlock)
-ClassImp(ParticleBlock)
+ClassImp(SavedEvent)
+ClassImp(TrkBlock)
+ClassImp(ScinBlock)
 
 HistoManager::HistoManager()
 {}
@@ -33,7 +33,7 @@ void HistoManager::Book()
     fTree = new TTree("TreeMC", "Tree keeps output from Geant simulation");
     fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
 
-     fEvent = new  Event();
+     fEvent = new  SavedEvent();
 
     fBranch = fTree->Branch("event", &fEvent);
 

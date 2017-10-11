@@ -3,7 +3,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh" 
-#include "Event.hh"
+#include "SavedEvent.hh"
 #include "HistoManager.hh"
 #include <memory>
 
@@ -17,7 +17,7 @@ class EventAction : public G4UserEventAction
         virtual void EndOfEventAction(const G4Event* anEvent);
 
     private:
-        std::unique_ptr<Event> fEvent {new Event()};
+        std::unique_ptr<SavedEvent> fEvent {new SavedEvent()};
         HistoManager* fHisto;
 };
 
