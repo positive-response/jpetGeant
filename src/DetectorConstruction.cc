@@ -10,6 +10,7 @@
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4SDManager.hh"
 
 
 DetectorConstruction::DetectorConstruction()
@@ -54,7 +55,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // scintillator
     G4Box* scinBox = new G4Box("scinBox", scinDim_x/2.0 ,scinDim_y/2.0 , scinDim_z/2.0 );
-    G4LogicalVolume* scinLog = new G4LogicalVolume(scinBox, scinMaterial , "scinLogical");
+    scinLog = new G4LogicalVolume(scinBox, scinMaterial , "scinLogical");
 
 
     G4int icopy = 0;
@@ -91,4 +92,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
     return worldPhysical;
+}
+
+
+void DetectorConstruction::ConstructSDandField()
+{
+    G4String detectorName = "/mydet/detector";
+    DetectorSD * detectorSD = new DetectorSD(detectorName);
+    G4SDManager::GetSDMpointer()->AddNewDetector(detectorSD);
+    SetSensitiveDetector(scinLog,detectorSD);
 }

@@ -3,6 +3,8 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "DetectorSD.hh"
+
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -10,6 +12,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     DetectorConstruction();
     virtual ~DetectorConstruction();
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField(); 
+
+    G4LogicalVolume * scinLog;
 };
 
 
