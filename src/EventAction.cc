@@ -8,6 +8,7 @@
 #include "G4EventManager.hh"
 
 #include "G4SDManager.hh"
+#include "DetectorHit.hh"
 
 
 EventAction::EventAction(HistoManager* histo )
@@ -42,7 +43,6 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
      G4int id =  anEvent->GetEventID();
      
-     // save information about all primary particles 
 
      G4TrajectoryContainer* trajectoryContainer = anEvent->GetTrajectoryContainer();
      G4int trackNum = 0; 
@@ -59,9 +59,23 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
          fHisto->FillTrk();
      }
 
+    G4HCofThisEvent * HCE = anEvent->GetHCofThisEvent();
+    DetectorHitsCollection* DHC = 0;
+    if(HCE)
+    {
+        DHC = (DetectorHitsCollection*)(HCE->GetHC(fScinCollID));
+        int n_hit = DHC->entries();
+        G4cout << "Detector hits "<< n_hit <<   G4endl; 
 
-//     Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[0]); 
-//     pdgNumber = vec->GetTrackID();
+        for (int i=0; i<n_hit; i++)
+        {
+           DetectorHit*  hit = (DetectorHit*)DHC->GetHit(i);
+           fHisto->GetScinBlock()->Fill(id,hit);
+           fHisto->FillScin();
+        }
+
+    }
+
 
 
 

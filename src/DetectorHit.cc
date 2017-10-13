@@ -1,10 +1,11 @@
 #include "DetectorHit.hh"
 
 DetectorHit::DetectorHit()
-    : G4VHit(), fEdep(0.0), fPos(0), fTrackID(-1) 
+    : G4VHit(), fScinID(0), fTrackID(-1), fEdep(0.0), fTime(0), fPos(0) 
 {}
 
 
 DetectorHit::~DetectorHit()
 {}
+
 
