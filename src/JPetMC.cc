@@ -5,9 +5,16 @@
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "ActionInitialization.hh"
+#include "Randomize.hh"
+#include "time.h"
 
 int main (int argc,char** argv)
 {
+
+    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+    G4long seed = time(NULL);
+    CLHEP::HepRandom::setTheSeed(seed);
+
   G4UIExecutive* ui = 0;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);

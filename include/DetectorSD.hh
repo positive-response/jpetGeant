@@ -13,7 +13,13 @@ class DetectorSD : public G4VSensitiveDetector
         virtual void Initialize(G4HCofThisEvent* HCE);
 
     private:
-         DetectorHitsCollection *fDetectorCollection;
+        const G4double timeIntervals = 0.08; // 80 ps
+        DetectorHitsCollection *fDetectorCollection;
+        G4int previousScinID;
+        G4int lastHitID;
+        G4double previousTime;
+
+
 
     protected:
          virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);

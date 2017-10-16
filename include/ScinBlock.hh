@@ -6,6 +6,7 @@
 #include "G4ThreeVector.hh"
 #include <vector> 
 #include "DetectorHit.hh"
+#include "TVector3.h"
 
 
 class ScinBlock : public TObject
@@ -18,11 +19,17 @@ class ScinBlock : public TObject
 
     private:
         G4int evtID;
+        G4int numInteractions;
         G4int scinID;
         G4int trackID;
+        G4int trackPDGencoding;
         G4double eDep;
         G4double time;
-        G4ThreeVector position;
+        TVector3 position;
+        TVector3 polarizationIn;
+        TVector3 polarizationOut;
+        TVector3 momentumIn;
+        TVector3 momentumOut;
 
     ClassDef(ScinBlock,1)     
 };

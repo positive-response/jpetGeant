@@ -55,6 +55,7 @@ void HistoManager::FillScin()
     fTree2->Fill();
 }
 
+
 void HistoManager::Save()
 {
     if (! fRootFile) return;

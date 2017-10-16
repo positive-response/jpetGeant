@@ -17,6 +17,7 @@ class Trajectory : public G4VTrajectory
 
         virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
         virtual void AppendStep(const G4Step* aStep);
+//        virtual void DrawTrajectory() const;
 //
         virtual G4int GetTrackID() const { return fTrackID; } 
         virtual G4int GetParentID() const { return fParentID; }

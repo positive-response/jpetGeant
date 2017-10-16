@@ -1,5 +1,6 @@
 #include "PhysicsList.hh"
 #include "G4EmLivermorePolarizedPhysics.hh"
+//#include "G4EmStandardPhysics_option4.hh"
 
 
 PhysicsList::PhysicsList() 
@@ -7,6 +8,7 @@ PhysicsList::PhysicsList()
 {
      SetVerboseLevel(1);
      RegisterPhysics(new G4EmLivermorePolarizedPhysics());
+     //RegisterPhysics(new G4EmStandardPhysics_option4());
 }
 
 PhysicsList::~PhysicsList()

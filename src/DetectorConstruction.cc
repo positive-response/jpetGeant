@@ -34,9 +34,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4Material* air = G4Material::GetMaterial("G4_AIR"); 
     G4Material* scinMaterial  =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 
-    G4double world_hx = 1.0*m;
-    G4double world_hy = 1.0*m;
-    G4double world_hz = 1.0*m;
+    G4double world_hx = 0.7*m;
+    G4double world_hy = 0.7*m;
+    G4double world_hz = 0.7*m;
 
     G4bool checkOverlaps = true; 
     // world 
