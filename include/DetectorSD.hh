@@ -14,10 +14,12 @@ class DetectorSD : public G4VSensitiveDetector
 
     private:
         const G4double timeIntervals = 0.08; // 80 ps
+        const G4int totScinNum = 192; 
+        G4int previousHitHistory[192];
+        G4double previousHitTimeHistory[192];
         DetectorHitsCollection *fDetectorCollection;
-        G4int previousScinID;
-        G4int lastHitID;
-        G4double previousTime;
+        //G4int lastHitID;
+        //G4double previousTime;
 
 
 

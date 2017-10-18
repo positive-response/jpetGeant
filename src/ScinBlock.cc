@@ -12,8 +12,10 @@ ScinBlock::~ScinBlock()
 void ScinBlock::Clean()
 {}
 
-void ScinBlock::Fill(G4int iD, DetectorHit* hit)
+void ScinBlock::Fill(G4int hitTNo, G4int hitNo, G4int iD, DetectorHit* hit)
 {
+    hitTotNumber = hitTNo;
+    hitNumber = hitNo+1;
     evtID = iD;
     scinID = hit->GetScinID();
     trackID = hit->GetTrackID();
@@ -43,6 +45,7 @@ void ScinBlock::Fill(G4int iD, DetectorHit* hit)
 
     numInteractions = hit->GetNumInteractions();
 
+    //G4cout << hit->GetProcessName() << " "<< eDep << " " << time << " " << numInteractions  << G4endl;
     //intType = TranslateInteraction(hit->GetProcessName());
 
 }

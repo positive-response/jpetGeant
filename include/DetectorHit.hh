@@ -19,7 +19,7 @@ class DetectorHit : public G4VHit
     void SetTrackPDG(G4int i) {fTrackPDG = i;}
     void SetScinID(G4int i) {fScinID = i;}
     void SetPosition(G4ThreeVector xyz) {fPos =xyz;}
-    void SetInteractionNumber() {fNumInteractions =0;}
+    void SetInteractionNumber() {fNumInteractions = 1;}
     void AddInteraction() { fNumInteractions += 1;}
     void AddEdep(G4double de) { fEdep += de;}
 
@@ -27,6 +27,7 @@ class DetectorHit : public G4VHit
     void SetPolarizationOut(G4ThreeVector xyz) {fPolarizationOut =xyz;}
     void SetMomentumIn(G4ThreeVector xyz)  {fMomentumIn =xyz;}
     void SetMomentumOut(G4ThreeVector xyz) {fMomentumOut =xyz;}
+    void SetProcessName(G4String str) {fName = str;}
 
 
     G4int GetScinID() {return fScinID;}
@@ -40,6 +41,7 @@ class DetectorHit : public G4VHit
     G4ThreeVector GetMomentumIn()  {return fPolarizationIn;}
     G4ThreeVector GetMomentumOut() {return fPolarizationOut;}
     G4int GetNumInteractions() {return fNumInteractions;}
+    G4String GetProcessName() {return fName;}
 
     private:
     G4int fScinID;
@@ -53,6 +55,7 @@ class DetectorHit : public G4VHit
     G4ThreeVector fPolarizationOut;
     G4ThreeVector fMomentumIn;
     G4ThreeVector fMomentumOut;
+    G4String fName;
 
 
 };

@@ -15,9 +15,11 @@ class ScinBlock : public TObject
         ScinBlock();
         ~ScinBlock();
         void Clean();
-        void Fill(G4int iD, DetectorHit* hit);
+        void Fill(G4int hitTNo, G4int hitNo, G4int iD, DetectorHit* hit);
 
     private:
+        G4int hitTotNumber;
+        G4int hitNumber;
         G4int evtID;
         G4int numInteractions;
         G4int scinID;

@@ -47,10 +47,10 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
      G4TrajectoryContainer* trajectoryContainer = anEvent->GetTrajectoryContainer();
      G4int trackNum = 0; 
      if (trajectoryContainer) trackNum = trajectoryContainer->entries();
-     G4cout << G4endl;
-     G4cout << "Trajectories in tracker "<< 
-        "-------------------------------------------------" << G4endl;
-     G4cout << trackNum <<  G4endl;
+     //G4cout << G4endl;
+     //G4cout << "Trajectories in tracker "<< 
+     //   "-------------------------------------------------" << G4endl;
+     //G4cout << trackNum <<  G4endl;
 
      for (G4int i=0; i<trackNum; i++)
      {
@@ -65,12 +65,12 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
     {
         DHC = (DetectorHitsCollection*)(HCE->GetHC(fScinCollID));
         int n_hit = DHC->entries();
-        G4cout << "Detector hits "<< n_hit <<   G4endl; 
-
+        //G4cout << "Detector hits "<< n_hit <<    
+        //"-------------------------------------------------" << G4endl;
         for (int i=0; i<n_hit; i++)
         {
            DetectorHit*  hit = (DetectorHit*)DHC->GetHit(i);
-           fHisto->GetScinBlock()->Fill(id,hit);
+           fHisto->GetScinBlock()->Fill(n_hit,i,id,hit);
            fHisto->FillScin();
         }
 
