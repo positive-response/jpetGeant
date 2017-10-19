@@ -9,26 +9,11 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
+
 PrimaryGeneratorAction::PrimaryGeneratorAction() 
 :G4VUserPrimaryGeneratorAction()
 {
-    G4int nofParticles = 1;
-    //G4double *energy = new G4double[nofParticles] ;
-    G4double energy = 511*keV;
-    G4ThreeVector position = G4ThreeVector(.0,.0,.0);
-    G4ThreeVector momentumDirection = G4ThreeVector(1.,.0,.0);
 
-
-    fParticleGun  = new G4ParticleGun(nofParticles);
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4String particleName;
-
-    G4ParticleDefinition* particle= particleTable->FindParticle(particleName="gamma");
-    fParticleGun->SetParticleDefinition(particle);
-
-    fParticleGun->SetParticleEnergy(energy);
-    fParticleGun->SetParticlePosition(position);
-    fParticleGun->SetParticleMomentumDirection(momentumDirection);
 
 
 }
@@ -40,13 +25,49 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) 
 {
 
-    fParticleGun->GeneratePrimaryVertex(event);
-
+    GenerateTwoGamma(event);
 }
 
 
-void PrimaryGeneratorAction::GenerateTwoGamma()
+void PrimaryGeneratorAction::GenerateTwoGamma(G4Event* event)
 {
+    // NO boost of progenies !
+    
+    G4double mass = 1022*keV;
+    std::vector<G4double> mass_secondaries = {0., 0.};
+       
+    std::vector<G4LorentzVector> out;
+
+    G4HadPhaseSpaceGenbod* phS = new G4HadPhaseSpaceGenbod();
+    phS->Generate(mass,mass_secondaries,out);
+
+    G4ParticleGun* fParticleGun  = new G4ParticleGun(1);
+    G4ParticleGun* fParticleGun2  = new G4ParticleGun(1);
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4String particleName;
+    G4ParticleDefinition* particle= particleTable->FindParticle(particleName="gamma");
+
+    G4double energy = 511*keV;
+    G4ThreeVector position = G4ThreeVector(0.,0.,0.);
+    G4ThreeVector momentumDirection = G4ThreeVector(out[0].px(),out[0].py(),out[0].pz());
+    G4ThreeVector momentumDirection2 = G4ThreeVector(out[1].px(),out[1].py(),out[1].pz());
+
+
+    fParticleGun->SetParticleDefinition(particle);
+    fParticleGun->SetParticleEnergy(energy);
+    fParticleGun->SetParticlePosition(position);
+    fParticleGun->SetParticleMomentumDirection(momentumDirection);
+    fParticleGun->GeneratePrimaryVertex(event);
+
+
+    fParticleGun2->SetParticleDefinition(particle);
+    fParticleGun2->SetParticleEnergy(energy);
+    fParticleGun2->SetParticlePosition(position);
+    fParticleGun2->SetParticleMomentumDirection(momentumDirection2);
+    fParticleGun2->GeneratePrimaryVertex(event);
+
+    delete fParticleGun;
+    delete fParticleGun2; 
 }
 
 void PrimaryGeneratorAction::GenerateThreeGamma()

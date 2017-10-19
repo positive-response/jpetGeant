@@ -11,6 +11,8 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4SDManager.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
 
 
 DetectorConstruction::DetectorConstruction()
@@ -56,7 +58,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // scintillator
     G4Box* scinBox = new G4Box("scinBox", scinDim_x/2.0 ,scinDim_y/2.0 , scinDim_z/2.0 );
     scinLog = new G4LogicalVolume(scinBox, scinMaterial , "scinLogical");
-
+    G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.0,0.2,.9));
+    BoxVisAtt->SetForceWireframe(true);
+    BoxVisAtt->SetForceSolid(true);
+    scinLog->SetVisAttributes(BoxVisAtt);
 
     G4int icopy = 0;
 
@@ -83,6 +88,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                               false,                 //no boolean operation
                               icopy,                 //copy number
                               checkOverlaps);       // checking overlaps 
+
+        
 
 
             icopy++;

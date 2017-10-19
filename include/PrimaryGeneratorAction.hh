@@ -2,6 +2,7 @@
 #define PrimaryGeneratorAction_h 1
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4HadPhaseSpaceGenbod.hh"
 
 class G4ParticleDefinition;
 class G4ParticleGun;
@@ -14,10 +15,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         ~PrimaryGeneratorAction();
         virtual void GeneratePrimaries(G4Event*);
     private:
-        G4ParticleGun* fParticleGun;
+        
 
-        void GenerateTwoGamma();
+        void GenerateTwoGamma(G4Event* event);
         void GenerateThreeGamma();
+
 
 };
 #endif

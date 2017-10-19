@@ -11,7 +11,7 @@ project(jpet_mc)
 #
 ##SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
 ##set(CMAKE_CXX_COMPILER /usr/bin/clang++ CACHE PATH "" FORCE)
-#SET (CMAKE_CXX_FLAGS                "-Wall -std=c++11")
+SET (CMAKE_CXX_FLAGS                "-Wall -std=c++11 -g")
 #SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
 #SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
 #SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
