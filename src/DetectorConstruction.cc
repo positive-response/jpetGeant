@@ -1,23 +1,10 @@
 #include "DetectorConstruction.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4NistManager.hh"
-#include "G4MaterialTable.hh"
-#include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4SDManager.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 
 
 DetectorConstruction::DetectorConstruction()
 :  G4VUserDetectorConstruction()
 {
+    InitializeMaterials();
 }
 
 DetectorConstruction::~DetectorConstruction()
@@ -28,37 +15,30 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct() 
 {
-    // define material
-    G4NistManager* nistManager = G4NistManager::Instance();
-    nistManager->FindOrBuildMaterial("G4_AIR");   
-    nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+//    G4GeometryManager::GetInstance()->SetWorldMaximumExtent(2.*world_hx);
 
-    G4Material* air = G4Material::GetMaterial("G4_AIR"); 
-    G4Material* scinMaterial  =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-
-    G4double world_hx = 0.7*m;
-    G4double world_hy = 0.7*m;
-    G4double world_hz = 0.7*m;
-
-    G4bool checkOverlaps = true; 
     // world 
-    G4Box* worldSolid
-        = new G4Box("world", world_hx, world_hy, world_hz);
-    G4LogicalVolume* worldLogical 
-        = new G4LogicalVolume(worldSolid,air,"worldLogical");  
-    G4VPhysicalVolume* worldPhysical
-        = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,false,0,checkOverlaps);                
-    const G4int layers = 3;
-    const G4double scinDim_x = 1.9*cm;
-    const G4double scinDim_y = 0.7*cm;
-    const G4double scinDim_z = 50.0*cm;
-    const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm};
-    const int nSegments[layers] = {48,48,96};
+     worldSolid  = new G4Box("world", world_hx, world_hy, world_hz);
+     worldLogical  = new G4LogicalVolume(worldSolid,air,"worldLogical");  
+     worldPhysical = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,false,0,checkOverlaps);                
+    // scintillaotrs
+     ConstructScintillators();
 
+    // FRAME 
+      ConstructFrame();
+
+
+
+    return worldPhysical;
+}
+
+
+void DetectorConstruction::ConstructScintillators()
+{
     // scintillator
     G4Box* scinBox = new G4Box("scinBox", scinDim_x/2.0 ,scinDim_y/2.0 , scinDim_z/2.0 );
     scinLog = new G4LogicalVolume(scinBox, scinMaterial , "scinLogical");
-    G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.0,0.2,.9));
+    G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.3,0.4,.9));
     BoxVisAtt->SetForceWireframe(true);
     BoxVisAtt->SetForceSolid(true);
     scinLog->SetVisAttributes(BoxVisAtt);
@@ -96,11 +76,49 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
         }
     }
-
-
-    return worldPhysical;
 }
 
+void DetectorConstruction::InitializeMaterials()
+{
+    // define material
+    G4NistManager* nistManager = G4NistManager::Instance();
+    nistManager->FindOrBuildMaterial("G4_AIR");   
+    nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    nistManager->FindOrBuildMaterial("G4_Al");
+
+    air = G4Material::GetMaterial("G4_AIR"); 
+    scinMaterial      =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    detectorMaterial  =G4Material::GetMaterial("G4_Al");
+
+}
+
+void DetectorConstruction::ConstructFrame()
+{
+     LoadCAD( "stl_geometry/frame_side_A.stl" );
+     LoadCAD( "stl_geometry/frame_side_B.stl" );
+     LoadCAD( "stl_geometry/spojnik_1.stl" );
+     LoadCAD( "stl_geometry/spojnik_2.stl" );
+     LoadCAD( "stl_geometry/spojnik_3.stl" );
+     LoadCAD( "stl_geometry/spojnik_4.stl" );
+     LoadCAD( "stl_geometry/spornik_dlugi_1.stl" );
+     LoadCAD( "stl_geometry/spornik_dlugi_2.stl" );
+}
+
+void DetectorConstruction::LoadCAD( const char* fileName)
+{
+     G4ThreeVector  offset = G4ThreeVector(0, 0, 0);
+     //CADMesh * mesh = new CADMesh((char*) "stl_geometry/frame_side_A.stl");
+     CADMesh * mesh = new CADMesh((char*) fileName);
+     mesh->SetScale(m);
+     G4VSolid* cad_solid = mesh->TessellatedMesh();
+     G4LogicalVolume * cad_logical = new G4LogicalVolume(cad_solid, detectorMaterial, "cad_logical", 0, 0, 0);
+     G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
+     DetVisAtt->SetForceWireframe(true);
+     DetVisAtt->SetForceSolid(true);
+     cad_logical->SetVisAttributes(DetVisAtt);
+     G4VPhysicalVolume * cad_physical = new G4PVPlacement(0, G4ThreeVector(), cad_logical, "cad_physical", worldLogical, false, checkOverlaps);
+
+}
 
 void DetectorConstruction::ConstructSDandField()
 {

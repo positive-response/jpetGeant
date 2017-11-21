@@ -16,6 +16,12 @@ class ScinBlock : public TObject
         ~ScinBlock();
         void Clean();
         void Fill(G4int hitTNo, G4int hitNo, G4int iD, DetectorHit* hit);
+        G4double GetEdep() {return eDep;}
+        G4int GetScinID() {return scinID;}
+        G4int GetTotHitNumber() {return hitTotNumber;}
+        G4int GetHitNumber() {return hitNumber;}
+        TVector3 GetPositon() {return position;}
+        G4double GetTime() {return time;}
 
     private:
         G4int hitTotNumber;

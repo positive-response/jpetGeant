@@ -32,6 +32,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 
+
+# Include CADMesh in your project.                
+find_package(cadmesh)
+include_directories(${CADMESH_INCLUDE_DIRS})
+
                 #                REFLEX_GENERATE_DICTIONARY(JPetMCClasses include/Event.hh)
                 #                add_library(JPetMCClassesDict SHARED ${sources} JPetMCClasses.cxx)
                 #                set(libsuffix .so)
@@ -51,4 +56,4 @@ target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 #---Create  a main program using the library
 add_executable(jpet_mc ${sources} ${headers})
-target_link_libraries(jpet_mc ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} JPetMCClassesDict)
+target_link_libraries(jpet_mc ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} JPetMCClassesDict cadmesh)

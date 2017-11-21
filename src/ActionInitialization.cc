@@ -4,6 +4,7 @@
 #include "HistoManager.hh"
 #include "EventAction.hh"
 #include "TrackingAction.hh"
+#include "SteppingAction.hh"
 
 ActionInitialization::ActionInitialization()
      : G4VUserActionInitialization()
@@ -27,5 +28,6 @@ void ActionInitialization::Build() const
     SetUserAction(new EventAction(histo));
 
     SetUserAction(new TrackingAction);
+    SetUserAction(new SteppingAction);
 }
 
