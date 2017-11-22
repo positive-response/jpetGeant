@@ -1,15 +1,16 @@
 #include "DetectorConstruction.hh"
+#include "G4UnionSolid.hh"
 
 
 DetectorConstruction::DetectorConstruction()
 :  G4VUserDetectorConstruction()
 {
     InitializeMaterials();
+    CAD_icopy = 0;
 }
 
 DetectorConstruction::~DetectorConstruction()
 {
-
 }
 
 
@@ -26,8 +27,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // FRAME 
       ConstructFrame();
-
-
 
     return worldPhysical;
 }
@@ -56,7 +55,7 @@ void DetectorConstruction::ConstructScintillators()
             }
 
             G4RotationMatrix rot = G4RotationMatrix();
-            rot.rotateZ(phi);
+            rot.rotateZ(phi+fi);
 
             G4ThreeVector loc = G4ThreeVector(radius[j]*(cos(phi+fi)),radius[j]*(sin(phi+fi)),0.0);
             G4Transform3D transform(rot,loc);
@@ -68,9 +67,6 @@ void DetectorConstruction::ConstructScintillators()
                               false,                 //no boolean operation
                               icopy,                 //copy number
                               checkOverlaps);       // checking overlaps 
-
-        
-
 
             icopy++;
 
@@ -94,19 +90,73 @@ void DetectorConstruction::InitializeMaterials()
 
 void DetectorConstruction::ConstructFrame()
 {
-     LoadCAD( "stl_geometry/frame_side_A.stl" );
-     LoadCAD( "stl_geometry/frame_side_B.stl" );
-     LoadCAD( "stl_geometry/spojnik_1.stl" );
-     LoadCAD( "stl_geometry/spojnik_2.stl" );
-     LoadCAD( "stl_geometry/spojnik_3.stl" );
-     LoadCAD( "stl_geometry/spojnik_4.stl" );
-     LoadCAD( "stl_geometry/spornik_dlugi_1.stl" );
-     LoadCAD( "stl_geometry/spornik_dlugi_2.stl" );
+    CAD_icopy++;
+     G4RotationMatrix rot = G4RotationMatrix();
+     G4ThreeVector loc = G4ThreeVector(0.,0.,0.0);
+     G4Transform3D transform(rot,loc);
+
+     G4VSolid* unionSolid; 
+
+      CADMesh * mesh0 = new CADMesh((char*)"stl_geometry/frame_side_A.stl" );
+      mesh0->SetScale(m);
+      G4VSolid* cad_solid0 = mesh0->TessellatedMesh();
+
+      CADMesh * mesh1 = new CADMesh((char*)"stl_geometry/frame_side_B.stl" );
+      mesh1->SetScale(m);
+      G4VSolid* cad_solid1 = mesh1->TessellatedMesh();
+      unionSolid =  new G4UnionSolid("Union1", cad_solid1, cad_solid0);
+
+      CADMesh * mesh2 = new CADMesh((char*) "stl_geometry/spojnik_1.stl");
+      mesh2->SetScale(m);
+      G4VSolid* cad_solid2 = mesh2->TessellatedMesh();
+      unionSolid =  new G4UnionSolid("Union2", unionSolid, cad_solid2);
+
+      CADMesh * mesh3 = new CADMesh((char*)"stl_geometry/spojnik_2.stl" );
+      mesh3->SetScale(m);
+      G4VSolid* cad_solid3 = mesh3->TessellatedMesh();
+      unionSolid =  new G4UnionSolid("Union3", unionSolid, cad_solid3);
+
+      CADMesh * mesh4 = new CADMesh((char*) "stl_geometry/spojnik_3.stl");
+      mesh4->SetScale(m);
+      G4VSolid* cad_solid4 = mesh4->TessellatedMesh();
+      unionSolid =  new G4UnionSolid("Union4", unionSolid, cad_solid4);
+
+      CADMesh * mesh5 = new CADMesh((char*)"stl_geometry/spojnik_4.stl");
+      mesh5->SetScale(m);
+      G4VSolid* cad_solid5 = mesh5->TessellatedMesh();
+      unionSolid =  new G4UnionSolid("Union5", unionSolid, cad_solid5);
+
+//      CADMesh * mesh6 = new CADMesh((char*) "stl_geometry/spornik_dlugi_1.stl");
+//      mesh6->SetScale(m);
+//      G4VSolid* cad_solid6 = mesh6->TessellatedMesh();
+//      unionSolid =  new G4UnionSolid("Union6", unionSolid, cad_solid6);
+//
+//      CADMesh * mesh7 = new CADMesh((char*)"stl_geometry/spornik_dlugi_2.stl");
+//      mesh7->SetScale(m);
+//      G4VSolid* cad_solid7 = mesh7->TessellatedMesh();
+//      unionSolid =  new G4UnionSolid("Union7", unionSolid, cad_solid7);
+//
+
+
+     G4LogicalVolume * cad_logical = new G4LogicalVolume(unionSolid, detectorMaterial, "cad_logical", 0, 0, 0);
+
+    G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
+    DetVisAtt->SetForceWireframe(true);
+    DetVisAtt->SetForceSolid(true);
+    cad_logical->SetVisAttributes(DetVisAtt);
+
+    new G4PVPlacement(transform, cad_logical, "cadGeom", worldLogical, false, 0, checkOverlaps);
+
 }
 
 void DetectorConstruction::LoadCAD( const char* fileName)
 {
-     G4ThreeVector  offset = G4ThreeVector(0, 0, 0);
+    CAD_icopy++;
+     G4RotationMatrix rot = G4RotationMatrix();
+     G4ThreeVector loc = G4ThreeVector(0.,0.,0.0);
+     G4Transform3D transform(rot,loc);
+
+
      //CADMesh * mesh = new CADMesh((char*) "stl_geometry/frame_side_A.stl");
      CADMesh * mesh = new CADMesh((char*) fileName);
      mesh->SetScale(m);
@@ -116,7 +166,10 @@ void DetectorConstruction::LoadCAD( const char* fileName)
      DetVisAtt->SetForceWireframe(true);
      DetVisAtt->SetForceSolid(true);
      cad_logical->SetVisAttributes(DetVisAtt);
-     G4VPhysicalVolume * cad_physical = new G4PVPlacement(0, G4ThreeVector(), cad_logical, "cad_physical", worldLogical, false, checkOverlaps);
+     //G4VPhysicalVolume * cad_physical = new G4PVPlacement(0, G4ThreeVector(), cad_logical, "cad_physical", worldLogical, false, checkOverlaps);
+     
+     G4String name = "cad_physical_"+G4UIcommand::ConvertToString(CAD_icopy);
+     new G4PVPlacement(transform, cad_logical, name, worldLogical, false, 1000, checkOverlaps);
 
 }
 

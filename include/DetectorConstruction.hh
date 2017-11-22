@@ -26,16 +26,16 @@
 
 
 
-const G4double world_hx = 0.7*m;
-const G4double world_hy = 0.7*m;
-const G4double world_hz = 0.7*m;
+const G4double world_hx = 1.0*m;
+const G4double world_hy = 1.0*m;
+const G4double world_hz = 1.0*m;
 const G4int layers = 3;
 const G4double scinDim_x = 1.9*cm;
 const G4double scinDim_y = 0.7*cm;
 const G4double scinDim_z = 50.0*cm;
 const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm};
 const int nSegments[layers] = {48,48,96};
-const  G4bool checkOverlaps = true; 
+const  G4bool checkOverlaps = false; //debugging purpose 
 
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -62,6 +62,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4Material* detectorMaterial;
 
     G4LogicalVolume * scinLog;
+
+    G4int CAD_icopy;
+
 };
 
 
