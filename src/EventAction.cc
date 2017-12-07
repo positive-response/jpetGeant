@@ -42,6 +42,10 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 //     if(fScinCollID<0) return;
 
      G4int id =  anEvent->GetEventID();
+     if ( id % 10000 == 0)
+     {
+         printf ("Processed %i events \n", id);
+     }
      
 
      G4TrajectoryContainer* trajectoryContainer = anEvent->GetTrajectoryContainer();

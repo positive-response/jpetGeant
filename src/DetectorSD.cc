@@ -54,7 +54,7 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
         newHit->SetTrackPDG(aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         newHit->SetProcessName(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
         newHit->SetInteractionNumber();
-        newHit->SetPosition(aStep->GetPreStepPoint()->GetPosition()/CLHEP::cm);
+        newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition()/CLHEP::cm);
         newHit->SetTime(currentTime);
 
         newHit->SetScinID(physVol->GetCopyNo());
