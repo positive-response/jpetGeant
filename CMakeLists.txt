@@ -1,21 +1,38 @@
 cmake_minimum_required (VERSION 2.6)
 project(jpet_mc)
 
-##SET (CMAKE_C_COMPILER             "/usr/bin/clang")
-##set(CMAKE_C_COMPILER /usr/bin/clang CACHE PATH "" FORCE)
-#SET (CMAKE_C_FLAGS                "-Wall -std=c++11")
-#SET (CMAKE_C_FLAGS_DEBUG          "-g")
-#SET (CMAKE_C_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
-#SET (CMAKE_C_FLAGS_RELEASE        "-O4 -DNDEBUG")
-#SET (CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
-#
-##SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
-##set(CMAKE_CXX_COMPILER /usr/bin/clang++ CACHE PATH "" FORCE)
-SET (CMAKE_CXX_FLAGS                "-Wall -std=c++11 -g")
-#SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
-#SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
-#SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
-#SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+#######################################################
+# The project version number.
+set(VERSION_MAJOR   0   CACHE STRING "Project major version number.")
+set(VERSION_MINOR   0   CACHE STRING "Project minor version number.")
+set(VERSION_PATCH   1   CACHE STRING "Project patch version number.")
+mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
+
+# add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+
+if(BUILD_DOCUMENTATION)
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+    endif()
+
+    set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+    set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile)
+
+    configure_file(${doxyfile_in} ${doxyfile} @ONLY)
+
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM)
+
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+endif()
+######################################################
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
@@ -25,6 +42,7 @@ set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # add geant4 with vis drivers
 find_package(Geant4 REQUIRED ui_all vis_all)
+
 include(${Geant4_USE_FILE})
 
 find_package(ROOT REQUIRED)
@@ -34,7 +52,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 
 
 # Include CADMesh in your project.                
-find_package(cadmesh)
+find_package(cadmesh REQUIRED)
+
 include_directories(${CADMESH_INCLUDE_DIRS})
 
                 #                REFLEX_GENERATE_DICTIONARY(JPetMCClasses include/Event.hh)
