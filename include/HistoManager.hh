@@ -12,16 +12,21 @@ class TFile;
 class TTree;
 const G4int MaxHisto = 4;
 
+/**
+ * \class HistoManager
+ * \brief class reach for informations stored during sumulations
+ * and saves them into ROOT tree structures
+ */
 class HistoManager
 {
     public:
         HistoManager();
         ~HistoManager();
 
-        void Book();
-        void Save();
-        void FillTrk();
-        void FillScin();
+        void Book(); //< call once; book all trees and histograms
+        void Save(); //< call once; save all trees and histograms
+        void FillTrk(); //< translate TrkBlock.cc into tree
+        void FillScin(); //< translate ScinBlock.cc into tree
         
        TrkBlock* GetTrkBlock() const {return fTrk;}
        ScinBlock* GetScinBlock() const {return fScin;}

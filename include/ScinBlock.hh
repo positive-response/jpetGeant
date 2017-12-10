@@ -9,6 +9,11 @@
 #include "TVector3.h"
 
 
+/**
+ * \class ScinBlock
+ * \brief class directly written into ROOT files; translates  
+ *
+ */
 class ScinBlock : public TObject
 {
     public:

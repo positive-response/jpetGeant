@@ -26,30 +26,38 @@
 
 
 
-const G4double world_hx = 1.0*m;
-const G4double world_hy = 1.0*m;
-const G4double world_hz = 1.0*m;
-const G4int layers = 3;
-const G4double scinDim_x = 1.9*cm;
-const G4double scinDim_y = 0.7*cm;
-const G4double scinDim_z = 50.0*cm;
-const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm};
-const int nSegments[layers] = {48,48,96};
-const  G4bool checkOverlaps = false; //debugging purpose 
+const G4double world_hx = 1.0*m; ///< max world size
+const G4double world_hy = 1.0*m; ///< max world size
+const G4double world_hz = 1.0*m; ///< max world size
+const G4int layers = 3; ///< number of simulated laters in detector
+const G4double scinDim_x = 1.9*cm; ///<  X dimension of simulated strip
+const G4double scinDim_y = 0.7*cm; ///<  Y dimension of simulated strip
+const G4double scinDim_z = 50.0*cm; ///<  Z dimension of simulated strip
+const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm}; ///< layer radius up to center of the strip
+const int nSegments[layers] = {48,48,96}; ///< number of segments in each layer
+const  G4bool checkOverlaps = false; ///< debugging purpose 
 
-
+/**
+* \class DetectorConstruction
+* \brief creating detector; can read the CAD geometry 
+*/
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
+    /// standard constructor
     DetectorConstruction();
     virtual ~DetectorConstruction();
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField(); 
 
     private:
+    /// load from NIST database
     void InitializeMaterials();
+    ///  function is loading detector elements from CAD files
     void ConstructFrame();
+    //// create only scintillators; dimensions are right now fixed in code
     void ConstructScintillators();
+    /// rm me
     void LoadCAD( const char* fileName);
 
 

@@ -1,6 +1,12 @@
 cmake_minimum_required (VERSION 2.6)
 project(jpet_mc)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+
+set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 
 #######################################################
 # The project version number.
@@ -29,16 +35,11 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM)
 
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/doc)
 endif()
 ######################################################
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
-set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # add geant4 with vis drivers
 find_package(Geant4 REQUIRED ui_all vis_all)

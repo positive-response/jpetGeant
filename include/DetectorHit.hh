@@ -8,10 +8,17 @@
 #include "G4Types.hh"
 
 
+/**
+ * \class DetectorHit
+ * \brief Class containing hits in the sensitive part of the detector
+ *
+ * class is filled in DetectorSD class and rewritten into ROOT tree in 
+ * HistoManager::FillScin  
+ */
 class DetectorHit : public G4VHit
 {
     public:
-    DetectorHit();
+    DetectorHit(); //< standard constructor
     virtual ~DetectorHit();
     void SetEdep(G4double de)  { fEdep = de; }
     void SetTime(G4double val) {fTime = val;}
@@ -44,19 +51,18 @@ class DetectorHit : public G4VHit
     G4String GetProcessName() {return fName;}
 
     private:
-    G4int fScinID;
-    G4int fTrackID;
-    G4int fTrackPDG;
-    G4double fEdep;
-    G4double fTime;
-    G4ThreeVector fPos;
-    G4int fNumInteractions;
-    G4ThreeVector fPolarizationIn;
-    G4ThreeVector fPolarizationOut;
-    G4ThreeVector fMomentumIn;
-    G4ThreeVector fMomentumOut;
-    G4String fName;
-
+    G4int fScinID; //< scintillator number (arbitrary!; not following convension used in laboratory )
+    G4int fTrackID; //< track identificator 
+    G4int fTrackPDG; //< Particle Data Group numbering for particles
+    G4double fEdep; //< total energy deposited in the strip
+    G4double fTime; //< interaction time
+    G4ThreeVector fPos; //< 3D interaction position
+    G4int fNumInteractions; //< counters for interaction classified as single hit
+    G4ThreeVector fPolarizationIn;  //< polarization vector before interaction
+    G4ThreeVector fPolarizationOut; //< polarization vector after interaction
+    G4ThreeVector fMomentumIn;  //< momentum vector before interaction
+    G4ThreeVector fMomentumOut; //< momentum vector after interaction
+    G4String fName; //< process name
 
 };
 

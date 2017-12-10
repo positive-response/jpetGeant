@@ -8,6 +8,10 @@
 
 class G4Run;
 
+/**
+ * \class RunAction
+ * \brief class manages the runs = set of events
+ */
 class RunAction : public G4UserRunAction 
 {
      public:
