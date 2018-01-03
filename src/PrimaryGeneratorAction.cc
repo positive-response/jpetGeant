@@ -14,8 +14,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 :G4VUserPrimaryGeneratorAction()
 {
 
-
-
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() 

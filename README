@@ -13,7 +13,16 @@ https://github.com/daria137/jpetmc.git
 How to compile?
 cmake .
 make
+- output file: bin/jpet_mc
 
 How to create documentation?
 make doc
 - open the doc/index.html in your favourite web browser 
+
+TODO:
+1. check geometry overlapping
+2. user friendly interface
+3. fill all information in root trees
+4. include big annihilation chamber (2g /3g direct annihilations)
+5. integrate with framework output  (separate program - cosmics from data runs; input should check if number of generated events 
+corresponds to the source activity)

@@ -8,6 +8,7 @@
 #include "Randomize.hh"
 #include "time.h"
 #include <G4INCLRandom.hh>
+#include "Constants.hh"
 
 int main (int argc,char** argv)
 {
@@ -20,6 +21,14 @@ int main (int argc,char** argv)
     seeds[0] = (long) systime;
     seeds[1] = (long) (systime * G4UniformRand());
     G4Random::setTheSeeds(seeds);
+
+ // set the simulation parameters
+ // - source type Na / Ge / ..
+ // - prompt gamma emmision (if yes then characteristic for source)
+ // - boost orginating from thermalization
+ // - material target/ does oPs create:
+ //          pointlike / annihilation chamber
+
 
 
 

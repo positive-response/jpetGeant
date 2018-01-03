@@ -33,6 +33,12 @@ const G4int layers = 3; ///< number of simulated laters in detector
 const G4double scinDim_x = 1.9*cm; ///<  X dimension of simulated strip
 const G4double scinDim_y = 0.7*cm; ///<  Y dimension of simulated strip
 const G4double scinDim_z = 50.0*cm; ///<  Z dimension of simulated strip
+
+const G4double wrappingThickness = 2*25.4*pow(10,-6)*m; ///<  total width of used wrapping 
+const G4double wrappingShift = 1*pow(10,-5)*m; ///<  free space between wrapping and scinitlator 
+
+
+
 const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm}; ///< layer radius up to center of the strip
 const int nSegments[layers] = {48,48,96}; ///< number of segments in each layer
 const  G4bool checkOverlaps = false; ///< debugging purpose 
@@ -68,10 +74,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4Material* air; 
     G4Material* scinMaterial;    
     G4Material* detectorMaterial;
+    G4Material* kapton;
 
     G4LogicalVolume * scinLog;
 
     G4int CAD_icopy;
+
 
 };
 

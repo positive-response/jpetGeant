@@ -47,6 +47,8 @@ find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
 find_package(ROOT REQUIRED)
+include(${ROOT_USE_FILE})
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
@@ -68,7 +70,7 @@ include_directories(${CADMESH_INCLUDE_DIRS})
                 #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
                 ##
                 ##
-                ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/TrkBlock.hh include/ScinBlock.hh)
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/TrkBlock.hh include/ScinBlock.hh)
 #---Create a shared library with geneated dictionary
 add_library(JPetMCClassesDict SHARED  src/TrkBlock.cc src/ScinBlock.cc JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
