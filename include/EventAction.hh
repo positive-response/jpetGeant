@@ -4,7 +4,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh" 
 #include "HistoManager.hh"
-#include "TrkBlock.hh"
+#include "DecayTree.hh"
 #include "ScinBlock.hh"
 #include <memory>
 

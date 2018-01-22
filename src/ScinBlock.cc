@@ -1,5 +1,5 @@
 #include "ScinBlock.hh"
-#include "TranslateInteraction.hh"
+//#include "TranslateInteraction.hh"
 
 ScinBlock::ScinBlock()
      :evtID(0), scinID(0), trackID(-1), eDep(0), time(0)

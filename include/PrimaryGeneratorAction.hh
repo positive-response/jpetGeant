@@ -1,12 +1,12 @@
 #ifndef PrimaryGeneratorAction_h 
 #define PrimaryGeneratorAction_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4HadPhaseSpaceGenbod.hh"
+#include "PrimaryGenerator.hh"
+#include "G4Event.hh"
+#include "HistoManager.hh"
 
-class G4ParticleDefinition;
-class G4ParticleGun;
-class G4Event;
 
 /**
  * \class PrimaryGeneratorAction
@@ -15,13 +15,11 @@ class G4Event;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
     public:
-        PrimaryGeneratorAction();
+        PrimaryGeneratorAction(HistoManager* histo);
         ~PrimaryGeneratorAction();
         virtual void GeneratePrimaries(G4Event*);
     private:
-
-        void GenerateTwoGamma(G4Event* event);
-        void GenerateThreeGamma();
-
+       PrimaryGenerator* fPrimaryGenerator; 
+       HistoManager* fHisto;
 };
 #endif

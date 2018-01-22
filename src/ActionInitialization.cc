@@ -15,15 +15,17 @@ ActionInitialization::~ActionInitialization()
 
 void ActionInitialization::BuildForMaster() const
 {
-    HistoManager*  histo = new HistoManager();
-    SetUserAction(new RunAction(histo));
+//    HistoManager*  histo = new HistoManager();
+//    SetUserAction(new RunAction(histo));
 
 }
 
 void ActionInitialization::Build() const
 {
-    SetUserAction(new PrimaryGeneratorAction);
+
+
     HistoManager*  histo = new HistoManager();
+    SetUserAction(new PrimaryGeneratorAction(histo));
     SetUserAction(new RunAction(histo));
     SetUserAction(new EventAction(histo));
 

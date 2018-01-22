@@ -5,13 +5,16 @@
 #include <vector>
 
 
-ClassImp(TrkBlock)
+ClassImp(DecayTree)
 ClassImp(ScinBlock)
+ClassImp(EvtInfo)
+
 
 HistoManager::HistoManager()
 {
-    fTrk = new TrkBlock();
+    fDecayTree = new DecayTree();
     fScin = new ScinBlock();
+    fEvtInfo = new EvtInfo();
 }
 
 HistoManager::~HistoManager()
@@ -29,18 +32,23 @@ void HistoManager::Book()
         return; 
     }
 
+    Int_t bufsize=32000;
+    Int_t splitlevel=2;
+
     //HISTO
     fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);  
 
-    fTree = new TTree("TTrk", "Tree keeps output from Geant simulation");
+    fTree = new TTree("TTrk", "Tree keeps output from Geant simulation",splitlevel);
     fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-
-
-    fBranchTrk = fTree->Branch("trk", &fTrk);
+    fBranchTrk = fTree->Branch("decayTree", &fDecayTree, bufsize, splitlevel);
 
     fTree2 = new TTree("TScin", "Tree keeps output from Geant simulation");
     fTree2->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchScin = fTree2->Branch("scin", &fScin);
+    fBranchScin = fTree2->Branch("scin", &fScin, bufsize, splitlevel);
+
+    fTree3 = new TTree("EvtInfo", "Tree keeps output from Geant simulation");
+    fTree3->SetAutoSave(1000000000); // autosave when 1 Gbyte written
+    fBranchEventInfo = fTree3->Branch("evtInfo", &fEvtInfo, bufsize, splitlevel);
 
 
 }
@@ -53,6 +61,11 @@ void HistoManager::FillTrk()
 void HistoManager::FillScin()
 {
     fTree2->Fill();
+}
+
+void HistoManager::FillEvtInfo()
+{
+    fTree3->Fill();
 }
 
 

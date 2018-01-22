@@ -13,9 +13,9 @@
 #include "G4UnitsTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4PrimaryParticle.hh"
+#include "G4SystemOfUnits.hh"
 
-
-//for details examples/runandaction re01
+//for details geant4.10.04/examples/extended/runAndEvent/RE01 
 Trajectory::Trajectory(const G4Track* aTrack) 
 :G4VTrajectory(), fPositionRecord(0)
 {
@@ -25,12 +25,14 @@ Trajectory::Trajectory(const G4Track* aTrack)
     fPDGEncoding = fParticleDefinition->GetPDGEncoding();
 
     fTrackID = aTrack->GetTrackID(); 
-    fMomentum = aTrack->GetMomentum();
-    fVertexPosition = aTrack->GetPosition(); 
-    fGlobalTime = aTrack->GetGlobalTime();
 
     fPositionRecord =new TrajectoryPointContainer();
     fPositionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
+    fMomentum = aTrack->GetMomentumDirection();
+    fVertexPosition = aTrack->GetPosition(); 
+    fGlobalTime = aTrack->GetGlobalTime();
+
+    //
    // TrackInformation* trackInfo  = (TrackInformation*)(aTrack->GetUserInformation());
    // fTrackStatus = trackInfo->GetTrackingStatus();
    // if(fTrackStatus == 1) 

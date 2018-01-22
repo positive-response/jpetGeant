@@ -8,7 +8,6 @@
 #include "Randomize.hh"
 #include "time.h"
 #include <G4INCLRandom.hh>
-#include "Constants.hh"
 
 int main (int argc,char** argv)
 {
@@ -44,9 +43,9 @@ int main (int argc,char** argv)
  runManager->SetUserInitialization(new PhysicsList);
  runManager->SetUserInitialization(new ActionInitialization);
 
- runManager->Initialize();
- int numberOfEvent = 10;
- runManager->BeamOn(numberOfEvent);
+ //runManager->Initialize();
+ //int numberOfEvent = 10;
+ //runManager->BeamOn(numberOfEvent);
 
 
  G4UImanager* UImanager = G4UImanager::GetUIpointer();

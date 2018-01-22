@@ -70,9 +70,9 @@ include_directories(${CADMESH_INCLUDE_DIRS})
                 #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
                 ##
                 ##
-ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/TrkBlock.hh include/ScinBlock.hh)
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/DecayTree.hh include/ScinBlock.hh include/EvtInfo.hh LINKDEF LinkDef.h)
 #---Create a shared library with geneated dictionary
-add_library(JPetMCClassesDict SHARED  src/TrkBlock.cc src/ScinBlock.cc JPetMCClasses.cxx )
+add_library(JPetMCClassesDict SHARED  src/DecayTree.cc src/ScinBlock.cc src/EvtInfo.cc JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 

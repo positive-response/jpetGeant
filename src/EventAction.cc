@@ -59,7 +59,7 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
      for (G4int i=0; i<trackNum; i++)
      {
          Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[i]); 
-         fHisto->GetTrkBlock()->Fill(id,vec);
+         fHisto->GetDecayTree()->Fill(id,vec);
          fHisto->FillTrk();
      }
 

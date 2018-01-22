@@ -30,13 +30,13 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
 
 G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
 {
-    G4double edep = aStep->GetTotalEnergyDeposit()/CLHEP::keV;
+    G4double edep = aStep->GetTotalEnergyDeposit();
     if(edep==0.0) return false;
 
     G4TouchableHistory* theTouchable  = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()); 
     G4VPhysicalVolume* physVol = theTouchable->GetVolume();
     G4int   currentScinCopy = physVol->GetCopyNo();
-    G4double currentTime = aStep->GetPreStepPoint()->GetGlobalTime()/CLHEP::ns;
+    G4double currentTime = aStep->GetPreStepPoint()->GetGlobalTime();
 
 
     if( (previousHitHistory[currentScinCopy] !=-1 )
@@ -54,15 +54,15 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
         newHit->SetTrackPDG(aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         newHit->SetProcessName(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
         newHit->SetInteractionNumber();
-        newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition()/CLHEP::cm);
+        newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition());
         newHit->SetTime(currentTime);
 
         newHit->SetScinID(physVol->GetCopyNo());
 
         newHit->SetPolarizationIn(aStep->GetPreStepPoint()->GetPolarization());
         newHit->SetPolarizationOut(aStep->GetPostStepPoint()->GetPolarization());
-        newHit->SetMomentumIn(aStep->GetPreStepPoint()->GetMomentum()/CLHEP::keV);
-        newHit->SetMomentumOut(aStep->GetPostStepPoint()->GetMomentum()/CLHEP::keV);
+        newHit->SetMomentumIn(aStep->GetPreStepPoint()->GetMomentum());
+        newHit->SetMomentumOut(aStep->GetPostStepPoint()->GetMomentum());
 
         G4int id = fDetectorCollection->insert(newHit);
         previousHitHistory[currentScinCopy] = id-1;

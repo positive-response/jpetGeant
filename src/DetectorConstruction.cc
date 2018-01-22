@@ -1,6 +1,8 @@
 #include "DetectorConstruction.hh"
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4Tubs.hh"
+#include "G4Polycone.hh"
 //#include "G4GeometryTolerance.hh"
 //#include "G4GDMLParser.hh"
 
@@ -19,13 +21,6 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct() 
 {
-//    G4double fWorldLength = 150. *nm;
-//    G4GeometryManager::GetInstance()->SetWorldMaximumExtent(fWorldLength);
-//    G4cout << "Computed tolerance = "
-//      << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/nm
-//      << " nm" 
-//      << G4GeometryTolerance::GetInstance()->GetRadialTolerance()/nm
-//      << " nm" <<G4endl;
 
     // world 
      worldSolid  = new G4Box("world", world_hx, world_hy, world_hz);
@@ -35,11 +30,77 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      ConstructScintillators();
 
     // FRAME from CAD geometry  
-      ConstructFrame();
+    // ConstructFrameCAD();
+     ConstructFrame();
+
+    // ConstructTargetRun3();
 
     return worldPhysical;
 }
 
+
+void DetectorConstruction::ConstructTargetRun3()
+{
+   G4RotationMatrix rot = G4RotationMatrix();
+
+   G4double z[] = {-37*cm, -32.61*cm,-32.6*cm, -31.1*cm, -31*cm, 31*cm, 31.1*cm, 32.6*cm, 32.61*cm, 37*cm}; 
+   G4double rInner[] = { 0*cm, 0*cm, 0*cm, 0*cm, 9.1*cm, 9.1*cm, 0*cm, 0*cm, 0*cm, 0*cm};
+   G4double rOuter[] = { 3*cm, 3*cm, 12*cm, 12*cm, 9.5*cm, 9.5*cm, 12*cm, 12*cm, 3*cm, 3*cm}; 
+
+   G4Polycone* bigChamber = new G4Polycone("bigChamber",0*degree,360*degree, 10 , z, rInner, rOuter);
+        
+   G4Tubs* ringOuter = new G4Tubs("ringOuter",80*mm,95*mm,0.8*mm,0*degree,360*degree);
+   G4Tubs* ringInner = new G4Tubs("ringInner",15*mm,20.8*mm,0.8*mm,0*degree,360*degree);
+
+   G4UnionSolid*  unionSolid =  new G4UnionSolid("bCH1", bigChamber,ringOuter);
+   unionSolid =  new G4UnionSolid("bCH2", unionSolid,ringInner);
+
+   // todo add  G4Box 6mm x 1.6mm  laczace dwa ringi / cztery sztuki
+
+   G4LogicalVolume * bigChamber_logical = new G4LogicalVolume(unionSolid, bigChamberMaterial, "bigChamber_logical");
+
+    G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
+    DetVisAtt->SetForceWireframe(true);
+    DetVisAtt->SetForceSolid(true);
+    bigChamber_logical->SetVisAttributes(DetVisAtt);
+
+
+     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4Transform3D transform(rot,loc);
+     new G4PVPlacement(transform,             //rotation,position
+                       bigChamber_logical,            //its logical volume
+                       "bigChamberGeom",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+     G4Tubs* ringBig_vol = new G4Tubs("ringBig_vol",160*mm,174*mm,1.6*mm,0*degree,360*degree);
+     G4LogicalVolume* ringBig_logical =  new G4LogicalVolume(ringBig_vol, bigChamberMaterial, "ringBig_logical"); 
+     new G4PVPlacement(transform,             //rotation,position
+                       ringBig_logical,            //its logical volume
+                       "ringBigGeom",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+
+
+//     G4Tubs* vacuum_vol = new G4Tubs("vacuumTub",0,9.0*cm,31.05*cm,0*degree,360*degree);
+//     G4LogicalVolume* vacuum_logical =  new G4LogicalVolume(vacuum_vol, vacuum, "vacuum_logical"); 
+//     new G4PVPlacement(transform,             //rotation,position
+//                       vacuum_logical,            //its logical volume
+//                       "vacuumGeom",             //its name
+//                       worldLogical,      //its mother (logical) volume
+//                       true,                 //no boolean operation
+//                       0,                 //copy number
+//                       checkOverlaps);       // checking overlaps 
+
+
+}
 
 void DetectorConstruction::ConstructScintillators()
 {
@@ -55,16 +116,15 @@ void DetectorConstruction::ConstructScintillators()
             scinDim_z/2.0 );
     G4Box* wrappingBox = new G4Box("wrappingBox", scinDim_x/2.0+wrappingThickness,
             scinDim_y/2.0+wrappingThickness , scinDim_z/2.0-1*cm );
-//    G4LogicalVolume* wrappingLog; 
-//
-//    G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.8,0.8,.8));
-//    BoxVisAttWrapping->SetForceWireframe(true);
-//    BoxVisAttWrapping->SetForceSolid(true);
-//    wrappingLog->SetVisAttributes(BoxVisAttWrapping);
+    G4LogicalVolume* wrappingLog; 
+
+    G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.4,0.4,.4));
+    BoxVisAttWrapping->SetForceWireframe(true);
+    BoxVisAttWrapping->SetForceSolid(true);
 
 
 
-    G4int icopy = 0;
+    G4int icopy = 1;
 
     for(int j=0;j<layers;j++){
         for(int i=0;i<nSegments[j];i++){
@@ -95,13 +155,10 @@ void DetectorConstruction::ConstructScintillators()
              // wrapping 
              
              G4VSolid* unionSolid =  new G4SubtractionSolid("wrapping", wrappingBox, scinBoxFree);
-             G4LogicalVolume* wrappingLog = new G4LogicalVolume(unionSolid, kapton , "wrappingLogical");
+             wrappingLog = new G4LogicalVolume(unionSolid, kapton , "wrappingLogical");
+             wrappingLog->SetVisAttributes(BoxVisAttWrapping);
 
              G4String nameWrapping = "wrapping_"+G4UIcommand::ConvertToString(icopy);
-             G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.8,0.8,.8));
-             BoxVisAttWrapping->SetForceWireframe(true);  
-             BoxVisAttWrapping->SetForceSolid(true);
-             wrappingLog->SetVisAttributes(BoxVisAttWrapping);
 
              new G4PVPlacement(transform,             //rotation,position
                               wrappingLog,            //its logical volume
@@ -126,15 +183,168 @@ void DetectorConstruction::InitializeMaterials()
     nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
     nistManager->FindOrBuildMaterial("G4_Al");
     nistManager->FindOrBuildMaterial("G4_KAPTON");
+    nistManager->FindOrBuildMaterial("G4_Galactic");
 
-    air = G4Material::GetMaterial("G4_AIR"); 
-    scinMaterial      =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    detectorMaterial  =G4Material::GetMaterial("G4_Al");
-    kapton  =G4Material::GetMaterial("G4_KAPTON");
+    //air = G4Material::GetMaterial("G4_AIR"); 
+    //scinMaterial      =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    //detectorMaterial  =G4Material::GetMaterial("G4_Al");
+    //kapton  =G4Material::GetMaterial("G4_KAPTON");
 
+    air =  new MaterialExtension("air",G4Material::GetMaterial("G4_AIR")); 
+    vacuum =  new MaterialExtension("vacuum", G4Material::GetMaterial("G4_Galactic")); 
+    scinMaterial      = new MaterialExtension("scinMaterial", G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
+    detectorMaterial  = new MaterialExtension("detectorMaterial",G4Material::GetMaterial("G4_Al"));
+    kapton =  new MaterialExtension("kapton", G4Material::GetMaterial("G4_KAPTON")); 
+
+
+    bigChamberMaterial = new MaterialExtension("bigChamber", G4Material::GetMaterial("G4_Al"));
+    bigChamberMaterial->AllowsAnnihilations(true); 
 }
 
 void DetectorConstruction::ConstructFrame()
+{
+
+    G4VSolid* unionSolid; 
+    G4Box* frameBox = new G4Box("frameBox", 600*mm , 600*mm , 7.5*mm );
+    G4Tubs* tubsBox = new G4Tubs("tubsBox", 0*mm, 400*mm, 60*mm, 0*degree, 360*degree);
+
+    unionSolid =  new G4SubtractionSolid("frameTub", frameBox, tubsBox );
+
+    // remove scintillators volumes; ugly but working  
+    G4int icopy = 1;
+
+    G4Box* scinBox = new G4Box("scinBox", 10.5*mm, 4.5*mm, scinDim_z );
+
+    for(int j=0;j<layers;j++){
+        for(int i=0;i<nSegments[j];i++){
+            G4double phi = i*2*M_PI/nSegments[j];
+            G4double fi = M_PI/nSegments[j];
+
+
+            if( j == 0 ){
+                fi =0.;
+            }
+
+            G4RotationMatrix rot = G4RotationMatrix();
+            rot.rotateZ(phi+fi);
+
+            G4ThreeVector loc = G4ThreeVector(radius[j]*(cos(phi+fi)),radius[j]*(sin(phi+fi)),0.0);
+            G4Transform3D transform(rot,loc);
+
+            G4String name = "unionScin_"+G4UIcommand::ConvertToString(icopy);
+            unionSolid =  new G4SubtractionSolid(name, unionSolid, scinBox, transform);
+
+            icopy++;
+
+        }
+    }
+
+    // remove scintillators from two additional layers  
+    for(int j=0;j<extraLayers;j++){
+        for(int i=0;i<nSegmentsExtraLayers[j];i++){
+            G4double phi = i*2*M_PI/nSegmentsExtraLayers[j];
+            G4double fi = M_PI/nSegmentsExtraLayers[j];
+
+            if( j == 0 ){
+                fi =0.;
+            }
+            G4RotationMatrix rot = G4RotationMatrix();
+            rot.rotateZ(phi+fi);
+
+            G4ThreeVector loc = G4ThreeVector(radiusExtraLayers[j]*(cos(phi+fi)),radiusExtraLayers[j]*(sin(phi+fi)),0.0);
+            G4Transform3D transform(rot,loc);
+
+            G4String name = "unionScin_"+G4UIcommand::ConvertToString(icopy);
+
+            unionSolid =  new G4SubtractionSolid(name, unionSolid, scinBox, transform);
+
+            icopy++;
+
+        }
+    }
+
+
+    G4LogicalVolume * cad_logical = new G4LogicalVolume(unionSolid, detectorMaterial, "cad_logical");
+
+    G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
+    DetVisAtt->SetForceWireframe(true);
+    DetVisAtt->SetForceSolid(true);
+    cad_logical->SetVisAttributes(DetVisAtt);
+
+     G4RotationMatrix rot = G4RotationMatrix();
+     //rot.rotateX(0.1*deg);
+     G4ThreeVector loc = G4ThreeVector(0.0,0.0,238.5*mm);
+     G4Transform3D transform(rot,loc);
+
+     new G4PVPlacement(transform,             //rotation,position
+                       cad_logical,            //its logical volume
+                       "Frame1",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+     G4ThreeVector loc2 = G4ThreeVector(0.0,0.0,-238.5*mm);
+     G4Transform3D transform2(rot,loc2);
+
+     new G4PVPlacement(transform2,             //rotation,position
+                       cad_logical,            //its logical volume
+                       "Frame2",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+    G4Box* connectorBox = new G4Box("connectorBox", 30*mm , 30*mm , 231*mm-0.1*mm );
+    G4LogicalVolume * connectorBox_logical = new G4LogicalVolume(connectorBox, detectorMaterial, "connectorBox_logical");
+    connectorBox_logical->SetVisAttributes(DetVisAtt);
+
+    G4ThreeVector loc3 = G4ThreeVector(570.0*mm,570.0*mm,0.*mm);
+    G4Transform3D transform3(rot,loc3);
+    new G4PVPlacement(transform3,             //rotation,position
+                       connectorBox_logical,            //its logical volume
+                       "connector1",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+    G4ThreeVector loc4 = G4ThreeVector(-570.0*mm,570.0*mm,0.*mm);
+    G4Transform3D transform4(rot,loc4);
+    new G4PVPlacement(transform4,             //rotation,position
+                       connectorBox_logical,            //its logical volume
+                       "connector2",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+    G4ThreeVector loc5 = G4ThreeVector(570.0*mm,-570.0*mm,0.*mm);
+    G4Transform3D transform5(rot,loc5);
+    new G4PVPlacement(transform5,             //rotation,position
+                       connectorBox_logical,            //its logical volume
+                       "connector3",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+    G4ThreeVector loc6 = G4ThreeVector(-570.0*mm,-570.0*mm,0.*mm);
+    G4Transform3D transform6(rot,loc6);
+    new G4PVPlacement(transform6,             //rotation,position
+                       connectorBox_logical,            //its logical volume
+                       "connector4",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+}
+
+
+void DetectorConstruction::ConstructFrameCAD()
 {
     CAD_icopy++;
 
@@ -184,7 +394,7 @@ void DetectorConstruction::ConstructFrame()
 
 
     // remove scintillators volumes; ugly but working  
-    G4int icopy = 0;
+    G4int icopy = 1;
 
     G4Box* scinBox = new G4Box("scinBox", scinDim_x/2.0+0.1*mm ,scinDim_y/2.0+0.1*mm , scinDim_z/2.0 );
     for(int j=0;j<layers;j++){

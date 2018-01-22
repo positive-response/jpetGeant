@@ -24,6 +24,8 @@
 #include "CADMesh.hh"
 #include <string>
 
+#include "MaterialExtension.hh"
+
 
 
 const G4double world_hx = 1.0*m; ///< max world size
@@ -43,6 +45,10 @@ const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm}; ///< layer radius up
 const int nSegments[layers] = {48,48,96}; ///< number of segments in each layer
 const  G4bool checkOverlaps = false; ///< debugging purpose 
 
+const int extraLayers = 2;
+const int nSegmentsExtraLayers[2] = {96,96};
+const G4double radiusExtraLayers[2] = {509*mm, 533*mm};
+
 /**
 * \class DetectorConstruction
 * \brief creating detector; can read the CAD geometry 
@@ -60,9 +66,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     /// load from NIST database
     void InitializeMaterials();
     ///  function is loading detector elements from CAD files
+    void ConstructFrameCAD();
     void ConstructFrame();
     //// create only scintillators; dimensions are right now fixed in code
     void ConstructScintillators();
+    //// create target used in run3 - big chamber no XAD material inside
+    void ConstructTargetRun3();
     /// rm me
     void LoadCAD( const char* fileName);
 
@@ -71,10 +80,13 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* worldLogical;
     G4VPhysicalVolume* worldPhysical;
 
-    G4Material* air; 
-    G4Material* scinMaterial;    
-    G4Material* detectorMaterial;
-    G4Material* kapton;
+    MaterialExtension* vacuum; 
+    MaterialExtension* air; 
+    MaterialExtension* scinMaterial;    
+    MaterialExtension* detectorMaterial;
+
+    MaterialExtension* kapton;
+    MaterialExtension* bigChamberMaterial;
 
     G4LogicalVolume * scinLog;
 
