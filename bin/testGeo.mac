@@ -1,0 +1,5 @@
+/run/initialize
+/geometry/test/run
+#/vis/open DAWNFILE
+#/vis/drawVolume
+#/vis/viewer/update
