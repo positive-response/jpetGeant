@@ -31,7 +31,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // FRAME from CAD geometry  
     // ConstructFrameCAD();
-     ConstructFrame();
+//     ConstructFrame();
 
     // ConstructTargetRun3();
 
