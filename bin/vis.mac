@@ -110,7 +110,8 @@
 #/vis/geometry/set/visibility Envelope 0 false
 #/vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
-/vis/viewer/set/viewpointThetaPhi 0 90
+/vis/viewer/set/viewpointThetaPhi 180 0
+/vis/viewer/set/upVector 1 0 -1
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

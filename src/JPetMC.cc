@@ -8,7 +8,6 @@
 #include "Randomize.hh"
 #include "time.h"
 #include <G4INCLRandom.hh>
-#include "UserParameters.hh"
 
 int main (int argc,char** argv)
 {
@@ -29,10 +28,6 @@ int main (int argc,char** argv)
  // - material target/ does oPs create:
  //          pointlike / annihilation chamber
 
-
-    UserParameters* userParams = UserParameters::getInstance(); 
-    userParams->SetRun(3,0);
-    if( ! userParams->CheckConsistency() )  G4Exception ("Main","userParams",FatalException, "required simulation parameters are not implemented yet");
 
 
 

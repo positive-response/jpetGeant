@@ -37,15 +37,15 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
     //int a;
     //std::tie(vtxPosition, a) = GetVerticesDistribution();
 
-    G4PrimaryVertex* vertex = new G4PrimaryVertex(VertexUniformInCylinder(25*cm,20*cm), time);
-    //G4PrimaryVertex* vertex = new G4PrimaryVertex(VertexUniformInCylinder(1*mm,1*mm), time);
+    //G4PrimaryVertex* vertex = new G4PrimaryVertex(VertexUniformInCylinder(25*cm,20*cm), time);
+    G4PrimaryVertex* vertex = new G4PrimaryVertex(VertexUniformInCylinder(1*mm,1*mm), time);
     const G4ThreeVector bo(0.1,0,0);
 
 //    GeneratePromptGammaSodium(vertex);
-//    GenerateTwoGammaVertex(vertex);
-//    GeneratePromptGammaSodium(vertex);
+        GenerateTwoGammaVertex(vertex);
+    GeneratePromptGammaSodium(vertex);
 
-    GenerateThreeGammaVertex(vertex);
+    //GenerateThreeGammaVertex(vertex);
 
     event->AddPrimaryVertex(vertex);
 }

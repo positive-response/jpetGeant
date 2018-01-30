@@ -29,9 +29,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // scintillaotrs
      ConstructScintillators();
 
+    // LoadCAD("../stl_sushil/3Layers-new.stl");
+
     // FRAME from CAD geometry  
     // ConstructFrameCAD();
-     ConstructFrame();
+    // ConstructFrame();
 
     // ConstructTargetRun3();
 
@@ -452,7 +454,8 @@ void DetectorConstruction::LoadCAD( const char* fileName)
      //G4ThreeVector loc = G4ThreeVector(0.,0.,0.0);
      rot.rotateY(90*deg);
      //G4ThreeVector loc = G4ThreeVector(0.018, 191.4003*cm, -23.05*cm);
-     G4ThreeVector loc = G4ThreeVector(0.0, 191.4*cm, -23.05*cm);
+     //G4ThreeVector loc = G4ThreeVector(0.0, 191.4*cm, -23.05*cm);
+     G4ThreeVector loc = G4ThreeVector(0,0,23*cm);
 
      G4Transform3D transform(rot,loc);
 
