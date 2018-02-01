@@ -26,6 +26,7 @@
 
 #include "MaterialExtension.hh"
 
+class DetectorConstructionMessenger;
 
 
 const G4double world_hx = 1.0*m; ///< max world size
@@ -62,7 +63,19 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField(); 
 
+    void LoadFrame(G4bool tf){fLoadFrame=tf;};  
+    void LoadGeometryForRun(G4int nr);
+//    void LoadCADFrame(G4bool tf){fLoadCADFrame=tf;};  
+//    void LoadWrapping(G4bool tf){fLoadWrapping=tf;}; 
+//    void SetRunMajor(G4int x){fRunNumber=x;};
+//    void SetRunMinor(G4int x){fRunNumberMinor=x;};
+
+    void UpdateGeometry();
     private:
+
+    DetectorConstructionMessenger* fMessenger;
+
+
     /// load from NIST database
     void InitializeMaterials();
     ///  function is loading detector elements from CAD files
@@ -74,6 +87,15 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructTargetRun3();
     /// rm me
     void LoadCAD( const char* fileName);
+
+
+    G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
+
+
+    G4bool fLoadFrame; ///<  construct frame as simple volumes
+    G4bool fLoadCADFrame; ///< load frame from cad file
+    G4bool fLoadWrapping;
+
 
 
     G4Box* worldSolid;
@@ -90,7 +112,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume * scinLog;
 
-    G4int CAD_icopy;
 
 
 };

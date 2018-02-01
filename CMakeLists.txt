@@ -51,8 +51,9 @@ include(${Geant4_USE_FILE})
 ######################################################
 find_package(ROOT REQUIRED)
 message(STATUS "ROOT version: ${ROOT_VERSION}")
-if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
-    message(FATAL_ERROR "ROOT 6.0 is required")
+if(ROOT_FOUND AND NOT ROOT_VERSION VERSION_EQUAL "6.06.02")
+    message(FATAL_ERROR "ROOT 6.06.02 is required ")
+    # tested version above 6.10 can not display graphics while /run/beamOn due to llvm problem 
 endif()
 
 include(${ROOT_USE_FILE})
