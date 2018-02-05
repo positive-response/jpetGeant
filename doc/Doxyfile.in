@@ -2,10 +2,11 @@ PROJECT_NAME           = "@CMAKE_PROJECT_NAME@"
 PROJECT_NUMBER         = @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@
 STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
                          @PROJECT_BINARY_DIR@
-INPUT                  = @doxy_main_page@ \
+INPUT                  = @PROJECT_SOURCE_DIR@/README.md \
                          @PROJECT_SOURCE_DIR@/src \
-                         @PROJECT_SOURCE_DIR@/include \
-                         @PROJECT_SOURCE_DIR@/doc/mainpage.md
+                         @PROJECT_SOURCE_DIR@/include 
+
+USE_MDFILE_AS_MAINPAGE = README.md
 FILE_PATTERNS          = *.hh \
                          *.cc 
 RECURSIVE              = YES
