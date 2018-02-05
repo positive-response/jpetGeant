@@ -15,11 +15,14 @@
 #include "G4PhysicalConstants.hh"
 #include "G4Circle.hh"
 
+#include "DetectorConstruction.hh"
 
 
 PrimaryGenerator::PrimaryGenerator()
 : G4VPrimaryGenerator()
-{}
+{
+    fMessenger = new PrimaryGeneratorMessenger(this);
+}
 
 PrimaryGenerator::~PrimaryGenerator()
 {}
@@ -28,6 +31,9 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 {
     // create vertex of 2g/ 3g and if needed add de-excitation gamma quanta to this vertex
     G4double time = 0*s;
+
+    SetSetupInfo("beam");
+    SetSetupInfo("bem");
 
 
     //G4ThreeVector* boost = new G4ThreeVector(0,0,0);
@@ -49,6 +55,25 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 
     event->AddPrimaryVertex(vertex);
 }
+
+void PrimaryGenerator::SetSetupInfo(G4String newSetup)
+{
+    if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSetup) != std::end(fAllowedSourceTypes))
+    {
+        // setup found
+        if( DetectorConstruction::GetInstance()->GetRunNumber() == 0){ 
+        fGenerateSourceType = newSetup;
+        } else {
+         G4Exception("PrimaryGenerator","PG01",JustWarning,
+                "Chosen detector geometry corresponds to run number and it can not be changed");
+        }
+    } else {
+         G4Exception("PrimaryGenerator","PG02",JustWarning,
+                "Please pick from avaliable setups: beam/target");
+    }
+
+}
+
 
 G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rSquare, G4double zmax)
 {

@@ -7,7 +7,7 @@
 #include "ActionInitialization.hh"
 #include "Randomize.hh"
 #include "time.h"
-#include <G4INCLRandom.hh>
+#include "G4INCLRandom.hh"
 
 int main (int argc,char** argv)
 {
@@ -39,7 +39,7 @@ int main (int argc,char** argv)
 
  G4RunManager* runManager = new G4RunManager;
 
- runManager->SetUserInitialization(new DetectorConstruction);
+ runManager->SetUserInitialization(DetectorConstruction::GetInstance());
  runManager->SetUserInitialization(new PhysicsList);
  runManager->SetUserInitialization(new ActionInitialization);
 

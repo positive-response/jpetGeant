@@ -13,6 +13,19 @@
 
 #include "DetectorConstructionMessenger.hh"
 
+DetectorConstruction* DetectorConstruction::fInstance = 0;
+
+DetectorConstruction* DetectorConstruction::GetInstance()
+{
+    if (fInstance == 0)
+    {
+        fInstance = new DetectorConstruction();
+    }
+
+    return fInstance;
+}
+
+
 DetectorConstruction::DetectorConstruction()
 :  G4VUserDetectorConstruction(), fRunNumber(3),  fLoadFrame(false), fLoadCADFrame(false), fLoadWrapping(true)
 {

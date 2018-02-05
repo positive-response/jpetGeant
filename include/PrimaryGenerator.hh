@@ -7,7 +7,20 @@
 #include "MaterialExtension.hh"
 #include<TGenPhaseSpace.h> 
 #include<TLorentzVector.h>
+#include "PrimaryGeneratorMessenger.hh"
 
+
+struct BeamParams
+{
+    G4double energy;
+    G4ThreeVector position;
+    G4ThreeVector momentum;
+};
+
+struct TargetParams
+{
+    G4String shape;
+};
 
 
 class PrimaryGenerator : public G4VPrimaryGenerator 
@@ -16,10 +29,20 @@ class PrimaryGenerator : public G4VPrimaryGenerator
         PrimaryGenerator();
         ~PrimaryGenerator();
 
+        G4String GetSetupInfo(){return fGenerateSourceType;};
+        void SetSetupInfo(G4String);
     public:
          virtual void GeneratePrimaryVertex(G4Event*);
 
      private:
+        PrimaryGeneratorMessenger* fMessenger; 
+
+
+        G4String fGenerateSourceType;///< "run", "beam", "target" 
+        G4String fAllowedSourceTypes[3] = {"run", "beam", "target"};
+
+
+
          std::tuple<G4ThreeVector,int> GetVerticesDistribution(); 
         void GenerateTwoGammaVertex(G4PrimaryVertex*);
         void GenerateThreeGammaVertex(G4PrimaryVertex*);

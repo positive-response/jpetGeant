@@ -6,6 +6,7 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter ")
 
 # The project version number.
 #######################################################
@@ -56,17 +57,18 @@ if(ROOT_FOUND AND NOT ROOT_VERSION VERSION_EQUAL "6.06.02")
     # tested version above 6.10 can not display graphics while /run/beamOn due to llvm problem 
 endif()
 
+
+set(ROOT_CXX_FLAGS "-std=c++11 -Wunused-parameter")
 include(${ROOT_USE_FILE})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include) 
+include_directories(SYSTEM  ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 
 # Include CADMesh 
 ######################################################
 find_package(cadmesh REQUIRED)
 
-include_directories(${CADMESH_INCLUDE_DIRS})
+include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
 
 # Create ROOT dictionaries 
 ######################################################

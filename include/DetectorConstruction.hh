@@ -57,14 +57,14 @@ const G4double radiusExtraLayers[2] = {509*mm, 533*mm};
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-    /// standard constructor
-    DetectorConstruction();
-    virtual ~DetectorConstruction();
+    static DetectorConstruction* GetInstance(); ///< only single instance can exist        
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField(); 
 
     void LoadFrame(G4bool tf){fLoadFrame=tf;};  
     void LoadGeometryForRun(G4int nr);
+
+    G4int GetRunNumber(){return fRunNumber;};
 //    void LoadCADFrame(G4bool tf){fLoadCADFrame=tf;};  
 //    void LoadWrapping(G4bool tf){fLoadWrapping=tf;}; 
 //    void SetRunMajor(G4int x){fRunNumber=x;};
@@ -72,6 +72,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     void UpdateGeometry();
     private:
+    static DetectorConstruction* fInstance;
+
+    /// standard constructor
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
     DetectorConstructionMessenger* fMessenger;
 

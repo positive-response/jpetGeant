@@ -4,7 +4,7 @@
 DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector)
     :fDetector(detector)
 {
-  fDirectory = new G4UIdirectory("/jpetmc/detector"); 
+  fDirectory = new G4UIdirectory("/jpetmc/detector/"); 
   fDirectory->SetGuidance("Commands for controling the geometry");
 
   fLoadGeomForRun  = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadGeomForRun",this);
