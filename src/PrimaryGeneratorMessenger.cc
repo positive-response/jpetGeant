@@ -50,7 +50,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
     if(command==fSourceType){
-  //      fPrimGen->SetSourceType(newValue);
+        fPrimGen->SetSourceTypeInfo(newValue);
     }
 
 

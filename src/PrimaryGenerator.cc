@@ -21,6 +21,12 @@
 PrimaryGenerator::PrimaryGenerator()
 : G4VPrimaryGenerator()
 {
+    if( DetectorConstruction::GetInstance()->GetRunNumber() == 0){
+        SetSourceTypeInfo("beam");
+    } else {
+        SetSourceTypeInfo("run");
+    }
+
     fMessenger = new PrimaryGeneratorMessenger(this);
 }
 
@@ -32,8 +38,16 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
     // create vertex of 2g/ 3g and if needed add de-excitation gamma quanta to this vertex
     G4double time = 0*s;
 
-    SetSetupInfo("beam");
-    SetSetupInfo("bem");
+    if( fGenerateSourceType == "run") // predefined; can not be modified by user 
+    {
+    } else if(fGenerateSourceType == "beam"){
+    } else if(fGenerateSourceType == "target"){
+         G4Exception("PrimaryGenerator","PG03",FatalException,
+                "Option not implemented");
+    } else {
+         G4Exception("PrimaryGenerator","PG04",FatalException,
+                "Required source type is not allowed");
+    }
 
 
     //G4ThreeVector* boost = new G4ThreeVector(0,0,0);
@@ -48,7 +62,7 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
     const G4ThreeVector bo(0.1,0,0);
 
 //    GeneratePromptGammaSodium(vertex);
-        GenerateTwoGammaVertex(vertex);
+    GenerateTwoGammaVertex(vertex);
     GeneratePromptGammaSodium(vertex);
 
     //GenerateThreeGammaVertex(vertex);
@@ -56,7 +70,7 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
     event->AddPrimaryVertex(vertex);
 }
 
-void PrimaryGenerator::SetSetupInfo(G4String newSetup)
+void PrimaryGenerator::SetSourceTypeInfo(G4String newSetup)
 {
     if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSetup) != std::end(fAllowedSourceTypes))
     {

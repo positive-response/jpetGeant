@@ -1,12 +1,12 @@
-JPetMC is a simulation of the JPET detector conducted in GEANT4 enviroment.  {#mainpage}
+JPetMC is a simulation of the JPET detector conducted in GEANT4 enviroment.  
 =============================================================================
 
 ## Source code:
 https://github.com/daria137/jpetmc.git
 
 ## Required packages:
-- geant4.10.03.p02
-- root 6.10 (not working with 6.12.04)
+- geant4.10.04
+- root 6.06.02 (not working with 6.12.04)
 - cadmesh (https://github.com/christopherpoole/CADMesh)
 - cmake 
 - doxygen

@@ -36,15 +36,15 @@ void HistoManager::Book()
     Int_t splitlevel=2;
 
     //HISTO
-    fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);  
+    //fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);  
 
-    fTree = new TTree("TTrk", "Tree keeps output from Geant simulation",splitlevel);
-    fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchTrk = fTree->Branch("decayTree", &fDecayTree, bufsize, splitlevel);
-
-    fTree2 = new TTree("TScin", "Tree keeps output from Geant simulation");
-    fTree2->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchScin = fTree2->Branch("scin", &fScin, bufsize, splitlevel);
+//    fTree = new TTree("TTrk", "Tree keeps output from Geant simulation",splitlevel);
+//    fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
+//    fBranchTrk = fTree->Branch("decayTree", &fDecayTree, bufsize, splitlevel);
+//
+//    fTree2 = new TTree("TScin", "Tree keeps output from Geant simulation");
+//    fTree2->SetAutoSave(1000000000); // autosave when 1 Gbyte written
+//    fBranchScin = fTree2->Branch("scin", &fScin, bufsize, splitlevel);
 
     fTree3 = new TTree("EvtInfo", "Tree keeps output from Geant simulation");
     fTree3->SetAutoSave(1000000000); // autosave when 1 Gbyte written
@@ -55,12 +55,12 @@ void HistoManager::Book()
 
 void HistoManager::FillTrk()
 {
-    fTree->Fill();
+  //  fTree->Fill();
 }
 
 void HistoManager::FillScin()
 {
-    fTree2->Fill();
+  //  fTree2->Fill();
 }
 
 void HistoManager::FillEvtInfo()
@@ -72,7 +72,8 @@ void HistoManager::FillEvtInfo()
 void HistoManager::Save()
 {
     if (! fRootFile) return;
-    fRootFile->Write(); 
+     //fRootFile->Write(); 
+     fTree3->Write();
     fRootFile->Close(); 
 
     G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;

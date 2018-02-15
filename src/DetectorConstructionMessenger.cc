@@ -65,22 +65,5 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
         fDetector->UpdateGeometry();
     }
 
-//    if(command==fRunMajorCmd){
-//        fDetector->SetRunMajor( fRunMajorCmd->GetNewIntValue(newValue)  );
-//    }
-//    if(command==fRunMinorCmd){
-//        fDetector->SetRunMinor( fRunMinorCmd->GetNewIntValue(newValue) );
-//    }
-//    if(command==fLoadFrame) {
-//        fDetector->LoadFrame( fLoadFrame->GetNewBoolValue(newValue));
-//
-//    }
-//    if(command==fLoadCADFrame){ 
-//        fDetector->LoadCADFrame(fLoadCADFrame->GetNewBoolValue(newValue));
-//    }
-//    if(command==fLoadWrapping){
-//        fDetector->LoadWrapping(fLoadWrapping->GetNewBoolValue(newValue));
-//    }
-
 
 }

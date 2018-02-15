@@ -30,7 +30,7 @@ class PrimaryGenerator : public G4VPrimaryGenerator
         ~PrimaryGenerator();
 
         G4String GetSetupInfo(){return fGenerateSourceType;};
-        void SetSetupInfo(G4String);
+        void SetSourceTypeInfo(G4String);
     public:
          virtual void GeneratePrimaryVertex(G4Event*);
 

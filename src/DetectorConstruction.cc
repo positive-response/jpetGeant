@@ -27,7 +27,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 
 DetectorConstruction::DetectorConstruction()
-:  G4VUserDetectorConstruction(), fRunNumber(3),  fLoadFrame(false), fLoadCADFrame(false), fLoadWrapping(true)
+:  G4VUserDetectorConstruction(), fRunNumber(0),  fLoadFrame(false), fLoadCADFrame(false), fLoadWrapping(true)
 {
 
     InitializeMaterials();

@@ -65,10 +65,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void LoadGeometryForRun(G4int nr);
 
     G4int GetRunNumber(){return fRunNumber;};
-//    void LoadCADFrame(G4bool tf){fLoadCADFrame=tf;};  
-//    void LoadWrapping(G4bool tf){fLoadWrapping=tf;}; 
-//    void SetRunMajor(G4int x){fRunNumber=x;};
-//    void SetRunMinor(G4int x){fRunNumberMinor=x;};
 
     void UpdateGeometry();
     private:
