@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 project(jpet_mc)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc  ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh  ${PROJECT_SOURCE_DIR}/include/*.h)
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter ")
@@ -82,10 +82,10 @@ include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
                 ##include(${ROOT_USE_FILE}) -- below workaround 
                 #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
                 ##
-                ##
-ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/DecayTree.hh include/ScinBlock.hh include/EvtInfo.hh LINKDEF LinkDef.h)
+##
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/JPetGeantDecayTree.h include/JPetGeantScinHits.h include/EvtInfo.hh include/JPetGeantEventPack.h LINKDEF LinkDef.h)
 #---Create a shared library with geneated dictionary
-add_library(JPetMCClassesDict SHARED  src/DecayTree.cc src/ScinBlock.cc src/EvtInfo.cc JPetMCClasses.cxx )
+add_library(JPetMCClassesDict SHARED  src/JPetGeantDecayTree.cpp src/JPetGeantScinHits.cpp src/EvtInfo.cc src/JPetGeantEventPack.cpp JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 

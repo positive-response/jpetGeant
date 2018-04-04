@@ -15,7 +15,14 @@
 #include "G4PrimaryParticle.hh"
 #include "G4SystemOfUnits.hh"
 
-//for details geant4.10.04/examples/extended/runAndEvent/RE01 
+
+G4ThreadLocal G4Allocator<Trajectory> * myTrajectoryAllocator = 0;
+
+Trajectory::Trajectory()
+:G4VTrajectory(),  fPositionRecord(0) 
+{
+}
+
 Trajectory::Trajectory(const G4Track* aTrack) 
 :G4VTrajectory(), fPositionRecord(0)
 {

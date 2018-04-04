@@ -4,8 +4,8 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh" 
 #include "HistoManager.hh"
-#include "DecayTree.hh"
-#include "ScinBlock.hh"
+#include "JPetGeantDecayTree.h"
+#include "JPetGeantScinHits.h"
 #include <memory>
 
 /**
@@ -14,7 +14,6 @@
  *
  * Here also one can reach for information
  * after propagation of all tracks in detector.
- * One ned to be shue to store all trajectories while propagating (hidden in standard usage)
  */
 class EventAction : public G4UserEventAction
 {

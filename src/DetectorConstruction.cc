@@ -72,6 +72,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         //ConstructFrameCAD();
      }
 
+     if(fLoadCADFrame)
+     {
+        ConstructFrameCAD();
+     }
+
      if (fRunNumber == 3) {
          ConstructTargetRun3();
      }
