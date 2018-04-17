@@ -1,4 +1,5 @@
 *.pdf
+build
 bin/jpet_mc
 CMakeCache.txt
 CMakeFiles/

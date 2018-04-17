@@ -6,17 +6,21 @@ https://github.com/daria137/jpetmc.git
 
 ## Required packages:
 - geant4.10.04
-- root 6.06.02 (not working with 6.12.04)
+- root 6.0 
 - cadmesh (https://github.com/christopherpoole/CADMesh)
 - cmake 
 - doxygen
 
 ## How to compile? 
-cmake . &&  make
-- output file: bin/jpet_mc
+mkdir build
+cd build
+cmake ..
+make
+- output file: (in build) bin/jpet_mc
 
 ## How to create documentation?
-make doc
+(in build folder) 
+cmake .. && make doc
 - open the doc/index.html in your favourite web browser 
 
 ## Basics information
