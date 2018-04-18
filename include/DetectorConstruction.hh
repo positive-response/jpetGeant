@@ -67,6 +67,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4int GetRunNumber(){return fRunNumber;};
 
     void UpdateGeometry();
+
+
     private:
     static DetectorConstruction* fInstance;
 
@@ -81,7 +83,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void InitializeMaterials();
     ///  function is loading detector elements from CAD files
     void ConstructFrameCAD();
-    void ConstructFrame();
     //// create only scintillators; dimensions are right now fixed in code
     void ConstructScintillators();
     //// create target used in run3 - big chamber no XAD material inside

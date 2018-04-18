@@ -1,16 +1,15 @@
-#include "PrimaryGeneratorMessenger.hh"
-#include "PrimaryGenerator.hh"
+#include "PrimaryGeneratorActionMessenger.hh"
 
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGenerator* primGenerator)
-    :fPrimGen(primGenerator)
+PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction)
+    :fPrimGen(primGeneratorAction)
 {
 
     fDirectory = new G4UIdirectory("/jpetmc/source/"); 
     fDirectory->SetGuidance("Commands for controling the gamma quanta source (beam/target) and its parameters");
 
     fSourceType = new G4UIcmdWithAString("/jpetmc/source/setType",this);
-    fSourceType->SetCandidates("beam target");
+    fSourceType->SetCandidates("beam isotope");
     fSourceType->SetDefaultValue("beam"); 
 
     fGammaBeamSetEnergy = new G4UIcmdWithADoubleAndUnit("/jpetmc/source/gammaBeam/setEnergy",this);
@@ -34,11 +33,10 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGenerator* primGener
     fGammaBeamSetMomentum->SetUnitCandidates("eV keV MeV");
     fGammaBeamSetMomentum->SetParameterName("Xvalue","Yvalue","Zvalue",false);
 
-
 }
 
 
-PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
+PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
 {
     delete fSourceType;
     delete fGammaBeamSetEnergy;
@@ -47,10 +45,10 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 }
 
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
     if(command==fSourceType){
-        fPrimGen->SetSourceTypeInfo(newValue);
+//        fPrimGen->SetSourceTypeInfo(newValue);
     }
 
 

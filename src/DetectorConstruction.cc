@@ -61,6 +61,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      worldSolid   = new G4Box("world", world_hx, world_hy, world_hz);
      worldLogical  = new G4LogicalVolume(worldSolid,air,"worldLogical");  
      worldPhysical = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,false,0,checkOverlaps);                
+     
     // scintillators for standard setup; right now always loaded
      ConstructScintillators();
 
@@ -73,8 +74,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          ConstructTargetRun3();
      }
 
-
-
     return worldPhysical;
 }
 
@@ -84,9 +83,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
     fRunNumber = nr;
 
-     if (fRunNumber == 0) {
-        LoadFrame(false);
-     } else if (fRunNumber == 3) {
+     if (fRunNumber == 3) {
         LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 
@@ -280,7 +277,7 @@ void DetectorConstruction::InitializeMaterials()
 void DetectorConstruction::ConstructFrameCAD()
 {
 
-     // in stl file the jscintillaotr slot were made bigger !!!
+     // in stl file the scintillator slots were made bigger !!!
      //             Length      width
      //    true      2.1 cm      0.9 cm
      //    used in stl       2.6 cm      1.7 cm

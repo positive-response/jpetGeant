@@ -1,5 +1,5 @@
-#ifndef PrimaryGeneratorMessenger_h
-#define PrimaryGeneratorMessenger_h 1
+#ifndef PrimaryGeneratorActionMessenger_h
+#define PrimaryGeneratorActionMessenger_h 1
 
 #include "globals.hh" 
 #include "G4UImessenger.hh"
@@ -15,18 +15,19 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 //#include "G4UIcmdWith3Vector.hh"
 
-class PrimaryGenerator;
+//#include "PrimaryGeneratorAction.hh"
 
+class PrimaryGeneratorAction;
 
-class PrimaryGeneratorMessenger: public G4UImessenger
+class PrimaryGeneratorActionMessenger: public G4UImessenger
 {
     public:
-        PrimaryGeneratorMessenger(PrimaryGenerator* primGenerator);
-        ~PrimaryGeneratorMessenger();
+        PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction);
+        ~PrimaryGeneratorActionMessenger();
         void SetNewValue(G4UIcommand*, G4String);
 
     private:
-        PrimaryGenerator* fPrimGen;
+        PrimaryGeneratorAction* fPrimGen;
         
         G4UIdirectory* fDirectory;
         G4UIcmdWithAString* fSourceType;

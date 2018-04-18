@@ -60,6 +60,8 @@ User can load one of the selected geometries:
    - shows only scintillator wrapped in a kapton foil   
 
 ## Targets
+If user calls run geometry for dedicated run, then target is predefined and it can not be changed. 
+
 
 - materials can keep information about oPs creation and lifetime
 
