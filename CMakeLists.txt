@@ -23,6 +23,7 @@ mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 set(SCRIPT_FILES
     vis.mac
     init_vis.mac
+    run1.mac
     )
 
 
@@ -82,9 +83,9 @@ include_directories(SYSTEM  ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 
 # Create ROOT dictionaries 
 ######################################################
-ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/JPetGeantDecayTree.h include/JPetGeantScinHits.h include/EvtInfo.hh include/JPetGeantEventPack.h LINKDEF LinkDef.h)
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/JPetGeantDecayTree.h include/JPetGeantScinHits.h include/JPetGeantEventPack.h LINKDEF LinkDef.h)
 #---Create a shared library with geneated dictionary
-add_library(JPetMCClassesDict SHARED  src/JPetGeantDecayTree.cpp src/JPetGeantScinHits.cpp src/EvtInfo.cc src/JPetGeantEventPack.cpp JPetMCClasses.cxx )
+add_library(JPetMCClassesDict SHARED  src/JPetGeantDecayTree.cpp src/JPetGeantScinHits.cpp  src/JPetGeantEventPack.cpp JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 

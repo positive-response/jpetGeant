@@ -5,8 +5,6 @@
 #include <vector>
 
 
-ClassImp(EvtInfo)
-
 
 HistoManager::HistoManager()
 {

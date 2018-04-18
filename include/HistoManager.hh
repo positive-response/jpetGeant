@@ -6,7 +6,6 @@
 #include <TFile.h>
 #include <TTree.h>
 #include "JPetGeantDecayTree.h"
-#include "EvtInfo.hh"
 #include "JPetGeantScinHits.h"
 #include "JPetGeantEventPack.h"
 #include "DetectorHit.hh"

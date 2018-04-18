@@ -21,53 +21,45 @@ int main (int argc,char** argv)
     seeds[1] = (long) (systime * G4UniformRand());
     G4Random::setTheSeeds(seeds);
 
- // set the simulation parameters
- // - source type Na / Ge / ..
- // - prompt gamma emmision (if yes then characteristic for source)
- // - boost orginating from thermalization
- // - material target/ does oPs create:
- //          pointlike / annihilation chamber
 
 
+    G4UIExecutive* ui = 0;
+    if ( argc == 1 ) {
+        ui = new G4UIExecutive(argc, argv);
+    }
 
 
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+    G4RunManager* runManager = new G4RunManager;
+
+    runManager->SetUserInitialization(DetectorConstruction::GetInstance());
+    runManager->SetUserInitialization(new PhysicsList);
+    runManager->SetUserInitialization(new ActionInitialization);
+
+    //runManager->Initialize();
+    //int numberOfEvent = 10;
+    //runManager->BeamOn(numberOfEvent);
 
 
- G4RunManager* runManager = new G4RunManager;
-
- runManager->SetUserInitialization(DetectorConstruction::GetInstance());
- runManager->SetUserInitialization(new PhysicsList);
- runManager->SetUserInitialization(new ActionInitialization);
-
- //runManager->Initialize();
- //int numberOfEvent = 10;
- //runManager->BeamOn(numberOfEvent);
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
 
 
- G4UImanager* UImanager = G4UImanager::GetUIpointer();
- G4VisManager* visManager = new G4VisExecutive;
- visManager->Initialize();
+    if ( ! ui ) {
+        // batch mode
+        G4String command = "/control/execute ";
+        G4String fileName = argv[1];
+        UImanager->ApplyCommand(command+fileName);
+    }
+    else {
+        // interactive mode
+        UImanager->ApplyCommand("/control/execute init_vis.mac");
+        ui->SessionStart();
+        delete ui;
+    }
 
 
-  if ( ! ui ) {
-    // batch mode
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-  else {
-    // interactive mode
-    UImanager->ApplyCommand("/control/execute init_vis.mac");
-    ui->SessionStart();
-    delete ui;
-  }
-
-
-  delete visManager;
-  delete runManager;
-  return 0;
+    delete visManager;
+    delete runManager;
+    return 0;
 }
