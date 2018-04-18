@@ -7,7 +7,7 @@ Details of the J-PET detector can be found on the project webpage [webpage](http
 Its main features:
 - the J-PET detector geometry is loaded from the (CAD) technical drawings,
 - user can load detector setups (identified by run numbers), which corresponds to 
-one used in the experiment. Details can be found in section [Simulated setups](#simulated-setups),
+one used in the experiment. Details can be found in section [How to run](#how-to-run),
 - the mcGeant.root is created as an output file. It can be processed by the J-PET Framework
 software
 
@@ -34,20 +34,32 @@ cmake .. && make doc
 - open the doc/html/index.html in your favourite web browser 
 
 
-# Simulated setups
-## Basics information
-- geometry
-    - 3 layers of scintillators (48,48,96)
-    - each scintillator: 1.9x0.7x50 cm^3 wrapped in kapton foil
-    - detector frame: constructed based on simple volumes or loaded by CAD files
-- materials can keep information about oPs creation and lifetime
-- desired solution: for each run type a dedicated target should be loaded  
+# How to run 
+The executable program is located in build/bin/jpet_mc. 
+Simple execution of the program (./jpet_mc) should load the init_vis.mac script and show detector geometry.
 
-## TODO list:
-1. check geometry overlapping (done)
-2. user friendly interface
-3. fill all information in root trees
-4. include big annihilation chamber (2g /3g direct annihilations)
-5. integrate with framework output  (separate program - cosmics from data runs; input should check if number of generated events 
-corresponds to the source activity)
+## Geometry
+User can load one of the selected geometries:
+ - /jpetmc/detector/loadGeomForRun runNr
+   - runNr=3
+    - only implemented since now 
+    - loaded JPetBasicGeom
+    - place inside of the detector the large annihilation chamber without porous material inside 
+ - /jpetmc/detector/loadJPetBasicGeom 
+   - 3 layers of scintillators (48,48,96)
+   - each scintillator: 1.9x0.7x50 cm^3 wrapped in kapton foil
+   - detector frame: loaded from CAD file
+   - standard setup for runs 1-6
+ - /jpetmc/detector/loadIdealGeom 
+   - not implemented yet
+   - should load n-layer fully packed with scintillators barrel
+ - /jpetmc/detector/loadJPetExtendedGeom 
+   - not implemented yet
+   - should load JPET standard geometry with additional read-out modules
+ - /jpetmc/detector/loadOnlyScintillators 
+   - shows only scintillator wrapped in a kapton foil   
+
+## Targets
+
+- materials can keep information about oPs creation and lifetime
 

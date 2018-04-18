@@ -6,7 +6,6 @@
 #include "G4RunManager.hh"
 //#include "G4GeometryTolerance.hh"
 //#include "G4GDMLParser.hh"
-//
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -27,7 +26,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 
 DetectorConstruction::DetectorConstruction()
-:  G4VUserDetectorConstruction(), fRunNumber(0),  fLoadFrame(false), fLoadCADFrame(false), fLoadWrapping(true)
+:  G4VUserDetectorConstruction(), fRunNumber(0),  fLoadCADFrame(false), fLoadWrapping(true)
 {
 
     InitializeMaterials();
@@ -64,13 +63,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      worldPhysical = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,false,0,checkOverlaps);                
     // scintillators for standard setup; right now always loaded
      ConstructScintillators();
-
-     if(fLoadFrame)
-     { 
-       ConstructFrame();
-       // \todo show differences between geometry loaded with cad and width simple volumes
-        //ConstructFrameCAD();
-     }
 
      if(fLoadCADFrame)
      {
@@ -284,148 +276,6 @@ void DetectorConstruction::InitializeMaterials()
     bigChamberMaterial->AllowsAnnihilations(true); 
 }
 
-void DetectorConstruction::ConstructFrame()
-{
-
-    G4VSolid* unionSolid; 
-    G4Box* frameBox = new G4Box("frameBox", 600*mm , 600*mm , 7.5*mm );
-    G4Tubs* tubsBox = new G4Tubs("tubsBox", 0*mm, 400*mm, 60*mm, 0*degree, 360*degree);
-
-    unionSolid =  new G4SubtractionSolid("frameTub", frameBox, tubsBox );
-
-    // remove scintillators volumes; ugly but working  
-    G4int icopy = 1;
-
-    G4Box* scinBox = new G4Box("scinBox", 10.5*mm, 4.5*mm, scinDim_z );
-
-    for(int j=0;j<layers;j++){
-        for(int i=0;i<nSegments[j];i++){
-            G4double phi = i*2*M_PI/nSegments[j];
-            G4double fi = M_PI/nSegments[j];
-
-
-            if( j == 0 ){
-                fi =0.;
-            }
-
-            G4RotationMatrix rot = G4RotationMatrix();
-            rot.rotateZ(phi+fi);
-
-            G4ThreeVector loc = G4ThreeVector(radius[j]*(cos(phi+fi)),radius[j]*(sin(phi+fi)),0.0);
-            G4Transform3D transform(rot,loc);
-
-            G4String name = "unionScin_"+G4UIcommand::ConvertToString(icopy);
-            unionSolid =  new G4SubtractionSolid(name, unionSolid, scinBox, transform);
-
-            icopy++;
-
-        }
-    }
-
-    // remove scintillators from two additional layers  
-    for(int j=0;j<extraLayers;j++){
-        for(int i=0;i<nSegmentsExtraLayers[j];i++){
-            G4double phi = i*2*M_PI/nSegmentsExtraLayers[j];
-            G4double fi = M_PI/nSegmentsExtraLayers[j];
-
-            if( j == 0 ){
-                fi =0.;
-            }
-            G4RotationMatrix rot = G4RotationMatrix();
-            rot.rotateZ(phi+fi);
-
-            G4ThreeVector loc = G4ThreeVector(radiusExtraLayers[j]*(cos(phi+fi)),radiusExtraLayers[j]*(sin(phi+fi)),0.0);
-            G4Transform3D transform(rot,loc);
-
-            G4String name = "unionScin_"+G4UIcommand::ConvertToString(icopy);
-
-            unionSolid =  new G4SubtractionSolid(name, unionSolid, scinBox, transform);
-
-            icopy++;
-
-        }
-    }
-
-
-    G4LogicalVolume * cad_logical = new G4LogicalVolume(unionSolid, detectorMaterial, "cad_logical");
-
-    G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
-    DetVisAtt->SetForceWireframe(true);
-    DetVisAtt->SetForceSolid(true);
-    cad_logical->SetVisAttributes(DetVisAtt);
-
-     G4RotationMatrix rot = G4RotationMatrix();
-     //rot.rotateX(0.1*deg);
-     G4ThreeVector loc = G4ThreeVector(0.0,0.0,238.5*mm);
-     G4Transform3D transform(rot,loc);
-
-     new G4PVPlacement(transform,             //rotation,position
-                       cad_logical,            //its logical volume
-                       "Frame1",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-
-     G4ThreeVector loc2 = G4ThreeVector(0.0,0.0,-238.5*mm);
-     G4Transform3D transform2(rot,loc2);
-
-     new G4PVPlacement(transform2,             //rotation,position
-                       cad_logical,            //its logical volume
-                       "Frame2",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-
-    G4Box* connectorBox = new G4Box("connectorBox", 30*mm , 30*mm , 231*mm-0.1*mm );
-    G4LogicalVolume * connectorBox_logical = new G4LogicalVolume(connectorBox, detectorMaterial, "connectorBox_logical");
-    connectorBox_logical->SetVisAttributes(DetVisAtt);
-
-    G4ThreeVector loc3 = G4ThreeVector(570.0*mm,570.0*mm,0.*mm);
-    G4Transform3D transform3(rot,loc3);
-    new G4PVPlacement(transform3,             //rotation,position
-                       connectorBox_logical,            //its logical volume
-                       "connector1",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-    G4ThreeVector loc4 = G4ThreeVector(-570.0*mm,570.0*mm,0.*mm);
-    G4Transform3D transform4(rot,loc4);
-    new G4PVPlacement(transform4,             //rotation,position
-                       connectorBox_logical,            //its logical volume
-                       "connector2",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-    G4ThreeVector loc5 = G4ThreeVector(570.0*mm,-570.0*mm,0.*mm);
-    G4Transform3D transform5(rot,loc5);
-    new G4PVPlacement(transform5,             //rotation,position
-                       connectorBox_logical,            //its logical volume
-                       "connector3",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-    G4ThreeVector loc6 = G4ThreeVector(-570.0*mm,-570.0*mm,0.*mm);
-    G4Transform3D transform6(rot,loc6);
-    new G4PVPlacement(transform6,             //rotation,position
-                       connectorBox_logical,            //its logical volume
-                       "connector4",             //its name
-                       worldLogical,      //its mother (logical) volume
-                       true,                 //no boolean operation
-                       0,                 //copy number
-                       checkOverlaps);       // checking overlaps 
-
-}
-
 
 void DetectorConstruction::ConstructFrameCAD()
 {
@@ -458,35 +308,6 @@ void DetectorConstruction::ConstructFrameCAD()
                        true,                 //no boolean operation
                        0,                 //copy number
                        checkOverlaps);       // checking overlaps 
-
-}
-
-void DetectorConstruction::LoadCAD( const char* fileName)
-{
-     G4RotationMatrix rot = G4RotationMatrix();
-     //G4ThreeVector loc = G4ThreeVector(0.,0.,0.0);
-     rot.rotateY(90*deg);
-     //G4ThreeVector loc = G4ThreeVector(0.018, 191.4003*cm, -23.05*cm);
-     //G4ThreeVector loc = G4ThreeVector(0.0, 191.4*cm, -23.05*cm);
-     G4ThreeVector loc = G4ThreeVector(0,0,23*cm);
-
-     G4Transform3D transform(rot,loc);
-
-
-     //CADMesh * mesh = new CADMesh((char*) "stl_geometry/frame_side_A.stl");
-     CADMesh * mesh = new CADMesh((char*) fileName);
-     //mesh->SetScale(m);
-     mesh->SetScale(mm);
-     G4VSolid* cad_solid = mesh->TessellatedMesh();
-     G4LogicalVolume * cad_logical = new G4LogicalVolume(cad_solid, detectorMaterial, "cad_logical", 0, 0, 0);
-     G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
-     DetVisAtt->SetForceWireframe(true);
-     DetVisAtt->SetForceSolid(true);
-     cad_logical->SetVisAttributes(DetVisAtt);
-     //G4VPhysicalVolume * cad_physical = new G4PVPlacement(0, G4ThreeVector(), cad_logical, "cad_physical", worldLogical, false, checkOverlaps);
-     
-     G4String name = "cad_physical_"; //+G4UIcommand::ConvertToString(CAD_icopy);
-     new G4PVPlacement(transform, cad_logical, name, worldLogical, false, 0, checkOverlaps);
 
 }
 

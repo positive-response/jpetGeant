@@ -61,7 +61,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField(); 
 
-    void LoadFrame(G4bool tf){fLoadFrame=tf;};  
+    void LoadFrame(G4bool tf){fLoadCADFrame=tf;};  
     void LoadGeometryForRun(G4int nr);
 
     G4int GetRunNumber(){return fRunNumber;};
@@ -86,14 +86,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructScintillators();
     //// create target used in run3 - big chamber no XAD material inside
     void ConstructTargetRun3();
-    /// rm me
-    void LoadCAD( const char* fileName);
-
 
     G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
 
 
-    G4bool fLoadFrame; ///<  construct frame as simple volumes
     G4bool fLoadCADFrame; ///< load frame from cad file
     G4bool fLoadWrapping;
 
