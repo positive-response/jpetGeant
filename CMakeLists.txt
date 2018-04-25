@@ -12,8 +12,8 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter ")
 
 # THE PROJECT VERSION NUMBER
 #######################################################
-set(VERSION_MAJOR   0   CACHE STRING "Project major version number.")
-set(VERSION_MINOR   1   CACHE STRING "Project minor version number.")
+set(VERSION_MAJOR   1   CACHE STRING "Project major version number.")
+set(VERSION_MINOR   0   CACHE STRING "Project minor version number.")
 set(VERSION_PATCH   1   CACHE STRING "Project patch version number.")
 mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 
@@ -97,3 +97,8 @@ target_link_libraries(jpet_mc ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} JPetMCClasse
 foreach(file_i ${SCRIPT_FILES})
      configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/${file_i} ${CMAKE_CURRENT_BINARY_DIR}/bin/${file_i} COPYONLY)
 endforeach( file_i )
+
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ln -sf  ${CMAKE_CURRENT_SOURCE_DIR}/stl_geometry ${CMAKE_CURRENT_BINARY_DIR}/bin
+)

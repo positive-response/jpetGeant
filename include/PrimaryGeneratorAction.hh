@@ -12,11 +12,12 @@
 struct BeamParams
 {
     G4double energy;
-    G4ThreeVector position;
+    G4ThreeVector vtxPosition;
+    G4ThreeVector polarization;
     G4ThreeVector momentum;
 };
 
-struct TargetParams
+struct IsotopeParams
 {
     G4String shape;
 };
@@ -33,19 +34,20 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         ~PrimaryGeneratorAction();
         virtual void GeneratePrimaries(G4Event*);
 
-        G4String GetSetupInfo(){return fGenerateSourceType;};
         void SetSourceTypeInfo(G4String);
+        G4String GetSourceTypeInfo(){return fGenerateSourceType;};
 
     private:
 
         G4String fGenerateSourceType;///< "run", "beam", "isotope" 
         G4String fAllowedSourceTypes[3] = {"run", "beam", "isotope"};
 
+        PrimaryGeneratorActionMessenger* fMessenger; 
 
+        PrimaryGenerator* fPrimaryGenerator; 
+        HistoManager* fHisto;
 
-       PrimaryGeneratorActionMessenger* fMessenger; 
+        BeamParams beam;
 
-       PrimaryGenerator* fPrimaryGenerator; 
-       HistoManager* fHisto;
 };
 #endif

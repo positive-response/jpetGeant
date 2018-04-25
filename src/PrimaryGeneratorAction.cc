@@ -22,60 +22,44 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) 
 {
-    // if setup for dedicated run is set then ignore its modifications 
-        if( DetectorConstruction::GetInstance()->GetRunNumber() != 0){
-    //        SetSourceTypeInfo("beam");
-        } else {
-            SetSourceTypeInfo("run");
+    // if setup for dedicated run is set then ignore its modifications made by user 
+    if( DetectorConstruction::GetInstance()->GetRunNumber() != 0){
+        if( GetSourceTypeInfo() != "run"){
+          G4Exception("PrimaryGeneratorAction","PG03",JustWarning,
+                 "User can not modify the predefined run geometry");
         }
+        SetSourceTypeInfo("run");
+    }
 
+
+    if( GetSourceTypeInfo() == ("run")) {
+    } else if (GetSourceTypeInfo() == ("beam")) {
+    } else if (GetSourceTypeInfo() == ("isotope")) {
+    } else {
+          G4Exception("PrimaryGeneratorAction","PG04",FatalException,
+                 "Required source type is not allowed");
+    }
 
 
     fPrimaryGenerator->GeneratePrimaryVertex(event);
 
-    //    if( fGenerateSourceType == "run") // predefined; can not be modified by user 
-    //    {
-    //    } else if(fGenerateSourceType == "beam"){
-    //    } else if(fGenerateSourceType == "target"){
-    //         G4Exception("PrimaryGenerator","PG03",FatalException,
-    //                "Option not implemented");
-    //    } else {
-    //         G4Exception("PrimaryGenerator","PG04",FatalException,
-    //                "Required source type is not allowed");
-    //    }
-    //
 
-
-
-
-
-    //   G4int numPrimVtx = event->GetNumberOfPrimaryVertex(); 
-    //   for (int i=0; i<numPrimVtx; i++)
-    //    {
-    int i=0;    
-    G4PrimaryVertex* vtx = event->GetPrimaryVertex(i);
-    //        fHisto->GetEvtInfo()->FillEvtInfo( event->GetEventID(),
-    //            vtx->GetX0(), vtx->GetY0(), vtx->GetZ0(), vtx->GetT0());    
-    //        fHisto->FillEvtInfo();
-
-
-    //    }
 }
 
-void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSetup)
+void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
 {
-    if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSetup) != std::end(fAllowedSourceTypes))
+    if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSourceType) != std::end(fAllowedSourceTypes))
     {
         // setup found
         if( DetectorConstruction::GetInstance()->GetRunNumber() == 0){ 
-            fGenerateSourceType = newSetup;
+            fGenerateSourceType = newSourceType;
         } else {
-            G4Exception("PrimaryGenerator","PG01",JustWarning,
+            G4Exception("PrimaryGeneratorAction","PG01",JustWarning,
                     "Chosen detector geometry corresponds to run number and it can not be changed");
         }
     } else {
-        G4Exception("PrimaryGenerator","PG02",JustWarning,
-                "Please pick from avaliable setups: beam/target");
+        G4Exception("PrimaryGeneratorAction","PG02",JustWarning,
+                "Please pick from avaliable setups: beam/isotope");
     }
 
 }

@@ -1,5 +1,5 @@
 #include "PrimaryGeneratorActionMessenger.hh"
-
+#include "PrimaryGeneratorAction.hh"
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction)
     :fPrimGen(primGeneratorAction)
@@ -33,6 +33,12 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
     fGammaBeamSetMomentum->SetUnitCandidates("eV keV MeV");
     fGammaBeamSetMomentum->SetParameterName("Xvalue","Yvalue","Zvalue",false);
 
+    fGammaBeamSetPolarization = new G4UIcmdWith3Vector("/jpetmc/source/gammaBeam/setPolarization",this);
+    fGammaBeamSetPolarization->SetGuidance("Set initial polarization of the gamma quanta beam");
+    fGammaBeamSetPolarization->SetDefaultValue(G4ThreeVector(1,0,0));
+    fGammaBeamSetPolarization->SetParameterName("Xvalue","Yvalue","Zvalue",false);
+
+
 }
 
 
@@ -42,22 +48,26 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
     delete fGammaBeamSetEnergy;
     delete fGammaBeamSetPosition;
     delete fGammaBeamSetMomentum;
+    delete fGammaBeamSetPolarization;
 }
 
 
 void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
     if(command==fSourceType){
-//        fPrimGen->SetSourceTypeInfo(newValue);
+        fPrimGen->SetSourceTypeInfo(newValue);
     }
-
 
     if(command==fGammaBeamSetEnergy){
         // check if we really changing parameters corresponding to the beam
-//        if(fPrimGen->GetSetupInfo() == "beam")
-//        {
-//
-//        }
+        if(fPrimGen->GetSourceTypeInfo() != "beam")
+        {
+            G4Exception("PrimaryGeneratorActionMessenger","PGM01",JustWarning,
+                    "Changed sourceType to beam");
+            fPrimGen->SetSourceTypeInfo(newValue);
+        }
+
+
     }
 
     if(command==fGammaBeamSetPosition){

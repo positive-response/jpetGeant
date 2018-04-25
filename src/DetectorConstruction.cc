@@ -282,7 +282,7 @@ void DetectorConstruction::ConstructFrameCAD()
      //    true      2.1 cm      0.9 cm
      //    used in stl       2.6 cm      1.7 cm
 
-     CADMesh * mesh1 = new CADMesh((char*)"../stl_geometry/Frame_JPET.stl" );
+     CADMesh * mesh1 = new CADMesh((char*)"stl_geometry/Frame_JPET.stl" );
      mesh1->SetScale(mm);
      G4VSolid* cad_solid1 = mesh1->TessellatedMesh();
 
