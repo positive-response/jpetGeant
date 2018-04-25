@@ -7,7 +7,7 @@
 #include "MaterialExtension.hh"
 #include<TGenPhaseSpace.h> 
 #include<TLorentzVector.h>
-
+#include "BeamParams.hh"
 
 
 class PrimaryGenerator : public G4VPrimaryGenerator 
@@ -15,11 +15,13 @@ class PrimaryGenerator : public G4VPrimaryGenerator
     public:
         PrimaryGenerator();
         ~PrimaryGenerator();
+        void GenerateBeam(BeamParams*, G4Event* );
 
     public:
          virtual void GeneratePrimaryVertex(G4Event*);
 
      private:
+
          std::tuple<G4ThreeVector,int> GetVerticesDistribution(); 
         void GenerateTwoGammaVertex(G4PrimaryVertex*);
         void GenerateThreeGammaVertex(G4PrimaryVertex*);
