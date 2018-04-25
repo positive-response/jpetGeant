@@ -62,6 +62,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
 
     if(command==fLoadOnlyScintillators){
         fDetector->LoadGeometryForRun(0);
+        fDetector->LoadFrame(false);
         fDetector->UpdateGeometry();
     }
 

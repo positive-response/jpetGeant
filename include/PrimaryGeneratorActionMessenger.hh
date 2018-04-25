@@ -25,6 +25,7 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
         void SetNewValue(G4UIcommand*, G4String);
 
     private:
+        void CheckIfBeam();
         PrimaryGeneratorAction* fPrimGen;
         
         G4UIdirectory* fDirectory;

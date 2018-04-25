@@ -83,7 +83,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
     fRunNumber = nr;
 
-     if (fRunNumber == 3) {
+     if (fRunNumber == 3 || fRunNumber == 0) {
         LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 

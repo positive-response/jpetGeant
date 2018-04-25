@@ -38,6 +38,8 @@ cmake .. && make doc
 The executable program is located in build/bin/jpet_mc. 
 Simple execution of the program (./jpet_mc) should load the init_vis.mac script and show detector geometry.
 
+User can adjust detector parameters and generated gamma-quanta by using macros. Exemplary  macro is given in bin folder along the executive file.
+
 ## Geometry
 User can load one of the selected geometries:
  - /jpetmc/detector/loadGeomForRun runNr

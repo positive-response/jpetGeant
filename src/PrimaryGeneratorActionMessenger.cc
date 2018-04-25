@@ -16,26 +16,26 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
     fGammaBeamSetEnergy->SetGuidance("Set energy (value and unit) for beam of gamma quanta");
     fGammaBeamSetEnergy->SetDefaultValue(511);
     fGammaBeamSetEnergy->SetDefaultUnit("keV");
-    fGammaBeamSetEnergy->SetUnitCandidates("eV keV MeV");
+    fGammaBeamSetEnergy->SetUnitCandidates("keV");
 
 
     fGammaBeamSetPosition = new G4UIcmdWith3VectorAndUnit("/jpetmc/source/gammaBeam/setPosition",this);
     fGammaBeamSetPosition->SetGuidance("Set vertex position of the gamma quanta beam");
     fGammaBeamSetPosition->SetDefaultValue(G4ThreeVector(0,0,0));
     fGammaBeamSetPosition->SetDefaultUnit("cm");
-    fGammaBeamSetPosition->SetUnitCandidates("mm cm");
+    fGammaBeamSetPosition->SetUnitCandidates("cm");
     fGammaBeamSetPosition->SetParameterName("Xvalue","Yvalue","Zvalue",false);
 
     fGammaBeamSetMomentum = new G4UIcmdWith3VectorAndUnit("/jpetmc/source/gammaBeam/setMomentum",this);
     fGammaBeamSetMomentum->SetGuidance("Set momentum of the gamma quanta beam");
     fGammaBeamSetMomentum->SetDefaultValue(G4ThreeVector(1,0,0));
     fGammaBeamSetMomentum->SetDefaultUnit("keV");
-    fGammaBeamSetMomentum->SetUnitCandidates("eV keV MeV");
+    fGammaBeamSetMomentum->SetUnitCandidates("keV");
     fGammaBeamSetMomentum->SetParameterName("Xvalue","Yvalue","Zvalue",false);
 
     fGammaBeamSetPolarization = new G4UIcmdWith3Vector("/jpetmc/source/gammaBeam/setPolarization",this);
     fGammaBeamSetPolarization->SetGuidance("Set initial polarization of the gamma quanta beam");
-    fGammaBeamSetPolarization->SetDefaultValue(G4ThreeVector(1,0,0));
+    fGammaBeamSetPolarization->SetDefaultValue(G4ThreeVector(0,0,0));
     fGammaBeamSetPolarization->SetParameterName("Xvalue","Yvalue","Zvalue",false);
 
 
@@ -59,21 +59,28 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     }
 
     if(command==fGammaBeamSetEnergy){
+        CheckIfBeam();
+        fPrimGen->GetBeamParams()->SetEnergy(fGammaBeamSetEnergy->GetNewDoubleRawValue(newValue));
+    }
+
+    if(command==fGammaBeamSetPosition){
+        CheckIfBeam();
+        fPrimGen->GetBeamParams()->SetVtxPosition(fGammaBeamSetPosition->GetNew3VectorValue(newValue));
+    }
+
+    if(command==fGammaBeamSetMomentum){
+        CheckIfBeam();
+        fPrimGen->GetBeamParams()->SetMomentum(fGammaBeamSetMomentum->GetNew3VectorValue(newValue));
+    }
+}
+
+void PrimaryGeneratorActionMessenger::CheckIfBeam()
+{
         // check if we really changing parameters corresponding to the beam
         if(fPrimGen->GetSourceTypeInfo() != "beam")
         {
             G4Exception("PrimaryGeneratorActionMessenger","PGM01",JustWarning,
                     "Changed sourceType to beam");
-            fPrimGen->SetSourceTypeInfo(newValue);
+            fPrimGen->SetSourceTypeInfo("beam");
         }
-
-
-    }
-
-    if(command==fGammaBeamSetPosition){
-    }
-
-    if(command==fGammaBeamSetMomentum){
-    }
 }
-

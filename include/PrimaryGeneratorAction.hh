@@ -8,14 +8,8 @@
 #include "HistoManager.hh"
 #include "PrimaryGeneratorActionMessenger.hh"
 
+#include "BeamParams.hh"
 
-struct BeamParams
-{
-    G4double energy;
-    G4ThreeVector vtxPosition;
-    G4ThreeVector polarization;
-    G4ThreeVector momentum;
-};
 
 struct IsotopeParams
 {
@@ -35,6 +29,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         virtual void GeneratePrimaries(G4Event*);
 
         void SetSourceTypeInfo(G4String);
+        BeamParams* GetBeamParams(){return fBeam;};
+
         G4String GetSourceTypeInfo(){return fGenerateSourceType;};
 
     private:
@@ -47,7 +43,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         PrimaryGenerator* fPrimaryGenerator; 
         HistoManager* fHisto;
 
-        BeamParams beam;
+        BeamParams* fBeam;
 
 };
 #endif

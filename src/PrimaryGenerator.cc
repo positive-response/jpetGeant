@@ -25,6 +25,30 @@ PrimaryGenerator::PrimaryGenerator()
 PrimaryGenerator::~PrimaryGenerator()
 {}
 
+void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
+{
+
+    G4PrimaryVertex* vertex = new G4PrimaryVertex(beamParams->GetVtx(),0);
+
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleDefinition* particleDefinition = particleTable->FindParticle("gamma");
+
+    const G4double ene = beamParams->GetEne();
+    G4ThreeVector momentum = beamParams->GetMomentum();
+
+    G4double px = ene * momentum.x();
+    G4double py = ene * momentum.y();
+    G4double pz = ene * momentum.z();
+
+    G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
+            px, py, pz,ene);
+
+    vertex->SetPrimary(particle1);
+
+    event->AddPrimaryVertex(vertex);
+}
+
+
 void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 {
     // create vertex of 2g/ 3g and if needed add de-excitation gamma quanta to this vertex

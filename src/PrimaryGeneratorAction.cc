@@ -3,19 +3,21 @@
 #include "G4PrimaryVertex.hh"
 
 
+
+
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) 
     :G4VUserPrimaryGeneratorAction(),
     fPrimaryGenerator(0), fHisto(histo)
 {
     fPrimaryGenerator = new PrimaryGenerator();
-
-
+    fBeam = new BeamParams();
     fMessenger = new PrimaryGeneratorActionMessenger(this);
 
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() 
 {
+    delete fBeam;
     delete fPrimaryGenerator;
     delete fMessenger;
 }
@@ -34,6 +36,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
     if( GetSourceTypeInfo() == ("run")) {
     } else if (GetSourceTypeInfo() == ("beam")) {
+        fPrimaryGenerator->GenerateBeam(fBeam,event);
     } else if (GetSourceTypeInfo() == ("isotope")) {
     } else {
           G4Exception("PrimaryGeneratorAction","PG04",FatalException,
@@ -41,7 +44,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     }
 
 
-    fPrimaryGenerator->GeneratePrimaryVertex(event);
+       // fPrimaryGenerator->GeneratePrimaryVertex(event);
 
 
 }
