@@ -10,6 +10,7 @@
 #include "G4SDManager.hh"
 #include "DetectorHit.hh"
 
+#include "EventInformation.hh"
 
 EventAction::EventAction(HistoManager* histo )
      :G4UserEventAction(), 
@@ -32,7 +33,10 @@ void EventAction::BeginOfEventAction(const G4Event*)
         fScinCollID = SDman->GetCollectionID(colNam="detectorCollection");
     }
 
-    fHisto->Clear();
+     G4EventManager::GetEventManager()->SetUserInformation( new EventInformation());    
+
+     printf("BEGINOFEVENT \n");
+     fHisto->Clear();
 }
 
 
@@ -79,6 +83,9 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
         }
 
     }
+
+    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
+    fHisto->AddGenInfo(info);
 
     // save full information about event in final ntuples
     fHisto->SaveEvtPack();

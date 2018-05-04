@@ -55,6 +55,7 @@ void DetectorConstruction::UpdateGeometry()
       G4RunManager::GetRunManager()->GeometryHasBeenModified();
 
       G4RegionStore::GetInstance()->UpdateMaterialList(worldPhysical);
+     G4RunManager::GetRunManager()->ReinitializeGeometry();
       ConstructSDandField();
       // Please note that materials and sensitive detectors cannot be deleted. Thus the user has to set the pointers of already-existing materials / sensitive detectors to the relevant logical volumes. 
 }

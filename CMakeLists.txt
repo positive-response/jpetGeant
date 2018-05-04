@@ -84,9 +84,9 @@ include_directories(SYSTEM  ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 
 # Create ROOT dictionaries 
 ######################################################
-ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/JPetGeantDecayTree.h include/JPetGeantScinHits.h include/JPetGeantEventPack.h LINKDEF LinkDef.h)
+ROOT_GENERATE_DICTIONARY(JPetMCClasses   include/JPetGeantDecayTree.h include/JPetGeantScinHits.h include/JPetGeantEventPack.h include/JPetGeantEventInformation.h LINKDEF LinkDef.h)
 #---Create a shared library with geneated dictionary
-add_library(JPetMCClassesDict SHARED  src/JPetGeantDecayTree.cpp src/JPetGeantScinHits.cpp  src/JPetGeantEventPack.cpp JPetMCClasses.cxx )
+add_library(JPetMCClassesDict SHARED  src/JPetGeantDecayTree.cpp src/JPetGeantScinHits.cpp  src/JPetGeantEventPack.cpp  src/JPetGeantEventInformation.cpp  JPetMCClasses.cxx )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 

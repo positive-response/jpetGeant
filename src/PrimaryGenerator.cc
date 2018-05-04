@@ -15,6 +15,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4Circle.hh"
 
+#include "EventInformation.hh"
+#include "G4EventManager.hh"
 
 
 PrimaryGenerator::PrimaryGenerator()
@@ -27,28 +29,47 @@ PrimaryGenerator::~PrimaryGenerator()
 
 void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
 {
+
+    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
+
+
+    printf("called instance %d \n",info);
+
     G4ThreeVector vtxPosition;
     G4double ratio3g;
     G4double lifetime3g; 
     std::tie(vtxPosition, ratio3g, lifetime3g) = GetVerticesDistribution();
 
-
     G4PrimaryVertex* vertex;
+    G4double lifetime;
+    G4double promptLifetime;
+
 
     if( ratio3g > G4UniformRand() )
     { 
+        lifetime = G4RandExponential::shoot(lifetime3g);
         //generate 3g
-        vertex = new G4PrimaryVertex(vtxPosition, G4RandExponential::shoot(lifetime3g) );
+        vertex = new G4PrimaryVertex(vtxPosition, lifetime );
         GenerateThreeGammaVertex(vertex);
+//        info->SetThreeGammaGen(true);
+        printf("lifetime 1 %f \n",lifetime);
+        info->SetLifetime(lifetime);
+        printf("lifetime END %f \n",lifetime);
+
 
     } else {
         //generate 2g
-        vertex = new G4PrimaryVertex(vtxPosition, G4RandExponential::shoot(fTauBulk) );
+        lifetime =G4RandExponential::shoot(fTauBulk);
+        vertex = new G4PrimaryVertex(vtxPosition, lifetime );
         GenerateTwoGammaVertex(vertex);
+//        info->SetTwoGammaGen(true);
+//        info->SetLifetime(lifetime);
     }
 
     // add sodium prompt gamma
     GeneratePromptGammaSodium(vertex);
+//    info->SetPromptGammaGen(true);
+//    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
 
     event->AddPrimaryVertex(vertex);
 
