@@ -25,6 +25,36 @@ PrimaryGenerator::PrimaryGenerator()
 PrimaryGenerator::~PrimaryGenerator()
 {}
 
+void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
+{
+    G4ThreeVector vtxPosition;
+    G4double ratio3g;
+    G4double lifetime3g; 
+    std::tie(vtxPosition, ratio3g, lifetime3g) = GetVerticesDistribution();
+
+
+    G4PrimaryVertex* vertex;
+
+    if( ratio3g > G4UniformRand() )
+    { 
+        //generate 3g
+        vertex = new G4PrimaryVertex(vtxPosition, G4RandExponential::shoot(lifetime3g) );
+        GenerateThreeGammaVertex(vertex);
+
+    } else {
+        //generate 2g
+        vertex = new G4PrimaryVertex(vtxPosition, G4RandExponential::shoot(fTauBulk) );
+        GenerateTwoGammaVertex(vertex);
+    }
+
+    // add sodium prompt gamma
+    GeneratePromptGammaSodium(vertex);
+
+    event->AddPrimaryVertex(vertex);
+
+}
+
+
 void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
 {
 
@@ -73,6 +103,8 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
     //GenerateThreeGammaVertex(vertex);
 
     event->AddPrimaryVertex(vertex);
+
+
 }
 
 
@@ -96,7 +128,7 @@ G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rSquare, G4doub
 
 
 
-std::tuple<G4ThreeVector,int> PrimaryGenerator::GetVerticesDistribution()
+std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistribution()
 {
 
     G4bool lookForVtx = false;
@@ -121,7 +153,7 @@ std::tuple<G4ThreeVector,int> PrimaryGenerator::GetVerticesDistribution()
 
     };
 
-    return std::make_tuple(myPoint,4);
+    return std::make_tuple(myPoint,4.0,5.0);
 }
 
 

@@ -9,6 +9,7 @@
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4RegionStore.hh"
 
 #include "DetectorConstructionMessenger.hh"
 
@@ -44,12 +45,17 @@ DetectorConstruction::~DetectorConstruction()
 void DetectorConstruction::UpdateGeometry()
 {
       // clean-up previous geometry
+      G4GeometryManager::GetInstance()->OpenGeometry();
+
       G4SolidStore::GetInstance()->Clean();
       G4LogicalVolumeStore::GetInstance()->Clean();
       G4PhysicalVolumeStore::GetInstance()->Clean();
       //define new one
       G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
       G4RunManager::GetRunManager()->GeometryHasBeenModified();
+
+      G4RegionStore::GetInstance()->UpdateMaterialList(worldPhysical);
+      ConstructSDandField();
       // Please note that materials and sensitive detectors cannot be deleted. Thus the user has to set the pointers of already-existing materials / sensitive detectors to the relevant logical volumes. 
 }
 
@@ -84,7 +90,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
     fRunNumber = nr;
 
      if (fRunNumber == 3 || fRunNumber == 0) {
-        LoadFrame(true);  
+       // LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 
              " This run setup is not implemented ");    
@@ -271,6 +277,8 @@ void DetectorConstruction::InitializeMaterials()
 
     bigChamberMaterial = new MaterialExtension("bigChamber", G4Material::GetMaterial("G4_Al"));
     bigChamberMaterial->AllowsAnnihilations(true); 
+    bigChamberMaterial->Set3gProbability(foPsProbabilityAl); 
+    bigChamberMaterial->SetoPsLifetime(fTauoPsAl); 
 }
 
 
