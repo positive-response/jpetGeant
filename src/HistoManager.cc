@@ -5,16 +5,10 @@
 #include <vector>
 
 
-ClassImp(DecayTree)
-ClassImp(ScinBlock)
-ClassImp(EvtInfo)
-
 
 HistoManager::HistoManager()
 {
-    fDecayTree = new DecayTree();
-    fScin = new ScinBlock();
-    fEvtInfo = new EvtInfo();
+    fEventPack = new JPetGeantEventPack();
 }
 
 HistoManager::~HistoManager()
@@ -23,7 +17,7 @@ HistoManager::~HistoManager()
 
 void HistoManager::Book()
 {
-    G4String fileName = "ana.root";
+    G4String fileName = "mcGeant.root";
     fRootFile = new TFile(fileName,"RECREATE");  
     if (! fRootFile) { 
         G4cout << " HistoManager::Book :"                    
@@ -35,45 +29,66 @@ void HistoManager::Book()
     Int_t bufsize=32000;
     Int_t splitlevel=2;
 
-    //HISTO
-    fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);  
 
-    fTree = new TTree("TTrk", "Tree keeps output from Geant simulation",splitlevel);
+    fTree = new TTree("T", "Tree keeps output from Geant simulation",splitlevel);
     fTree->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchTrk = fTree->Branch("decayTree", &fDecayTree, bufsize, splitlevel);
-
-    fTree2 = new TTree("TScin", "Tree keeps output from Geant simulation");
-    fTree2->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchScin = fTree2->Branch("scin", &fScin, bufsize, splitlevel);
-
-    fTree3 = new TTree("EvtInfo", "Tree keeps output from Geant simulation");
-    fTree3->SetAutoSave(1000000000); // autosave when 1 Gbyte written
-    fBranchEventInfo = fTree3->Branch("evtInfo", &fEvtInfo, bufsize, splitlevel);
-
+    fBranchEventPack = fTree->Branch("eventPack", &fEventPack, bufsize, splitlevel);
 
 }
 
-void HistoManager::FillTrk()
+
+void HistoManager::AddNewHit(DetectorHit* hit)
 {
-    fTree->Fill();
+
+  JPetGeantScinHits* geantHit =  fEventPack->ConstructNextHit();
+
+   geantHit->Fill(
+           fEventPack->GetEventNumber(),    //int evID, 
+           hit->GetScinID(),    //int scinID, 
+           hit->GetTrackID(),    //int trkID, 
+           hit->GetTrackPDG(),    //int trkPDG, 
+           hit->GetNumInteractions(),    //int nInter,
+           hit->GetEdep(),    //float ene, 
+           hit->GetTime()    //float time, 
+               );
+
+         // ugly way but there is no easy way to cast g4vector into root vector
+    geantHit->SetHitPosition(
+             hit->GetPosition().getX(),
+             hit->GetPosition().getY(),
+             hit->GetPosition().getZ());
+
+    geantHit->SetPolarizationIn(
+             hit->GetPolarizationIn().getX(),
+             hit->GetPolarizationIn().getY(),
+             hit->GetPolarizationIn().getZ());
+
+    geantHit->SetPolarizationOut(
+             hit->GetPolarizationOut().getX(),
+             hit->GetPolarizationOut().getY(),
+             hit->GetPolarizationOut().getZ());
+
+    geantHit->SetMomentumIn(
+             hit->GetMomentumIn().getX(),
+             hit->GetMomentumIn().getY(),
+             hit->GetMomentumIn().getZ());
+
+    geantHit->SetMomentumOut(
+             hit->GetMomentumOut().getX(),
+             hit->GetMomentumOut().getY(),
+             hit->GetMomentumOut().getZ());
+
 }
 
-void HistoManager::FillScin()
-{
-    fTree2->Fill();
-}
 
-void HistoManager::FillEvtInfo()
-{
-    fTree3->Fill();
-}
 
 
 void HistoManager::Save()
 {
     if (! fRootFile) return;
-    fRootFile->Write(); 
-    fRootFile->Close(); 
+     //fRootFile->Write(); 
+     fTree->Write();
+     fRootFile->Close(); 
 
     G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;
 }

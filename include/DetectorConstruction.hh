@@ -26,6 +26,7 @@
 
 #include "MaterialExtension.hh"
 
+class DetectorConstructionMessenger;
 
 
 const G4double world_hx = 1.0*m; ///< max world size
@@ -56,24 +57,43 @@ const G4double radiusExtraLayers[2] = {509*mm, 533*mm};
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-    /// standard constructor
-    DetectorConstruction();
-    virtual ~DetectorConstruction();
+    static DetectorConstruction* GetInstance(); ///< only single instance can exist        
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField(); 
 
+    void LoadFrame(G4bool tf){fLoadCADFrame=tf;};  
+    void LoadGeometryForRun(G4int nr);
+
+    G4int GetRunNumber(){return fRunNumber;};
+
+    void UpdateGeometry();
+
+
     private:
+    static DetectorConstruction* fInstance;
+
+    /// standard constructor
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
+
+    DetectorConstructionMessenger* fMessenger;
+
+
     /// load from NIST database
     void InitializeMaterials();
     ///  function is loading detector elements from CAD files
     void ConstructFrameCAD();
-    void ConstructFrame();
     //// create only scintillators; dimensions are right now fixed in code
     void ConstructScintillators();
     //// create target used in run3 - big chamber no XAD material inside
     void ConstructTargetRun3();
-    /// rm me
-    void LoadCAD( const char* fileName);
+
+    G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
+
+
+    G4bool fLoadCADFrame; ///< load frame from cad file
+    G4bool fLoadWrapping;
+
 
 
     G4Box* worldSolid;
@@ -90,7 +110,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume * scinLog;
 
-    G4int CAD_icopy;
 
 
 };

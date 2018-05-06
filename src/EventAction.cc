@@ -20,8 +20,7 @@ EventAction::EventAction(HistoManager* histo )
 }
 
 EventAction::~EventAction()
-{
-}
+{}
 
 
 void EventAction::BeginOfEventAction(const G4Event*)
@@ -32,17 +31,20 @@ void EventAction::BeginOfEventAction(const G4Event*)
         G4String colNam;
         fScinCollID = SDman->GetCollectionID(colNam="detectorCollection");
     }
+
+    fHisto->Clear();
 }
+
 
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
-//     G4PrimaryParticle* primary = anEvent->GetPrimaryVertex(0)->GetPrimary(0);
 
      if(anEvent->GetNumberOfPrimaryVertex()==0) return;
-//     if(fScinCollID<0) return;
 
      G4int id =  anEvent->GetEventID();
-     if ( id % 10000 == 0)
+     fHisto->SetEventNumber(id);
+
+     if ( id % 1000 == 0)
      {
          printf ("Processed %i events \n", id);
      }
@@ -59,8 +61,8 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
      for (G4int i=0; i<trackNum; i++)
      {
          Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[i]); 
-         fHisto->GetDecayTree()->Fill(id,vec);
-         fHisto->FillTrk();
+//         fHisto->GetDecayTree()->Fill(id,vec);
+//         fHisto->FillTrk();
      }
 
     G4HCofThisEvent * HCE = anEvent->GetHCofThisEvent();
@@ -73,14 +75,13 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
         //"-------------------------------------------------" << G4endl;
         for (int i=0; i<n_hit; i++)
         {
-           DetectorHit*  hit = (DetectorHit*)DHC->GetHit(i);
-           fHisto->GetScinBlock()->Fill(n_hit,i,id,hit);
-           fHisto->FillScin();
+          fHisto->AddNewHit((DetectorHit*)DHC->GetHit(i) );
         }
 
     }
 
-
+    // save full information about event in final ntuples
+    fHisto->SaveEvtPack();
 
 
 }

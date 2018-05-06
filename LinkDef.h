@@ -1,7 +1,8 @@
 #ifdef __CINT__
 
-#pragma link C++ class DecayTree+;
-#pragma link C++ class ScinBlock+;
+#pragma link C++ class JPetGeantDecayTree+;
+#pragma link C++ class JPetGeantScinHits+;
+#pragma link C++ class JPetGeantEventPack+;
 #pragma link C++ class EvtInfo+;
 
 
