@@ -55,19 +55,19 @@ if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
     message(FATAL_ERROR "ROOT 6.0 is required")
 endif()
 
-include(${ROOT_USE_FILE})
+#include(${ROOT_USE_FILE})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 
-# Include CADMesh 
+# Include CADMesh
 ######################################################
 find_package(cadmesh REQUIRED)
 
 include_directories(${CADMESH_INCLUDE_DIRS})
 
-# Create ROOT dictionaries 
+# Create ROOT dictionaries
 ######################################################
                 #                REFLEX_GENERATE_DICTIONARY(JPetMCClasses include/Event.hh)
                 #                add_library(JPetMCClassesDict SHARED ${sources} JPetMCClasses.cxx)
@@ -76,7 +76,7 @@ include_directories(${CADMESH_INCLUDE_DIRS})
                 #                set_target_properties(JPetMCClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
                 #                target_link_libraries(JPetMCClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
                 #
-                ##include(${ROOT_USE_FILE}) -- below workaround 
+                ##include(${ROOT_USE_FILE}) -- below workaround
                 #list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/cmake)
                 ##
                 ##
