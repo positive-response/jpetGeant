@@ -52,7 +52,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     if(command==fLoadJPetBasicGeometry){
         fDetector->LoadGeometryForRun(0);
         fDetector->LoadFrame(true);
-        fDetector->UpdateGeometry();
+///        fDetector->UpdateGeometry();
     }
 
     if(command==fLoadJPetExtendedGeometry){
@@ -63,7 +63,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     if(command==fLoadOnlyScintillators){
         fDetector->LoadGeometryForRun(0);
         fDetector->LoadFrame(false);
-        fDetector->UpdateGeometry();
+//        fDetector->UpdateGeometry();
     }
 
 

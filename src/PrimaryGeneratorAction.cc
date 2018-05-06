@@ -4,7 +4,6 @@
 
 
 
-
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) 
     :G4VUserPrimaryGeneratorAction(),
     fPrimaryGenerator(0), fHisto(histo)
@@ -24,8 +23,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) 
 {
-    // if setup for dedicated run is set then ignore its modifications made by user 
 
+    // if setup for dedicated run is set then ignore its modifications made by user 
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if(  nRun != 0){
         if( GetSourceTypeInfo() != "run"){

@@ -5,12 +5,11 @@
 
 #include "Trajectory.hh"
 #include "G4TrajectoryContainer.hh"
-#include "G4EventManager.hh"
 
+#include "G4EventManager.hh"
 #include "G4SDManager.hh"
 #include "DetectorHit.hh"
 
-#include "EventInformation.hh"
 
 EventAction::EventAction(HistoManager* histo )
      :G4UserEventAction(), 
@@ -24,8 +23,9 @@ EventAction::~EventAction()
 {}
 
 
-void EventAction::BeginOfEventAction(const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event* event)
 {
+
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
     if(fScinCollID<0)
     {
@@ -33,9 +33,6 @@ void EventAction::BeginOfEventAction(const G4Event*)
         fScinCollID = SDman->GetCollectionID(colNam="detectorCollection");
     }
 
-     G4EventManager::GetEventManager()->SetUserInformation( new EventInformation());    
-
-     printf("BEGINOFEVENT \n");
      fHisto->Clear();
 }
 
@@ -84,8 +81,10 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
     }
 
-    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
-    fHisto->AddGenInfo(info);
+//    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
+//     EventInformation* info =  (EventInformation*) anEvent->GetUserInformation();    
+//     printf("info iiii %d \n",info);
+//    fHisto->AddGenInfo(info);
 
     // save full information about event in final ntuples
     fHisto->SaveEvtPack();

@@ -4,8 +4,7 @@
 DetectorSD::DetectorSD(G4String name)
     :G4VSensitiveDetector(name)
 {
-     G4String HCname;
-     collectionName.insert(HCname="detectorCollection");
+     collectionName.insert("detectorCollection");
 }
 
 DetectorSD::~DetectorSD()

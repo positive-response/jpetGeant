@@ -1,15 +1,15 @@
-#include "EventInformation.hh"
+#include "VtxInformation.hh"
 
-EventInformation::EventInformation()
+VtxInformation::VtxInformation()
     :fVtxPosition(0), fTwoGammaGen(false), fThreeGammaGen(false), fPromptGammaGen(false), fnRun(0), fLifetime(0)
 {}
 
 
-EventInformation::~EventInformation()
+VtxInformation::~VtxInformation()
 {}
 
 
-void EventInformation::SetVtxPosition(G4double x, G4double y, G4double z)
+void VtxInformation::SetVtxPosition(G4double x, G4double y, G4double z)
 { 
     fVtxPosition.setX(x);
     fVtxPosition.setY(y);
@@ -17,7 +17,7 @@ void EventInformation::SetVtxPosition(G4double x, G4double y, G4double z)
 };
 
 
-void EventInformation::Clear()
+void VtxInformation::Clear()
 {
     fTwoGammaGen = false;
     fThreeGammaGen = false;
@@ -30,7 +30,7 @@ void EventInformation::Clear()
 
 }
 
-void EventInformation::Print() const
+void VtxInformation::Print() const
 {
     
 }

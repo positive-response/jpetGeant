@@ -15,8 +15,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4Circle.hh"
 
-#include "EventInformation.hh"
-#include "G4EventManager.hh"
+#include "VtxInformation.hh"
 
 
 PrimaryGenerator::PrimaryGenerator()
@@ -30,17 +29,18 @@ PrimaryGenerator::~PrimaryGenerator()
 void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
 {
 
-    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
-
-
-    printf("called instance %d \n",info);
-
     G4ThreeVector vtxPosition;
     G4double ratio3g;
     G4double lifetime3g; 
     std::tie(vtxPosition, ratio3g, lifetime3g) = GetVerticesDistribution();
 
     G4PrimaryVertex* vertex;
+    vertex = new G4PrimaryVertex();
+    VtxInformation* info = new VtxInformation();
+    vertex->SetUserInformation(info);
+    vertex->SetPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
+
+
     G4double lifetime;
     G4double promptLifetime;
 
@@ -49,27 +49,23 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
     { 
         lifetime = G4RandExponential::shoot(lifetime3g);
         //generate 3g
-        vertex = new G4PrimaryVertex(vtxPosition, lifetime );
         GenerateThreeGammaVertex(vertex);
-//        info->SetThreeGammaGen(true);
-        printf("lifetime 1 %f \n",lifetime);
-        info->SetLifetime(lifetime);
-        printf("lifetime END %f \n",lifetime);
-
+        info->SetThreeGammaGen(true);
 
     } else {
         //generate 2g
         lifetime =G4RandExponential::shoot(fTauBulk);
-        vertex = new G4PrimaryVertex(vtxPosition, lifetime );
         GenerateTwoGammaVertex(vertex);
-//        info->SetTwoGammaGen(true);
-//        info->SetLifetime(lifetime);
+        info->SetTwoGammaGen(true);
     }
+    info->SetLifetime(lifetime);
+
+
 
     // add sodium prompt gamma
     GeneratePromptGammaSodium(vertex);
-//    info->SetPromptGammaGen(true);
-//    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
+    info->SetPromptGammaGen(true);
+    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
 
     event->AddPrimaryVertex(vertex);
 

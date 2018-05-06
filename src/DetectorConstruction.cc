@@ -44,20 +44,14 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::UpdateGeometry()
 {
-      // clean-up previous geometry
-      G4GeometryManager::GetInstance()->OpenGeometry();
 
-      G4SolidStore::GetInstance()->Clean();
-      G4LogicalVolumeStore::GetInstance()->Clean();
-      G4PhysicalVolumeStore::GetInstance()->Clean();
-      //define new one
-      G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-      G4RunManager::GetRunManager()->GeometryHasBeenModified();
+     // clean-up previous geometry
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
 
-      G4RegionStore::GetInstance()->UpdateMaterialList(worldPhysical);
-     G4RunManager::GetRunManager()->ReinitializeGeometry();
-      ConstructSDandField();
-      // Please note that materials and sensitive detectors cannot be deleted. Thus the user has to set the pointers of already-existing materials / sensitive detectors to the relevant logical volumes. 
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 
@@ -319,8 +313,11 @@ void DetectorConstruction::ConstructFrameCAD()
 
 void DetectorConstruction::ConstructSDandField()
 {
-    G4String detectorName = "/mydet/detector";
-    DetectorSD * detectorSD = new DetectorSD(detectorName);
-    G4SDManager::GetSDMpointer()->AddNewDetector(detectorSD);
-    SetSensitiveDetector(scinLog,detectorSD);
+        if(!detectorSD.Get()){
+        DetectorSD* det = new DetectorSD("/mydet/detector");
+        detectorSD.Put(det);
+        }
+        G4SDManager::GetSDMpointer()->AddNewDetector(detectorSD.Get());
+        SetSensitiveDetector(scinLog,detectorSD.Get());
+
 }
