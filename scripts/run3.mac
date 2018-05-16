@@ -2,6 +2,6 @@
 /run/initialize
 #
 /jpetmc/detector/loadGeomForRun 3
-#ZZ
+
 /run/beamOn 100000
 #

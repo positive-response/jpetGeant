@@ -23,7 +23,7 @@ EventAction::~EventAction()
 {}
 
 
-void EventAction::BeginOfEventAction(const G4Event* event)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
 
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -39,6 +39,7 @@ void EventAction::BeginOfEventAction(const G4Event* event)
 
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
+
 
      if(anEvent->GetNumberOfPrimaryVertex()==0) return;
 
@@ -81,10 +82,20 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
     }
 
-//    EventInformation* info = (EventInformation*) G4EventManager::GetEventManager()->GetUserInformation();
-//     EventInformation* info =  (EventInformation*) anEvent->GetUserInformation();    
-//     printf("info iiii %d \n",info);
-//    fHisto->AddGenInfo(info);
+
+     if(anEvent->GetNumberOfPrimaryVertex()==1)
+     {
+
+        VtxInformation* info =  (VtxInformation*) anEvent->GetPrimaryVertex(0)->GetUserInformation();    
+        if( info != 0 )
+        {
+            fHisto->AddGenInfo(info);
+        }
+     } else {
+         printf(" number of vtx %i \n", anEvent->GetNumberOfPrimaryVertex());
+         G4Exception("Event Action","EA01",JustWarning,
+                 "Generated more than single vertex - genInfo has no meaning");
+     }
 
     // save full information about event in final ntuples
     fHisto->SaveEvtPack();

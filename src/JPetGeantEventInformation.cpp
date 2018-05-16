@@ -4,7 +4,7 @@ ClassImp(JPetGeantEventInformation)
 
 
 JPetGeantEventInformation::JPetGeantEventInformation()
-    :fVtxPosition(0,0,0), fTwoGammaGen(false), fThreeGammaGen(false), fPromptGammaGen(false), fnRun(0), fLifetime(0)
+    :fVtxPosition(0,0,0), fTwoGammaGen(false), fThreeGammaGen(false), fPromptGammaGen(false), fnRun(0), fLifetime(0), fPromptLifetime(0)
 {}
 
 
@@ -18,6 +18,7 @@ void JPetGeantEventInformation::Clear()
     fPromptGammaGen = false;
     fnRun = 0;
     fLifetime = 0.;
+    fPromptLifetime = 0.;
     fVtxPosition.SetXYZ(0,0,0);
 
 }

@@ -42,7 +42,7 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
 
 
     G4double lifetime;
-    G4double promptLifetime;
+    G4double promptLifetime = G4RandExponential::shoot(3.7*ps);
 
 
     if( ratio3g > G4UniformRand() )
@@ -59,6 +59,7 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
         info->SetTwoGammaGen(true);
     }
     info->SetLifetime(lifetime);
+    info->SetPromptLifetime(promptLifetime);
 
 
 
@@ -82,6 +83,7 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
 
     const G4double ene = beamParams->GetEne();
     G4ThreeVector momentum = beamParams->GetMomentum();
+
 
     G4double px = ene * momentum.x();
     G4double py = ene * momentum.y();
@@ -150,6 +152,7 @@ std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistrib
 
     G4bool lookForVtx = false;
     G4ThreeVector myPoint(0,0,0);
+    MaterialExtension* mat;
 
     // annihilation will occure only in materials where it was allowed @see MaterialExtension
     // annihilation rate 2g/3g also depends on the material type
@@ -165,12 +168,16 @@ std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistrib
         myPoint.setZ(z_tmp);
 
         G4Navigator* theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-        MaterialExtension* mat = (MaterialExtension*)theNavigator->LocateGlobalPointAndSetup(myPoint)->GetLogicalVolume()->GetMaterial()  ; 
+        mat = (MaterialExtension*)theNavigator->LocateGlobalPointAndSetup(myPoint)->GetLogicalVolume()->GetMaterial()  ; 
         lookForVtx = mat->IsTarget();
 
     };
 
-    return std::make_tuple(myPoint,4.0,5.0);
+    G4double ratio3g = mat->Get3gFraction();
+    G4double  lifetime3g = mat->GetoPsLifetime();
+
+
+    return std::make_tuple(myPoint,ratio3g,lifetime3g);
 }
 
 

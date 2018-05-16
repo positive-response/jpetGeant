@@ -18,6 +18,7 @@ class JPetGeantEventInformation : public TObject {
         void SetRunNr(int x){fnRun =x;};
         void SetVtxPosition(double x, double y, double z){fVtxPosition.SetXYZ(x,y,z);};
         void SetLifetime(double x){fLifetime=x;};
+        void SetPromptLifetime(double x){fPromptLifetime=x;};
 
         bool GetThreeGammaGen(){return fThreeGammaGen;};
         bool GetTwoGammaGen(){return fTwoGammaGen;};
@@ -27,6 +28,7 @@ class JPetGeantEventInformation : public TObject {
         double GetVtxPositionY(){return fVtxPosition.Y();};
         double GetVtxPositionZ(){return fVtxPosition.Z();};
         double GetLifetime(){return fLifetime;};
+        double GetPromptLifetime(){return fPromptLifetime;};
 
 
     private:
@@ -36,6 +38,7 @@ class JPetGeantEventInformation : public TObject {
         bool fPromptGammaGen;
         int fnRun;
         double fLifetime;
+        double fPromptLifetime;
 
     private:
      ClassDef(JPetGeantEventInformation,1)

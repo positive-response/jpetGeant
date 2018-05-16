@@ -18,6 +18,7 @@ class VtxInformation : public G4VUserPrimaryVertexInformation {
         void SetRunNr(G4int x){fnRun =x;};
         void SetVtxPosition(G4double x, G4double y, G4double z);
         void SetLifetime(G4double x){fLifetime=x;};
+        void SetPromptLifetime(G4double x){fPromptLifetime=x;};
 
         G4bool GetThreeGammaGen(){return fThreeGammaGen;};
         G4bool GetTwoGammaGen(){return fTwoGammaGen;};
@@ -27,6 +28,7 @@ class VtxInformation : public G4VUserPrimaryVertexInformation {
         G4double GetVtxPositionY(){return fVtxPosition.y();};
         G4double GetVtxPositionZ(){return fVtxPosition.z();};
         G4double GetLifetime(){return fLifetime;};
+        G4double GetPromptLifetime(){return fPromptLifetime;};
 
     private:
         G4ThreeVector fVtxPosition;
@@ -35,6 +37,7 @@ class VtxInformation : public G4VUserPrimaryVertexInformation {
         G4bool fPromptGammaGen;
         G4int fnRun;
         G4double fLifetime;
+        G4double fPromptLifetime;
 
 };
 

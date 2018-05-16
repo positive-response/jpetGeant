@@ -36,18 +36,19 @@ void HistoManager::Book()
 
 }
 
-//void HistoManager::AddGenInfo(EventInformation* info)
-//{
-//    JPetGeantEventInformation* geantInfo =  fEventPack->GetEventInformation();
-//    geantInfo->SetThreeGammaGen(info->GetThreeGammaGen());
-//    geantInfo->SetTwoGammaGen(info->GetTwoGammaGen());
-//    geantInfo->SetPromptGammaGen(info->GetPromptGammaGen());
-//
-//    geantInfo->SetRunNr(info->GetRunNr());
-//    geantInfo->SetVtxPosition(info->GetVtxPositionX(),info->GetVtxPositionY(),info->GetVtxPositionZ());
-//
-//    geantInfo->SetLifetime(info->GetLifetime());
-//}
+void HistoManager::AddGenInfo(VtxInformation* info)
+{
+    JPetGeantEventInformation* geantInfo =  fEventPack->GetEventInformation();
+    geantInfo->SetThreeGammaGen(info->GetThreeGammaGen());
+    geantInfo->SetTwoGammaGen(info->GetTwoGammaGen());
+    geantInfo->SetPromptGammaGen(info->GetPromptGammaGen());
+
+    geantInfo->SetRunNr(info->GetRunNr());
+    geantInfo->SetVtxPosition(info->GetVtxPositionX(),info->GetVtxPositionY(),info->GetVtxPositionZ());
+
+    geantInfo->SetLifetime(info->GetLifetime());
+    geantInfo->SetPromptLifetime(info->GetPromptLifetime());
+}
 
 void HistoManager::AddNewHit(DetectorHit* hit)
 {

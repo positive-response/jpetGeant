@@ -33,6 +33,7 @@ class MaterialExtension : public G4Material
       void Set3gProbability(G4double);
 
       G4double Get3gFraction(); 
+      G4double GetoPsLifetime(){return foPslifetime;};; 
 
 
       G4bool IsTarget() {return fTarget;};
