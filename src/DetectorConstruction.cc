@@ -44,19 +44,18 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::UpdateGeometry()
 {
-
-     // clean-up previous geometry
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4PhysicalVolumeStore::GetInstance()->Clean();
-    G4LogicalVolumeStore::GetInstance()->Clean();
-    G4SolidStore::GetInstance()->Clean();
-
     G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 
 G4VPhysicalVolume* DetectorConstruction::Construct() 
 {
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
+
 
     // world 
      worldSolid   = new G4Box("world", world_hx, world_hy, world_hz);

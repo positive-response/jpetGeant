@@ -1,7 +1,7 @@
 # Initialize kernel
-/run/initialize
 #
 /jpetmc/detector/loadGeomForRun 3
+/run/initialize
 
 /run/beamOn 100000
 #
