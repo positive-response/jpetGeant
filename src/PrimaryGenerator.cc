@@ -215,7 +215,7 @@ void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
                 out[i].px(),out[i].py(),out[i].pz(),out[i].e());
         PrimaryParticleInformation* info = new PrimaryParticleInformation();
         info->SetGammaMultiplicity(2);
-        info->SetIndex(i);
+        info->SetIndex(i+1);
         particle1->SetUserInformation(info);
 
         vertex->SetPrimary(particle1);
@@ -259,7 +259,7 @@ void PrimaryGenerator::GenerateThreeGammaVertex(G4PrimaryVertex* vertex )
 
         PrimaryParticleInformation* info = new PrimaryParticleInformation();
         info->SetGammaMultiplicity(3);
-        info->SetIndex(i);
+        info->SetIndex(i+1);
         particle1->SetUserInformation(info);
         vertex->SetPrimary(particle1);
     }
@@ -284,8 +284,8 @@ void PrimaryGenerator::GeneratePromptGammaSodium(G4PrimaryVertex* vertex )
     G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
             px, py, pz,ene);
     PrimaryParticleInformation* info = new PrimaryParticleInformation();
-    info->SetGammaMultiplicity(3);
-    info->SetIndex(0);
+    info->SetGammaMultiplicity(1);
+    info->SetIndex(1);
     particle1->SetUserInformation(info);
 
     vertex->SetPrimary(particle1);
