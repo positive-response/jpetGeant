@@ -16,6 +16,8 @@
 #include "G4Circle.hh"
 
 #include "VtxInformation.hh"
+#include "PrimaryParticleInformation.hh"
+
 
 
 PrimaryGenerator::PrimaryGenerator()
@@ -29,7 +31,8 @@ PrimaryGenerator::~PrimaryGenerator()
 void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
 {
 
-    G4ThreeVector vtxPosition;
+    G4ThreeVector vtxPosition; // 2g/3g
+    G4ThreeVector promptVtxPosition(0.,0.,0.);  
     G4double ratio3g;
     G4double lifetime3g; 
     std::tie(vtxPosition, ratio3g, lifetime3g) = GetVerticesDistribution();
@@ -39,6 +42,12 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
     VtxInformation* info = new VtxInformation();
     vertex->SetUserInformation(info);
     vertex->SetPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
+
+
+    G4PrimaryVertex* vertexPrompt = new G4PrimaryVertex() ;
+    VtxInformation* infoPrompt = new VtxInformation();
+    vertexPrompt->SetUserInformation(infoPrompt);
+    vertexPrompt->SetPosition(promptVtxPosition.x(),promptVtxPosition.y(),promptVtxPosition.z());
 
 
     G4double lifetime;
@@ -58,17 +67,18 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
         GenerateTwoGammaVertex(vertex);
         info->SetTwoGammaGen(true);
     }
-    info->SetLifetime(lifetime);
-    info->SetPromptLifetime(promptLifetime);
-
+    info->SetLifetime(lifetime/ps);
+    info->SetVtxPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+    event->AddPrimaryVertex(vertex);
 
 
     // add sodium prompt gamma
-    GeneratePromptGammaSodium(vertex);
-    info->SetPromptGammaGen(true);
-    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
+    GeneratePromptGammaSodium(vertexPrompt);
+    infoPrompt->SetPromptGammaGen(true);
+    infoPrompt->SetLifetime(promptLifetime);
+    infoPrompt->SetVtxPosition(promptVtxPosition.x()/cm,promptVtxPosition.y()/cm,promptVtxPosition.z()/cm);
 
-    event->AddPrimaryVertex(vertex);
+    event->AddPrimaryVertex(vertexPrompt);
 
 }
 
@@ -203,6 +213,10 @@ void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
 
         G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
                 out[i].px(),out[i].py(),out[i].pz(),out[i].e());
+        PrimaryParticleInformation* info = new PrimaryParticleInformation();
+        info->SetGammaMultiplicity(2);
+        info->SetIndex(i);
+        particle1->SetUserInformation(info);
 
         vertex->SetPrimary(particle1);
     }
@@ -242,8 +256,11 @@ void PrimaryGenerator::GenerateThreeGammaVertex(G4PrimaryVertex* vertex )
 
         G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
                 out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
-        // output in MeV
 
+        PrimaryParticleInformation* info = new PrimaryParticleInformation();
+        info->SetGammaMultiplicity(3);
+        info->SetIndex(i);
+        particle1->SetUserInformation(info);
         vertex->SetPrimary(particle1);
     }
 
@@ -266,6 +283,10 @@ void PrimaryGenerator::GeneratePromptGammaSodium(G4PrimaryVertex* vertex )
 
     G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
             px, py, pz,ene);
+    PrimaryParticleInformation* info = new PrimaryParticleInformation();
+    info->SetGammaMultiplicity(3);
+    info->SetIndex(0);
+    particle1->SetUserInformation(info);
 
     vertex->SetPrimary(particle1);
     //printf(" %f \n", sqrt(pow(px,2)+pow(py,2)+pow(pz,2)));

@@ -47,6 +47,7 @@ class HistoManager
         TBranch* fBranchEventPack;
 
         JPetGeantEventPack* fEventPack;
+        JPetGeantEventInformation* fGeantInfo; 
 
 };
 

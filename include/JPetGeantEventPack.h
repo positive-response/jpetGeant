@@ -37,7 +37,6 @@ class JPetGeantEventPack : public TObject
     private:
         TClonesArray fMCHits;
         TClonesArray fMCDecayTrees;
-
         JPetGeantEventInformation* fGenInfo;
 
         unsigned int fEvtIndex;

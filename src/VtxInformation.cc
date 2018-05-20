@@ -1,7 +1,7 @@
 #include "VtxInformation.hh"
 
 VtxInformation::VtxInformation()
-    :fVtxPosition(0), fTwoGammaGen(false), fThreeGammaGen(false), fPromptGammaGen(false), fnRun(0), fLifetime(0), fPromptLifetime(0)
+    :fVtxPosition(0), fTwoGammaGen(false), fThreeGammaGen(false), fPromptGammaGen(false), fnRun(0), fLifetime(0)
 {}
 
 
@@ -24,7 +24,6 @@ void VtxInformation::Clear()
     fPromptGammaGen = false;
     fnRun = 0;
     fLifetime =0.;
-    fPromptLifetime =0.;
     fVtxPosition.setX(0);
     fVtxPosition.setY(0);
     fVtxPosition.setZ(0);
