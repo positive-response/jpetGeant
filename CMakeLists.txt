@@ -25,6 +25,7 @@ set(SCRIPT_FILES
     run3.mac
     init_vis.mac
     singleBeam.mac
+    extendedSource.mac
     )
 
 

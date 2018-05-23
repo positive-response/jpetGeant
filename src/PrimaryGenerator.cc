@@ -32,7 +32,8 @@ void PrimaryGenerator::GenerateEvtChamberRun3(G4Event* event)
 {
 
     G4ThreeVector vtxPosition; // 2g/3g
-    G4ThreeVector promptVtxPosition(0.,0.,0.);  
+    G4ThreeVector promptVtxPosition
+         =  VertexUniformInCylinder(1.5*cm,0.2*cm);
     G4double ratio3g;
     G4double lifetime3g; 
     std::tie(vtxPosition, ratio3g, lifetime3g) = GetVerticesDistribution();
@@ -108,6 +109,51 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
 }
 
 
+void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* event)
+{
+
+    G4ThreeVector vtxPosition; 
+
+    if (sourceParams->GetShape() == "cylinder")
+    {
+        vtxPosition =  VertexUniformInCylinder(sourceParams->GetShapeDim(0),sourceParams->GetShapeDim(1));
+    }
+
+    G4PrimaryVertex* vertex = new G4PrimaryVertex(vtxPosition,0);
+    VtxInformation* info = new VtxInformation();
+    vertex->SetUserInformation(info);
+    vertex->SetPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+
+
+    G4double lifetime = G4RandExponential::shoot(fTauBulk);
+
+
+    if ( sourceParams->GetGammasNumber() == 1 )
+    { 
+        GeneratePromptGammaSodium(vertex);
+        info->SetPromptGammaGen(true);
+        info->SetLifetime(lifetime);
+
+    } else if ( sourceParams->GetGammasNumber() == 2 )   {
+        //generate 2g
+        GenerateTwoGammaVertex(vertex);
+        info->SetTwoGammaGen(true);
+    } else if ( sourceParams->GetGammasNumber() == 3 )   {
+        //generate 3g
+        GenerateThreeGammaVertex(vertex);
+        info->SetThreeGammaGen(true);
+    } else {
+        G4Exception("PrimaryGenerator","PG01",FatalException,
+                " program does not know how many gamma quanta need to be simulated ");
+    }
+
+    info->SetLifetime(lifetime/ps);
+    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
+    event->AddPrimaryVertex(vertex);
+
+
+}
+
 void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 {
     // create vertex of 2g/ 3g and if needed add de-excitation gamma quanta to this vertex
@@ -137,14 +183,14 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 }
 
 
-G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rSquare, G4double zmax)
+G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double r, G4double zmax)
 {
     //vertex A uniform on a cylinder
     //  
     //const G4double rSquare = 144*cm;
     //const G4double zmax = 34*cm;
     //
-    G4double r = std::sqrt(rSquare*G4UniformRand());
+    //G4double r = std::sqrt(rSquare*G4UniformRand());
 
     G4double alpha = twopi*G4UniformRand();     //alpha uniform in (0, 2*pi)
     G4double ux = std::cos(alpha);
@@ -171,7 +217,7 @@ std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistrib
     {
         G4double x_tmp = 10.*(2*G4UniformRand() - 1)*cm;
         G4double y_tmp = 10.*(2*G4UniformRand() - 1)*cm;
-        G4double z_tmp = 30.*(2*G4UniformRand() - 1)*cm;
+        G4double z_tmp = 26.*(2*G4UniformRand() - 1)*cm;
 
         myPoint.setX(x_tmp);
         myPoint.setY(y_tmp);

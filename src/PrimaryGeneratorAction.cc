@@ -10,12 +10,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo)
 {
     fPrimaryGenerator = new PrimaryGenerator();
     fBeam = new BeamParams();
+    fIsotope = new SourceParams();
     fMessenger = new PrimaryGeneratorActionMessenger(this);
 
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() 
 {
+    delete fIsotope;
     delete fBeam;
     delete fPrimaryGenerator;
     delete fMessenger;
@@ -45,6 +47,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     } else if (GetSourceTypeInfo() == ("beam")) {
         fPrimaryGenerator->GenerateBeam(fBeam,event);
     } else if (GetSourceTypeInfo() == ("isotope")) {
+        fPrimaryGenerator->GenerateIsotope(fIsotope,event);
     } else {
           G4Exception("PrimaryGeneratorAction","PG04",FatalException,
                  "Required source type is not allowed");

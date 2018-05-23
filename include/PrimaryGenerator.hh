@@ -8,6 +8,7 @@
 #include<TGenPhaseSpace.h> 
 #include<TLorentzVector.h>
 #include "BeamParams.hh"
+#include "SourceParams.hh"
 
 
 class PrimaryGenerator : public G4VPrimaryGenerator 
@@ -16,6 +17,7 @@ class PrimaryGenerator : public G4VPrimaryGenerator
         PrimaryGenerator();
         ~PrimaryGenerator();
         void GenerateBeam(BeamParams*, G4Event* );
+        void GenerateIsotope(SourceParams*, G4Event* );
         void GenerateEvtChamberRun3(G4Event*);
 
     public:

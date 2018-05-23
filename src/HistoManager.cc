@@ -56,6 +56,7 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     {
         fGeantInfo->SetPromptGammaGen(isprompt);
         fGeantInfo->SetPromptLifetime(info->GetLifetime());
+        fGeantInfo->SetVtxPromptPosition(info->GetVtxPositionX(),info->GetVtxPositionY(),info->GetVtxPositionZ());
     }
 
 
