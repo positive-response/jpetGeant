@@ -183,7 +183,7 @@ void PrimaryGenerator::GeneratePrimaryVertex(G4Event* event)
 }
 
 
-G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double r, G4double zmax)
+G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rIn, G4double zmax)
 {
     //vertex A uniform on a cylinder
     //  
@@ -191,6 +191,7 @@ G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double r, G4double zma
     //const G4double zmax = 34*cm;
     //
     //G4double r = std::sqrt(rSquare*G4UniformRand());
+    G4double r = std::sqrt(pow(rIn,2)*G4UniformRand());
 
     G4double alpha = twopi*G4UniformRand();     //alpha uniform in (0, 2*pi)
     G4double ux = std::cos(alpha);
@@ -238,36 +239,71 @@ std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistrib
 
 
 
+//void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
+//{
+//    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+//    G4ParticleDefinition* particleDefinition = particleTable->FindParticle("gamma");
+//
+//
+//    G4double mass = 1022*keV;
+//    std::vector<G4double> mass_secondaries = {0., 0.};
+//
+//    std::vector<G4LorentzVector> out;
+//
+//    G4HadPhaseSpaceGenbod* phS = new G4HadPhaseSpaceGenbod();
+//    phS->Generate(mass,mass_secondaries,out);
+//
+//    // boost gamma quanta
+//    for (int i=0; i<2; i++)
+//    {
+//        // out[i].boost(BoostAxis,0.1);
+//
+//        G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
+//                out[i].px(),out[i].py(),out[i].pz(),out[i].e());
+//        PrimaryParticleInformation* info = new PrimaryParticleInformation();
+//        info->SetGammaMultiplicity(2);
+//        info->SetIndex(i+1);
+//        particle1->SetUserInformation(info);
+//
+//        vertex->SetPrimary(particle1);
+//    }
+//
+//}
+
+
 void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
 {
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* particleDefinition = particleTable->FindParticle("gamma");
 
 
-    G4double mass = 1022*keV;
-    std::vector<G4double> mass_secondaries = {0., 0.};
+    Double_t mass_secondaries[2] = {0., 0.};
 
-    std::vector<G4LorentzVector> out;
+    TGenPhaseSpace event;
+    TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022);
+    Bool_t test =  event.SetDecay(vec_pozytonium, 2, mass_secondaries);
+    if( !test){
+        std::cout   << "error: generate_gamma : createThreeEvts:" << test << std::endl;  
+    }
 
-    G4HadPhaseSpaceGenbod* phS = new G4HadPhaseSpaceGenbod();
-    phS->Generate(mass,mass_secondaries,out);
 
-    // boost gamma quanta
+    event.Generate();   
     for (int i=0; i<2; i++)
     {
-        // out[i].boost(BoostAxis,0.1);
+        TLorentzVector * out = event.GetDecay(i);
 
         G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
-                out[i].px(),out[i].py(),out[i].pz(),out[i].e());
+                out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
+
         PrimaryParticleInformation* info = new PrimaryParticleInformation();
         info->SetGammaMultiplicity(2);
         info->SetIndex(i+1);
         particle1->SetUserInformation(info);
-
         vertex->SetPrimary(particle1);
     }
 
 }
+
 
 void PrimaryGenerator::GenerateThreeGammaVertex(G4PrimaryVertex* vertex )
 {
