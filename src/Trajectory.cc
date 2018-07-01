@@ -58,19 +58,19 @@ Trajectory::~Trajectory()
 
 void Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)  
 { 
-//  if(!secondTrajectory) return; 
-//  
-//  Trajectory* seco = (Trajectory*)secondTrajectory;            
-//  G4int ent = seco->GetPointEntries();                                 
-//  //
-//  // initial point of the second trajectory should not be merged       
-//  for(int i=1;i<ent;i++) 
-//  {                                                                    
-//    fPositionRecord->push_back((*(seco->fPositionRecord))[i]);         
-//  }
-//  delete (*seco->fPositionRecord)[0];
-//  seco->fPositionRecord->clear();
-//  
+  if(!secondTrajectory) return; 
+  
+  Trajectory* seco = (Trajectory*)secondTrajectory;            
+  G4int ent = seco->GetPointEntries();                                 
+  //
+  // initial point of the second trajectory should not be merged       
+  for(int i=1;i<ent;i++) 
+  {                                                                    
+    fPositionRecord->push_back((*(seco->fPositionRecord))[i]);         
+  }
+  delete (*seco->fPositionRecord)[0];
+  seco->fPositionRecord->clear();
+  
 } 
 
 

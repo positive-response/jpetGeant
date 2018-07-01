@@ -17,6 +17,10 @@ class DetectorSD : public G4VSensitiveDetector
         const G4int totScinNum = 193; 
         G4int previousHitHistory[193];
         G4double previousHitTimeHistory[193];
+        //const G4int totScinNum = 7; 
+        //G4int previousHitHistory[7];
+        //G4double previousHitTimeHistory[7];
+
         DetectorHitsCollection *fDetectorCollection;
         //G4int lastHitID;
         //G4double previousTime;

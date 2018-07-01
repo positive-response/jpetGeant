@@ -122,7 +122,8 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
     G4PrimaryVertex* vertex = new G4PrimaryVertex(vtxPosition,0);
     VtxInformation* info = new VtxInformation();
     vertex->SetUserInformation(info);
-    vertex->SetPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+    vertex->SetPosition(vtxPosition.x()*cm,vtxPosition.y()*cm,vtxPosition.z()*cm);
+    //G4cout << vtxPosition.x() << " cm "  << vtxPosition.x()*cm << " *cm " << vtxPosition.x()/cm << " /cm \n";
 
 
     G4double lifetime = G4RandExponential::shoot(fTauBulk);
@@ -283,10 +284,11 @@ void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
     TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022);
     Bool_t test =  event.SetDecay(vec_pozytonium, 2, mass_secondaries);
     if( !test){
-        std::cout   << "error: generate_gamma : createThreeEvts:" << test << std::endl;  
+        std::cout   << "error: generate_gamma : createTwoEvts:" << test << std::endl;  
     }
 
 
+    //printf(" ======================================= \n");
     event.Generate();   
     for (int i=0; i<2; i++)
     {
@@ -294,6 +296,7 @@ void PrimaryGenerator::GenerateTwoGammaVertex(G4PrimaryVertex* vertex )
 
         G4PrimaryParticle* particle1 = new G4PrimaryParticle(particleDefinition,
                 out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
+        //printf("gamma %i %4.2f %4.2f %4.2f %4.2f \n",i,out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
 
         PrimaryParticleInformation* info = new PrimaryParticleInformation();
         info->SetGammaMultiplicity(2);

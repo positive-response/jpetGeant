@@ -77,13 +77,18 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
         //"-------------------------------------------------" << G4endl;
         for (int i=0; i<n_hit; i++)
         {
-          fHisto->AddNewHit((DetectorHit*)DHC->GetHit(i) );
-           //DetectorHit* dh =  (DetectorHit*)DHC->GetHit(i);
-           //printf("dh %i trID %i  gammMuliplicity %i gammaindex %i  \n", 
+          //fHisto->AddNewHit((DetectorHit*)DHC->GetHit(i) );
+           DetectorHit* dh =  (DetectorHit*)DHC->GetHit(i);
+           fHisto->AddNewHit(dh);
+           //G4ThreeVector momentum = dh->GetMomentumIn();
+           //printf("dh %i trID %i  gammMuliplicity %i gammaindex %i %4.2f %4.2f %4.2f \n", 
            //        i,
            //        dh->GetTrackID(),
            //        dh->GetGenGammaMultiplicity(),
-           //        dh->GetGenGammaIndex()
+           //        dh->GetGenGammaIndex(),
+           //        momentum.x(),
+           //        momentum.y(),
+           //        momentum.z()
            //        );
         }
 
