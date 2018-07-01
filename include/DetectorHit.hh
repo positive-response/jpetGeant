@@ -45,10 +45,17 @@ class DetectorHit : public G4VHit
     G4int GetTrackPDG() {return fTrackPDG;}
     G4ThreeVector GetPolarizationIn()  {return fPolarizationIn;}
     G4ThreeVector GetPolarizationOut() {return fPolarizationOut;}
-    G4ThreeVector GetMomentumIn()  {return fPolarizationIn;}
-    G4ThreeVector GetMomentumOut() {return fPolarizationOut;}
+    G4ThreeVector GetMomentumIn()  {return fMomentumIn;}
+    G4ThreeVector GetMomentumOut() {return fMomentumOut;}
     G4int GetNumInteractions() {return fNumInteractions;}
     G4String GetProcessName() {return fName;}
+
+    void SetGenGammaMultiplicity(G4int i){fGenGammaMultiplicity=i;}
+    void SetGenGammaIndex(G4int i){fGenGammaIndex=i;}
+
+    G4int GetGenGammaMultiplicity(){return fGenGammaMultiplicity;}
+    G4int GetGenGammaIndex(){return fGenGammaIndex;}
+
 
     private:
     G4int fScinID; //< scintillator number (arbitrary!; not following convension used in laboratory )
@@ -62,8 +69,12 @@ class DetectorHit : public G4VHit
     G4ThreeVector fPolarizationOut; //< polarization vector after interaction
     G4ThreeVector fMomentumIn;  //< momentum vector before interaction
     G4ThreeVector fMomentumOut; //< momentum vector after interaction
-    G4String fName; //< process name
 
+    // from PrimaryParticleInformation
+    G4int fGenGammaMultiplicity;
+    G4int fGenGammaIndex;
+
+    G4String fName; //< process name
 };
 
 typedef G4THitsCollection<DetectorHit> DetectorHitsCollection;

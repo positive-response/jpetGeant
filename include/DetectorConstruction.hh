@@ -26,6 +26,8 @@
 
 #include "MaterialExtension.hh"
 
+#include "G4Cache.hh"
+
 class DetectorConstructionMessenger;
 
 
@@ -44,6 +46,7 @@ const G4double wrappingShift = 1*pow(10,-5)*m; ///<  free space between wrapping
 
 const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm}; ///< layer radius up to center of the strip
 const int nSegments[layers] = {48,48,96}; ///< number of segments in each layer
+//const int nSegments[layers] = {2,2,2}; ///< number of segments in each layer
 const  G4bool checkOverlaps = false; ///< debugging purpose 
 
 const int extraLayers = 2;
@@ -70,6 +73,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
 
     private:
+    static G4ThreadLocal G4bool fConstructedSDandField;
     static DetectorConstruction* fInstance;
 
     /// standard constructor
@@ -109,6 +113,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     MaterialExtension* bigChamberMaterial;
 
     G4LogicalVolume * scinLog;
+    G4Cache<DetectorSD*>  detectorSD;
 
 
 
