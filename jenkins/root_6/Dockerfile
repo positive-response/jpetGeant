@@ -66,7 +66,7 @@ RUN mkdir -p geant4
 RUN mkdir -p geant4-install
 RUN wget https://github.com/Geant4/geant4/archive/v10.4.2.tar.gz -P geant4
 WORKDIR /geant4
-RUN mkdir -p geant4-10.4.2/build && cd geant4-10.4.2/build && cmake -DCMAKE_INSTALL_PREFIX=/geant4-install -DGEANT4_USE_SYSTEM_CLHEP=ON .. && make && make test && make install
+RUN ls -la geant4-10.4.2/ && mkdir -p geant4-10.4.2/build && cd geant4-10.4.2/build && cmake -DCMAKE_INSTALL_PREFIX=/geant4-install -DGEANT4_USE_SYSTEM_CLHEP=ON .. && make && make test && make install
 WORKDIR /
 RUN mkdir -p /CADMesh-install
 RUN source /geant4-install/bin/geant4.sh && git clone https://github.com/christopherpoole/CADMesh.git && cd CADMesh && git checkout v1.1 && mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/CADMesh-install .. && make && make install
