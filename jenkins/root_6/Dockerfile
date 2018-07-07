@@ -59,7 +59,7 @@ RUN mkdir clhep-install
 RUN wget http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/tarFiles/clhep-2.4.1.0.tgz -P clhep
 WORKDIR /clhep
 RUN tar xvxf clhep-2.4.1.0.tgz
-RUN mkdir -p 2.4.1.0/CLHEP/build cd 2.4.1.0/CLHEP/build && cmake -DCMAKE_INSTALL_PREFIX=/clhep-install .. && make && make test && make install
+RUN mkdir -p 2.4.1.0/CLHEP/build && cd 2.4.1.0/CLHEP/build && cmake -DCMAKE_INSTALL_PREFIX=/clhep-install .. && make && make test && make install
 
 WORKDIR /
 RUN mkdir -p geant4
