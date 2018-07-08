@@ -13,7 +13,7 @@ executeCommand "export CMAKE_INCLUDE_PATH=$CMAKE_INCLUDE_PATH:/framework-depende
 executeCommand "export CLHEP_DIR=/clhep-install"
 executeCommand "export CLHEP_INCLUDE_DIR=/clhep-install/include"
 executeCommand "export CLHEP_LIBRARY=/clhep-install/lib"
-executeCommand "LD_LIBRARY_PATH=${CLHEP_LIBRARY}:${LD_LIBRARY_PATH}"
+executeCommand "LD_LIBRARY_PATH=${CLHEP_LIBRARY}"
 executeCommand "PATH=/clhep-install/CLHEP/bin:$PATH"
 executeCommand "source /geant4-install/bin/geant4.sh"
 executeCommand "source /root-system/bin/thisroot.sh"
