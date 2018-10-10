@@ -67,7 +67,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
      if(fLoadCADFrame)
      {
-        ConstructFrameCAD();
+       // ConstructFrameCAD();
      }
 
      if (fRunNumber == 3) {
@@ -132,7 +132,7 @@ void DetectorConstruction::ConstructTargetRun3()
     G4Tubs* ringInner = new G4Tubs("ringInner",15*mm,20.8*mm,0.8*mm,0*degree,360*degree);
 
 
-    G4Box* conn = new G4Box("conn",31*mm,7.*mm,0.8*mm);
+    G4Box* conn = new G4Box("conn",25*mm,7.*mm,0.8*mm);
     G4LogicalVolume* conn_logical = new G4LogicalVolume(conn,bigChamberMaterial,"conn_logical");
     conn_logical->SetVisAttributes(DetVisAtt);
 
@@ -140,24 +140,24 @@ void DetectorConstruction::ConstructTargetRun3()
     G4ThreeVector loc2;
     G4Transform3D transform2;
 
-    loc2 = G4ThreeVector(49.8*mm,0.0,0.0);
+    loc2 = G4ThreeVector(39.8*mm,0.0,0.0);
     transform2 = G4Transform3D(rot,loc2);
     G4UnionSolid*  unionSolid =  new G4UnionSolid("c1", ringInner,conn,transform2);
 
-    loc2 = G4ThreeVector(-49.8*mm,0.0,0.0);
+    loc2 = G4ThreeVector(-39.8*mm,0.0,0.0);
     transform2 = G4Transform3D(rot,loc2);
     unionSolid =  new G4UnionSolid("c2", unionSolid,conn,transform2);
 
-    loc2 = G4ThreeVector(0.0,49.8*mm,0.0);
+    loc2 = G4ThreeVector(0.0,39.8*mm,0.0);
     transform2 = G4Transform3D(rot.rotateZ(90*degree),loc2);
     unionSolid =  new G4UnionSolid("c3", unionSolid,conn,transform2);
 
-    loc2 = G4ThreeVector(0.0,-49.8*mm,0.0);
+    loc2 = G4ThreeVector(0.0,-39.8*mm,0.0);
     transform2 = G4Transform3D(rot,loc2);
     unionSolid =  new G4UnionSolid("c4", unionSolid,conn,transform2);
 
     //G4Tubs* ringOuter = new G4Tubs("ringOuter",80*mm,95*mm,0.8*mm,0*degree,360*degree);
-    G4Tubs* ringOuter = new G4Tubs("ringOuter",80*mm,90*mm,0.8*mm,0*degree,360*degree);
+    G4Tubs* ringOuter = new G4Tubs("ringOuter",60*mm,70*mm,0.8*mm,0*degree,360*degree);
     unionSolid =  new G4UnionSolid("c5", unionSolid,ringOuter);
 
 
@@ -180,7 +180,8 @@ void DetectorConstruction::ConstructScintillators()
     // scintillator
     G4Box* scinBox = new G4Box("scinBox", scinDim_x/2.0 ,scinDim_y/2.0 , scinDim_z/2.0 );
     scinLog = new G4LogicalVolume(scinBox, scinMaterial , "scinLogical");
-    G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.3,0.4,.9));
+    //G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.3,0.4,.9));
+    G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.447059,0.623529,0.811765));
     BoxVisAtt->SetForceWireframe(true);
     BoxVisAtt->SetForceSolid(true);
     scinLog->SetVisAttributes(BoxVisAtt);
@@ -191,7 +192,8 @@ void DetectorConstruction::ConstructScintillators()
             scinDim_y/2.0+wrappingThickness , scinDim_z/2.0-1*cm );
     G4LogicalVolume* wrappingLog; 
 
-    G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.4,0.4,.4));
+    G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.447059,0.623529,0.811765));
+    //G4VisAttributes* BoxVisAttWrapping =  new G4VisAttributes(G4Colour(0.4,0.4,.4));
     BoxVisAttWrapping->SetForceWireframe(true);
     BoxVisAttWrapping->SetForceSolid(true);
 
