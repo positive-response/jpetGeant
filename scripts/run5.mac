@@ -2,7 +2,7 @@
 #
 #/control/execute init_vis.mac
 
-/jpetmc/detector/loadGeomForRun 3
+/jpetmc/detector/loadGeomForRun 5
 /run/initialize
 
 /run/beamOn 1000000

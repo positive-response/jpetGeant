@@ -23,6 +23,7 @@ mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 set(SCRIPT_FILES
     vis.mac
     run3.mac
+    run5.mac
     init_vis.mac
     singleBeam.mac
     extendedSource.mac

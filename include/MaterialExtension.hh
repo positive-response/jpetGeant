@@ -19,6 +19,8 @@ const G4double fTauBulk = 0.2*ns;
 // data for AL  https://doi.org/10.1007/s00339-015-9214-0
 const G4double fTauoPsAl = 0.32*ns;
 const G4double foPsProbabilityAl = 0.12;
+const G4double fTauoPsXAD = 2.45*ns;
+const G4double foPsProbabilityXAD = 89.6; // 4/3 I; taken only most intense component
 
 //class MaterialExtension : public G4VMaterialExtension
 class MaterialExtension : public G4Material

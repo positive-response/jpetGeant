@@ -91,6 +91,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructScintillators();
     //// create target used in run3 - big chamber no XAD material inside
     void ConstructTargetRun3();
+    //// create target used in run5 - small chamber + XAD material inside
+    void ConstructTargetRun5();
+
 
     G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
 
@@ -111,6 +114,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     MaterialExtension* kapton;
     MaterialExtension* bigChamberMaterial;
+    MaterialExtension* smallChamberMaterial;
+    MaterialExtension* XADMaterial;
 
     G4LogicalVolume * scinLog;
     G4Cache<DetectorSD*>  detectorSD;

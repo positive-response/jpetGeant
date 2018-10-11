@@ -74,6 +74,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          ConstructTargetRun3();
      }
 
+     if (fRunNumber == 5) {
+         ConstructTargetRun5();
+     }
+
+
+
     return worldPhysical;
 }
 
@@ -83,7 +89,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
     fRunNumber = nr;
 
-     if (fRunNumber == 3 || fRunNumber == 0) {
+     if (fRunNumber == 3 ||fRunNumber == 5 || fRunNumber == 0) {
         LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 
@@ -93,6 +99,54 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 }
 
 
+void DetectorConstruction::ConstructTargetRun5()
+{
+   G4RotationMatrix rot = G4RotationMatrix();
+
+   G4double z[] = {-7.6*cm, -7.0*cm, -6.9*cm, -4.3*cm, -4.2*cm, -2.7*cm, -2.6*cm, 2.6*cm, 2.7*cm, 4.2*cm, 4.3*cm, 6.9*cm, 7.0*cm, 7.6*cm }; 
+   G4double rInner[] = { 0*cm, 0*cm, 1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm , 1.5*cm,  1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm , 1.5*cm,  0*cm, 0*cm};
+   G4double rOuter[] = { 2.5*cm, 2.5*cm, 2.0*cm, 2.0*cm, 1.8*cm, 1.8*cm, 1.57*cm, 1.57*cm, 1.8*cm, 1.8*cm, 2.0*cm, 2.0*cm, 2.5*cm, 2.5*cm }; 
+
+   G4Polycone* smallChamber = new G4Polycone("bigChamber",0*degree,360*degree, 14 , z, rInner, rOuter);
+        
+
+   G4LogicalVolume * smallChamber_logical = new G4LogicalVolume(smallChamber, smallChamberMaterial, "smallChamber_logical");
+
+    G4VisAttributes* DetVisAtt =  new G4VisAttributes(G4Colour(0.9,0.9,.9));
+    DetVisAtt->SetForceWireframe(true);
+    DetVisAtt->SetForceSolid(true);
+    smallChamber_logical->SetVisAttributes(DetVisAtt);
+
+
+     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4Transform3D transform(rot,loc);
+     new G4PVPlacement(transform,             //rotation,position
+                       smallChamber_logical,            //its logical volume
+                       "smallChamberGeom",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+    G4Tubs* xadFilling = new G4Tubs("xadFilling",0*cm, 1.49*cm, 0.6*cm, 0*degree,360*degree);
+    G4LogicalVolume* xadFilling_logical = new G4LogicalVolume(xadFilling,XADMaterial,"xadFilling_logical");
+    G4VisAttributes* XADVisAtt =  new G4VisAttributes(G4Colour(0.2,0.3,.5));
+    XADVisAtt->SetForceWireframe(true);
+    XADVisAtt->SetForceSolid(true);
+
+    xadFilling_logical->SetVisAttributes(XADVisAtt);
+
+     new G4PVPlacement(transform,             //rotation,position
+                       xadFilling_logical,            //its logical volume
+                       "xadFillingGeom",             //its name
+                       worldLogical,      //its mother (logical) volume
+                       true,                 //no boolean operation
+                       0,                 //copy number
+                       checkOverlaps);       // checking overlaps 
+
+
+}
 
 void DetectorConstruction::ConstructTargetRun3()
 {
@@ -262,6 +316,7 @@ void DetectorConstruction::InitializeMaterials()
     nistManager->FindOrBuildMaterial("G4_Al");
     nistManager->FindOrBuildMaterial("G4_KAPTON");
     nistManager->FindOrBuildMaterial("G4_Galactic");
+    nistManager->FindOrBuildMaterial("G4_POLYSTYRENE");
 
     //air = G4Material::GetMaterial("G4_AIR"); 
     //scinMaterial      =G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
@@ -279,6 +334,19 @@ void DetectorConstruction::InitializeMaterials()
     bigChamberMaterial->AllowsAnnihilations(true); 
     bigChamberMaterial->Set3gProbability(foPsProbabilityAl); 
     bigChamberMaterial->SetoPsLifetime(fTauoPsAl); 
+
+    smallChamberMaterial = new MaterialExtension("smallChamber", G4Material::GetMaterial("G4_Al"));
+    smallChamberMaterial->AllowsAnnihilations(true); 
+    smallChamberMaterial->Set3gProbability(foPsProbabilityAl); 
+    smallChamberMaterial->SetoPsLifetime(fTauoPsAl); 
+
+    //  /// https://www.sigmaaldrich.com/catalog/product/sigma/xad4
+    XADMaterial = new MaterialExtension("XAD", G4Material::GetMaterial("G4_POLYSTYRENE"));
+    XADMaterial->AllowsAnnihilations(true); 
+    XADMaterial->Set3gProbability(foPsProbabilityAl); 
+    XADMaterial->SetoPsLifetime(fTauoPsAl); 
+
+
 }
 
 

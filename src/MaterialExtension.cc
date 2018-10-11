@@ -22,13 +22,13 @@ MaterialExtension::~MaterialExtension()
 
 G4double MaterialExtension::Get3gFraction()
 {
-    /// f3g = (1-Pi)/372 + 3/4 tau_i/tau_vac \times Pi
+    /// f3g = (1-4/3 Pi)/372 + tau_i/tau_vac \times Pi
     //  Pi - propability of Ps formation
     //  f^{oPs}_{3g} = tau_i/tau_vac 
     
     // foPsProbability = 4/3 I_3 measured in PALS
     // 3g = direct + oPs
-    f3gFraction = (1.-foPsPobability)/372 + (3/4)*(foPslifetime/fTauoPsVaccum)*foPsPobability; 
+    f3gFraction = (1.-4/3*foPsPobability)/372 + (foPslifetime/fTauoPsVaccum)*foPsPobability; 
 
     return f3gFraction;
 }
