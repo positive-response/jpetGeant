@@ -107,7 +107,7 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
     // save full information about event in final ntuples
     fHisto->SaveEvtPack();
 
-     if ( id % 1000 == 0)
+     if ( id % 100000 == 0)
      {
          printf (" === Processed %i events \n", id);
      }

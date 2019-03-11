@@ -38,7 +38,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
 
     if( GetSourceTypeInfo() == ("run")) {
-        if (nRun == 3 || nRun == 5) {
+        if (nRun == 3 || nRun == 5|| nRun == 7) {
             fPrimaryGenerator->GenerateEvtChamberRun3(event);
         } else {
           G4Exception("PrimaryGeneratorAction","PG05",FatalException,

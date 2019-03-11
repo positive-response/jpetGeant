@@ -93,6 +93,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructTargetRun3();
     //// create target used in run5 - small chamber + XAD material inside
     void ConstructTargetRun5();
+    void ConstructTargetRun7();
 
 
     G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
@@ -115,6 +116,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     MaterialExtension* kapton;
     MaterialExtension* bigChamberMaterial;
     MaterialExtension* smallChamberMaterial;
+    MaterialExtension* smallChamberRun7Material;
     MaterialExtension* XADMaterial;
 
     G4LogicalVolume * scinLog;
