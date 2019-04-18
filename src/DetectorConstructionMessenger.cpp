@@ -24,7 +24,10 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadOnlyScintillators = new G4UIcmdWithoutParameter("/jpetmc/detector/loadOnlyScintillators",this);
   fLoadOnlyScintillators->SetGuidance("Generate only scintillators (for test purposes)");
 
-       
+  fLoadModularLayer = new G4UIcmdWithABool("/jpetmc/detector/loadModularLayer",this);
+  fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
+
+
 }
 
 DetectorConstructionMessenger::~DetectorConstructionMessenger()
@@ -34,6 +37,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
    delete fLoadJPetBasicGeometry;
    delete fLoadJPetExtendedGeometry;
    delete fLoadOnlyScintillators;
+   delete fLoadModularLayer;
 }
 
 
@@ -67,5 +71,12 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
         fDetector->UpdateGeometry();
 
     }
+
+    if(command==fLoadModularLayer){
+        fDetector->ConstructModularLayer(fLoadModularLayer->GetNewBoolValue(newValue));
+        fDetector->UpdateGeometry();
+    }
+
+
 
 }

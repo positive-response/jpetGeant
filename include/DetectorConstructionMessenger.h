@@ -33,6 +33,7 @@ class DetectorConstructionMessenger: public G4UImessenger
         G4UIcmdWithoutParameter* fLoadJPetBasicGeometry;
         G4UIcmdWithoutParameter* fLoadJPetExtendedGeometry;
         G4UIcmdWithoutParameter* fLoadOnlyScintillators;
+        G4UIcmdWithABool* fLoadModularLayer; 
 
 };
 
