@@ -641,7 +641,7 @@ G4int DetectorConstruction::ReturnNumberOfScintillators()
 void DetectorConstruction::ConstructSDandField()
 {
       if(!detectorSD.Get()){
-        DetectorSD* det = new DetectorSD("/mydet/detector",ReturnNumberOfScintillators());
+        DetectorSD* det = new DetectorSD("/mydet/detector",ReturnNumberOfScintillators(),GetMergingTimeValueForScin());
         detectorSD.Put(det);
       }
         G4SDManager::GetSDMpointer()->AddNewDetector(detectorSD.Get());

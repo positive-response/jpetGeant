@@ -3,8 +3,8 @@
 #include "G4PrimaryParticle.hh"
 #include "PrimaryParticleInformation.h"
 
-DetectorSD::DetectorSD(G4String name, G4int scinSum)
-    :G4VSensitiveDetector(name), totScinNum(scinSum)
+DetectorSD::DetectorSD(G4String name, G4int scinSum, const G4double timeMergeValue )
+    :G4VSensitiveDetector(name), totScinNum(scinSum), timeIntervals(timeMergeValue)
 {
      collectionName.insert("detectorCollection");
 

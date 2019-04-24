@@ -1,4 +1,5 @@
 #include "DetectorConstructionMessenger.h"
+#include "DetectorConstants.h"
 
 
 DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector)
@@ -27,6 +28,9 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadModularLayer = new G4UIcmdWithABool("/jpetmc/detector/loadModularLayer",this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
 
+  fScinHitMergingTime = new G4UIcmdWithADouble("/jpetmc/detector/hitMergingTime",this);
+  fScinHitMergingTime->SetGuidance("Define time range (ns) while merging hits in scintillators");
+
 
 }
 
@@ -38,6 +42,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
    delete fLoadJPetExtendedGeometry;
    delete fLoadOnlyScintillators;
    delete fLoadModularLayer;
+   delete fScinHitMergingTime;
 }
 
 
@@ -76,6 +81,12 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
         fDetector->ConstructModularLayer(fLoadModularLayer->GetNewBoolValue(newValue));
         fDetector->UpdateGeometry();
     }
+
+    if(command==fScinHitMergingTime){
+        detector_constants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
+        fDetector->UpdateGeometry();
+    }
+
 
 
 

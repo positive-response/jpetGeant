@@ -7,13 +7,13 @@
 class DetectorSD : public G4VSensitiveDetector
 {
     public:
-        DetectorSD(G4String name, G4int scinSum);
+        DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue );
         virtual ~DetectorSD();
 
         virtual void Initialize(G4HCofThisEvent* HCE);
 
     private:
-        const G4double timeIntervals = 0.08; // 80 ps
+        G4double timeIntervals; 
         G4int totScinNum; 
         std::vector<G4int> previousHitHistory;
         std::vector<G4double> previousHitTimeHistory;

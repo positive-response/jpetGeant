@@ -113,8 +113,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume * scinLogInModule;
     G4Cache<DetectorSD*>  detectorSD;
 
-
-
 };
 
 

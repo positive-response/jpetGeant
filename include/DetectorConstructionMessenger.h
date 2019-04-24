@@ -13,6 +13,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh" 
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADouble.hh"
 
 
 class DetectorConstructionMessenger: public G4UImessenger 
@@ -34,6 +35,8 @@ class DetectorConstructionMessenger: public G4UImessenger
         G4UIcmdWithoutParameter* fLoadJPetExtendedGeometry;
         G4UIcmdWithoutParameter* fLoadOnlyScintillators;
         G4UIcmdWithABool* fLoadModularLayer; 
+
+        G4UIcmdWithADouble* fScinHitMergingTime;
 
 };
 

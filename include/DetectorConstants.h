@@ -29,6 +29,9 @@ namespace detector_constants
       const int modulesInModularLayer = 24;
 
 
+      G4double GetMergingTimeValueForScin(); 
+      void SetMergingTimeValueForScin(G4double );
+
 }
 
 
