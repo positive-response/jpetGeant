@@ -15,8 +15,9 @@ class DetectorSD : public G4VSensitiveDetector
     private:
         G4double timeIntervals; 
         G4int totScinNum; 
-        std::vector<G4int> previousHitHistory;
-        std::vector<G4double> previousHitTimeHistory;
+        std::vector<G4int> previousHitID;
+        std::vector<G4double> previousHitTime;
+        std::vector<G4double> previousHitsEnergySum;
 
         DetectorHitsCollection *fDetectorCollection;
 
