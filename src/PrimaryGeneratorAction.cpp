@@ -60,9 +60,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     }
 
 
-       // fPrimaryGenerator->GeneratePrimaryVertex(event);
-
-
 }
 
 void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)

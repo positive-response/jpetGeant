@@ -3,6 +3,8 @@
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4ThreeVector.hh"
 
 
 namespace detector_constants
@@ -29,9 +31,12 @@ namespace detector_constants
       const int modulesInModularLayer = 24;
 
 
+
       G4double GetMergingTimeValueForScin(); 
       void SetMergingTimeValueForScin(G4double );
 
+      void SetChamberCenter(const G4ThreeVector);
+      const G4ThreeVector GetChamberCenter();
 }
 
 

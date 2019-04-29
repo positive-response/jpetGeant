@@ -5,7 +5,19 @@ namespace detector_constants
       namespace // hiding variables
       {
         static G4double fScinHitMergingTime = 2.0; //ns
+        static G4ThreeVector fChamberCenter(0.0*cm, 0.0*cm, 0.0*cm); 
       }
+
+
+void SetChamberCenter(const G4ThreeVector xyz)
+{
+  fChamberCenter=xyz;
+}
+
+const G4ThreeVector GetChamberCenter()
+{
+  return fChamberCenter;
+}
 
 G4double GetMergingTimeValueForScin()
 {

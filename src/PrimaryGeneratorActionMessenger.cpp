@@ -1,5 +1,7 @@
 #include "PrimaryGeneratorActionMessenger.h"
 #include "PrimaryGeneratorAction.h"
+#include "DetectorConstruction.h"
+#include "DetectorConstants.h"
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction)
     :fPrimGen(primGeneratorAction)
@@ -61,6 +63,14 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
     fNemaPosition->SetDefaultValue(1);
 
 
+    fSetChamberCenter = new G4UIcmdWith3VectorAndUnit("/jpetmc/source/run/setChamberPosition",this);
+    fSetChamberCenter->SetGuidance("Set position of the annihilation chamber");
+    fSetChamberCenter->SetDefaultValue(G4ThreeVector(0,0,0));
+    fSetChamberCenter->SetDefaultUnit("cm");
+    fSetChamberCenter->SetUnitCandidates("cm");
+    fSetChamberCenter->SetParameterName("Xvalue","Yvalue","Zvalue",false);
+
+
 }
 
 
@@ -75,6 +85,7 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
     delete fGammaBeamSetMomentum;
     delete fIsotopeSetCenter;
     delete fNemaPosition;
+    delete fSetChamberCenter;
 }
 
 
@@ -130,9 +141,13 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
 
     if(command==fNemaPosition){
         fPrimGen->SetSourceTypeInfo("nema");
-	fPrimGen->SetNemaPoint(fNemaPosition->GetNewIntValue(newValue));
+	      fPrimGen->SetNemaPoint(fNemaPosition->GetNewIntValue(newValue));
     }
 
+    if(command==fSetChamberCenter){
+        ChangeToRun();
+        detector_constants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));
+    }
 
 
 }
@@ -145,6 +160,19 @@ void PrimaryGeneratorActionMessenger::CheckIfIsotope()
             G4Exception("PrimaryGeneratorActionMessenger","PGM02",JustWarning,
                     "Changed sourceType to isotope");
             fPrimGen->SetSourceTypeInfo("isotope");
+        }
+
+}
+
+void PrimaryGeneratorActionMessenger::ChangeToRun()
+{
+        if(fPrimGen->GetSourceTypeInfo() != "run")
+        {
+          G4Exception("PrimaryGeneratorActionMessenger","PGM01",JustWarning,
+                  "Changed run number to RUN5");
+          DetectorConstruction::GetInstance()->LoadGeometryForRun(5);
+          fPrimGen->SetSourceTypeInfo("run");
+          DetectorConstruction::GetInstance()->UpdateGeometry();
         }
 
 }

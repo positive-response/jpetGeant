@@ -30,7 +30,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 
 DetectorConstruction::DetectorConstruction()
-:  G4VUserDetectorConstruction(), fRunNumber(0),  fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(true)
+:  G4VUserDetectorConstruction(), fRunNumber(0),  fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false)
 {
 
     InitializeMaterials();
@@ -74,7 +74,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
      if(fLoadCADFrame)
      {
-        ConstructFrameCAD();
+       ConstructFrameCAD();
      }
 
      if (fRunNumber == 3) {
@@ -102,7 +102,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
     fRunNumber = nr;
 
      if (fRunNumber == 3 ||fRunNumber == 5 ||fRunNumber == 6 || fRunNumber == 0) {
-        LoadFrame(true);  
+       // LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 
              " This run setup is not implemented ");    
@@ -164,7 +164,7 @@ void DetectorConstruction::ConstructTargetRun6()
     bigChamber_logical->SetVisAttributes(DetVisAtt);
 
 
-     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4ThreeVector loc = GetChamberCenter();
      G4Transform3D transform(rot,loc);
      new G4PVPlacement(transform,             //rotation,position
                        bigChamber_logical,            //its logical volume
@@ -304,7 +304,7 @@ void DetectorConstruction::ConstructTargetRun5()
     smallChamber_logical->SetVisAttributes(DetVisAtt);
 
 
-     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4ThreeVector loc = GetChamberCenter();
      G4Transform3D transform(rot,loc);
      new G4PVPlacement(transform,             //rotation,position
                        smallChamber_logical,            //its logical volume
@@ -375,7 +375,7 @@ void DetectorConstruction::ConstructTargetRun3()
     bigChamber_logical->SetVisAttributes(DetVisAtt);
 
 
-     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4ThreeVector loc = GetChamberCenter();
      G4Transform3D transform(rot,loc);
      new G4PVPlacement(transform,             //rotation,position
                        bigChamber_logical,            //its logical volume
@@ -398,19 +398,19 @@ void DetectorConstruction::ConstructTargetRun3()
     G4ThreeVector loc2;
     G4Transform3D transform2;
 
-    loc2 = G4ThreeVector(39.8*mm,0.0,0.0);
+    loc2 = G4ThreeVector(39.8*mm,0.0,0.0)+GetChamberCenter();
     transform2 = G4Transform3D(rot,loc2);
     G4UnionSolid*  unionSolid =  new G4UnionSolid("c1", ringInner,conn,transform2);
 
-    loc2 = G4ThreeVector(-39.8*mm,0.0,0.0);
+    loc2 = G4ThreeVector(-39.8*mm,0.0,0.0)+GetChamberCenter();
     transform2 = G4Transform3D(rot,loc2);
     unionSolid =  new G4UnionSolid("c2", unionSolid,conn,transform2);
 
-    loc2 = G4ThreeVector(0.0,39.8*mm,0.0);
+    loc2 = G4ThreeVector(0.0,39.8*mm,0.0)+GetChamberCenter();
     transform2 = G4Transform3D(rot.rotateZ(90*degree),loc2);
     unionSolid =  new G4UnionSolid("c3", unionSolid,conn,transform2);
 
-    loc2 = G4ThreeVector(0.0,-39.8*mm,0.0);
+    loc2 = G4ThreeVector(0.0,-39.8*mm,0.0)+GetChamberCenter();
     transform2 = G4Transform3D(rot,loc2);
     unionSolid =  new G4UnionSolid("c4", unionSolid,conn,transform2);
 

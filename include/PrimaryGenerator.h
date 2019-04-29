@@ -21,8 +21,7 @@ class PrimaryGenerator : public G4VPrimaryGenerator
         void GenerateNema(G4int, G4Event* );
         void GenerateEvtChamberWithSodiumAndPorousMaterial(G4Event* event, G4double maxXhalf, G4double maxYhalf, G4double maxZhalf); ///< as input the maximal dimension(/2) of annihilation chamber are passed (to speed up)
 
-    public:
-         virtual void GeneratePrimaryVertex(G4Event*);
+        virtual void GeneratePrimaryVertex(G4Event*);
 
      private:
 

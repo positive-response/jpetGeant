@@ -26,6 +26,7 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
 
     private:
         void CheckIfBeam();
+        void ChangeToRun();
         void CheckIfIsotope();
         PrimaryGeneratorAction* fPrimGen;
         
@@ -45,6 +46,8 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
 
 
         G4UIcmdWithAnInteger* fNemaPosition;
+
+        G4UIcmdWith3VectorAndUnit* fSetChamberCenter;
 
 };
 
