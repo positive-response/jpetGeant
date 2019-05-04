@@ -4,7 +4,7 @@ namespace detector_constants
 {
       namespace // hiding variables
       {
-        static G4double fScinHitMergingTime = 2.0; //ns
+        static G4double fScinHitMergingTime = 5.0; //ns
         static G4ThreeVector fChamberCenter(0.0*cm, 0.0*cm, 0.0*cm); 
       }
 

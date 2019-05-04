@@ -53,12 +53,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructModularLayer(bool tf){fLoadModularLayer=tf;}
     G4int ReturnNumberOfScintillators();
 
-
-
     G4int GetRunNumber(){return fRunNumber;};
 
     void UpdateGeometry();
 
+    void ReloadMaterials();
 
     private:
     static G4ThreadLocal G4bool fConstructedSDandField;

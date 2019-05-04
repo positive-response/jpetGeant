@@ -13,6 +13,7 @@
 
 #include "DetectorConstructionMessenger.h"
 #include "DetectorConstants.h"
+#include "MaterialParameters.h"
 
 using namespace detector_constants;
 
@@ -178,7 +179,7 @@ void DetectorConstruction::ConstructTargetRun6()
     G4Tubs* ringInner = new G4Tubs("ringInner",source_holder_radius_inner,source_holder_radius_outer,source_holder_radius_halfthickness,0*degree,360*degree);
 
     G4Box* conn = new G4Box("conn",source_holder_connector_height,source_holder_connector_width,source_holder_connector_halfthickness);
-    G4LogicalVolume* conn_logical = new G4LogicalVolume(conn,plexiglassMaterial,"conn_logical");
+    G4LogicalVolume* conn_logical = new G4LogicalVolume(conn,aluminiumMaterial,"conn_logical");
     conn_logical->SetVisAttributes(DetVisAtt);
 
     G4ThreeVector loc2;
@@ -196,7 +197,7 @@ void DetectorConstruction::ConstructTargetRun6()
     transform2 = G4Transform3D(rot.rotateZ(90*degree),loc2);
     unionSolid =  new G4UnionSolid("c3", unionSolid,conn,transform2);
 
-    G4LogicalVolume* unionSolid_logical = new G4LogicalVolume(unionSolid,plexiglassMaterial,"union_logical");
+    G4LogicalVolume* unionSolid_logical = new G4LogicalVolume(unionSolid,aluminiumMaterial,"union_logical");
     unionSolid_logical->SetVisAttributes(DetVisAtt);
 
     new G4PVPlacement(transform,             //rotation,position
@@ -551,6 +552,15 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
  
 }
 
+void DetectorConstruction::ReloadMaterials()
+{
+    XADMaterial->SetoPsFraction(MaterialParameters::GetXADoPsFraction()); 
+    XADMaterial->SetoPsLifetime(MaterialParameters::GetXADoPsTau());
+    XADMaterial->SetPickOffFraction(MaterialParameters::GetXADPickOffFraction());
+
+}
+
+
 void DetectorConstruction::InitializeMaterials()
 {
     // define material
@@ -570,29 +580,21 @@ void DetectorConstruction::InitializeMaterials()
     kapton =  new MaterialExtension("kapton", G4Material::GetMaterial("G4_KAPTON")); 
 
 
-    aluminiumMaterial = new MaterialExtension("bigChamberRun3", G4Material::GetMaterial("G4_Al"));
+    aluminiumMaterial = new MaterialExtension("aluminium", G4Material::GetMaterial("G4_Al"));
     aluminiumMaterial->AllowsAnnihilations(true); 
-    aluminiumMaterial->Set3gProbability(foPsProbabilityAl); 
-    aluminiumMaterial->SetoPsLifetime(fTauoPsAl); 
 
     plexiglassMaterial = new MaterialExtension("bigChamberRun6", G4Material::GetMaterial("G4_PLEXIGLASS"));
     plexiglassMaterial->AllowsAnnihilations(true); 
-    plexiglassMaterial->Set3gProbability(foPsProbabilityAl); 
-    plexiglassMaterial->SetoPsLifetime(fTauoPsAl); 
-
 
     smallChamberMaterial = new MaterialExtension("smallChamber", G4Material::GetMaterial("G4_Al"));
     smallChamberMaterial->AllowsAnnihilations(true); 
-    smallChamberMaterial->Set3gProbability(foPsProbabilityAl); 
-    smallChamberMaterial->SetoPsLifetime(fTauoPsAl); 
 
     //  /// https://www.sigmaaldrich.com/catalog/product/sigma/xad4
     XADMaterial = new MaterialExtension("XAD", G4Material::GetMaterial("G4_POLYSTYRENE"));
     XADMaterial->AllowsAnnihilations(true); 
-    XADMaterial->Set3gProbability(foPsProbabilityAl); 
-    XADMaterial->SetoPsLifetime(fTauoPsAl); 
-
-
+    XADMaterial->SetoPsFraction(MaterialParameters::GetXADoPsFraction()); 
+    XADMaterial->SetoPsLifetime(MaterialParameters::GetXADoPsTau());
+    XADMaterial->SetPickOffFraction(MaterialParameters::GetXADPickOffFraction());
 }
 
 void DetectorConstruction::ConstructFrameCAD()

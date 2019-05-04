@@ -3,6 +3,7 @@
 #include "G4PrimaryVertex.hh"
 
 
+G4double PrimaryGeneratorAction::fEffectivePositronRadius=0.5*cm;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) 
     :G4VUserPrimaryGeneratorAction(),
@@ -23,6 +24,17 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
     delete fMessenger;
 }
 
+void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double d)
+{
+  if(d<=0)
+  {
+    G4Exception("PrimaryGeneratorAction","PG0Radius",JustWarning,
+           "EffectivePositronRadius can not be negative!! Value is not changed");
+  } else {
+    fEffectivePositronRadius = d;
+  }
+}
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) 
 {
 
@@ -39,11 +51,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
     if( GetSourceTypeInfo() == ("run")) {
         if (nRun == 3) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,2.5,2.5,7.6);
+            fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else if (nRun == 5) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,10.0,10.0,20.0);
+            fPrimaryGenerator->GenerateEvtSmallChamber(event,fEffectivePositronRadius);
         } else if (nRun == 6) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,15.0,15.0,31.0);
+            fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else {
           G4Exception("PrimaryGeneratorAction","PG05",FatalException,
                  "Called run with non-exisitng geometry");

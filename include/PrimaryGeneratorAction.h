@@ -38,6 +38,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         void SetNemaPoint(G4int i){fNemaPoint = i;}
         G4int GetNemaPoint(){return fNemaPoint;}
 
+        void SetEffectivePositronRadius(G4double );
+
     private:
 
         G4String fGenerateSourceType;///< "run", "beam", "isotope" 
@@ -51,6 +53,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         BeamParams* fBeam = nullptr;
         SourceParams* fIsotope = nullptr;
         G4int fNemaPoint = -1;
+
+        static G4double fEffectivePositronRadius;
 
 };
 #endif

@@ -10,7 +10,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
 
   fLoadGeomForRun  = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadGeomForRun",this);
   fLoadGeomForRun->SetGuidance("Set RUN number to simulate");
-  fLoadGeomForRun->SetDefaultValue(3);
+  fLoadGeomForRun->SetDefaultValue(5);
 
   fLoadIdealGeometry = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadIdealGeom",this);
   fLoadIdealGeometry->SetGuidance("Generate ideal geometry for 1-4 layers");

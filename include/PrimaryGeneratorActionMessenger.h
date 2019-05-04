@@ -25,12 +25,15 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
         void SetNewValue(G4UIcommand*, G4String);
 
     private:
-        void CheckIfBeam();
+        void ChangeToBeam();
         void ChangeToRun();
-        void CheckIfIsotope();
+        void ChangeToIsotope();
+
+        bool CheckIfRun();
         PrimaryGeneratorAction* fPrimGen;
         
         G4UIdirectory* fDirectory;
+        G4UIdirectory* fDirectoryRun;
         G4UIcmdWithAString* fSourceType;
 
         G4UIcmdWithADoubleAndUnit* fGammaBeamSetEnergy;
@@ -48,6 +51,7 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
         G4UIcmdWithAnInteger* fNemaPosition;
 
         G4UIcmdWith3VectorAndUnit* fSetChamberCenter;
+        G4UIcmdWithADoubleAndUnit* fSetChamberEffectivePositronRadius;
 
 };
 

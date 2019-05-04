@@ -14,14 +14,6 @@
  * \brief extended material keeps information about 2g/3g creation fraction
  */
 
-const G4double fTauoPsVaccum = 142*ns;
-
-const G4double fTauBulk = 0.2*ns;
-// data for AL  https://doi.org/10.1007/s00339-015-9214-0
-const G4double fTauoPsAl = 0.32*ns;
-const G4double foPsProbabilityAl = 0.12;
-const G4double fTauoPsXAD = 2.45*ns;
-const G4double foPsProbabilityXAD = 89.6; // 4/3 I; taken only most intense component
 
 class MaterialExtension : public G4Material
 {
@@ -32,10 +24,12 @@ class MaterialExtension : public G4Material
       G4Material* GetMaterial() {return fMaterial;};
 
       void SetoPsLifetime(G4double);
-      void Set3gProbability(G4double);
+      void SetoPsFraction(G4double);
+      void SetPickOffFraction(G4double sf){fPickOffFraction=sf;}
 
       G4double Get3gFraction(); 
       G4double GetoPsLifetime(){return foPslifetime;};
+      std::vector<G4double> GetEventsFraction(); //< 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
 
 
       G4bool IsTarget() {return fTarget;};
@@ -49,9 +43,9 @@ class MaterialExtension : public G4Material
       MaterialExtensionMessenger* fMaterialExtensionMessenger =  MaterialExtensionMessenger::GetMaterialExtensionMessenger();
       G4bool fTarget;
 
-      G4double f3gFraction; ///<  3g/2g events fraction 
-      G4double foPsPobability; 
+      G4double foPsFraction; ///<  3g/2g events fraction 
       G4double foPslifetime;
+      G4double fPickOffFraction;
 
 };
 

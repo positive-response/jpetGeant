@@ -1,14 +1,17 @@
 #include "MaterialExtension.h"
+#include "MaterialParameters.h"
 
+using namespace MaterialParameters;
 
 MaterialExtension::MaterialExtension(const G4String& name, const G4Material* baseMaterial)
 : G4Material(name,baseMaterial->GetDensity(),baseMaterial,    
    baseMaterial->GetState(),baseMaterial->GetTemperature(),
    baseMaterial->GetPressure())
 {
-    foPsPobability = 0.;
     foPslifetime = 0.;
+    foPsFraction = 0.;
     fTarget = false ;
+    fPickOffFraction = 0.;
 }
 
 
@@ -19,40 +22,27 @@ MaterialExtension::~MaterialExtension()
 
 G4double MaterialExtension::Get3gFraction()
 {
-    /// f3g = (1-4/3 Pi)/372 + tau_i/tau_vac \times Pi
-    //  Pi - propability of Ps formation
-    //  f^{oPs}_{3g} = tau_i/tau_vac 
-    
-    // foPsProbability = 4/3 I_3 measured in PALS
-    // 3g = direct + oPs
-    f3gFraction = (1.-4/3*foPsPobability)/372 + (foPslifetime/fTauoPsVaccum)*foPsPobability; 
-
-      if(fMaterialExtensionMessenger->GenerateOnly3g())
-      {
-            return 1.0;
-      } else {
-            return f3gFraction;
-      }
+   return foPsFraction;
 }
 
-void MaterialExtension::Set3gProbability(G4double x)
+void MaterialExtension::SetoPsFraction(G4double x)
 {
     if ( x <0 || x > 1)
     {
-        G4Exception ("MaterialExtension", "ME01", FatalException,
-                "3gamma fraction can not extend 1");
+        G4Exception ("MaterialExtension", "ME01",JustWarning,
+                "3gamma fraction can not extend 1; nothing happend");
 
     } else {
-        foPsPobability = x;
+        foPsFraction = x;
     };
 }
 
 
 void MaterialExtension::SetoPsLifetime(G4double x)
 {
-    if ( x <0 || x > fTauoPsVaccum )
+    if ( x <0 || x > oPsTauVaccum )
     {
-        G4Exception ("MaterialExtension", "ME02", FatalException,
+        G4Exception ("MaterialExtension", "ME02",JustWarning,
                 "oPs lifetime can not excided 142*ns");
 
     } else {
@@ -62,3 +52,13 @@ void MaterialExtension::SetoPsLifetime(G4double x)
 }
 
 
+std::vector<G4double> MaterialExtension::GetEventsFraction()
+{
+  G4double direct3g = fractionDirect3g;
+  if( foPsFraction==1) direct3g = 0.0f;
+  if( fPickOffFraction==1) direct3g = 0.0f;
+
+   std::vector<G4double> frac = {1.-fPickOffFraction-direct3g-foPsFraction , fPickOffFraction, direct3g , foPsFraction};
+  // 2g direct //  2g pickoff // 3g direct // 3g  oPs
+  return frac;
+}

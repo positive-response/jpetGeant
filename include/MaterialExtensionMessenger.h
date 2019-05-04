@@ -12,6 +12,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh" 
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 
 
 class MaterialExtension;
@@ -31,8 +33,41 @@ class MaterialExtensionMessenger: public G4UImessenger
 
         G4UIdirectory* fDirectory;
         MaterialExtension* fMaterial;
+        
+        G4UIcmdWithoutParameter* fXAD3GammaOnly;
+        G4UIcmdWithoutParameter* fXAD2GammaOnly;
+        G4UIcmdWithoutParameter* fXADPickOffOnly;
+        G4UIcmdWithADoubleAndUnit* fXADSet3gLifetime;
+        G4UIcmdWithADouble* fXADSet3gFraction;
+        G4UIcmdWithADouble* fXADSetPickOffFraction;
 
-        G4UIcmdWithABool* fMake3GammaOnly;
+        //G4UIcmdWithABool* fKaptonNoAnnihilations;
+        //G4UIcmdWithABool* fKapton3GammaOnly;
+        //G4UIcmdWithABool* fKapton2GammaOnly;
+        //G4UIcmdWithADoubleAndUnit* fKaptonSet2gLifetime;
+        //G4UIcmdWithADoubleAndUnit* fKaptonSet3gLifetime;
+
+        //G4UIcmdWithABool* fChamberRun5NoAnnihilations;
+        //G4UIcmdWithABool* fChamberRun53GammaOnly;
+        //G4UIcmdWithABool* fChamberRun52GammaOnly;
+        //G4UIcmdWithADoubleAndUnit* fChamberRun5Set2gLifetime;
+        //G4UIcmdWithADoubleAndUnit* fChamberRun5Set3gLifetime;
+
+        //G4UIcmdWithABool* fChamberRun6NoAnnihilations;
+        //G4UIcmdWithABool* fChamberRun63GammaOnly;
+        //G4UIcmdWithABool* fChamberRun62GammaOnly;
+        //G4UIcmdWithADoubleAndUnit* fChamberRun6Set2gLifetime;
+        //G4UIcmdWithADoubleAndUnit* fChamberRun6Set3gLifetime;
+
+        //G4UIcmdWithABool* fAlNoAnnihilations;
+        //G4UIcmdWithABool* fAl3GammaOnly;
+        //G4UIcmdWithABool* fAl2GammaOnly;
+        //G4UIcmdWithADoubleAndUnit* fAlSet2gLifetime;
+        //G4UIcmdWithADoubleAndUnit* fAlSet3gLifetime;
+
+
+
+
         bool fIsOnly3g = true;
 };
 
