@@ -1,6 +1,7 @@
 #include "HistoManager.h"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
+#include "PrimaryParticleInformation.h"
 
 #include <vector>
 
@@ -120,6 +121,27 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     }
 
       
+}
+
+void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
+{
+  PrimaryParticleInformation* infoParticle = static_cast<PrimaryParticleInformation*> (particle->GetUserInformation());
+
+  if (infoParticle == nullptr) return;
+
+  G4int multiplicity = infoParticle->GetGammaMultiplicity();
+
+  if ( multiplicity == 0 ) return;
+
+  if ( multiplicity == 1 )
+  {
+    fGeantInfo->SetMomentumGamma0( particle->GetPx(), particle->GetPy(), particle->GetPz());
+  } else {
+    G4int index = infoParticle->GetIndex();
+    if (index==1) fGeantInfo->SetMomentumGamma1( particle->GetPx(), particle->GetPy(), particle->GetPz());
+    if (index==2) fGeantInfo->SetMomentumGamma2( particle->GetPx(), particle->GetPy(), particle->GetPz());
+    if (index==3) fGeantInfo->SetMomentumGamma3( particle->GetPx(), particle->GetPy(), particle->GetPz());
+  }
 }
 
 void HistoManager::AddNewHit(DetectorHit* hit)

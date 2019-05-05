@@ -38,9 +38,21 @@ class JPetGeantEventInformation : public TObject {
         double GetVtxPromptPositionY() const {return fVtxPromptPosition.Y();};
         double GetVtxPromptPositionZ() const {return fVtxPromptPosition.Z();};
 
+        TVector3 GetVtxPromptPosition() const {return fVtxPromptPosition;}
+        TVector3 GetVtxPosition() const {return fVtxPosition;}
+
         double GetLifetime() const {return fLifetime;};
         double GetPromptLifetime() const {return fPromptLifetime;};
 
+        void SetMomentumGamma0(double x, double y, double z ){fMomentumGamma0.SetXYZ(x,y,z);}
+        void SetMomentumGamma1(double x, double y, double z ){fMomentumGamma1.SetXYZ(x,y,z);}
+        void SetMomentumGamma2(double x, double y, double z ){fMomentumGamma2.SetXYZ(x,y,z);}
+        void SetMomentumGamma3(double x, double y, double z ){fMomentumGamma3.SetXYZ(x,y,z);}
+
+        TVector3 GetMomentumGamma0() const {return fMomentumGamma0;}
+        TVector3 GetMomentumGamma1() const {return fMomentumGamma1;}
+        TVector3 GetMomentumGamma2() const {return fMomentumGamma2;}
+        TVector3 GetMomentumGamma3() const {return fMomentumGamma3;}
 
     private:
         const unsigned int fMaxGammaNumberIndex = 3;
@@ -51,8 +63,13 @@ class JPetGeantEventInformation : public TObject {
         double fLifetime = -1.0; ///< lifetime of generated bound state or direct annihilation; see specific simulation details
         double fPromptLifetime = -1.0; ///< generated lifetime of emmited prompt photon; filled only if prompt gamma is generated
 
+        TVector3 fMomentumGamma0; // prompt
+        TVector3 fMomentumGamma1;
+        TVector3 fMomentumGamma2;
+        TVector3 fMomentumGamma3;
+
     private:
-     ClassDef(JPetGeantEventInformation,3)
+     ClassDef(JPetGeantEventInformation,5)
 
 };
 

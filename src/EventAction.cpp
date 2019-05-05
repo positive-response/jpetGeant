@@ -23,7 +23,7 @@ EventAction::~EventAction()
 {}
 
 
-void EventAction::BeginOfEventAction(const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event* anEvent)
 {
 
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -34,6 +34,27 @@ void EventAction::BeginOfEventAction(const G4Event*)
     }
 
      fHisto->Clear();
+
+    // has to be filled before we touch the Multiplicity in PrimaryParticleInformation
+    for( int i=0; i<anEvent->GetNumberOfPrimaryVertex(); i++)
+    {
+        VtxInformation* info =  (VtxInformation*) anEvent->GetPrimaryVertex(i)->GetUserInformation();    
+        if( info != 0 )
+        {
+            fHisto->AddGenInfo(info);
+        }
+
+        for (int j=0; j<anEvent->GetPrimaryVertex(i)->GetNumberOfParticle(); j++)
+        {
+          G4PrimaryParticle* particle = anEvent->GetPrimaryVertex(i)->GetPrimary(j);
+          if(particle != nullptr )
+          {
+            fHisto->AddGenInfoParticles(particle);
+          }
+        }
+    }
+
+
 }
 
 
@@ -73,34 +94,10 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
     {
         DHC = (DetectorHitsCollection*)(HCE->GetHC(fScinCollID));
         int n_hit = DHC->entries();
-        //G4cout << "Detector hits "<< n_hit <<    
-        //"-------------------------------------------------" << G4endl;
         for (int i=0; i<n_hit; i++)
         {
-          //fHisto->AddNewHit((DetectorHit*)DHC->GetHit(i) );
            DetectorHit* dh =  (DetectorHit*)DHC->GetHit(i);
            fHisto->AddNewHit(dh);
-           //G4ThreeVector momentum = dh->GetMomentumIn();
-           //printf("dh %i trID %i  gammMuliplicity %i gammaindex %i %4.2f %4.2f %4.2f \n", 
-           //        i,
-           //        dh->GetTrackID(),
-           //        dh->GetGenGammaMultiplicity(),
-           //        dh->GetGenGammaIndex(),
-           //        momentum.x(),
-           //        momentum.y(),
-           //        momentum.z()
-           //        );
-        }
-
-    }
-
-
-    for( int i=0; i<anEvent->GetNumberOfPrimaryVertex(); i++)
-    {
-        VtxInformation* info =  (VtxInformation*) anEvent->GetPrimaryVertex(i)->GetUserInformation();    
-        if( info != 0 )
-        {
-            fHisto->AddGenInfo(info);
         }
     }
 

@@ -12,6 +12,7 @@
 #include "JPetGeantEventInformation.h"
 #include "DetectorHit.h"
 #include "VtxInformation.h"
+#include "G4PrimaryParticle.hh"
 
 
 class TFile;
@@ -36,6 +37,7 @@ class HistoManager
         void Clear(){fEventPack->Clear();}; 
 
         void AddGenInfo(VtxInformation* info);
+        void AddGenInfoParticles(G4PrimaryParticle* particle);
         void AddNewHit(DetectorHit*);
         void SetEventNumber(int x){fEventPack->SetEventNumber(x);};
 
