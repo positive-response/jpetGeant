@@ -103,7 +103,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
     fRunNumber = nr;
 
      if (fRunNumber == 3 ||fRunNumber == 5 ||fRunNumber == 6 || fRunNumber == 0) {
-       // LoadFrame(true);  
+        LoadFrame(true);  
      } else {
          G4Exception ("DetectorConstruction","DC02", FatalException, 
              " This run setup is not implemented ");    

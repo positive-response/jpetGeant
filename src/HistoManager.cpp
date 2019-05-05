@@ -45,34 +45,69 @@ void HistoManager::Book()
 void HistoManager::BookHistograms()
 {
 
-      /// histograms - registered hits parameters
-      fHisto[0] = new TH1F("gen_gamma_multiplicity","Generated gammas multiplicity",10,0,10);
+    /// histograms - registered hits parameters
+    fHisto[0] = new TH1F("gen_gamma_multiplicity","Generated gammas multiplicity",10,0,10);
+    fHisto[0]->GetXaxis()->SetTitle("Gamma quanta multiplicity: 1=prompt; 2=2g; 3=3g");
+    fHisto[0]->GetYaxis()->SetTitle("Entries");
+
     fHisto[1] = new TH1F("gen_hit_time","Gen hit time",100, 0.0, 15000.0);
+    fHisto[1]->GetXaxis()->SetTitle("Hit-times in scintillators [ps]");
+    fHisto[1]->GetYaxis()->SetTitle("Entries");
+
     fHisto[2] = new TH1F("gen_hit_eneDepos","Gen hit ene deposition",750, 0.0, 1500.0);
+    fHisto[2]->GetXaxis()->SetTitle("Deposited energy in scintillators [keV]");
+    fHisto[2]->GetYaxis()->SetTitle("Entries");
+
     fHisto[3] = new TH1F("gen_hits_z_pos", "gen hits Z position",100, -60.0, 60.0);
+    fHisto[3]->GetXaxis()->SetTitle("Hit-position along z [cm]");
+    fHisto[3]->GetYaxis()->SetTitle("Entries");
+
     fHisto2D[0] = new TH2F("gen_hits_xy_pos","GEN hits XY pos",
       121, -60.5, 60.5,121, -60.5, 60.5);
-
+    fHisto2D[0]->GetXaxis()->SetTitle("Hit-position X [cm]");
+    fHisto2D[0]->GetYaxis()->SetTitle("Hit-position Y [cm]");
 
     /// histograms - source position
     fHisto[4] = new TH1F("gen_lifetime","Gen lifetime",100, 0.0, 1500.0);
-    fHisto[5] = new TH1F("gen_prompt_lifetime","Gen prompt lifetime",100, 0.0, 1500.0);
+    fHisto[4]->GetXaxis()->SetTitle("Lifetime (2/3g) [ps]");
+    fHisto[4]->GetYaxis()->SetTitle("Entries");
 
+    fHisto[5] = new TH1F("gen_prompt_lifetime","Gen prompt lifetime",100, 0.0, 1500.0);
+    fHisto[5]->GetXaxis()->SetTitle("Lifetime prompt gamma [ps]");
+    fHisto[5]->GetYaxis()->SetTitle("Entries");
 
     fHisto2D[1] = new TH2F("gen_XY","GEN XY coordinates of annihilation point",
     121, -21.5, 21.5,121, -21.5, 21.5);
+    fHisto2D[1]->GetXaxis()->SetTitle("Annihilation point (2/3g) X [cm]");
+    fHisto2D[1]->GetYaxis()->SetTitle("Annihilation point (2/3g) Y [cm]");
+
     fHisto2D[2] = new TH2F("gen_XZ","GEN XZ coordinates of annihilation point",
           121, -21.5, 21.5,121, -60.5, 60.5);
+    fHisto2D[2]->GetXaxis()->SetTitle("Annihilation point (2/3g) X [cm]");
+    fHisto2D[2]->GetYaxis()->SetTitle("Annihilation point (2/3g) Z [cm]");
+
     fHisto2D[3] = new TH2F("gen_YZ","GEN YZ coordinates of  annihilation point",
           121, -21.5, 21.5,121, -60.5, 60.5);
+    fHisto2D[3]->GetXaxis()->SetTitle("Annihilation point (2/3g) Y [cm]");
+    fHisto2D[3]->GetYaxis()->SetTitle("Annihilation point (2/3g) Z [cm]");
+
+
     fHisto2D[4] = new TH2F("gen_prompt_XY","GEN prompt XY coordinates of annihilation point",
     121, -21.5, 21.5,121, -21.5, 21.5);
+    fHisto2D[4]->GetXaxis()->SetTitle("Prompt emission point X [cm]");
+    fHisto2D[4]->GetYaxis()->SetTitle("Prompt emission point Y [cm]");
+
+
     fHisto2D[5] = new TH2F("gen_prompt_XZ","GEN prompt XZ coordinates of annihilation point",
           121, -21.5, 21.5,121, -60.5, 60.5);
+    fHisto2D[5]->GetXaxis()->SetTitle("Prompt emission point X [cm]");
+    fHisto2D[5]->GetYaxis()->SetTitle("Prompt emission point Z [cm]");
+
+
     fHisto2D[6] = new TH2F("gen_prompt_YZ","GEN prompt YZ coordinates of  annihilation point",
             121, -21.5, 21.5,121, -60.5, 60.5);
-
-            
+    fHisto2D[6]->GetXaxis()->SetTitle("Prompt emission point Y [cm]");
+    fHisto2D[6]->GetYaxis()->SetTitle("Prompt emission point Z [cm]");
 
 }
 
