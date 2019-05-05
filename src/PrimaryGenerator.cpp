@@ -371,9 +371,9 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
 {
 
     /** NEMA positions - coordinate system centered in the middle of the detector
-     * for( z={0,3/4L}){
-     *  x = 1, 10, 20 cm
-     *  y =0 
+     * for( z={0,-3/4L}){
+     *  y = 1, 10, 20 cm
+     *  x =0 
      *  }
      *
      *  20      3       6
@@ -383,27 +383,28 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
      */
 
     G4double x_creation = 0.0; 
+    G4double y_creation = 0.0; 
     G4double z_creation = 0.0;
 
         if(nemaPoint>3){
-            z_creation = z_creation + scinDim[2]*3/8/cm;
+            z_creation = z_creation - scinDim[2]*3/8/cm;
         }
     
         if(nemaPoint==1 || nemaPoint == 4){
-            x_creation = x_creation + 1.0;
+            y_creation = y_creation + 1.0;
         }
     
         if(nemaPoint==2 || nemaPoint == 5){
-            x_creation = x_creation + 10.0;
+            y_creation = y_creation + 10.0;
         }
         if(nemaPoint==3 || nemaPoint == 6){
-            x_creation = x_creation + 20.0;
+            y_creation = y_creation + 20.0;
         }
 
 
 
     G4ThreeVector vtxPosition
-      =  VertexUniformInCylinder(0.1*mm,0.1*mm)+G4ThreeVector(x_creation,0.,z_creation);
+      =  VertexUniformInCylinder(0.1*mm,0.1*mm)+G4ThreeVector(x_creation,y_creation,z_creation);
 
 
     event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,0.0f,tauBulk));
