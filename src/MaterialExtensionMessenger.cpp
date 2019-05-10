@@ -2,7 +2,6 @@
 #include "MaterialParameters.h"
 #include "DetectorConstruction.h"
 
-using namespace MaterialParameters;
 
 MaterialExtensionMessenger*  MaterialExtensionMessenger::fInstance = nullptr;
 
@@ -74,25 +73,25 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
 {
   if(command==fXAD3GammaOnly) 
   {
-    SetXADoPsOnly();  
+    MaterialParameters::SetXADoPsOnly();  
     DetectorConstruction::GetInstance()->ReloadMaterials();
   }
 
   if(command==fXAD2GammaOnly) 
   { 
-    SetXAD2gOnly();  
+    MaterialParameters::SetXAD2gOnly();  
     DetectorConstruction::GetInstance()->ReloadMaterials();
   }
 
   if(command==fXADPickOffOnly) 
   { 
-    SetXADPickOffOnly(); 
+    MaterialParameters::SetXADPickOffOnly(); 
     DetectorConstruction::GetInstance()->ReloadMaterials();
   }
 
   if(command==fXADSet3gLifetime)
   {
-    SetXADoPsLifetime(fXADSet3gLifetime->GetNewDoubleValue(newValue));
+    MaterialParameters::SetXADoPsLifetime(fXADSet3gLifetime->GetNewDoubleValue(newValue));
     DetectorConstruction::GetInstance()->ReloadMaterials();
   }
 
@@ -104,7 +103,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
       G4Exception ("MaterialMessenger", "MP01",JustWarning,
       "Fraction should be between 0 and 1 ! ");
     } else {
-      SetXADoPsFraction(frac);
+      MaterialParameters::SetXADoPsFraction(frac);
       DetectorConstruction::GetInstance()->ReloadMaterials();
     }
   }
@@ -118,7 +117,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
       G4Exception ("MaterialMessenger", "MP01",JustWarning,
       "Fraction should be between 0 and 1 ! ");
     } else {
-      SetXADPickOffFraction(frac);
+      MaterialParameters::SetXADPickOffFraction(frac);
       DetectorConstruction::GetInstance()->ReloadMaterials();
     }
   }

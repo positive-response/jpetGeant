@@ -14,7 +14,6 @@
 #include "MaterialParameters.h"
 
 
-using namespace MaterialParameters;
 
 PrimaryGenerator::PrimaryGenerator()
     : G4VPrimaryGenerator()
@@ -194,13 +193,13 @@ void PrimaryGenerator::GenerateEvtSmallChamber(G4Event* event, const G4double ef
 
     if( evtFractions[0] > random) {
       // 2g
-      event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,tauBulk));
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,MaterialParameters::tauBulk));
     } else if ( (evtFractions[0] + evtFractions[1]) > random ) {
       // 2g pick off
       event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,lifetime3g));
     } else if ( (evtFractions[0] + evtFractions[1] + evtFractions[2]) > random ) {
       // 3g direct
-      event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,tauBulk));
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,MaterialParameters::tauBulk));
     } else {
       // 3g oPs
       event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,lifetime3g));
@@ -211,7 +210,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(G4Event* event, const G4double ef
     G4ThreeVector promptVtxPosition =  VertexUniformInCylinder(0.2*cm,0.2*cm)+chamberCenter;
 
     event->AddPrimaryVertex(
-    GeneratePromptGammaVertex(promptVtxPosition,0.0f,sodiumGammaTau,sodiumGammaEnergy)
+    GeneratePromptGammaVertex(promptVtxPosition,0.0f,MaterialParameters::sodiumGammaTau,MaterialParameters::sodiumGammaEnergy)
     ); 
 
 }
@@ -277,13 +276,13 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
 
     if( evtFractions[0] > random) {
       // 2g
-      event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,tauBulk));
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,MaterialParameters::tauBulk));
     } else if ( (evtFractions[0] + evtFractions[1]) > random ) {
       // 2g pick off
       event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,T0,lifetime3g));
     } else if ( (evtFractions[0] + evtFractions[1] + evtFractions[2]) > random ) {
       // 3g direct
-      event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,tauBulk));
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,MaterialParameters::tauBulk));
     } else {
       // 3g oPs
       event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,T0,lifetime3g));
@@ -294,7 +293,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
     G4ThreeVector promptVtxPosition =  VertexUniformInCylinder(0.2*cm,0.2*cm)+chamberCenter;
 
     event->AddPrimaryVertex(
-    GeneratePromptGammaVertex(promptVtxPosition,0.0f,sodiumGammaTau,sodiumGammaEnergy)
+    GeneratePromptGammaVertex(promptVtxPosition,0.0f,MaterialParameters::sodiumGammaTau,MaterialParameters::sodiumGammaEnergy)
     ); 
 
 }
@@ -349,15 +348,15 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
     if ( sourceParams->GetGammasNumber() == 1 )
     { 
       event->AddPrimaryVertex(
-        GeneratePromptGammaVertex(vtxPosition,0.0f,sodiumGammaTau,sodiumGammaEnergy)
+        GeneratePromptGammaVertex(vtxPosition,0.0f,MaterialParameters::sodiumGammaTau,MaterialParameters::sodiumGammaEnergy)
       ); 
 
     } else if ( sourceParams->GetGammasNumber() == 2 )   {
         //generate 2g
-        event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,0.0f,tauBulk));
+        event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,0.0f,MaterialParameters::tauBulk));
     } else if ( sourceParams->GetGammasNumber() == 3 )   {
         //generate 3g
-        event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,0.0f,oPsTauVaccum));
+        event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition,0.0f,MaterialParameters::oPsTauVaccum));
     } else {
         G4Exception("PrimaryGenerator","PG01",FatalException,
                 " program does not know how many gamma quanta need to be simulated ");
@@ -406,9 +405,9 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
       =  VertexUniformInCylinder(0.1*mm,0.1*mm)+G4ThreeVector(x_creation,y_creation,z_creation);
 
 
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,0.0f,tauBulk));
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition,0.0f,MaterialParameters::tauBulk));
     event->AddPrimaryVertex(
-        GeneratePromptGammaVertex(vtxPosition,0.0f,sodiumGammaTau,sodiumGammaEnergy)
+        GeneratePromptGammaVertex(vtxPosition,0.0f,MaterialParameters::sodiumGammaTau,MaterialParameters::sodiumGammaEnergy)
       ); 
 
 }

@@ -1,7 +1,6 @@
 #include "MaterialExtension.h"
 #include "MaterialParameters.h"
 
-using namespace MaterialParameters;
 
 MaterialExtension::MaterialExtension(const G4String& name, const G4Material* baseMaterial)
 : G4Material(name,baseMaterial->GetDensity(),baseMaterial,    
@@ -40,7 +39,7 @@ void MaterialExtension::SetoPsFraction(G4double x)
 
 void MaterialExtension::SetoPsLifetime(G4double x)
 {
-    if ( x <0 || x > oPsTauVaccum )
+    if ( x <0 || x > MaterialParameters::oPsTauVaccum )
     {
         G4Exception ("MaterialExtension", "ME02",JustWarning,
                 "oPs lifetime can not excided 142*ns");
@@ -54,7 +53,7 @@ void MaterialExtension::SetoPsLifetime(G4double x)
 
 std::vector<G4double> MaterialExtension::GetEventsFraction()
 {
-  G4double direct3g = fractionDirect3g;
+  G4double direct3g = MaterialParameters::fractionDirect3g;
   if( foPsFraction==1) direct3g = 0.0f;
   if( fPickOffFraction==1) direct3g = 0.0f;
 
