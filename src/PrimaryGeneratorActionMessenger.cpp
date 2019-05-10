@@ -158,7 +158,7 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
 
     if(command==fSetChamberCenter){
         if( ! CheckIfRun()) ChangeToRun();
-        detector_constants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));
+        DetectorConstants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));
     }
 
     if(command==fSetChamberEffectivePositronRadius){

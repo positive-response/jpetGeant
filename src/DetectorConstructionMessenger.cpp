@@ -83,7 +83,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     }
 
     if(command==fScinHitMergingTime){
-        detector_constants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
+        DetectorConstants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
         fDetector->UpdateGeometry();
     }
 

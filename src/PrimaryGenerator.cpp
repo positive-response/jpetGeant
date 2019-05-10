@@ -14,7 +14,6 @@
 #include "MaterialParameters.h"
 
 
-using namespace detector_constants;
 using namespace MaterialParameters;
 
 PrimaryGenerator::PrimaryGenerator()
@@ -179,7 +178,7 @@ G4PrimaryVertex* PrimaryGenerator::GeneratePromptGammaVertex(const G4ThreeVector
 
 void PrimaryGenerator::GenerateEvtSmallChamber(G4Event* event, const G4double effectivePositronRadius )
 {
-    G4ThreeVector chamberCenter=GetChamberCenter();
+    G4ThreeVector chamberCenter=DetectorConstants::GetChamberCenter();
 
     G4ThreeVector vtxPosition; // 2g/3g
     MaterialExtension* material;
@@ -261,7 +260,7 @@ std::tuple<G4ThreeVector,MaterialExtension*> PrimaryGenerator::GetVerticesDistri
 void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
 {
 
-    G4ThreeVector chamberCenter=GetChamberCenter();
+    G4ThreeVector chamberCenter=DetectorConstants::GetChamberCenter();
 
     G4ThreeVector vtxPosition; // 2g/3g
     MaterialExtension* material;
@@ -387,7 +386,7 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
     G4double z_creation = 0.0;
 
         if(nemaPoint>3){
-            z_creation = z_creation - scinDim[2]*3/8/cm;
+            z_creation = z_creation - DetectorConstants::scinDim[2]*3/8/cm;
         }
     
         if(nemaPoint==1 || nemaPoint == 4){

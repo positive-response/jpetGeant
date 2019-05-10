@@ -7,37 +7,43 @@
 #include "G4ThreeVector.hh"
 
 
-namespace detector_constants
+class DetectorConstants 
 {
-      const G4double world_size[3] = {1.0*m, 1.0*m, 1.0*m}; ///< max world size
+  public:
+      static const G4double world_size[3]; ///< max world size
 
-      const G4int layers = 3; ///< number of simulated laters in detector
-      const G4double scinDim[3] = {1.9*cm, 0.7*cm, 50.0*cm}; ///<  X dimension of simulated strip
+      static const G4int layers = 3; ///< number of simulated layers in detector
+      static const G4double scinDim[3]; ///<  dimensions of simulated strip
 
-      const G4double radius[layers] = {42.5*cm,46.75*cm,57.5*cm}; ///< layer radius up to center of the strip
-      const int nSegments[layers] = {48,48,96}; ///< number of segments in each layer
+      static const G4double radius[layers]; ///< layer radius up to center of the strip
+      static const int nSegments[layers]; ///< number of segments in each layer
 
-      const int extraLayers = 2;
-      const int nSegmentsExtraLayers[2] = {96,96};
-      const G4double radiusExtraLayers[2] = {509*mm, 533*mm};
+      static const int extraLayers = 2;
+      static const int nSegmentsExtraLayers[extraLayers];
+      static const G4double radiusExtraLayers[extraLayers];
 
-      const G4double wrappingThickness = 2*25.4*pow(10,-6)*m; ///<  total width of used wrapping 
-      const G4double wrappingShift = 1*pow(10,-5)*m; ///<  free space between wrapping and scinitlator 
+      static const G4double wrappingThickness; ///<  total width of used wrapping 
+      static const G4double wrappingShift; ///<  free space between wrapping and scinitlator 
 
 
       // parameters for modular layer (known as 4th layer)
-      const G4double scinDim_inModule[3] = {2.5*cm, 0.6*cm, 50.0*cm}; ///<  X dimension of simulated strip
+      static const G4double scinDim_inModule[3]; ///<  dimensions of simulated strip in modular layer
 
-      const int modulesInModularLayer = 24;
+      static const int modulesInModularLayer = 24;
 
 
 
-      G4double GetMergingTimeValueForScin(); 
-      void SetMergingTimeValueForScin(G4double );
+      static G4double GetMergingTimeValueForScin(); 
+      static void SetMergingTimeValueForScin(G4double );
 
-      void SetChamberCenter(const G4ThreeVector);
-      const G4ThreeVector GetChamberCenter();
-}
+      static void SetChamberCenter(const G4ThreeVector);
+      static const G4ThreeVector GetChamberCenter();
+  private:
+     static G4double fScinHitMergingTime; ///ns
+     static G4double fChamberCenter[3]; 
+
+
+};
 
 
 #endif
