@@ -3,7 +3,6 @@
 #include "G4PrimaryVertex.hh"
 
 
-G4double PrimaryGeneratorAction::fEffectivePositronRadius=0.5*cm;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) 
     :G4VUserPrimaryGeneratorAction(),
@@ -24,14 +23,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
     delete fMessenger;
 }
 
-void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double d)
+void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
 {
-  if(d<=0)
+  if(radius<=0)
   {
     G4Exception("PrimaryGeneratorAction","PG0Radius",JustWarning,
            "EffectivePositronRadius can not be negative!! Value is not changed");
   } else {
-    fEffectivePositronRadius = d;
+    fEffectivePositronRadius = radius;
   }
 }
 

@@ -188,9 +188,8 @@ bool PrimaryGeneratorActionMessenger::CheckIfRun()
    if(  nRun != 0){ 
      fPrimGen->SetSourceTypeInfo("run");
      return true;
-   } else {
-     return false;
    }
+  return false;
 
 }
 

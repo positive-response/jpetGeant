@@ -24,7 +24,6 @@ class EventAction : public G4UserEventAction
         virtual void EndOfEventAction(const G4Event* anEvent);
 
     private:
-        //std::unique_ptr<SavedEvent> fEvent {new SavedEvent()};
         HistoManager* fHisto;
         G4int fScinCollID;
 };

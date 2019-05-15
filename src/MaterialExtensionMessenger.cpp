@@ -24,13 +24,6 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   fDirectory = new G4UIdirectory("/jpetmc/material/xad/"); 
   fDirectory->SetGuidance("Commands for controling the XAD material properties");
 
-//  fDirectory = new G4UIdirectory("/jpetmc/material/kapton/"); 
-//  fDirectory->SetGuidance("Commands for controling the kapton material properties");
-//
-//  fDirectory = new G4UIdirectory("/jpetmc/material/chamberRun5/"); 
-//  fDirectory->SetGuidance("Commands for controling the kapton material properties");
-//
-
   fXAD3GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/xad/threeGammaOnly",this);
   fXAD3GammaOnly->SetGuidance("Only 3 gamma events will be generated"); 
 

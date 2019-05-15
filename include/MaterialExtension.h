@@ -27,9 +27,9 @@ class MaterialExtension : public G4Material
       void SetoPsFraction(G4double);
       void SetPickOffFraction(G4double sf){fPickOffFraction=sf;}
 
-      G4double Get3gFraction(); 
-      G4double GetoPsLifetime(){return foPslifetime;};
-      std::vector<G4double> GetEventsFraction(); //< 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
+      const G4double Get3gFraction(); 
+      const G4double GetoPsLifetime(){return foPslifetime;};
+      const std::vector<G4double> GetEventsFraction(); //< 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
 
 
       G4bool IsTarget() {return fTarget;};

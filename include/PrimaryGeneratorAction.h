@@ -42,19 +42,19 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     private:
 
-        G4String fGenerateSourceType;///< "run", "beam", "isotope" 
+        G4String fGenerateSourceType; 
         G4String fAllowedSourceTypes[4] = {"run", "beam", "isotope", "nema"};
 
-        PrimaryGeneratorActionMessenger* fMessenger; 
+        PrimaryGeneratorActionMessenger* fMessenger = nullptr; 
 
-        PrimaryGenerator* fPrimaryGenerator; 
-        HistoManager* fHisto;
+        PrimaryGenerator* fPrimaryGenerator = nullptr; 
+        HistoManager* fHisto = nullptr;
 
         BeamParams* fBeam = nullptr;
         SourceParams* fIsotope = nullptr;
         G4int fNemaPoint = -1;
 
-        static G4double fEffectivePositronRadius;
+        G4double fEffectivePositronRadius = 0.5*cm;
 
 };
 #endif

@@ -10,7 +10,7 @@ MaterialExtension::MaterialExtension(const G4String& name, const G4Material* bas
     foPslifetime = 0.;
     foPsFraction = 0.;
     fTarget = false ;
-    fPickOffFraction = 0.;
+    fPickOffFraction = 0.; ///< depends on the material type
 }
 
 
@@ -19,7 +19,7 @@ MaterialExtension::~MaterialExtension()
 {}
 
 
-G4double MaterialExtension::Get3gFraction()
+const G4double MaterialExtension::Get3gFraction()
 {
    return foPsFraction;
 }
@@ -51,11 +51,11 @@ void MaterialExtension::SetoPsLifetime(G4double x)
 }
 
 
-std::vector<G4double> MaterialExtension::GetEventsFraction()
+const std::vector<G4double> MaterialExtension::GetEventsFraction()
 {
   G4double direct3g = MaterialParameters::fractionDirect3g;
-  if( foPsFraction==1) direct3g = 0.0f;
-  if( fPickOffFraction==1) direct3g = 0.0f;
+  if( foPsFraction==1){ direct3g = 0.0f;}
+  if( fPickOffFraction==1){ direct3g = 0.0f;}
 
    std::vector<G4double> frac = {1.-fPickOffFraction-direct3g-foPsFraction , fPickOffFraction, direct3g , foPsFraction};
   // 2g direct //  2g pickoff // 3g direct // 3g  oPs

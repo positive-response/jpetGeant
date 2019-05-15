@@ -166,9 +166,9 @@ void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
 
   G4int multiplicity = infoParticle->GetGammaMultiplicity();
 
-  if ( multiplicity == 0 ) return;
+  if ( multiplicity == PrimaryParticleInformation::kBackground ) return;
 
-  if ( multiplicity == 1 )
+  if ( multiplicity == PrimaryParticleInformation::kPromptGamma )
   {
     fGeantInfo->SetMomentumGamma0( particle->GetPx(), particle->GetPy(), particle->GetPz());
   } else {

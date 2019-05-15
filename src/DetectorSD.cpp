@@ -2,18 +2,13 @@
 #include "G4VProcess.hh"
 #include "G4PrimaryParticle.hh"
 #include "PrimaryParticleInformation.h"
+#include <algorithm>
 
 DetectorSD::DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue )
     :G4VSensitiveDetector(name), totScinNum(scinSum), timeIntervals(timeMergeValue)
 {
      collectionName.insert("detectorCollection");
-
-    for (G4int i=0; i<=totScinNum; i++)
-    {
-        previousHitID.push_back(-1);
-        previousHitTime.push_back(0.);
-        previousHitsEnergySum.push_back(0.);
-    }
+     previousHits.resize(totScinNum+1); //declare array
 
 }
 
@@ -29,12 +24,7 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
     { HCID = GetCollectionID(0); }
     HCE->AddHitsCollection(HCID,fDetectorCollection);
 
-    for (G4int i=0; i<=totScinNum; i++)
-    {
-        previousHitID[i] = -1;
-        previousHitTime[i] = 0.;
-        previousHitsEnergySum[i] = 0.;
-    }
+    std::fill( previousHits.begin(), previousHits.end(), HitParameters() );
 
 }
 
@@ -52,17 +42,16 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     G4double currentTime = aStep->GetPreStepPoint()->GetGlobalTime();
 
 
-    if( (previousHitID[currentScinCopy] !=-1 )
-          &&( abs(previousHitTime[currentScinCopy]-currentTime)<timeIntervals) ) 
+    if( (previousHits[currentScinCopy].fID !=-1 )
+          &&( abs(previousHits[currentScinCopy].fTime-currentTime)<timeIntervals) ) 
     {
         // update track
-        (*fDetectorCollection)[previousHitID[currentScinCopy]]->AddEdep(edep);
-        (*fDetectorCollection)[previousHitID[currentScinCopy]]->AddInteraction();
-        (*fDetectorCollection)[previousHitID[currentScinCopy]]->AddTime(currentTime,edep);
-        (*fDetectorCollection)[previousHitID[currentScinCopy]]->AddPosition(aStep->GetPostStepPoint()->GetPosition(),edep);
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddEdep(edep);
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddInteraction();
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddTime(currentTime,edep);
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddPosition(aStep->GetPostStepPoint()->GetPosition(),edep);
 
     } else {
-
         // new hit
         // interaction types compton, msc (multiple compton scatterings)
         DetectorHit* newHit = new DetectorHit();
@@ -93,11 +82,9 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
             }
         }
 
-
         G4int id = fDetectorCollection->insert(newHit);
-        previousHitID[currentScinCopy] = id-1;
-        previousHitTime[currentScinCopy]= currentTime;
-
+        previousHits[currentScinCopy].fID = id-1;
+        previousHits[currentScinCopy].fTime= currentTime;
 
 
     }

@@ -22,21 +22,22 @@ class DetectorConstructionMessenger: public G4UImessenger
         DetectorConstructionMessenger(DetectorConstruction* detector);
         ~DetectorConstructionMessenger();
         void SetNewValue(G4UIcommand*, G4String); 
+        const int kDefaultRunNumber = 5;
 
     private:
-        DetectorConstruction* fDetector;
+        DetectorConstruction* fDetector= nullptr;
 
-        G4UIdirectory* fDirectory;
-        G4UIcmdWithAnInteger* fLoadGeomForRun;
-        G4UIcmdWithAnInteger* fLoadIdealGeometry; 
+        G4UIdirectory* fDirectory = nullptr;
+        G4UIcmdWithAnInteger* fLoadGeomForRun= nullptr;
+        G4UIcmdWithAnInteger* fLoadIdealGeometry= nullptr; 
 
 
-        G4UIcmdWithoutParameter* fLoadJPetBasicGeometry;
-        G4UIcmdWithoutParameter* fLoadJPetExtendedGeometry;
-        G4UIcmdWithoutParameter* fLoadOnlyScintillators;
-        G4UIcmdWithABool* fLoadModularLayer; 
+        G4UIcmdWithoutParameter* fLoadJPetBasicGeometry= nullptr;
+        G4UIcmdWithoutParameter* fLoadJPetExtendedGeometry= nullptr;
+        G4UIcmdWithoutParameter* fLoadOnlyScintillators= nullptr;
+        G4UIcmdWithABool* fLoadModularLayer= nullptr; 
 
-        G4UIcmdWithADouble* fScinHitMergingTime;
+        G4UIcmdWithADouble* fScinHitMergingTime= nullptr;
 
 };
 

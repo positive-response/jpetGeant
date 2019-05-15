@@ -68,35 +68,15 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
      fHisto->SetEventNumber(id);
 
 
-     /*
-     G4TrajectoryContainer* trajectoryContainer = anEvent->GetTrajectoryContainer();
-     G4int trackNum = 0; 
-     if (trajectoryContainer) trackNum = trajectoryContainer->entries();
-
-     for (G4int i=0; i<trackNum; i++)
-     {
-         Trajectory* vec = (Trajectory*)((*( anEvent->GetTrajectoryContainer()))[i]); 
-         printf("in %i  track ID %i, pdg %i parentID %i, x y x %4.2f %4.2f %4.2f \n",
-                 i,
-                 vec->GetTrackID(),
-                 vec->GetPDGEncoding(),
-                 vec->GetParentID(),
-                 vec->GetVertexPosition().x(),
-                 vec->GetVertexPosition().y(),
-                 vec->GetVertexPosition().z()
-               );
-     }
-     */
-
     G4HCofThisEvent * HCE = anEvent->GetHCofThisEvent();
     DetectorHitsCollection* DHC = 0;
     if(HCE)
     {
-        DHC = (DetectorHitsCollection*)(HCE->GetHC(fScinCollID));
+        DHC = dynamic_cast<DetectorHitsCollection*>(HCE->GetHC(fScinCollID));
         int n_hit = DHC->entries();
         for (int i=0; i<n_hit; i++)
         {
-           DetectorHit* dh =  (DetectorHit*)DHC->GetHit(i);
+           DetectorHit* dh =  dynamic_cast<DetectorHit*>(DHC->GetHit(i));
            fHisto->AddNewHit(dh);
         }
     }

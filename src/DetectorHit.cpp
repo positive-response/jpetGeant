@@ -10,3 +10,38 @@ DetectorHit::~DetectorHit()
 {}
 
 
+void DetectorHit::SetTime(G4double val, G4double weight )
+{
+  fTime = weight*val;
+  fSumWeightTime = weight; 
+}
+
+void DetectorHit::AddTime(G4double val, G4double weight )
+{
+  fTime += weight*val;
+  fSumWeightTime += weight; 
+}
+
+void DetectorHit::SetPosition(G4ThreeVector xyz, G4double weight )
+{
+  fPos = weight*xyz;
+  fSumWeightPosition = weight;
+}
+
+void DetectorHit::AddPosition(G4ThreeVector xyz, G4double weight )
+{
+  fPos += weight*xyz;
+  fSumWeightPosition += weight;
+}
+
+G4double  DetectorHit::GetTime()
+{
+  return fTime/fSumWeightTime;
+}
+
+G4ThreeVector  DetectorHit::GetPosition() 
+{
+  return fPos/fSumWeightPosition;
+}
+
+

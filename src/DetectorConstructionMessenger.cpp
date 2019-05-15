@@ -10,7 +10,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
 
   fLoadGeomForRun  = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadGeomForRun",this);
   fLoadGeomForRun->SetGuidance("Set RUN number to simulate");
-  fLoadGeomForRun->SetDefaultValue(5);
+  fLoadGeomForRun->SetDefaultValue(kDefaultRunNumber);
 
   fLoadIdealGeometry = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadIdealGeom",this);
   fLoadIdealGeometry->SetGuidance("Generate ideal geometry for 1-4 layers");
@@ -60,7 +60,6 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     }
 
     if(command==fLoadJPetBasicGeometry){
-        fDetector->LoadGeometryForRun(0);
         fDetector->LoadFrame(true);
         fDetector->UpdateGeometry();
     }
@@ -71,7 +70,6 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     }
 
     if(command==fLoadOnlyScintillators){
-        fDetector->LoadGeometryForRun(0);
         fDetector->LoadFrame(false);
         fDetector->UpdateGeometry();
 

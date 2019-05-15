@@ -31,41 +31,15 @@ class MaterialExtensionMessenger: public G4UImessenger
         MaterialExtensionMessenger();
         ~MaterialExtensionMessenger();
 
-        G4UIdirectory* fDirectory;
-        MaterialExtension* fMaterial;
+        G4UIdirectory* fDirectory = nullptr;
+        MaterialExtension* fMaterial = nullptr;
         
-        G4UIcmdWithoutParameter* fXAD3GammaOnly;
-        G4UIcmdWithoutParameter* fXAD2GammaOnly;
-        G4UIcmdWithoutParameter* fXADPickOffOnly;
-        G4UIcmdWithADoubleAndUnit* fXADSet3gLifetime;
-        G4UIcmdWithADouble* fXADSet3gFraction;
-        G4UIcmdWithADouble* fXADSetPickOffFraction;
-
-        //G4UIcmdWithABool* fKaptonNoAnnihilations;
-        //G4UIcmdWithABool* fKapton3GammaOnly;
-        //G4UIcmdWithABool* fKapton2GammaOnly;
-        //G4UIcmdWithADoubleAndUnit* fKaptonSet2gLifetime;
-        //G4UIcmdWithADoubleAndUnit* fKaptonSet3gLifetime;
-
-        //G4UIcmdWithABool* fChamberRun5NoAnnihilations;
-        //G4UIcmdWithABool* fChamberRun53GammaOnly;
-        //G4UIcmdWithABool* fChamberRun52GammaOnly;
-        //G4UIcmdWithADoubleAndUnit* fChamberRun5Set2gLifetime;
-        //G4UIcmdWithADoubleAndUnit* fChamberRun5Set3gLifetime;
-
-        //G4UIcmdWithABool* fChamberRun6NoAnnihilations;
-        //G4UIcmdWithABool* fChamberRun63GammaOnly;
-        //G4UIcmdWithABool* fChamberRun62GammaOnly;
-        //G4UIcmdWithADoubleAndUnit* fChamberRun6Set2gLifetime;
-        //G4UIcmdWithADoubleAndUnit* fChamberRun6Set3gLifetime;
-
-        //G4UIcmdWithABool* fAlNoAnnihilations;
-        //G4UIcmdWithABool* fAl3GammaOnly;
-        //G4UIcmdWithABool* fAl2GammaOnly;
-        //G4UIcmdWithADoubleAndUnit* fAlSet2gLifetime;
-        //G4UIcmdWithADoubleAndUnit* fAlSet3gLifetime;
-
-
+        G4UIcmdWithoutParameter* fXAD3GammaOnly = nullptr;
+        G4UIcmdWithoutParameter* fXAD2GammaOnly = nullptr;
+        G4UIcmdWithoutParameter* fXADPickOffOnly = nullptr;
+        G4UIcmdWithADoubleAndUnit* fXADSet3gLifetime = nullptr;
+        G4UIcmdWithADouble* fXADSet3gFraction = nullptr;
+        G4UIcmdWithADouble* fXADSetPickOffFraction = nullptr;
 
 
         bool fIsOnly3g = true;
