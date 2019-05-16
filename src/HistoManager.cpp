@@ -168,15 +168,8 @@ void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
 
   if ( multiplicity == PrimaryParticleInformation::kBackground ) return;
 
-  if ( multiplicity == PrimaryParticleInformation::kPromptGamma )
-  {
-    fGeantInfo->SetMomentumGamma0( particle->GetPx(), particle->GetPy(), particle->GetPz());
-  } else {
-    G4int index = infoParticle->GetIndex();
-    if (index==1) fGeantInfo->SetMomentumGamma1( particle->GetPx(), particle->GetPy(), particle->GetPz());
-    if (index==2) fGeantInfo->SetMomentumGamma2( particle->GetPx(), particle->GetPy(), particle->GetPz());
-    if (index==3) fGeantInfo->SetMomentumGamma3( particle->GetPx(), particle->GetPy(), particle->GetPz());
-  }
+  G4int index = infoParticle->GetIndex();
+  fGeantInfo->SetMomentumGamma( index, particle->GetPx(), particle->GetPy(), particle->GetPz());
 }
 
 void HistoManager::AddNewHit(DetectorHit* hit)
