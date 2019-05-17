@@ -24,6 +24,9 @@ class EventMessenger: public G4UImessenger
         bool SaveOnlySelectedEvents(){return fSave2gEvts||fSave3gEvts;}
         bool Save2gEvents(){return fSave2gEvts;}
         bool Save3gEvents(){return fSave3gEvts;}
+        bool PrintStatistics(){return fPrintStatistics;}
+        bool ShowProgress(){return fShowProgress;}
+        G4int GetPowerPrintStat(){return fPrintPower;}
 
     private:
         static EventMessenger* fInstance;
@@ -35,6 +38,13 @@ class EventMessenger: public G4UImessenger
         bool fSave3gEvts = false;
         G4UIcmdWithoutParameter* fSave2g;
         G4UIcmdWithoutParameter* fSave3g;
+        G4UIcmdWithABool* fPrintStat;
+        G4UIcmdWithABool* fPrintStatBar;
+        G4UIcmdWithAnInteger* fPrintStatPower;
+        bool fPrintStatistics = false;
+        G4int fPrintPower = 10;
+        bool fShowProgress = true;
+
 };
 
 #endif

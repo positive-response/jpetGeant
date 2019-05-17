@@ -5,13 +5,19 @@ void RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
   InitializeEventLoop(n_event,macroFile,n_select);
 
+  printf("\n\n");
 // Event loop
   for(G4int i_event=0; i_event<n_event; i_event++ )
   {
 
-    if ( i_event % 1000 == 0)
+    if (fEvtMessenger->PrintStatistics() && (i_event % int(pow(10,fEvtMessenger->GetPowerPrintStat())) == 0) )
     { 
       printf (" === Processed %i events \n", i_event);
+    }
+
+    if (fEvtMessenger->ShowProgress())
+    {
+      printf (" === Progress %4.2f === \r", double(100*i_event)/double(n_event));
     }
 
     if(fEvtMessenger->SaveOnlySelectedEvents())
