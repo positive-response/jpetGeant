@@ -3,9 +3,7 @@
 #include "G4SubtractionSolid.hh"
 #include "G4Tubs.hh"
 #include "G4Polycone.hh"
-#include "G4RunManager.hh"
-//#include "G4GeometryTolerance.hh"
-//#include "G4GDMLParser.hh"
+#include "RunManager.h"
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -47,7 +45,7 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::UpdateGeometry()
 {
-    G4RunManager::GetRunManager()->ReinitializeGeometry();
+    RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 
