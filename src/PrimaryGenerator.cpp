@@ -30,8 +30,8 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(const G4ThreeVector 
 
     G4double lifetime = G4RandExponential::shoot(lifetime3g);
     info->SetThreeGammaGen(true);
-    info->SetLifetime((T0+lifetime)/ps);
-    info->SetVtxPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+    info->SetLifetime((T0+lifetime));
+    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
     vertex->SetUserInformation(info);
     vertex->SetT0(T0+lifetime);
     vertex->SetPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
@@ -43,7 +43,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(const G4ThreeVector 
     Double_t mass_secondaries[3] = {0., 0., 0.};
 
     TGenPhaseSpace event;
-    TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022);
+    TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022*keV);
     Bool_t test =  event.SetDecay(vec_pozytonium, 3, mass_secondaries);
     if( !test){
         std::cout   << "error: generate_gamma : createThreeEvts:" << test << std::endl;  
@@ -66,7 +66,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(const G4ThreeVector 
         TLorentzVector * out = event.GetDecay(i);
 
         particle[i] = new G4PrimaryParticle(particleDefinition,
-                out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
+                out->Px(),out->Py(),out->Pz(),out->E());
 
         PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
         infoParticle->SetGammaMultiplicity(3);
@@ -87,8 +87,8 @@ G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(const G4ThreeVector vt
 
     G4double lifetime = G4RandExponential::shoot(lifetime2g);
     info->SetTwoGammaGen(true);
-    info->SetLifetime((T0+lifetime)/ps);
-    info->SetVtxPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+    info->SetLifetime((T0+lifetime));
+    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
     vertex->SetUserInformation(info);
     vertex->SetT0(T0+lifetime);
     vertex->SetPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
@@ -102,7 +102,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(const G4ThreeVector vt
     Double_t mass_secondaries[2] = {0., 0.};
 
     TGenPhaseSpace event;
-    TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022);
+    TLorentzVector vec_pozytonium(0.0,0.0,0.0,1022*keV);
     Bool_t test =  event.SetDecay(vec_pozytonium, 2, mass_secondaries);
     if( !test){
         std::cout   << "error: generate_gamma : createTwoEvts:" << test << std::endl;  
@@ -117,7 +117,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(const G4ThreeVector vt
         TLorentzVector * out = event.GetDecay(i);
 
         particle[i] = new G4PrimaryParticle(particleDefinition,
-                out->Px()*keV,out->Py()*keV,out->Pz()*keV,out->E()*keV);
+                out->Px(),out->Py(),out->Pz(),out->E());
 
 
         PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
@@ -150,8 +150,8 @@ G4PrimaryVertex* PrimaryGenerator::GeneratePromptGammaVertex(const G4ThreeVector
 
     G4double lifetime = G4RandExponential::shoot(lifetimePrompt);
     info->SetPromptGammaGen(true);
-    info->SetLifetime((T0+lifetime)/ps);
-    info->SetVtxPosition(vtxPosition.x()/cm,vtxPosition.y()/cm,vtxPosition.z()/cm);
+    info->SetLifetime((T0+lifetime));
+    info->SetVtxPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
     vertex->SetUserInformation(info);
     vertex->SetT0(T0+lifetime);
     vertex->SetPosition(vtxPosition.x(),vtxPosition.y(),vtxPosition.z());
@@ -219,7 +219,7 @@ std::tuple<G4ThreeVector,MaterialExtension*> PrimaryGenerator::GetVerticesDistri
 {
 
     G4bool lookForVtx = false;
-    G4ThreeVector myPoint(0,0,0);
+    G4ThreeVector myPoint(0*cm,0*cm,0*cm);
     MaterialExtension* mat;
 
     // annihilation will occure only in materials where it was allowed @see MaterialExtension
@@ -328,7 +328,7 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
     VtxInformation* infoPrompt = new VtxInformation();
     vertex->SetUserInformation(infoPrompt);
     infoPrompt->SetPromptGammaGen(true);
-    infoPrompt->SetVtxPosition(vtxCoor.x()/cm,vtxCoor.y()/cm,vtxCoor.z()/cm);
+    infoPrompt->SetVtxPosition(vtxCoor.x(),vtxCoor.y(),vtxCoor.z());
 
 
     event->AddPrimaryVertex(vertex);
@@ -380,23 +380,23 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
      *  z ------0------3/4L ------
      */
 
-    G4double x_creation = 0.0; 
-    G4double y_creation = 0.0; 
-    G4double z_creation = 0.0;
+    G4double x_creation = 0.0*cm; 
+    G4double y_creation = 0.0*cm; 
+    G4double z_creation = 0.0*cm;
 
         if(nemaPoint>3){
             z_creation = z_creation - DetectorConstants::scinDim[2]*3/8/cm;
         }
     
         if(nemaPoint==1 || nemaPoint == 4){
-            y_creation = y_creation + 1.0;
+            y_creation = y_creation + 1.0*cm;
         }
     
         if(nemaPoint==2 || nemaPoint == 5){
-            y_creation = y_creation + 10.0;
+            y_creation = y_creation + 10.0*cm;
         }
         if(nemaPoint==3 || nemaPoint == 6){
-            y_creation = y_creation + 20.0;
+            y_creation = y_creation + 20.0*cm;
         }
 
 
@@ -433,7 +433,7 @@ std::tuple<G4ThreeVector,G4double,G4double> PrimaryGenerator::GetVerticesDistrib
 {
 
     G4bool lookForVtx = false;
-    G4ThreeVector myPoint(0,0,0);
+    G4ThreeVector myPoint(0*cm,0*cm,0*cm);
     MaterialExtension* mat;
 
     // annihilation will occure only in materials where it was allowed @see MaterialExtension

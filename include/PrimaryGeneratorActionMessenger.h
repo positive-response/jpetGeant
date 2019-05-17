@@ -45,7 +45,7 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
         G4UIcmdWithAnInteger* fIsotopeSetGenGammas = nullptr;
         G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderRadius = nullptr; 
         G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderZ = nullptr; 
-        G4UIcmdWith3Vector* fIsotopeSetCenter = nullptr;
+        G4UIcmdWith3VectorAndUnit* fIsotopeSetCenter = nullptr;
 
 
         G4UIcmdWithAnInteger* fNemaPosition = nullptr;

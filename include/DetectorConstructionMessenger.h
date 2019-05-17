@@ -37,7 +37,7 @@ class DetectorConstructionMessenger: public G4UImessenger
         G4UIcmdWithoutParameter* fLoadOnlyScintillators= nullptr;
         G4UIcmdWithABool* fLoadModularLayer= nullptr; 
 
-        G4UIcmdWithADouble* fScinHitMergingTime= nullptr;
+        G4UIcmdWithADoubleAndUnit* fScinHitMergingTime= nullptr;
 
 };
 

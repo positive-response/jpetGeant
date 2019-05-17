@@ -28,8 +28,10 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadModularLayer = new G4UIcmdWithABool("/jpetmc/detector/loadModularLayer",this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
 
-  fScinHitMergingTime = new G4UIcmdWithADouble("/jpetmc/detector/hitMergingTime",this);
+  fScinHitMergingTime = new G4UIcmdWithADoubleAndUnit("/jpetmc/detector/hitMergingTime",this);
   fScinHitMergingTime->SetGuidance("Define time range (ns) while merging hits in scintillators");
+  fScinHitMergingTime->SetDefaultUnit("ns");
+  fScinHitMergingTime->SetUnitCandidates("ns");
 
 
 }

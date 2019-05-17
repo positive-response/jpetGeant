@@ -10,7 +10,7 @@ const G4double MaterialParameters::oPsProbabilityXAD = 89.6; // 4/3 I; taken onl
 
 
 const G4double MaterialParameters::fractionDirect3g = 0.002688;
-const G4double MaterialParameters::tauKapton = 0.380; // doi 10.2478/umcschem-2013-0012 
+const G4double MaterialParameters::tauKapton = 0.380*ns; // doi 10.2478/umcschem-2013-0012 
 const G4double MaterialParameters::tauBulk = 0.2*ns;
 
 const G4double MaterialParameters::sodiumGammaEnergy = 1.2770*MeV;
@@ -51,13 +51,6 @@ void MaterialParameters::SetXADPickOffOnly()
 
 G4double MaterialParameters::GetoPsFractionPALS(G4double oPsPobability, G4double oPslifetime)
 {
-  /// f3g = (1-4/3 Pi)/372 + tau_i/tau_vac \times Pi 
-  //  Pi - propability of Ps formation
-  //  f^{oPs}_{3g} = tau_i/tau_vac  
-  //  foPsProbability = 4/3 I_3 measured in PALS
-  //  3g = direct + oPs
-
-  //return (1.-4/3*oPsPobability)/372 + (oPslifetime/oPsTauVaccum)*oPsPobability;
   return (oPslifetime/oPsTauVaccum)*oPsPobability/100.;
 }
 

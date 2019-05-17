@@ -117,22 +117,30 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     bool is2g = info->GetTwoGammaGen();
     bool isprompt = info->GetPromptGammaGen();
 
+    // Geant system of units 
+    //    millimeter              (mm)
+    //    nanosecond              (ns)
+    //    Mega electron Volt      (MeV)
+    // Framework system of units 
+    //    time: ps
+    //    distance: cm
+    //    energy: keV
     if ( is2g || is3g )
     {
         fGeantInfo->SetThreeGammaGen(is3g);
         fGeantInfo->SetTwoGammaGen(is2g);
-        fGeantInfo->SetVtxPosition(info->GetVtxPositionX(),info->GetVtxPositionY(),info->GetVtxPositionZ());
-        fGeantInfo->SetLifetime(info->GetLifetime());
+        fGeantInfo->SetVtxPosition(info->GetVtxPositionX()/cm,info->GetVtxPositionY()/cm,info->GetVtxPositionZ()/cm);
+        fGeantInfo->SetLifetime(info->GetLifetime()/ps);
         fGeantInfo->SetRunNr(info->GetRunNr());
 
             if ( MakeControlHisto()){
                   if(is2g) fHisto[0]->Fill(2);
                   if(is3g) fHisto[0]->Fill(3);
             
-                  fHisto[4]->Fill(info->GetLifetime());
-                  fHisto2D[1]->Fill(info->GetVtxPositionX(),info->GetVtxPositionY());
-                  fHisto2D[2]->Fill(info->GetVtxPositionX(),info->GetVtxPositionZ());
-                  fHisto2D[3]->Fill(info->GetVtxPositionY(),info->GetVtxPositionZ());
+                  fHisto[4]->Fill(info->GetLifetime()/ps);
+                  fHisto2D[1]->Fill(info->GetVtxPositionX()/cm,info->GetVtxPositionY()/cm);
+                  fHisto2D[2]->Fill(info->GetVtxPositionX()/cm,info->GetVtxPositionZ()/cm);
+                  fHisto2D[3]->Fill(info->GetVtxPositionY()/cm,info->GetVtxPositionZ()/cm);
             }
 
 
@@ -141,16 +149,16 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     if (isprompt)
     {
         fGeantInfo->SetPromptGammaGen(isprompt);
-        fGeantInfo->SetPromptLifetime(info->GetLifetime());
-        fGeantInfo->SetVtxPromptPosition(info->GetVtxPositionX(),info->GetVtxPositionY(),info->GetVtxPositionZ());
+        fGeantInfo->SetPromptLifetime(info->GetLifetime()/ps);
+        fGeantInfo->SetVtxPromptPosition(info->GetVtxPositionX()/cm,info->GetVtxPositionY()/cm,info->GetVtxPositionZ()/cm);
         fGeantInfo->SetRunNr(info->GetRunNr());
 
             if ( MakeControlHisto()){
                   fHisto[0]->Fill(1);
-                  fHisto[5]->Fill(info->GetLifetime());
-                  fHisto2D[4]->Fill(info->GetVtxPositionX(),info->GetVtxPositionY());
-                  fHisto2D[5]->Fill(info->GetVtxPositionX(),info->GetVtxPositionZ());
-                  fHisto2D[6]->Fill(info->GetVtxPositionY(),info->GetVtxPositionZ());
+                  fHisto[5]->Fill(info->GetLifetime()/ps);
+                  fHisto2D[4]->Fill(info->GetVtxPositionX()/cm,info->GetVtxPositionY()/cm);
+                  fHisto2D[5]->Fill(info->GetVtxPositionX()/cm,info->GetVtxPositionZ()/cm);
+                  fHisto2D[6]->Fill(info->GetVtxPositionY()/cm,info->GetVtxPositionZ()/cm);
             }
 
     }
@@ -221,7 +229,6 @@ void HistoManager::AddNewHit(DetectorHit* hit)
             fHisto[3]->Fill(hit->GetPosition().getZ()/cm);
             fHisto2D[0]->Fill(hit->GetPosition().getX()/cm,
             hit->GetPosition().getY()/cm);
-
       }
 }
 

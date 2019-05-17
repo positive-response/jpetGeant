@@ -9,8 +9,8 @@ const G4double DetectorConstants::radiusExtraLayers[extraLayers] =  {509*mm, 533
 const G4double DetectorConstants::scinDim_inModule[3]  = {2.5*cm, 0.6*cm, 50.0*cm};
 const G4double DetectorConstants::wrappingThickness =   2*25.4*pow(10,-6)*m;
 const G4double DetectorConstants::wrappingShift = 1*pow(10,-5)*m;
-G4double DetectorConstants::fScinHitMergingTime =5.0; //ns
-G4double DetectorConstants::fChamberCenter[3] = {0.0, 0.0, 0.0};
+G4double DetectorConstants::fScinHitMergingTime = 5.0*ns; 
+G4double DetectorConstants::fChamberCenter[3] = {0.0*cm, 0.0*cm, 0.0*cm};
 
 void DetectorConstants::SetChamberCenter(const G4ThreeVector xyz)
 {

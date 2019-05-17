@@ -29,7 +29,7 @@ class SourceParams
         G4String allowedShapes[1] = {"cylinder"};
 
         G4ThreeVector shapeCenterPosition;
-        G4double shapeDim[10] = {0};
+        G4double shapeDim[10] = {0*cm};
         // cylinder 
         // [0] - R
         // [1] - z

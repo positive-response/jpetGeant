@@ -57,10 +57,12 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
     fIsotopeSetShapeDimCylinderZ->SetDefaultUnit("cm");
     fIsotopeSetShapeDimCylinderZ->SetUnitCandidates("cm"); 
 
-    fIsotopeSetCenter = new G4UIcmdWith3Vector("/jpetmc/source/isotope/setPosition",this);
+    fIsotopeSetCenter = new G4UIcmdWith3VectorAndUnit("/jpetmc/source/isotope/setPosition",this);
     fIsotopeSetCenter->SetGuidance("Set position of the source");
     fIsotopeSetCenter->SetDefaultValue(G4ThreeVector(0,0,0));
     fIsotopeSetCenter->SetParameterName("Xvalue","Yvalue","Zvalue",false);
+    fIsotopeSetCenter->SetDefaultUnit("cm");
+    fIsotopeSetCenter->SetUnitCandidates("cm"); 
 
     fNemaPosition = new G4UIcmdWithAnInteger("/jpetmc/source/nema",this);
     fNemaPosition->SetGuidance("Give nema point number to simulate (1-6) ");
@@ -109,7 +111,7 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
 
     if(command==fGammaBeamSetEnergy){
         ChangeToBeam();
-        fPrimGen->GetBeamParams()->SetEnergy(fGammaBeamSetEnergy->GetNewDoubleRawValue(newValue));
+        fPrimGen->GetBeamParams()->SetEnergy(fGammaBeamSetEnergy->GetNewDoubleValue(newValue));
     }
 
     if(command==fGammaBeamSetPosition){
@@ -134,13 +136,13 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
 
     if(command==fIsotopeSetShapeDimCylinderRadius){
         ChangeToIsotope();
-        fPrimGen->GetIsotopeParams()->SetShapeDim(0,fIsotopeSetShapeDimCylinderRadius->GetNewDoubleRawValue(newValue));
+        fPrimGen->GetIsotopeParams()->SetShapeDim(0,fIsotopeSetShapeDimCylinderRadius->GetNewDoubleValue(newValue));
     }
 
 
     if(command==fIsotopeSetShapeDimCylinderZ){
         ChangeToIsotope();
-        fPrimGen->GetIsotopeParams()->SetShapeDim(1,fIsotopeSetShapeDimCylinderRadius->GetNewDoubleRawValue(newValue));
+        fPrimGen->GetIsotopeParams()->SetShapeDim(1,fIsotopeSetShapeDimCylinderRadius->GetNewDoubleValue(newValue));
     }
 
     if(command==fIsotopeSetCenter){
