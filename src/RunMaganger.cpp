@@ -36,6 +36,11 @@ void RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
           G4Exception ("RunManager","RM01", FatalException, 
              " This can not happened ");    
         }
+        if (!requirement)
+        {
+          // clean event - it will not be stored
+          delete currentEvent;
+        }
       }
     } else {
       ProcessOneEvent(i_event);
@@ -48,6 +53,4 @@ void RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
   if(runManagerType==sequentialRM) TerminateEventLoop();
 
 }
-
-
 

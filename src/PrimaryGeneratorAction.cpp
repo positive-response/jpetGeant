@@ -41,8 +41,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if(  nRun != 0){
         if( GetSourceTypeInfo() != "run"){
-          //G4Exception("PrimaryGeneratorAction","PG03",JustWarning,
-          //       "User can not modify the predefined run geometry");
             SetSourceTypeInfo("run");
         }
     }
