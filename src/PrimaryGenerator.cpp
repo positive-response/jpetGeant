@@ -385,7 +385,7 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
     G4double z_creation = 0.0*cm;
 
         if(nemaPoint>3){
-            z_creation = z_creation - DetectorConstants::scinDim[2]*3/8/cm;
+            z_creation = z_creation - DetectorConstants::scinDim[2]*3/8;
         }
     
         if(nemaPoint==1 || nemaPoint == 4){
