@@ -174,7 +174,6 @@ void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
 
   G4int index = infoParticle->GetIndex();
 
-  if ( index == PrimaryParticleInformation::kBackground ) return;
   fGeantInfo->SetMomentumGamma( index, particle->GetPx(), particle->GetPy(), particle->GetPz());
 }
 

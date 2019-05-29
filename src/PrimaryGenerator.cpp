@@ -167,7 +167,7 @@ G4PrimaryVertex* PrimaryGenerator::GeneratePromptGammaVertex(const G4ThreeVector
           momentum.x(), momentum.y(), momentum.z(), energy);
     PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
     infoParticle->SetGammaMultiplicity(1);
-    infoParticle->SetIndex(1);
+    infoParticle->SetIndex(0);
     particle1->SetUserInformation(infoParticle);
 
     vertex->SetPrimary(particle1);
@@ -321,7 +321,7 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
 
     PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
     infoParticle->SetGammaMultiplicity(1);
-    infoParticle->SetIndex(1);
+    infoParticle->SetIndex(0);
     particle1->SetUserInformation(infoParticle);
 
     vertex->SetPrimary(particle1);
