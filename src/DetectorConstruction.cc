@@ -102,15 +102,9 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 
 }
 
-//JC
-
 void DetectorConstruction::ConstructTargetRun7()
 {
 	G4RotationMatrix rot = G4RotationMatrix();
-
-//   G4double z[] = {-8.9*cm, -8.85*cm, -8.8*cm, -7.81*cm, -7.8*cm, -6.61*cm, -6.6*cm, -5.1*cm, -4.9*cm, -3.1*cm, -2.8*cm, 2.8*cm, 3.1*cm, 4.9*cm, 5.1*cm, 6.6*cm, 6.61*cm, 7.8*cm, 7.81*cm, 8.8*cm, 8.85*cm , 8.9*cm}; 
-//   G4double rInner[] = { 0.0*cm, 0.0*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.5*cm, 0.5*cm, 0.5*cm, 0.5*cm , 0.5*cm,  0.5*cm, 0.5*cm, 0.5*cm, 0.5*cm, 0.5*cm, 0.5*cm, 0.5*cm, 0.6*cm, 0.6*cm , 0.6*cm, 0.0*cm, 0.0*cm};
-//   G4double rOuter[] = { 1.75*cm,1.75*cm, 1.75*cm, 1.75*cm, 1.35*cm, 1.35*cm,  1.0*cm, 1.0*cm, 1.0*cm, 1.0*cm, 0.5*cm, 0.5*cm, 1.0*cm, 1.0*cm, 1.0*cm, 1.0*cm, 1.35*cm, 1.35*cm, 1.75*cm, 1.75*cm, 1.75*cm, 1.75*cm }; 
 
    G4double z[] = {-8.8*cm, -7.8*cm, -7.8*cm , -6.6*cm,-6.6*cm, -5.1*cm, -4.9*cm, -3.1*cm, -2.8*cm,-0.57*cm, 0.57*cm,2.8*cm, 3.1*cm, 4.9*cm, 5.1*cm, 6.6*cm, 6.6*cm, 7.8*cm ,7.8*cm,  8.8*cm}; 
    G4double rInner[] = { 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm , 0.6*cm ,  0.54*cm, 0.5*cm, 0.5*cm, 0.54*cm, 0.6*cm, 0.6*cm , 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm, 0.6*cm};
@@ -127,7 +121,7 @@ void DetectorConstruction::ConstructTargetRun7()
     smallChamber_logical->SetVisAttributes(DetVisAtt);
 
 
-     G4ThreeVector loc = G4ThreeVector(0.0,0.0,0.0);
+     G4ThreeVector loc = G4ThreeVector(10.0,10.0,10.0);
      G4Transform3D transform(rot,loc);
      new G4PVPlacement(transform,             //rotation,position
                        smallChamber_logical,            //its logical volume
