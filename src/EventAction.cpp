@@ -39,6 +39,10 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
 
      fHisto->Clear();
 
+     G4int id =  anEvent->GetEventID();
+     fHisto->SetEventNumber(id);
+     fHisto->FillHistoGenInfo(anEvent);
+
 
 }
 
@@ -63,27 +67,6 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
 void EventAction::WriteToFile(const G4Event* anEvent)
 {
-     G4int id =  anEvent->GetEventID();
-     fHisto->SetEventNumber(id);
-
-    for( int i=0; i<anEvent->GetNumberOfPrimaryVertex(); i++)
-    {
-        VtxInformation* info =  dynamic_cast<VtxInformation*>( anEvent->GetPrimaryVertex(i)->GetUserInformation());    
-        if( info != 0 )
-        {
-            fHisto->AddGenInfo(info);
-        }
-
-        for (int j=0; j<anEvent->GetPrimaryVertex(i)->GetNumberOfParticle(); j++)
-        {
-          G4PrimaryParticle* particle = anEvent->GetPrimaryVertex(i)->GetPrimary(j);
-          if(particle != nullptr )
-          {
-            fHisto->AddGenInfoParticles(particle);
-          }
-        }
-    }
-
 
 
     G4HCofThisEvent * HCE = anEvent->GetHCofThisEvent();
@@ -98,6 +81,7 @@ void EventAction::WriteToFile(const G4Event* anEvent)
            fHisto->AddNewHit(dh);
         }
     }
+
 
     // save full information about event in final ntuples
     fHisto->SaveEvtPack();
@@ -159,6 +143,8 @@ void EventAction::CheckIf3gIsRegistered(const G4Event* anEvent)
 
   is3gRec = isReconstructed;
 
+
+
 }
 
 
@@ -211,5 +197,7 @@ void EventAction::CheckIf2gIsRegistered(const G4Event* anEvent)
 
 
 }
+
+
 
 

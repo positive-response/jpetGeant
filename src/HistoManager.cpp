@@ -76,6 +76,7 @@ void HistoManager::BookHistograms()
     fHisto[5]->GetXaxis()->SetTitle("Lifetime prompt gamma [ps]");
     fHisto[5]->GetYaxis()->SetTitle("Entries");
 
+
     fHisto2D[1] = new TH2F("gen_XY","GEN XY coordinates of annihilation point",
     121, -21.5, 21.5,121, -21.5, 21.5);
     fHisto2D[1]->GetXaxis()->SetTitle("Annihilation point (2/3g) X [cm]");
@@ -109,7 +110,69 @@ void HistoManager::BookHistograms()
     fHisto2D[6]->GetXaxis()->SetTitle("Prompt emission point Y [cm]");
     fHisto2D[6]->GetYaxis()->SetTitle("Prompt emission point Z [cm]");
 
+    fHisto2D[7] = new TH2F("gen_3g_angles","GEN angles 3g",
+            190, -5., 185. ,190 , -5., 185. );
+    fHisto2D[7]->GetXaxis()->SetTitle("#Theta_{12} [degree]");
+    fHisto2D[7]->GetYaxis()->SetTitle("#Theta_{23} [degree]");
+
+    fHisto2D[8] = new TH2F("gen_energy","GEN E_1 vs E_2",
+            100, 0., 550. , 100 , 0., 550. );
+    fHisto2D[8]->GetXaxis()->SetTitle("E_{1} [keV]");
+    fHisto2D[8]->GetYaxis()->SetTitle("E_{2} [keV]");
+
+    fHisto[6] = new TH1F("gen_g_ene","Gen energy", 200, 0.0, 1500.0);
+    fHisto[6]->GetXaxis()->SetTitle("E_1 gen [keV]");
+    fHisto[6]->GetYaxis()->SetTitle("Entries");
+
+
+
+
 }
+
+void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
+{
+    for( int i=0; i<anEvent->GetNumberOfPrimaryVertex(); i++)
+    {
+        VtxInformation* info =  dynamic_cast<VtxInformation*>( anEvent->GetPrimaryVertex(i)->GetUserInformation());    
+        if( info != 0 )
+        {
+            AddGenInfo(info);
+        }
+
+        for (int j=0; j<anEvent->GetPrimaryVertex(i)->GetNumberOfParticle(); j++)
+        {
+          G4PrimaryParticle* particle = anEvent->GetPrimaryVertex(i)->GetPrimary(j);
+          if(particle != nullptr )
+          {
+            AddGenInfoParticles(particle);
+          }
+        }
+    }
+
+
+    double theta_12 = (180./TMath::Pi())*(fGeantInfo->GetMomentumGamma(1)).Angle(fGeantInfo->GetMomentumGamma(2));
+    double theta_23 = (180./TMath::Pi())*(fGeantInfo->GetMomentumGamma(2)).Angle(fGeantInfo->GetMomentumGamma(3));
+
+    fHisto2D[7]->Fill(theta_12,theta_23);
+    fHisto2D[8]->Fill(fGeantInfo->GetMomentumGamma(1).Mag(),fGeantInfo->GetMomentumGamma(2).Mag());
+    fHisto[6]->Fill(fGeantInfo->GetMomentumGamma(1).Mag());
+
+
+
+}
+
+void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
+{
+  PrimaryParticleInformation* infoParticle = static_cast<PrimaryParticleInformation*> (particle->GetUserInformation());
+
+  if (infoParticle == nullptr) return;
+
+  G4int index = infoParticle->GetIndex();
+
+  fGeantInfo->SetMomentumGamma( index, particle->GetPx()/keV, particle->GetPy()/keV, particle->GetPz()/keV);
+
+}
+
 
 void HistoManager::AddGenInfo(VtxInformation* info)
 {
@@ -166,16 +229,7 @@ void HistoManager::AddGenInfo(VtxInformation* info)
       
 }
 
-void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
-{
-  PrimaryParticleInformation* infoParticle = static_cast<PrimaryParticleInformation*> (particle->GetUserInformation());
 
-  if (infoParticle == nullptr) return;
-
-  G4int index = infoParticle->GetIndex();
-
-  fGeantInfo->SetMomentumGamma( index, particle->GetPx(), particle->GetPy(), particle->GetPz());
-}
 
 void HistoManager::AddNewHit(DetectorHit* hit)
 {
@@ -248,4 +302,6 @@ void HistoManager::Save()
 
     G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;
 }
+
+
 

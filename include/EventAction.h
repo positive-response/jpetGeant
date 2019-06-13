@@ -28,6 +28,8 @@ class EventAction : public G4UserEventAction
         static bool Is3gRegistered();
 
     private:
+
+
         HistoManager* fHisto = nullptr;
         G4int fScinCollID;
         EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();

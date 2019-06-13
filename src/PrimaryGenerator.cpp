@@ -17,7 +17,8 @@
 
 PrimaryGenerator::PrimaryGenerator()
     : G4VPrimaryGenerator()
-{}
+{
+}
 
 PrimaryGenerator::~PrimaryGenerator()
 {}
@@ -50,16 +51,17 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(const G4ThreeVector 
     }
 
     Double_t weight;
-    Double_t weight_max= event.GetWtMax()*pow(10,5);
+    Double_t weight_max= event.GetWtMax()*pow(10,-1);
     Double_t rwt;  
     Double_t M_max = 7.65928*pow(10,-6);    
     do{
         weight = event.Generate();        
-        weight = weight*calculate_mQED(511,event.GetDecay(0)->E(),event.GetDecay(1)->E(),event.GetDecay(2)->E());
+        weight = weight*calculate_mQED(511.,event.GetDecay(0)->E()/keV,event.GetDecay(1)->E()/keV,event.GetDecay(2)->E()/keV);
         rwt = M_max*weight_max*(G4UniformRand());
     }while( rwt > weight );    
 
-    event.Generate();   
+
+
     G4PrimaryParticle* particle[3];
     for (int i=0; i<3; i++)
     {
@@ -67,6 +69,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(const G4ThreeVector 
 
         particle[i] = new G4PrimaryParticle(particleDefinition,
                 out->Px(),out->Py(),out->Pz(),out->E());
+        
 
         PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
         infoParticle->SetGammaMultiplicity(3);
