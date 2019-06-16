@@ -26,6 +26,7 @@ set(SCRIPT_FILES
     run5.mac
     run6.mac
     nema.mac
+    run7.mac
     init_vis.mac
     singleBeam.mac
     extendedSource.mac

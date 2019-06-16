@@ -84,6 +84,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructTargetRun5();
     //// create target used in run6 - big chamber + XAD material inside tube
     void ConstructTargetRun6();
+    void ConstructTargetRun7();
+
+
     G4int fRunNumber; ///< corresponds to JPET measurements; run 0 = user setup 
 
     G4bool fLoadCADFrame; ///< load frame from cad file
@@ -106,6 +109,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     MaterialExtension* aluminiumMaterial;
     MaterialExtension* plexiglassMaterial;
     MaterialExtension* smallChamberMaterial;
+    MaterialExtension* smallChamberRun7Material;
     MaterialExtension* XADMaterial;
 
     G4LogicalVolume * scinLog;
