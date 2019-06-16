@@ -2,17 +2,13 @@
 #include "G4VProcess.hh"
 #include "G4PrimaryParticle.hh"
 #include "PrimaryParticleInformation.h"
+#include <algorithm>
 
-DetectorSD::DetectorSD(G4String name, G4int scinSum)
-    :G4VSensitiveDetector(name), totScinNum(scinSum)
+DetectorSD::DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue )
+    :G4VSensitiveDetector(name), totScinNum(scinSum), timeIntervals(timeMergeValue)
 {
      collectionName.insert("detectorCollection");
-
-    for (G4int i=0; i<=totScinNum; i++)
-    {
-        previousHitHistory.push_back(-1);
-        previousHitTimeHistory.push_back(0.);
-    }
+     previousHits.resize(totScinNum+1); //declare array
 
 }
 
@@ -28,11 +24,7 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
     { HCID = GetCollectionID(0); }
     HCE->AddHitsCollection(HCID,fDetectorCollection);
 
-    for (G4int i=0; i<=totScinNum; i++)
-    {
-        previousHitHistory[i] = -1;
-        previousHitTimeHistory[i] = 0.;
-    }
+    std::fill( previousHits.begin(), previousHits.end(), HitParameters() );
 
 }
 
@@ -42,7 +34,20 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
 {
     G4double edep = aStep->GetTotalEnergyDeposit();
 
-    if(edep==0.0) return false;
+    if(edep==0.0){
+      if(aStep->GetPostStepPoint()->GetMomentum().mag2() > 0){
+      // particle quanta interact in detector but does not deposit energy
+      // (vide Rayleigh scattering)   
+        if(aStep->GetTrack()->GetParentID() == 0 ){
+          PrimaryParticleInformation* info  = dynamic_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
+          if (info != nullptr ){
+                  info->SetGammaMultiplicity(0);
+          }
+        }
+
+      }
+      return false;
+    }
 
     G4TouchableHistory* theTouchable  = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()); 
     G4VPhysicalVolume* physVol = theTouchable->GetVolume();
@@ -50,35 +55,31 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     G4double currentTime = aStep->GetPreStepPoint()->GetGlobalTime();
 
 
-
-    if( (previousHitHistory[currentScinCopy] !=-1 )
-          &&( abs(previousHitTimeHistory[currentScinCopy]-currentTime)<timeIntervals) ) 
+    if( (previousHits[currentScinCopy].fID !=-1 )
+          &&( abs(previousHits[currentScinCopy].fTime-currentTime)<timeIntervals) ) 
     {
         // update track
-        (*fDetectorCollection)[previousHitHistory[currentScinCopy]]->AddEdep(edep);
-        (*fDetectorCollection)[previousHitHistory[currentScinCopy]]->AddInteraction();
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddEdep(edep);
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddInteraction();
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddTime(currentTime,edep);
+        (*fDetectorCollection)[previousHits[currentScinCopy].fID]->AddPosition(aStep->GetPostStepPoint()->GetPosition(),edep);
 
     } else {
         // new hit
+        // interaction types compton, msc (multiple compton scatterings)
         DetectorHit* newHit = new DetectorHit();
         newHit->SetEdep( edep );
         newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
         newHit->SetTrackPDG(aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         newHit->SetProcessName(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
         newHit->SetInteractionNumber();
-        newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition());
-        newHit->SetTime(currentTime);
-
+        newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition(),edep);
+        newHit->SetTime(currentTime,edep);
         newHit->SetScinID(physVol->GetCopyNo());
-
         newHit->SetPolarizationIn(aStep->GetPreStepPoint()->GetPolarization());
-        newHit->SetPolarizationOut(aStep->GetPostStepPoint()->GetPolarization());
         newHit->SetMomentumIn(aStep->GetPreStepPoint()->GetMomentum());
-        //printf(" momentum track %4.2f %4.2f %4.2f \n",aStep->GetTrack()->GetMomentum().x(),aStep->GetTrack()->GetMomentum().y(),
-        //aStep->GetTrack()->GetMomentum().z());
-        //printf(" momentum presteppoint %4.2f %4.2f %4.2f \n",aStep->GetPreStepPoint()->GetMomentum().x(),aStep->GetPreStepPoint()->GetMomentum().y(),
-        //aStep->GetPreStepPoint()->GetMomentum().z());
-
+        
+        newHit->SetPolarizationOut(aStep->GetPostStepPoint()->GetPolarization());
         newHit->SetMomentumOut(aStep->GetPostStepPoint()->GetMomentum());
 
 
@@ -89,16 +90,18 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
             if (info != 0 ){
                 newHit->SetGenGammaMultiplicity(info->GetGammaMultiplicity());
                 newHit->SetGenGammaIndex(info->GetIndex());
+                // should be marked as scattering
+                info->SetGammaMultiplicity(info->GetGammaMultiplicity()+100);
             }
         }
 
         G4int id = fDetectorCollection->insert(newHit);
-        previousHitHistory[currentScinCopy] = id-1;
-        previousHitTimeHistory[currentScinCopy]= currentTime;
-
+        previousHits[currentScinCopy].fID = id-1;
+        previousHits[currentScinCopy].fTime= currentTime;
 
 
     }
+
 
 
     return true;

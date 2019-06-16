@@ -17,6 +17,12 @@ class PrimaryParticleInformation : public G4VUserPrimaryParticleInformation {
 
         void SetIndex(G4int i){fIndex = i;}
         void SetGammaMultiplicity(G4int i){fDecayMultiplicity =i;}
+
+        /// flags to multiplicity
+        static const G4int kBackground = 0;
+        static const G4int kPromptGamma = 1;
+        static const G4int kBackToBackGamma = 2;
+        static const G4int koPsGamma = 3;
     private:
         G4int fIndex;
         G4int fDecayMultiplicity;

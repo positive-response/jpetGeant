@@ -12,7 +12,7 @@ one used in the experiment. Details can be found in section [How to run](#how-to
 software
 
 ## Source code:
-https://github.com/daria137/jpetmc.git
+https://github.com/JPETTomography/J-PET-geant4
 
 ## Required packages:
 - geant4.10.04
@@ -43,10 +43,9 @@ User can adjust detector parameters and generated gamma-quanta by using macros. 
 ## Geometry
 User can load one of the selected geometries:
  - /jpetmc/detector/loadGeomForRun runNr
-   - runNr=3
+   - runNr=3/5/6
     - only implemented since now 
     - loaded JPetBasicGeom
-    - place inside of the detector the large annihilation chamber without porous material inside 
  - /jpetmc/detector/loadJPetBasicGeom 
    - 3 layers of scintillators (48,48,96)
    - each scintillator: 1.9x0.7x50 cm^3 wrapped in kapton foil
@@ -61,9 +60,19 @@ User can load one of the selected geometries:
  - /jpetmc/detector/loadOnlyScintillators 
    - shows only scintillator wrapped in a kapton foil   
 
-## Targets
-If user calls run geometry for dedicated run, then target is predefined and it can not be changed. 
+Following modifications for Runs can be introduced:
+- simulate only oPs gamma: /jpetmc/material/xad/threeGammaOnly 
+- simulate only 2g: /jpetmc/material/xad/twoGammaOnly
+- simulate only pick-off process (2g & long lifetime): /jpetmc/material/xad/pickOffOnly
+- define longest lifetime component: /jpetmc/material/xad/oPslifetime
+- define fraction of oPs annihilations (0-1): /jpetmc/material/xad/oPsFraction
+- define fraction of pick-off processes (0-1): /jpetmc/material/xad/pickOffFraction
+- set center of the annihilation chamber: /jpetmc/run/setChamberCenter
+- for run5: define range where we expect annihilations to occur: /jpetmc/run/setEffectivePositronRange  
 
+General parameters:
+- define time range, between hits in scintillator, which will be classified as single hit: /jpetmc/detector/hitMergingTime
 
-- materials can keep information about oPs creation and lifetime
+## 
+
 

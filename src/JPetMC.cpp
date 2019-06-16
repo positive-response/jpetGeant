@@ -1,6 +1,6 @@
 #include "DetectorConstruction.h"
 #include "PhysicsList.h"
-#include "G4RunManager.hh"
+#include "RunManager.h"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -29,7 +29,7 @@ int main (int argc,char** argv)
     }
 
 
-    G4RunManager* runManager = new G4RunManager;
+    RunManager* runManager = new RunManager;
 
     runManager->SetUserInitialization(DetectorConstruction::GetInstance());
     runManager->SetUserInitialization(new PhysicsList);

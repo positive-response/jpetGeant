@@ -21,14 +21,18 @@ class DetectorHit : public G4VHit
     DetectorHit(); //< standard constructor
     virtual ~DetectorHit();
     void SetEdep(G4double de)  { fEdep = de; }
-    void SetTime(G4double val) {fTime = val;}
+    void SetTime(G4double val, G4double weight );
     void SetTrackID(G4int i) { fTrackID =i;}
     void SetTrackPDG(G4int i) {fTrackPDG = i;}
     void SetScinID(G4int i) {fScinID = i;}
-    void SetPosition(G4ThreeVector xyz) {fPos =xyz;}
+    void SetPosition(G4ThreeVector xyz, G4double weight);
     void SetInteractionNumber() {fNumInteractions = 1;}
-    void AddInteraction() { fNumInteractions += 1;}
-    void AddEdep(G4double de) { fEdep += de;}
+
+    /// single hit is merged from many interactions in scintillator
+    void AddInteraction() {fNumInteractions += 1;}
+    void AddEdep(G4double de) {fEdep += de;}
+    void AddTime(G4double val, G4double weight);  
+    void AddPosition(G4ThreeVector xyz, G4double weight );
 
     void SetPolarizationIn(G4ThreeVector xyz) {fPolarizationIn =xyz;}
     void SetPolarizationOut(G4ThreeVector xyz) {fPolarizationOut =xyz;}
@@ -36,12 +40,13 @@ class DetectorHit : public G4VHit
     void SetMomentumOut(G4ThreeVector xyz) {fMomentumOut =xyz;}
     void SetProcessName(G4String str) {fName = str;}
 
+    /// time and position are weighted by energy
+    G4double GetTime();
+    G4ThreeVector GetPosition();
 
     G4int GetScinID() {return fScinID;}
     G4int GetTrackID() {return fTrackID;}
     G4double GetEdep() {return fEdep;}
-    G4double GetTime() {return fTime;}
-    G4ThreeVector GetPosition() {return fPos;}
     G4int GetTrackPDG() {return fTrackPDG;}
     G4ThreeVector GetPolarizationIn()  {return fPolarizationIn;}
     G4ThreeVector GetPolarizationOut() {return fPolarizationOut;}
@@ -75,6 +80,9 @@ class DetectorHit : public G4VHit
     G4int fGenGammaIndex;
 
     G4String fName; //< process name
+
+    G4double fSumWeightPosition;
+    G4double fSumWeightTime;
 };
 
 typedef G4THitsCollection<DetectorHit> DetectorHitsCollection;

@@ -12,12 +12,14 @@
 #include "JPetGeantEventInformation.h"
 #include "DetectorHit.h"
 #include "VtxInformation.h"
+#include "G4PrimaryParticle.hh"
+#include "G4Event.hh"
 
 
 class TFile;
 class TTree;
-const int MaxHisto = 6;
-const int MaxHisto2D = 7;
+const int MaxHisto = 7;
+const int MaxHisto2D = 9;
 
 /**
  * \class HistoManager
@@ -36,11 +38,17 @@ class HistoManager
         void Clear(){fEventPack->Clear();}; 
 
         void AddGenInfo(VtxInformation* info);
+        void AddGenInfoParticles(G4PrimaryParticle* particle);
         void AddNewHit(DetectorHit*);
         void SetEventNumber(int x){fEventPack->SetEventNumber(x);};
 
         void SetHistogramCreation(bool tf){fMakeControlHisto=tf;};
         bool MakeControlHisto(){return fMakeControlHisto;};
+
+        void FillHistoGenInfo(const G4Event* anEvent);
+
+        const JPetGeantEventInformation* GetGeantInfo(){ return fGeantInfo;} 
+
 
 
     private:

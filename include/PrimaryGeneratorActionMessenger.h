@@ -25,26 +25,33 @@ class PrimaryGeneratorActionMessenger: public G4UImessenger
         void SetNewValue(G4UIcommand*, G4String);
 
     private:
-        void CheckIfBeam();
-        void CheckIfIsotope();
-        PrimaryGeneratorAction* fPrimGen;
+        void ChangeToBeam();
+        void ChangeToRun();
+        void ChangeToIsotope();
+
+        bool CheckIfRun();
+        PrimaryGeneratorAction* fPrimGen = nullptr;
         
-        G4UIdirectory* fDirectory;
-        G4UIcmdWithAString* fSourceType;
+        G4UIdirectory* fDirectory = nullptr;
+        G4UIdirectory* fDirectoryRun = nullptr;
+        G4UIcmdWithAString* fSourceType = nullptr;
 
-        G4UIcmdWithADoubleAndUnit* fGammaBeamSetEnergy;
-        G4UIcmdWith3VectorAndUnit* fGammaBeamSetPosition;
-        G4UIcmdWith3VectorAndUnit* fGammaBeamSetMomentum;
-
-
-        G4UIcmdWithAString* fIsotopeSetShape;
-        G4UIcmdWithAnInteger* fIsotopeSetGenGammas;
-        G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderRadius; 
-        G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderZ; 
-        G4UIcmdWith3Vector* fIsotopeSetCenter;
+        G4UIcmdWithADoubleAndUnit* fGammaBeamSetEnergy = nullptr;
+        G4UIcmdWith3VectorAndUnit* fGammaBeamSetPosition = nullptr;
+        G4UIcmdWith3VectorAndUnit* fGammaBeamSetMomentum = nullptr;
 
 
-        G4UIcmdWithAnInteger* fNemaPosition;
+        G4UIcmdWithAString* fIsotopeSetShape = nullptr;
+        G4UIcmdWithAnInteger* fIsotopeSetGenGammas = nullptr;
+        G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderRadius = nullptr; 
+        G4UIcmdWithADoubleAndUnit* fIsotopeSetShapeDimCylinderZ = nullptr; 
+        G4UIcmdWith3VectorAndUnit* fIsotopeSetCenter = nullptr;
+
+
+        G4UIcmdWithAnInteger* fNemaPosition = nullptr;
+
+        G4UIcmdWith3VectorAndUnit* fSetChamberCenter = nullptr;
+        G4UIcmdWithADoubleAndUnit* fSetChamberEffectivePositronRadius = nullptr;
 
 };
 

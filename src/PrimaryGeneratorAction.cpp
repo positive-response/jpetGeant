@@ -23,6 +23,17 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
     delete fMessenger;
 }
 
+void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
+{
+  if(radius<=0)
+  {
+    G4Exception("PrimaryGeneratorAction","PG0Radius",JustWarning,
+           "EffectivePositronRadius can not be negative!! Value is not changed");
+  } else {
+    fEffectivePositronRadius = radius;
+  }
+}
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) 
 {
 
@@ -30,8 +41,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if(  nRun != 0){
         if( GetSourceTypeInfo() != "run"){
-          //G4Exception("PrimaryGeneratorAction","PG03",JustWarning,
-          //       "User can not modify the predefined run geometry");
             SetSourceTypeInfo("run");
         }
     }
@@ -39,11 +48,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
     if( GetSourceTypeInfo() == ("run")) {
         if (nRun == 3) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,2.5,2.5,7.6);
+            fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else if (nRun == 5) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,10.0,10.0,20.0);
+            fPrimaryGenerator->GenerateEvtSmallChamber(event,fEffectivePositronRadius);
         } else if (nRun == 6) {
-            fPrimaryGenerator->GenerateEvtChamberWithSodiumAndPorousMaterial(event,15.0,15.0,31.0);
+            fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else {
           G4Exception("PrimaryGeneratorAction","PG05",FatalException,
                  "Called run with non-exisitng geometry");
@@ -58,9 +67,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
           G4Exception("PrimaryGeneratorAction","PG04",FatalException,
                  "Required source type is not allowed");
     }
-
-
-       // fPrimaryGenerator->GeneratePrimaryVertex(event);
 
 
 }

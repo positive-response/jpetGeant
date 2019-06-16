@@ -12,6 +12,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh" 
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 
 
 class MaterialExtension;
@@ -29,10 +31,17 @@ class MaterialExtensionMessenger: public G4UImessenger
         MaterialExtensionMessenger();
         ~MaterialExtensionMessenger();
 
-        G4UIdirectory* fDirectory;
-        MaterialExtension* fMaterial;
+        G4UIdirectory* fDirectory = nullptr;
+        MaterialExtension* fMaterial = nullptr;
+        
+        G4UIcmdWithoutParameter* fXAD3GammaOnly = nullptr;
+        G4UIcmdWithoutParameter* fXAD2GammaOnly = nullptr;
+        G4UIcmdWithoutParameter* fXADPickOffOnly = nullptr;
+        G4UIcmdWithADoubleAndUnit* fXADSet3gLifetime = nullptr;
+        G4UIcmdWithADouble* fXADSet3gFraction = nullptr;
+        G4UIcmdWithADouble* fXADSetPickOffFraction = nullptr;
 
-        G4UIcmdWithABool* fMake3GammaOnly;
+
         bool fIsOnly3g = true;
 };
 
