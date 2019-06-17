@@ -1,20 +1,34 @@
-#ifndef HistoManager_h 
-#define HistoManager_h 1 
+/**
+ *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may find a copy of the License in the LICENCE file.
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  @file HistoManager.h
+ */
 
-#include "globals.hh"
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TFile.h>
-#include <TTree.h>
+#ifndef HISTOMANAGER_H
+#define HISTOMANAGER_H 1
+
+#include "JPetGeantEventInformation.h"
+#include "G4PrimaryParticle.hh"
+#include "JPetGeantEventPack.h"
 #include "JPetGeantDecayTree.h"
 #include "JPetGeantScinHits.h"
-#include "JPetGeantEventPack.h"
-#include "JPetGeantEventInformation.h"
-#include "DetectorHit.h"
 #include "VtxInformation.h"
-#include "G4PrimaryParticle.hh"
+#include "DetectorHit.h"
 #include "G4Event.hh"
-
+#include "globals.hh"
+#include <TFile.h>
+#include <TTree.h>
+#include <TH1F.h>
+#include <TH2F.h>
 
 class TFile;
 class TTree;
@@ -22,64 +36,94 @@ const int MaxHisto = 7;
 const int MaxHisto2D = 9;
 
 /**
- * \class HistoManager
- * \brief class reach for informations stored during sumulations
+ * @class HistoManager
+ * @brief class reach for informations stored during sumulations
  * and saves them into ROOT tree structures
  */
 class HistoManager
 {
-    public:
-        HistoManager();
-        ~HistoManager();
+public:
+  HistoManager();
+  ~HistoManager();
 
-        void Book(); //< call once; book all trees and histograms
-        void Save(); //< call once; save all trees and histograms
-        void SaveEvtPack(){fTree->Fill();}; 
-        void Clear(){fEventPack->Clear();}; 
+  //! call once; book (create) all trees and histograms
+  void Book();
+  //! call once; save all trees and histograms
+  void Save();
 
-        void AddGenInfo(VtxInformation* info);
-        void AddGenInfoParticles(G4PrimaryParticle* particle);
-        void AddNewHit(DetectorHit*);
-        void SetEventNumber(int x){fEventPack->SetEventNumber(x);};
+  void SaveEvtPack()
+  {
+    fTree->Fill();
+  };
 
-        void SetHistogramCreation(bool tf){fMakeControlHisto=tf;};
-        bool MakeControlHisto(){return fMakeControlHisto;};
+  void Clear()
+  {
+    fEventPack->Clear();
+  };
 
-        void FillHistoGenInfo(const G4Event* anEvent);
+  void AddGenInfo(VtxInformation* info);
+  void AddGenInfoParticles(G4PrimaryParticle* particle);
+  void AddNewHit(DetectorHit*);
 
-        const JPetGeantEventInformation* GetGeantInfo(){ return fGeantInfo;} 
+  void SetEventNumber(int x)
+  {
+    fEventPack->SetEventNumber(x);
+  };
 
+  void SetHistogramCreation(bool tf)
+  {
+    fMakeControlHisto = tf;
+  };
 
+  bool MakeControlHisto()
+  {
+    return fMakeControlHisto;
+  };
 
-    private:
-        bool     fMakeControlHisto; 
-        TH1F*    fHisto[MaxHisto];
-            // 0 - generated gamma
-            // 1 - time
-            // 2 - energy
-            // 3 - z position
-            // 4 - lifetime
-            // 5 - prompt lifetime
+  void FillHistoGenInfo(const G4Event* anEvent);
 
-        TH2F*    fHisto2D[MaxHisto2D];
-            // 0 - XY hits
-            // 1 - XY annihilation
-            // 2 - XZ annihilation
-            // 3 - YZ annihilation
-            // 4 - XY prompt 
-            // 5 - XZ prompt 
-            // 6 - YZ prompt 
+  const JPetGeantEventInformation* GetGeantInfo()
+  {
+    return fGeantInfo;
+  }
 
-        TFile*   fRootFile;
-        TTree*   fTree; 
-        TBranch* fBranchTrk;
-        TBranch* fBranchScin;
-        TBranch* fBranchEventPack;
+private:
+  bool fMakeControlHisto;
 
-        JPetGeantEventPack* fEventPack;
-        JPetGeantEventInformation* fGeantInfo; 
+  /**
+   * 1D histograms array:
+   * 0 - generated gamma
+   * 1 - time
+   * 2 - energy
+   * 3 - z position
+   * 4 - lifetime
+   * 5 - prompt lifetime
+   */
 
-        void BookHistograms();
+  TH1F* fHisto[MaxHisto];
+
+  /**
+  * 2D histograms array:
+  * 0 - XY of hits
+  * 1 - XY of annihilation
+  * 2 - XZ annihilation
+  * 3 - YZ annihilation
+  * 4 - XY prompt
+  * 5 - XZ prompt
+  * 6 -YZ prompt
+  */
+  TH2F* fHisto2D[MaxHisto2D];
+
+  TFile* fRootFile;
+  TTree* fTree;
+  TBranch* fBranchTrk;
+  TBranch* fBranchScin;
+  TBranch* fBranchEventPack;
+
+  JPetGeantEventPack* fEventPack;
+  JPetGeantEventInformation* fGeantInfo;
+
+  void BookHistograms();
 };
 
 #endif
