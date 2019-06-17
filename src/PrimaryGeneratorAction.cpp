@@ -51,7 +51,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
             fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else if (nRun == 5) {
             fPrimaryGenerator->GenerateEvtSmallChamber(event,fEffectivePositronRadius);
-        } else if (nRun == 6) {
+        } else if (nRun == 6 || nRun == 7) {
             fPrimaryGenerator->GenerateEvtLargeChamber(event);
         } else {
           G4Exception("PrimaryGeneratorAction","PG05",FatalException,
