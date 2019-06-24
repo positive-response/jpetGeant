@@ -30,6 +30,24 @@ HistoManager::~HistoManager() {}
 void HistoManager::Book()
 {
   G4String fileName = "mcGeant.root";
+
+  if(fEvtMessenger->AddDatetime()){
+    TDatime* now = new TDatime();
+    std::string a_year = std::to_string(now->GetYear());
+    std::string a_month = std::to_string(now->GetMonth());
+    if(a_month.length() == 1) { a_month = std::string("0")+a_month; }
+    std::string a_day = std::to_string(now->GetDay());
+    if(a_day.length() == 1) { a_day = std::string("0")+a_day; }
+    std::string a_hour = std::to_string(now->GetHour());
+    if(a_hour.length() == 1) { a_hour = std::string("0")+a_hour; }
+    std::string a_minute = std::to_string(now->GetMinute());
+    if(a_minute.length() == 1) { a_minute = std::string("0")+a_minute; }
+    std::string a_second = std::to_string(now->GetSecond());
+    if(a_second.length() == 1) { a_second = std::string("0")+a_second; }
+    std::string dateTime = a_year+"_"+a_month+"_"+a_day+"-"+a_hour+"_"+a_minute+"_"+a_second;
+    fileName = dateTime+"."+fileName;
+  }
+
   fRootFile = new TFile(fileName, "RECREATE");
   if (! fRootFile) {
     G4cout << " HistoManager::Book :" << " problem creating the ROOT TFile " << G4endl;

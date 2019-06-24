@@ -22,6 +22,7 @@
 #include "JPetGeantDecayTree.h"
 #include "JPetGeantScinHits.h"
 #include "VtxInformation.h"
+#include "EventMessenger.h"
 #include "DetectorHit.h"
 #include "G4Event.hh"
 #include "globals.hh"
@@ -122,6 +123,7 @@ private:
 
   JPetGeantEventPack* fEventPack;
   JPetGeantEventInformation* fGeantInfo;
+  EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
   void BookHistograms();
 };
