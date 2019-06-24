@@ -61,7 +61,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
     } else if (nRun == 5) {
       fPrimaryGenerator->GenerateEvtSmallChamber(event, fEffectivePositronRadius);
-    } else if (nRun == 6) {
+    } else if (nRun == 6 || nRun == 7) {
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
     } else {
       G4Exception("PrimaryGeneratorAction", "PG05", FatalException,
@@ -74,9 +74,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("nema")) {
     fPrimaryGenerator->GenerateNema(GetNemaPoint(), event);
   } else {
-    G4Exception(
-      "PrimaryGeneratorAction", "PG04", FatalException, "Required source type is not allowed"
-    );
+    G4Exception("PrimaryGeneratorAction", "PG05", FatalException,
+                "Called run with non-exisitng geometry");
   }
 }
 
@@ -102,6 +101,6 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
     G4Exception(
       "PrimaryGeneratorAction", "PG02", JustWarning,
       "Please pick from avaliable setups: beam/isotope"
-     );
+    );
   }
 }

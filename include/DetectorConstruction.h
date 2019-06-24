@@ -96,6 +96,9 @@ private:
   void ConstructTargetRun5();
   //! Create target used in run6 - big chamber + XAD material inside tube
   void ConstructTargetRun6();
+  //! Create target used in run7
+  void ConstructTargetRun7();
+
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
   //! Flag for loading frame from CAD file
@@ -105,24 +108,23 @@ private:
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
 
-  G4Box* worldSolid;
-  G4LogicalVolume* worldLogical;
-  G4VPhysicalVolume* worldPhysical;
+  G4Box* fWorldSolid;
+  G4LogicalVolume* fWorldLogical;
+  G4VPhysicalVolume* fWorldPhysical;
 
-  MaterialExtension* vacuum;
-  MaterialExtension* air;
-  MaterialExtension* scinMaterial;
-  MaterialExtension* detectorMaterial;
-  MaterialExtension* plexiglass;
-  MaterialExtension* kapton;
-  MaterialExtension* aluminiumMaterial;
-  MaterialExtension* plexiglassMaterial;
-  MaterialExtension* smallChamberMaterial;
-  MaterialExtension* XADMaterial;
+  MaterialExtension* fAir;
+  MaterialExtension* fKapton;
+  MaterialExtension* fVacuum;
+  MaterialExtension* fPlexiglass;
+  MaterialExtension* fXADMaterial;
+  MaterialExtension* fScinMaterial;
+  MaterialExtension* fAluminiumMaterial;
+  MaterialExtension* fSmallChamberMaterial;
+  MaterialExtension* fSmallChamberRun7Material;
 
-  G4LogicalVolume* scinLog;
-  G4LogicalVolume* scinLogInModule;
-  G4Cache<DetectorSD*> detectorSD;
+  G4LogicalVolume* fScinLog;
+  G4LogicalVolume* fScinLogInModule;
+  G4Cache<DetectorSD*> fDetectorSD;
 };
 
 #endif
