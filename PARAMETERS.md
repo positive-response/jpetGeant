@@ -24,6 +24,8 @@ Following options can be added to macro files, that are read by Geat4. Example f
 * Hit merging time:  
  * define time range, between hits in scintillator, which will be classified as single hit:  
  * `/jpetmc/detector/hitMergingTime`  
+* Adding date and time to the name of the output file, so multiple executions of the simulation does not overwrite the default file  
+ * `/jpetmc/output/AddDatetime 1`  
 
 ## Additional parameters:
 * simulate only oPs gamma:  

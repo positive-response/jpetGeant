@@ -65,6 +65,11 @@ public:
     return fPrintPower;
   }
 
+  bool AddDatetime()
+  {
+    return fOutputWithDatetime;
+  }
+
 private:
   static EventMessenger* fInstance;
   EventMessenger();
@@ -77,10 +82,12 @@ private:
   G4UIcmdWithoutParameter* fSave3g;
   G4UIcmdWithABool* fPrintStat;
   G4UIcmdWithABool* fPrintStatBar;
+  G4UIcmdWithABool* fAddDatetime;
   G4UIcmdWithAnInteger* fPrintStatPower;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = true;
+  bool fOutputWithDatetime = false;
 
 };
 
