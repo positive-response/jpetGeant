@@ -6,10 +6,37 @@ cmake_minimum_required (VERSION 2.6)
 project(jpet_mc)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h)
+
+################################################################################
+## Specify source folders
+set(FOLDERS_WITH_SOURCE
+  Objects/Framework
+  Objects/Geant4
+  Actions
+  Core
+  Info
+)
+
+## Point SOURCES and headers
+foreach(dir ${FOLDERS_WITH_SOURCE})
+  file(GLOB HEADERS_TMP ${dir}/*.h)
+  file(GLOB SOURCES_TMP ${dir}/*.cpp)
+  #list(REMOVE_ITEM FOLDERS_TMP ${HEADERS_TMP} ${SOURCES_TMP})
+  list(APPEND HEADERS ${HEADERS_TMP})
+  list(APPEND SOURCES ${SOURCES_TMP})
+endforeach()
+
+list(APPEND FOLDERS ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter")
+
+
+
+#old
+#file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
+#file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h)
 
 ################################################################################
 # Project version number
@@ -87,7 +114,7 @@ if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
 endif()
 
 set(ROOT_CXX_FLAGS "-std=c++11 -Wunused-parameter")
-include(${ROOT_USE_FILE})
+#include(${ROOT_USE_FILE})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
@@ -96,10 +123,10 @@ include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 # Create ROOT dictionaries
 ROOT_GENERATE_DICTIONARY(
   JPetMCClasses
-  include/JPetGeantDecayTree.h
-  include/JPetGeantScinHits.h
-  include/JPetGeantEventPack.h
-  include/JPetGeantEventInformation.h
+  Objects/Framework/JPetGeantEventInformation.h
+  Objects/Framework/JPetGeantDecayTree.h
+  Objects/Framework/JPetGeantEventPack.h
+  Objects/Framework/JPetGeantScinHits.h
   LINKDEF
   LinkDef.h
 )
@@ -107,10 +134,10 @@ ROOT_GENERATE_DICTIONARY(
 add_library(
   JPetMCClassesDict
   SHARED
-  src/JPetGeantDecayTree.cpp
-  src/JPetGeantScinHits.cpp
-  src/JPetGeantEventPack.cpp
-  src/JPetGeantEventInformation.cpp
+  Objects/Framework/JPetGeantEventInformation.cpp
+  Objects/Framework/JPetGeantDecayTree.cpp
+  Objects/Framework/JPetGeantEventPack.cpp
+  Objects/Framework/JPetGeantScinHits.cpp
   JPetMCClasses.cxx
 )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
@@ -118,7 +145,11 @@ target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
 ################################################################################
 # Create a main program using the library
-add_executable(jpet_mc ${sources} ${headers})
+add_executable(jpet_mc JPetMC.cpp ${SOURCES})
+
+# old
+#add_executable(jpet_mc ${sources} ${headers})
+
 target_link_libraries(
   jpet_mc
   ${Geant4_LIBRARIES}
