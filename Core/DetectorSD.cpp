@@ -18,6 +18,7 @@
 #include <G4VProcess.hh>
 #include "DetectorSD.h"
 #include <algorithm>
+#include <G4SystemOfUnits.hh>
 
 DetectorSD::DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue) :
   G4VSensitiveDetector(name), totScinNum(scinSum), timeIntervals(timeMergeValue)
@@ -45,7 +46,8 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if (edep == 0.0) {
-    if (aStep->GetPostStepPoint()->GetMomentum().mag2() > 0) {
+    if ( (aStep->GetPostStepPoint()->GetMomentum().mag2()-aStep->GetPreStepPoint()->GetMomentum().mag2()) > 0 ) {
+    printf("%4.2f %4.2f \n",(aStep->GetPostStepPoint()->GetMomentum().mag2()- aStep->GetPreStepPoint()->GetMomentum().mag2())/keV);
       // particle quanta interact in detector but does not deposit energy
       // (vide Rayleigh scattering)
       if (aStep->GetTrack()->GetParentID() == 0) {
