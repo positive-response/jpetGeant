@@ -39,7 +39,8 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadOnlyScintillators = new G4UIcmdWithoutParameter("/jpetmc/detector/loadOnlyScintillators", this);
   fLoadOnlyScintillators->SetGuidance("Generate only scintillators (for test purposes)");
 
-  fLoadModularLayer = new G4UIcmdWithABool("/jpetmc/detector/loadModularLayer", this);
+  // Bool converted into string
+  fLoadModularLayer = new G4UIcmdWithAString("/jpetmc/detector/loadModularLayer", this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
 
   fScinHitMergingTime = new G4UIcmdWithADoubleAndUnit("/jpetmc/detector/hitMergingTime", this);
@@ -86,11 +87,13 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     fDetector->LoadFrame(false);
     fDetector->UpdateGeometry();
   }
-
+// Introduce for the option of modular layer
   if (command == fLoadModularLayer) {
-    fDetector->ConstructModularLayer(fLoadModularLayer->GetNewBoolValue(newValue));
+
+    fDetector->ConstructModularLayer( newValue );
     fDetector->UpdateGeometry();
   }
+  //--------------------------------------
 
   if (command == fScinHitMergingTime) {
     DetectorConstants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));

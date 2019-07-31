@@ -36,6 +36,7 @@
 #include <globals.hh>
 #include <G4Box.hh>
 #include <string>
+#include<vector>
 
 class DetectorConstructionMessenger;
 
@@ -49,6 +50,9 @@ const  G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
+
+ enum GeometryKind { Unknown, Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+
   //! only single instance can exist
   static DetectorConstruction* GetInstance();
   virtual G4VPhysicalVolume* Construct();
@@ -64,15 +68,19 @@ public:
   };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(bool tf)
+  void ConstructModularLayer( G4String module_name )
   {
-    fLoadModularLayer = tf;
+    fLoadModularLayer = true;
+    if ( module_name == "Single" ) { fGeoKind = GeometryKind::Geo24ModulesLayer; }
+    else if ( module_name == "Double" ) { fGeoKind = GeometryKind::Geo24ModulesLayerDistributed; }
+    else { fLoadModularLayer = false; }
   }
 
   G4int GetRunNumber()
   {
     return fRunNumber;
   };
+  
 
 private:
   static G4ThreadLocal G4bool fConstructedSDandField;
@@ -98,6 +106,8 @@ private:
   void ConstructTargetRun6();
   //! Create target used in run7
   void ConstructTargetRun7();
+  
+  void ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI);
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
@@ -125,6 +135,8 @@ private:
   G4LogicalVolume* fScinLog;
   G4LogicalVolume* fScinLogInModule;
   G4Cache<DetectorSD*> fDetectorSD;
+  // Geometry Kind for the modular layer
+  GeometryKind fGeoKind = GeometryKind::Unknown;
 };
 
 #endif

@@ -26,6 +26,7 @@
 #include <G4Polycone.hh>
 #include "RunManager.h"
 #include <G4Tubs.hh>
+#include <vector>
 
 DetectorConstruction* DetectorConstruction::fInstance = 0;
 
@@ -40,7 +41,6 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 DetectorConstruction::DetectorConstruction() :
   G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
   fLoadWrapping(true),fLoadModularLayer(true)
-  //fLoadModularLayer(false) originally off
 
 {
   InitializeMaterials();
@@ -350,9 +350,9 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 	  25.4669, 25.49579, 25.54379, 25.61085, 25.6968, 25.8015};
 
 
-  G4double radius_dynamic[13]={0};
+  std::vector<G4double> radius_dynamic = std::vector<G4double>(13,0.0);
+  //G4double radius_dynamic[13]={0};
 
-  G4double phi1 = 0.0;
   //! sum of already constructed scintillators;
   G4int icopyI = 193;
 
@@ -365,23 +365,47 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   G4int numberofModules   =0;
 
 
- // for(int k = 0; k<1; k++) // switch on for the single layer of 24 module
-  for(int k = 1; k<3; k++)
+  //Assume: enum GeometryKind { Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+  //Single : for 24 modules layer
+  //Double : for 8 and 16 layer configuration
+
+  switch ( fGeoKind )
   {
+   case GeometryKind::Geo24ModulesLayer:
+     for(int i=0; i<13; i++) { radius_dynamic[i] = radius_24[i]; }
+     numberofModules = 24;
+     AngDisp_dynamic = AngDisp_24;
+     ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+     break;
+   case GeometryKind::Geo24ModulesLayerDistributed:
+    for(int i=0; i<13; i++) { radius_dynamic[i] = radius_8[i]; }
+    numberofModules = 8;
+    AngDisp_dynamic = AngDisp_8;
+    ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+    for(int i=0; i<13; i++) {radius_dynamic[i] = radius_16[i]; }
+    numberofModules =16;
+    AngDisp_dynamic = AngDisp_16;
+    icopyI=297;
+    ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+    break;
+   default:
+    G4cout<<" Not a proper option chosen : choose either Single or Double"<<G4endl;
+    break;
+  };
 
+}
 
-    // for 24 modules layer
-  if(k==0) {for(int i=0; i<13; i++) radius_dynamic[i] = radius_24[i];  numberofModules = 24; AngDisp_dynamic = AngDisp_24;}
-	// 24 modules are distributed in layers of 8 and 16
-	if(k==1)      {for(int i=0; i<13; i++) radius_dynamic[i] = radius_8[i];  numberofModules = 8; AngDisp_dynamic = AngDisp_8;}
-	else if(k==2) {for(int i=0; i<13; i++) radius_dynamic[i] = radius_16[i]; numberofModules =16; AngDisp_dynamic = AngDisp_16; icopyI=297;}
+void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI)
+{
+ G4double phi = 0.0;
+ G4double phi1 = 0.0;
 
-	for(int i=0; i<numberofModules; i++){
+ 	for(int i=0; i<numberofModules; i++)
+ 	{
+    phi = (i*2*M_PI/numberofModules);
 
-    G4double phi = (i*2*M_PI/numberofModules);
-
-  for(int j=-6; j<7; j++){
-      //icopyI++;
+    for(int j=-6; j<7; j++)
+    {
       phi1 = phi + j * AngDisp_dynamic;
 			G4double radius_new = radius_dynamic[j + 6] * cm;
 			G4RotationMatrix rot = G4RotationMatrix();
@@ -389,12 +413,11 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 			G4ThreeVector loc = G4ThreeVector(radius_new*cos(phi1), radius_new*sin(phi1),0.0);
 			G4Transform3D transform(rot,loc);
 			G4String nameNewI = "scin_"+G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
-			new G4PVPlacement(transform, fScinLogInModule, nameNewI, fWorldLogical,
-			true, icopyI + i * 13 + j + 6, checkOverlaps);
+			new G4PVPlacement(transform, fScinLogInModule, nameNewI, fWorldLogical, true, icopyI + i * 13 + j + 6, checkOverlaps);
 		}
-
 	 }
 }
+
 
   //! for Framework newly inserted scintillators need to have a unique numbering
  /* for (int i = 0; i < DetectorConstants::modulesInModularLayer; i++) {
@@ -415,7 +438,6 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
       );
     }
   }*/
-}
 
 /**
  * Method for construction of setup used in Run 3
