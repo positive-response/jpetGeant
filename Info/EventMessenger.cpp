@@ -102,8 +102,6 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if (command == fSaveSeed) {
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-    printf("SEED \n \n \n \n \n \n ");
-    printf("%d\n", fSaveRandomSeed);
   }
 
 }

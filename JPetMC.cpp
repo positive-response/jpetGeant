@@ -29,8 +29,8 @@
 void setRandomSeed()
 {
   long seeds[2];
-  seeds[0] =  std::hash<std::thread::id>()(std::this_thread::get_id());
-  seeds[1] = (long) static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  seeds[0] =  (long) static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()) + std::hash<std::thread::id>()(std::this_thread::get_id());
+  seeds[1] = (long) static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()) -  + std::hash<std::thread::id>()(std::this_thread::get_id());
   G4Random::setTheSeeds(seeds);
 
   if (EventMessenger::GetEventMessenger()->SaveSeed()) {
