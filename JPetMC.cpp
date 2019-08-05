@@ -25,12 +25,17 @@
 #include <thread>
 #include "Info/EventMessenger.h"
 #include <fstream> 
+#include <random>
 
 void setRandomSeed()
 {
   long seeds[2];
-  seeds[0] =  (long) static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()) + std::hash<std::thread::id>()(std::this_thread::get_id());
-  seeds[1] = (long) static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()) -  + std::hash<std::thread::id>()(std::this_thread::get_id());
+  
+  std::uniform_int_distribution<long> d(10, 0);
+  std::random_device rd1;
+
+  seeds[0] = d(rd1);
+  seeds[1] = d(rd1);
   G4Random::setTheSeeds(seeds);
 
   if (EventMessenger::GetEventMessenger()->SaveSeed()) {
