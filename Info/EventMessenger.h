@@ -70,6 +70,17 @@ public:
     return fOutputWithDatetime;
   }
 
+  bool SetRandomSeed()
+  {
+    return fSetRandomSeed;
+  }
+
+  bool SaveSeed()
+  {
+    return fSaveRandomSeed;
+  }
+
+
 private:
   static EventMessenger* fInstance;
   EventMessenger();
@@ -83,11 +94,15 @@ private:
   G4UIcmdWithABool* fPrintStat;
   G4UIcmdWithABool* fPrintStatBar;
   G4UIcmdWithABool* fAddDatetime;
+  G4UIcmdWithABool* fRandomSeed;
+  G4UIcmdWithABool* fSaveSeed;
   G4UIcmdWithAnInteger* fPrintStatPower;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = true;
   bool fOutputWithDatetime = false;
+  bool fSetRandomSeed = true;
+  bool fSaveRandomSeed = false;
 
 };
 
