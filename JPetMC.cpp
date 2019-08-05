@@ -21,8 +21,6 @@
 #include <G4UIExecutive.hh>
 #include <G4INCLRandom.hh>
 #include <G4UImanager.hh>
-#include <chrono>
-#include <thread>
 #include "Info/EventMessenger.h"
 #include <fstream> 
 #include <random>
@@ -31,7 +29,7 @@ void setRandomSeed()
 {
   long seeds[2];
   
-  std::uniform_int_distribution<long> d(10, 0);
+  std::uniform_int_distribution<long> d(0, LONG_MAX);
   std::random_device rd1;
 
   seeds[0] = d(rd1);
