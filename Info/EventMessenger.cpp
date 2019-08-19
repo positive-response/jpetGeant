@@ -38,6 +38,9 @@ EventMessenger::EventMessenger()
   fSave3g = new G4UIcmdWithoutParameter("/jpetmc/event/save3g", this);
   fSave3g->SetGuidance("Events with registered 3g will be saved");
 
+  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
+  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector"); 
+
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
   fPrintStat->SetGuidance("Print how many events was generated");
 
@@ -59,6 +62,7 @@ EventMessenger::~EventMessenger()
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
+  delete fCMDKillEventsEscapingWorld;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -85,5 +89,9 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if (command == fAddDatetime) {
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
+  }
+
+  if (command == fCMDKillEventsEscapingWorld) { 
+    fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
   }
 }

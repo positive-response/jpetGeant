@@ -61,6 +61,12 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
       return;
     }
   }
+  if(fEvtMessenger->KillEventsEscapingWorld()) {
+    if(G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted()){
+      return;
+    }
+  }
+
   WriteToFile(anEvent);
 }
 

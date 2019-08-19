@@ -35,7 +35,19 @@ void RunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_selec
       printf (" === Progress %4.2f === \r", double(100 * i_event) / double(n_event));
     }
 
-    if (fEvtMessenger->SaveOnlySelectedEvents()) {
+    if (fEvtMessenger->KillEventsEscapingWorld()) {
+      bool isAborted = true;
+      while (isAborted) {
+        ProcessOneEvent(i_event);
+         isAborted = currentEvent->IsAborted(); 
+        if (isAborted) {
+          //! clean event - it will not be stored
+          delete currentEvent;
+        }
+      }
+
+
+    } else if (fEvtMessenger->SaveOnlySelectedEvents()) {
       bool requirement = false;
       while (!requirement) {
         ProcessOneEvent(i_event);

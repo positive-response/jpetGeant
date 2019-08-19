@@ -35,6 +35,11 @@ public:
   static EventMessenger* GetEventMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 
+  bool KillEventsEscapingWorld()
+  {
+    return fKillEventsEscapingWorld;
+  }
+
   bool SaveOnlySelectedEvents()
   {
     return fSave2gEvts || fSave3gEvts;
@@ -83,11 +88,13 @@ private:
   G4UIcmdWithABool* fPrintStat;
   G4UIcmdWithABool* fPrintStatBar;
   G4UIcmdWithABool* fAddDatetime;
+  G4UIcmdWithABool* fCMDKillEventsEscapingWorld;
   G4UIcmdWithAnInteger* fPrintStatPower;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = true;
   bool fOutputWithDatetime = false;
+  bool fKillEventsEscapingWorld = false;
 
 };
 
