@@ -198,7 +198,8 @@ void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
     static_cast<PrimaryParticleInformation*> (particle->GetUserInformation());
   if (infoParticle == nullptr) { return; }
   G4int index = infoParticle->GetIndex();
-  fGeantInfo->SetMomentumGamma( index, particle->GetPx() / keV, particle->GetPy() / keV, particle->GetPz() / keV);
+  G4ThreeVector genMom = infoParticle->GenGenMomentum();
+  fGeantInfo->SetMomentumGamma( index, genMom.x() / keV, genMom.y() / keV, genMom.z() / keV);
 }
 
 /**

@@ -76,8 +76,10 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
       particleDefinition, out->Px(), out->Py(), out->Pz(), out->E()
     );
     PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
-    infoParticle->SetGammaMultiplicity(3);
+    infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
+    infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
     infoParticle->SetIndex(i + 1);
+    infoParticle->SetGenMomentum(out->Px(), out->Py(), out->Pz());
     particle[i]->SetUserInformation(infoParticle);
     vertex->SetPrimary(particle[i]);
   }
@@ -119,8 +121,10 @@ G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(
     );
 
     PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
-    infoParticle->SetGammaMultiplicity(2);
+    infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::kBackToBackGamma);
+    infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::kBackToBackGamma);
     infoParticle->SetIndex(i + 1);
+    infoParticle->SetGenMomentum(out->Px(), out->Py(), out->Pz());
     particle[i]->SetUserInformation(infoParticle);
     vertex->SetPrimary(particle[i]);
   }
@@ -158,8 +162,10 @@ G4PrimaryVertex* PrimaryGenerator::GeneratePromptGammaVertex(
     particleDefinition, momentum.x(), momentum.y(), momentum.z(), energy
   );
   PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
-  infoParticle->SetGammaMultiplicity(1);
-  infoParticle->SetIndex(0);
+  infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::kPromptGamma);
+  infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::kPromptGamma);
+  infoParticle->SetIndex(1);
+  infoParticle->SetGenMomentum(momentum.x(), momentum.y(), momentum.z());
   particle1->SetUserInformation(infoParticle);
   vertex->SetPrimary(particle1);
   return vertex;
@@ -291,8 +297,10 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
     particleDefinition, px, py, pz, ene
   );
   PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
-  infoParticle->SetGammaMultiplicity(1);
-  infoParticle->SetIndex(0);
+  infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::kPromptGamma);
+  infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::kPromptGamma);
+  infoParticle->SetIndex(1);
+  infoParticle->SetGenMomentum(px, py, pz);
   particle1->SetUserInformation(infoParticle);
   vertex->SetPrimary(particle1);
   VtxInformation* infoPrompt = new VtxInformation();

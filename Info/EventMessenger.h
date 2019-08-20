@@ -70,6 +70,11 @@ public:
     return fMaxRegisteredMultiplicity;
   }
 
+  G4int GetExcludedMultiplicity()
+  {
+    return fExcludedMultiplicity;
+  }
+
 
 private:
   static EventMessenger* fInstance;
@@ -84,13 +89,15 @@ private:
   G4UIcmdWithAnInteger* fPrintStatPower;
   G4UIcmdWithAnInteger* fCMDMinRegMulti;
   G4UIcmdWithAnInteger* fCMDMaxRegMulti;
+  G4UIcmdWithAnInteger* fCMDExcludedMulti;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
   bool fOutputWithDatetime = false;
   bool fKillEventsEscapingWorld = false;
-  G4int fMinRegisteredMultiplicity = 2;
+  G4int fMinRegisteredMultiplicity = 0;
   G4int fMaxRegisteredMultiplicity = 10;
+  G4int fExcludedMultiplicity = 1;
 
 };
 

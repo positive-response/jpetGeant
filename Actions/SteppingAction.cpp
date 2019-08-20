@@ -42,7 +42,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
           G4int multiplicity = info->GetGammaMultiplicity();
           const G4int minBoundMultiplicity = EventMessenger::GetEventMessenger()->GetMinRegMultiplicity();
           const G4int maxBoundMultiplicity = EventMessenger::GetEventMessenger()->GetMaxRegMultiplicity();
-          if(  (multiplicity < minBoundMultiplicity) || (multiplicity > maxBoundMultiplicity)  ) {
+          const G4int excludedMultiplicity = EventMessenger::GetEventMessenger()->GetExcludedMultiplicity();
+          if(  (multiplicity >= minBoundMultiplicity) && (multiplicity <= maxBoundMultiplicity) && (multiplicity != excludedMultiplicity) ) {
             G4RunManager::GetRunManager()->AbortEvent();        
           }
         }
@@ -62,6 +63,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   PrimaryParticleInformation* info  = static_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
   if (info != 0 ) {
     //! particle quanta interact in phantom or frame (but not SD!)
-    info->SetGammaMultiplicity(0);
+    info->SetGammaMultiplicity(PrimaryParticleInformation::kBackground);
   }
 }

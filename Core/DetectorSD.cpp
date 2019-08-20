@@ -52,7 +52,7 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       if (aStep->GetTrack()->GetParentID() == 0) {
         PrimaryParticleInformation* info = dynamic_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
         if (info != nullptr) {
-          info->SetGammaMultiplicity(0);
+          info->SetGammaMultiplicity(PrimaryParticleInformation::kBackground);
         }
       }
     }

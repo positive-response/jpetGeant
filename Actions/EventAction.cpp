@@ -39,13 +39,11 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
     fScinCollID = SDman->GetCollectionID(colNam = "detectorCollection");
   }
   fHisto->Clear();
-  G4int id =  anEvent->GetEventID();
-  fHisto->SetEventNumber(id);
-  fHisto->FillHistoGenInfo(anEvent);
 }
 
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
+
   if (anEvent->GetNumberOfPrimaryVertex() == 0) return;
   if(fEvtMessenger->KillEventsEscapingWorld()) {
     if(G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted()){
@@ -58,6 +56,12 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
 void EventAction::WriteToFile(const G4Event* anEvent)
 {
+  // save information about generated events
+  G4int id =  anEvent->GetEventID();
+  fHisto->SetEventNumber(id);
+  fHisto->FillHistoGenInfo(anEvent);
+
+  //save information about registered events
   G4HCofThisEvent* HCE = anEvent->GetHCofThisEvent();
   DetectorHitsCollection* DHC = 0;
   if (HCE) {
@@ -68,6 +72,8 @@ void EventAction::WriteToFile(const G4Event* anEvent)
       fHisto->AddNewHit(dh);
     }
   }
+
+  //save to disk
   fHisto->SaveEvtPack();
 }
 

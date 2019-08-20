@@ -42,10 +42,13 @@ EventMessenger::EventMessenger()
   fPrintStatPower->SetGuidance("Define X in divisor (10^X) for number of printed event ");
 
   fCMDMinRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/minRegMulti", this);
-  fCMDMinRegMulti->SetGuidance("Set the lower value of registered multiplicity (works only with saveEvtsDetAcc); def: 2");
+  fCMDMinRegMulti->SetGuidance("Set the lower value of registered multiplicity (works only with saveEvtsDetAcc); def: 0");
 
   fCMDMaxRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/maxRegMulti", this);
   fCMDMaxRegMulti->SetGuidance("Set the upper value of registered multiplicity (works only with saveEvtsDetAcc); def: 10");
+
+  fCMDExcludedMulti = new G4UIcmdWithAnInteger("/jpetmc/event/excludedMulti", this);
+  fCMDExcludedMulti->SetGuidance("Set excluded  multiplicity (works only with saveEvtsDetAcc); def: 1");
 
 
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
@@ -64,6 +67,7 @@ EventMessenger::~EventMessenger()
   delete fCMDKillEventsEscapingWorld;
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
+  delete fCMDExcludedMulti;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -98,4 +102,9 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if (command == fCMDKillEventsEscapingWorld) { 
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
   }
+
+  if (command == fCMDExcludedMulti){
+    fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
+  }
+
 }
