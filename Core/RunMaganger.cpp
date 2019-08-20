@@ -45,26 +45,6 @@ void RunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_selec
           delete currentEvent;
         }
       }
-
-
-    } else if (fEvtMessenger->SaveOnlySelectedEvents()) {
-      bool requirement = false;
-      while (!requirement) {
-        ProcessOneEvent(i_event);
-        if (fEvtMessenger->Save2gEvents()) {
-          requirement = EventAction::Is2gRegistered();
-        } else if (fEvtMessenger->Save3gEvents()) {
-          requirement = EventAction::Is3gRegistered();
-        } else {
-          G4Exception(
-            "RunManager", "RM01", FatalException, " This can not happened "
-          );
-        }
-        if (!requirement) {
-          //! clean event - it will not be stored
-          delete currentEvent;
-        }
-      }
     } else {
       ProcessOneEvent(i_event);
     }

@@ -40,21 +40,6 @@ public:
     return fKillEventsEscapingWorld;
   }
 
-  bool SaveOnlySelectedEvents()
-  {
-    return fSave2gEvts || fSave3gEvts;
-  }
-
-  bool Save2gEvents()
-  {
-    return fSave2gEvts;
-  }
-
-  bool Save3gEvents()
-  {
-    return fSave3gEvts;
-  }
-
   bool PrintStatistics()
   {
     return fPrintStatistics;
@@ -92,10 +77,6 @@ private:
   ~EventMessenger();
 
   G4UIdirectory* fDirectory = nullptr;
-  bool fSave2gEvts = false;
-  bool fSave3gEvts = false;
-  G4UIcmdWithoutParameter* fSave2g;
-  G4UIcmdWithoutParameter* fSave3g;
   G4UIcmdWithABool* fPrintStat;
   G4UIcmdWithABool* fPrintStatBar;
   G4UIcmdWithABool* fAddDatetime;
