@@ -21,22 +21,35 @@
 #include <G4UIExecutive.hh>
 #include <G4INCLRandom.hh>
 #include <G4UImanager.hh>
-#include <Randomize.hh>
-#include <time.h>
-#include <chrono>
+#include "Info/EventMessenger.h"
+#include <fstream> 
+#include <random>
 
-int main (int argc, char** argv)
+void setRandomSeed()
 {
-  auto start = std::chrono::steady_clock::now();
-
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
   G4long seed = time(NULL);
   CLHEP::HepRandom::setTheSeed(seed);
   long seeds[2];
-  time_t systime = time(NULL);
-  seeds[0] = (long) systime;
-  seeds[1] = (long) (systime * G4UniformRand());
+  
+  std::uniform_int_distribution<long> d(0, LONG_MAX);
+  std::random_device rd1;
+
+  seeds[0] = d(rd1);
+  seeds[1] = d(rd1);
   G4Random::setTheSeeds(seeds);
+
+  if (EventMessenger::GetEventMessenger()->SaveSeed()) {
+    std::ofstream file;
+    file.open ("seed", std::ofstream::out | std::ofstream::app);
+    file << seeds[0] << "\n" << seeds[1] << "\n";
+    file.close();
+  }
+}
+
+
+int main (int argc, char** argv)
+{
 
   G4UIExecutive* ui = 0;
   if (argc == 1) {
@@ -64,12 +77,14 @@ int main (int argc, char** argv)
     delete ui;
   }
 
+  if (EventMessenger::GetEventMessenger()->SetRandomSeed()) {
+    setRandomSeed();
+  }
+
+
   delete visManager;
   delete runManager;
-
-
-  auto end = std::chrono::steady_clock::now();
-  auto diff = end - start;
-  std::cout << "Total execution time: " << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
   return 0;
 }
+
+

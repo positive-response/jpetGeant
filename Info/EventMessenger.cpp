@@ -56,6 +56,13 @@ EventMessenger::EventMessenger()
 
   fAddDatetime = new G4UIcmdWithABool("/jpetmc/output/AddDatetime", this);
   fAddDatetime->SetGuidance("Adds to the output file name date and time of simulation start.");
+
+  fRandomSeed = new G4UIcmdWithABool("/jpetmc/SetRandomSeed", this);
+  fRandomSeed->SetGuidance("Use random seed (default true).");
+
+  fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
+  fSaveSeed->SetGuidance("Save random seed (default false).");
+
 }
 
 EventMessenger::~EventMessenger()
@@ -64,6 +71,8 @@ EventMessenger::~EventMessenger()
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
+  delete fRandomSeed;
+  delete fSaveSeed;
   delete fCMDKillEventsEscapingWorld;
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
@@ -89,8 +98,6 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
   }
 
-
-
   if (command == fPrintStatBar) {
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
   }
@@ -107,4 +114,15 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
   }
 
+  if (command == fRandomSeed) {
+    fSetRandomSeed = fRandomSeed->GetNewBoolValue(newValue);
+  }
+
+  if (command == fSaveSeed) {
+    fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
+  }
+
+  if (command == fAddDatetime) {
+    fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
+  }
 }

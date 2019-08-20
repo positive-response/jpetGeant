@@ -76,6 +76,17 @@ public:
   }
 
 
+  bool SetRandomSeed()
+  {
+    return fSetRandomSeed;
+  }
+
+  bool SaveSeed()
+  {
+    return fSaveRandomSeed;
+  }
+
+
 private:
   static EventMessenger* fInstance;
   EventMessenger();
@@ -90,6 +101,8 @@ private:
   G4UIcmdWithAnInteger* fCMDMinRegMulti;
   G4UIcmdWithAnInteger* fCMDMaxRegMulti;
   G4UIcmdWithAnInteger* fCMDExcludedMulti;
+  G4UIcmdWithABool* fRandomSeed;
+  G4UIcmdWithABool* fSaveSeed;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
@@ -98,6 +111,8 @@ private:
   G4int fMinRegisteredMultiplicity = 0;
   G4int fMaxRegisteredMultiplicity = 10;
   G4int fExcludedMultiplicity = 1;
+  bool fSetRandomSeed;
+  bool fSaveRandomSeed;
 
 };
 
