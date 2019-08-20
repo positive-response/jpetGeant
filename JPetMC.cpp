@@ -27,9 +27,6 @@
 
 void setRandomSeed()
 {
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-  G4long seed = time(NULL);
-  CLHEP::HepRandom::setTheSeed(seed);
   long seeds[2];
   
   std::uniform_int_distribution<long> d(0, LONG_MAX);

@@ -111,8 +111,8 @@ private:
   G4int fMinRegisteredMultiplicity = 0;
   G4int fMaxRegisteredMultiplicity = 10;
   G4int fExcludedMultiplicity = 1;
-  bool fSetRandomSeed;
-  bool fSaveRandomSeed;
+  bool fSetRandomSeed = true;
+  bool fSaveRandomSeed = false;
 
 };
 
