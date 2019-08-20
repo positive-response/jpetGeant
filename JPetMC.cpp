@@ -23,9 +23,12 @@
 #include <G4UImanager.hh>
 #include <Randomize.hh>
 #include <time.h>
+#include <chrono>
 
 int main (int argc, char** argv)
 {
+  auto start = std::chrono::steady_clock::now();
+
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
   G4long seed = time(NULL);
   CLHEP::HepRandom::setTheSeed(seed);
@@ -63,5 +66,10 @@ int main (int argc, char** argv)
 
   delete visManager;
   delete runManager;
+
+
+  auto end = std::chrono::steady_clock::now();
+  auto diff = end - start;
+  std::cout << "Total execution time: " << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
   return 0;
 }

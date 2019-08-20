@@ -35,15 +35,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // kill event if primary particle escapes the world volume
   if (EventMessenger::GetEventMessenger()->KillEventsEscapingWorld()) {
     G4StepPoint* point = aStep->GetPostStepPoint();
-    if (point->GetStepStatus() == G4StepStatus::fWorldBoundary) 
-    {
-      PrimaryParticleInformation* info  = static_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
-      if (info != 0 ) {
-        int multiplicity = info->GetGammaMultiplicity();
-        if( multiplicity < 10 && multiplicity != 0 ) {
-          //G4UImanager * UImanager = G4UImanager::GetUIpointer();
-          //UImanager->ApplyCommand("/event/abort");
-          G4RunManager::GetRunManager()->AbortEvent();        
+    if (point->GetStepStatus() == G4StepStatus::fWorldBoundary) {
+      if (aStep->GetTrack()->GetParentID() == 0) {
+        PrimaryParticleInformation* info  = dynamic_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
+        if (info != nullptr ) {
+          int multiplicity = info->GetGammaMultiplicity();
+          if( multiplicity < 10 && multiplicity > 1 ) {
+            //G4UImanager * UImanager = G4UImanager::GetUIpointer();
+            //UImanager->ApplyCommand("/event/abort");
+            G4RunManager::GetRunManager()->AbortEvent();        
+          }
         }
       }
     } 
