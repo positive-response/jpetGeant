@@ -75,6 +75,17 @@ public:
     return fOutputWithDatetime;
   }
 
+  G4int GetMinRegMultiplicity()
+  {
+    return fMinRegisteredMultiplicity;
+  }
+
+  G4int GetMaxRegMultiplicity()
+  {
+    return fMaxRegisteredMultiplicity;
+  }
+
+
 private:
   static EventMessenger* fInstance;
   EventMessenger();
@@ -90,11 +101,15 @@ private:
   G4UIcmdWithABool* fAddDatetime;
   G4UIcmdWithABool* fCMDKillEventsEscapingWorld;
   G4UIcmdWithAnInteger* fPrintStatPower;
+  G4UIcmdWithAnInteger* fCMDMinRegMulti;
+  G4UIcmdWithAnInteger* fCMDMaxRegMulti;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
-  bool fShowProgress = true;
+  bool fShowProgress = false;
   bool fOutputWithDatetime = false;
   bool fKillEventsEscapingWorld = false;
+  G4int fMinRegisteredMultiplicity = 2;
+  G4int fMaxRegisteredMultiplicity = 10;
 
 };
 

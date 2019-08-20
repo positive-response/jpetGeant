@@ -39,10 +39,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       if (aStep->GetTrack()->GetParentID() == 0) {
         PrimaryParticleInformation* info  = dynamic_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
         if (info != nullptr ) {
-          int multiplicity = info->GetGammaMultiplicity();
-          if( multiplicity < 10 && multiplicity > 1 ) {
-            //G4UImanager * UImanager = G4UImanager::GetUIpointer();
-            //UImanager->ApplyCommand("/event/abort");
+          G4int multiplicity = info->GetGammaMultiplicity();
+          const G4int minBoundMultiplicity = EventMessenger::GetEventMessenger()->GetMinRegMultiplicity();
+          const G4int maxBoundMultiplicity = EventMessenger::GetEventMessenger()->GetMaxRegMultiplicity();
+          if(  (multiplicity < minBoundMultiplicity) || (multiplicity > maxBoundMultiplicity)  ) {
             G4RunManager::GetRunManager()->AbortEvent();        
           }
         }

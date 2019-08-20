@@ -47,6 +47,13 @@ EventMessenger::EventMessenger()
   fPrintStatPower = new G4UIcmdWithAnInteger("/jpetmc/event/printEvtFactor", this);
   fPrintStatPower->SetGuidance("Define X in divisor (10^X) for number of printed event ");
 
+  fCMDMinRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/minRegMulti", this);
+  fCMDMinRegMulti->SetGuidance("Set the lower value of registered multiplicity (works only with saveEvtsDetAcc); def: 2");
+
+  fCMDMaxRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/maxRegMulti", this);
+  fCMDMaxRegMulti->SetGuidance("Set the upper value of registered multiplicity (works only with saveEvtsDetAcc); def: 10");
+
+
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
   fPrintStatBar->SetGuidance("Print how many events was generated (in %)");
 
@@ -63,6 +70,8 @@ EventMessenger::~EventMessenger()
   delete fPrintStatBar;
   delete fAddDatetime;
   delete fCMDKillEventsEscapingWorld;
+  delete fCMDMinRegMulti;
+  delete fCMDMaxRegMulti;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -82,6 +91,16 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if (command == fPrintStatPower) {
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
   }
+
+  if (command == fCMDMinRegMulti) {
+    fMinRegisteredMultiplicity = fCMDMinRegMulti->GetNewIntValue(newValue);
+  }
+
+  if (command == fCMDMaxRegMulti) {
+    fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
+  }
+
+
 
   if (command == fPrintStatBar) {
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
