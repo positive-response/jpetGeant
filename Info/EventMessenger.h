@@ -35,19 +35,9 @@ public:
   static EventMessenger* GetEventMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 
-  bool SaveOnlySelectedEvents()
+  bool KillEventsEscapingWorld()
   {
-    return fSave2gEvts || fSave3gEvts;
-  }
-
-  bool Save2gEvents()
-  {
-    return fSave2gEvts;
-  }
-
-  bool Save3gEvents()
-  {
-    return fSave3gEvts;
+    return fKillEventsEscapingWorld;
   }
 
   bool PrintStatistics()
@@ -70,6 +60,22 @@ public:
     return fOutputWithDatetime;
   }
 
+  G4int GetMinRegMultiplicity()
+  {
+    return fMinRegisteredMultiplicity;
+  }
+
+  G4int GetMaxRegMultiplicity()
+  {
+    return fMaxRegisteredMultiplicity;
+  }
+
+  G4int GetExcludedMultiplicity()
+  {
+    return fExcludedMultiplicity;
+  }
+
+
   bool SetRandomSeed()
   {
     return fSetRandomSeed;
@@ -87,20 +93,24 @@ private:
   ~EventMessenger();
 
   G4UIdirectory* fDirectory = nullptr;
-  bool fSave2gEvts = false;
-  bool fSave3gEvts = false;
-  G4UIcmdWithoutParameter* fSave2g;
-  G4UIcmdWithoutParameter* fSave3g;
   G4UIcmdWithABool* fPrintStat;
   G4UIcmdWithABool* fPrintStatBar;
   G4UIcmdWithABool* fAddDatetime;
+  G4UIcmdWithABool* fCMDKillEventsEscapingWorld;
+  G4UIcmdWithAnInteger* fPrintStatPower;
+  G4UIcmdWithAnInteger* fCMDMinRegMulti;
+  G4UIcmdWithAnInteger* fCMDMaxRegMulti;
+  G4UIcmdWithAnInteger* fCMDExcludedMulti;
   G4UIcmdWithABool* fRandomSeed;
   G4UIcmdWithABool* fSaveSeed;
-  G4UIcmdWithAnInteger* fPrintStatPower;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
-  bool fShowProgress = true;
+  bool fShowProgress = false;
   bool fOutputWithDatetime = false;
+  bool fKillEventsEscapingWorld = false;
+  G4int fMinRegisteredMultiplicity = 0;
+  G4int fMaxRegisteredMultiplicity = 10;
+  G4int fExcludedMultiplicity = 1;
   bool fSetRandomSeed = true;
   bool fSaveRandomSeed = false;
 

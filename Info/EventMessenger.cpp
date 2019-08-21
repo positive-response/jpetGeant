@@ -32,17 +32,24 @@ EventMessenger::EventMessenger()
   fDirectory = new G4UIdirectory("/jpetmc/event/");
   fDirectory->SetGuidance("Define events to save");
 
-  fSave2g = new G4UIcmdWithoutParameter("/jpetmc/event/save2g", this);
-  fSave2g->SetGuidance("Events with registered 2g will be saved");
-
-  fSave3g = new G4UIcmdWithoutParameter("/jpetmc/event/save3g", this);
-  fSave3g->SetGuidance("Events with registered 3g will be saved");
+  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
+  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector"); 
 
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
   fPrintStat->SetGuidance("Print how many events was generated");
 
   fPrintStatPower = new G4UIcmdWithAnInteger("/jpetmc/event/printEvtFactor", this);
   fPrintStatPower->SetGuidance("Define X in divisor (10^X) for number of printed event ");
+
+  fCMDMinRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/minRegMulti", this);
+  fCMDMinRegMulti->SetGuidance("Set the lower value of registered multiplicity (works only with saveEvtsDetAcc); def: 0");
+
+  fCMDMaxRegMulti = new G4UIcmdWithAnInteger("/jpetmc/event/maxRegMulti", this);
+  fCMDMaxRegMulti->SetGuidance("Set the upper value of registered multiplicity (works only with saveEvtsDetAcc); def: 10");
+
+  fCMDExcludedMulti = new G4UIcmdWithAnInteger("/jpetmc/event/excludedMulti", this);
+  fCMDExcludedMulti->SetGuidance("Set excluded  multiplicity (works only with saveEvtsDetAcc); def: 1");
+
 
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
   fPrintStatBar->SetGuidance("Print how many events was generated (in %)");
@@ -60,25 +67,20 @@ EventMessenger::EventMessenger()
 
 EventMessenger::~EventMessenger()
 {
-  delete fSave2g;
-  delete fSave3g;
   delete fPrintStat;
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
   delete fRandomSeed;
   delete fSaveSeed;
+  delete fCMDKillEventsEscapingWorld;
+  delete fCMDMinRegMulti;
+  delete fCMDMaxRegMulti;
+  delete fCMDExcludedMulti;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fSave2g) {
-    fSave2gEvts = true;
-  }
-
-  if (command == fSave3g) {
-    fSave3gEvts = true;
-  }
 
   if (command == fPrintStat) {
     fPrintStatistics = fPrintStat->GetNewBoolValue(newValue);
@@ -86,6 +88,14 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if (command == fPrintStatPower) {
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
+  }
+
+  if (command == fCMDMinRegMulti) {
+    fMinRegisteredMultiplicity = fCMDMinRegMulti->GetNewIntValue(newValue);
+  }
+
+  if (command == fCMDMaxRegMulti) {
+    fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
   }
 
   if (command == fPrintStatBar) {
@@ -96,6 +106,14 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
   }
 
+  if (command == fCMDKillEventsEscapingWorld) { 
+    fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
+  }
+
+  if (command == fCMDExcludedMulti){
+    fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
+  }
+
   if (command == fRandomSeed) {
     fSetRandomSeed = fRandomSeed->GetNewBoolValue(newValue);
   }
@@ -104,4 +122,7 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
   }
 
+  if (command == fAddDatetime) {
+    fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
+  }
 }

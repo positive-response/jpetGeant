@@ -38,6 +38,16 @@ public:
     return fDecayMultiplicity;
   }
 
+  G4int GetGeneratedGammaMultiplicity()
+  {
+    return fGeneratedMultiplicity;
+  }
+
+  void SetGeneratedGammaMultiplicity(G4int i)
+  {
+    fGeneratedMultiplicity = i;
+  }
+
   void SetIndex(G4int i)
   {
     fIndex = i;
@@ -46,6 +56,13 @@ public:
   void SetGammaMultiplicity(G4int i)
   {
     fDecayMultiplicity = i;
+  }
+
+  void SetGenMomentum(G4double x, G4double y, G4double z);
+
+  G4ThreeVector GenGenMomentum()
+  {
+    return fGenMomentum;
   }
 
   //! Multiplicity flags
@@ -57,6 +74,8 @@ public:
 private:
   G4int fIndex;
   G4int fDecayMultiplicity;
+  G4int fGeneratedMultiplicity;
+  G4ThreeVector fGenMomentum;
 
 };
 

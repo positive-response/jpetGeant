@@ -15,7 +15,7 @@
 
 #include "PrimaryParticleInformation.h"
 
-PrimaryParticleInformation::PrimaryParticleInformation() : fIndex(0), fDecayMultiplicity(0) {}
+PrimaryParticleInformation::PrimaryParticleInformation() : fIndex(0), fDecayMultiplicity(0), fGeneratedMultiplicity(0), fGenMomentum(0) {}
 
 PrimaryParticleInformation::~PrimaryParticleInformation() {}
 
@@ -23,6 +23,17 @@ void PrimaryParticleInformation::Clear()
 {
   fIndex = 0;
   fDecayMultiplicity = 0;
+  fGeneratedMultiplicity = 0;
+  fGenMomentum.setX(0);
+  fGenMomentum.setY(0);
+  fGenMomentum.setZ(0);
+}
+
+void PrimaryParticleInformation::SetGenMomentum(G4double x, G4double y, G4double z)
+{
+  fGenMomentum.setX(x);
+  fGenMomentum.setY(y);
+  fGenMomentum.setZ(z);
 }
 
 void PrimaryParticleInformation::Print() const {}

@@ -35,20 +35,12 @@ void RunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_selec
       printf (" === Progress %4.2f === \r", double(100 * i_event) / double(n_event));
     }
 
-    if (fEvtMessenger->SaveOnlySelectedEvents()) {
-      bool requirement = false;
-      while (!requirement) {
+    if (fEvtMessenger->KillEventsEscapingWorld()) {
+      bool isAborted = true;
+      while (isAborted) {
         ProcessOneEvent(i_event);
-        if (fEvtMessenger->Save2gEvents()) {
-          requirement = EventAction::Is2gRegistered();
-        } else if (fEvtMessenger->Save3gEvents()) {
-          requirement = EventAction::Is3gRegistered();
-        } else {
-          G4Exception(
-            "RunManager", "RM01", FatalException, " This can not happened "
-          );
-        }
-        if (!requirement) {
+         isAborted = currentEvent->IsAborted(); 
+        if (isAborted) {
           //! clean event - it will not be stored
           delete currentEvent;
         }
