@@ -3,12 +3,15 @@ PROJECT_NUMBER         = @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@
 STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
                          @PROJECT_BINARY_DIR@
 INPUT                  = @PROJECT_SOURCE_DIR@/README.md \
-                         @PROJECT_SOURCE_DIR@/src \
-                         @PROJECT_SOURCE_DIR@/include 
+                         @PROJECT_SOURCE_DIR@/Actions \
+                         @PROJECT_SOURCE_DIR@/Core \ 
+                         @PROJECT_SOURCE_DIR@/Info \
+                         @PROJECT_SOURCE_DIR@/Objects  
+
 
 USE_MDFILE_AS_MAINPAGE = README.md
-FILE_PATTERNS          = *.hh \
-                         *.cc 
+FILE_PATTERNS          = *.h \
+                         *.cpp 
 RECURSIVE              = YES
 
 EXTRACT_PRIVATE = YES
