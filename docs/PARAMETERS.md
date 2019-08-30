@@ -1,6 +1,4 @@
 # Parameters for MC simulations with Geant4 macros
-=============================================================================
-
 Following options can be added to macro files, that are read by Geat4. Example files are in `scripts` folder, and also those files are copied to `bin` directory during program build.  
 
 ## Using different geometries  
@@ -44,10 +42,17 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/run/setChamberCenter`  
 * for run5: define range where we expect annihilation to occur:   
  `/jpetmc/run/setEffectivePositronRange`  
-* save only events with 2 gamma registered  
- `/jpetmc/event/save2g`
-* save only events with 3 gamma registered  
- `/jpetmc/event/save3g`  
+* save true(!) generated events based on multiplicity (0,2-10):  
+ `/jpetmc/event/saveEvtsDetAcc`
+* change lower value of saved multiplicity (0):
+ `/jpetmc/event/minRegMulti`
+  (above valid only with: /jpetmc/event/saveEvtsDetAcc)
+* change upper value of saved multiplicity (10):
+ `/jpetmc/event/maxRegMulti`
+  (above valid only with: /jpetmc/event/saveEvtsDetAcc)
+* change excluded value of multiplicity (1):
+ `/jpetmc/event/excludedMulti`
+  (above valid only with: /jpetmc/event/saveEvtsDetAcc)
 * print how many events were generated  
  `/jpetmc/event/printEvtStat`  
 * print out option during execution of the simulation - X in divisor (10^X) for number of printed events  

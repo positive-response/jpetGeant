@@ -1,41 +1,31 @@
 # J-PET Monte Carlo with Geant4
-=============================================================================
 
 ## Software information
-**JPetMC** is a simulation program written in a **GEANT4** environment.  
-Details of the J-PET detector can be found on the project [webpage](http://koza.if.uj.edu.pl/pet/).  
-Its main features:  
-- the J-PET detector geometry is loaded from the (CAD) technical drawings  
-- user can load detector setups (identified by run numbers), which corresponds to
-one used in the experiment. Details can be found in section [How to run](#how-to-run)  
-- the mcGeant.root is created as an output file. It can be processed by the [J-PET Framework](https://github.com/JPETTomography/j-pet-framework-examples) software  
 
-## Required packages:  
-* `cmake`  
-* `root 6.0`  
-* [`geant4.10.04`](https://github.com/Geant4/geant4)  
- Built with cmake flags:  
- `-DGEANT4_USE_QT=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_GDML=ON`  
-* [cadmesh](https://github.com/christopherpoole/CADMesh)
-* doxygen
+J-PET-Geant4 is a Monte Carlo simulation program designed for the
+[J-PET](http://koza.if.uj.edu.pl/pet/) detector 
+written in C++ using Geant4 toolkit and ROOT libraries.
+Program output is prepared in a Root tree format and can be directly loaded
+into [J-PET Framework](https://github.com/JPETTomography/j-pet-framework-examples) software.
 
-## How to compile?
-`mkdir build`  
-`cd build`  
-`cmake ..`  
-`make`  
-output file: (in build folder)  
-`bin/jpet_mc`  
+Detector geometry consists of following components: layers of the scintillators, detector frame
+and sources. In general, user can modify the source code and incorporate in a easy way any type of
+needed geometry. Several user examples are available directly in a form of macros.
 
-## How to create documentation?
-(in build folder)  
-`cmake .. && make doc`  
-- open the `doc/html/index.html` in your favorite web browser  
+<p align="right">
+  <img src="docs/logo_merged.png" alt="J-PET logo">
+</p>
 
-## How to run
-The executable program is located in `build/bin/jpet_mc`.  
-Simple execution of the program (`./jpet_mc`) should load the `init_vis.mac` script and show detector geometry.  
-User can adjust detector parameters and generated gamma-quanta by using macros. Exemplary macro is given in `bin` folder along the executive file.  
 
-## Available parameters
-Please refer to [PARAMETERS](PARAMETERS.md) file for program run options, such as geometries, source parameters, saving files.
+## Index
+Please choose among the following options:
+* [Installation](docs/install.md)
+* [Introduction](docs/intro.md)
+* [API overview and examples](docs/user_intro.md)
+* [Manual.pdf](docs/manual_v3.0.pdf)
+* [Authors](docs/authors.md)
+
+### Support \& bug reporting 
+If you have any question or comment please write to  Daria Kisielewska <dk.dariakisielewska.com> or
+post it on the [Redmine](http://sphinx.if.uj.edu.pl/redmine/) 
+
