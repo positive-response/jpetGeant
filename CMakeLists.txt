@@ -40,7 +40,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter")
 
 ################################################################################
 # Project version number
-set(VERSION_MAJOR 2 CACHE STRING "Project major version number.")
+set(VERSION_MAJOR 3 CACHE STRING "Project major version number.")
 set(VERSION_MINOR 0 CACHE STRING "Project minor version number.")
 set(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
@@ -57,6 +57,10 @@ set(SCRIPT_FILES
   init_vis.mac
   singleBeam.mac
   extendedSource.mac
+)
+
+set(PARAMETERS_FILES
+  PARAMETERS.md
 )
 
 
@@ -167,6 +171,15 @@ foreach(file_i ${SCRIPT_FILES})
   )
 endforeach(file_i)
 
+foreach(file_i ${PARAMETERS_FILES})
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/docs/${file_i}
+    ${CMAKE_CURRENT_BINARY_DIR}/bin/${file_i}
+    COPYONLY
+  )
+endforeach(file_i)
+
+
 # Copy stl file of frame construction to bin directory
 add_custom_command(
   TARGET
@@ -176,3 +189,14 @@ add_custom_command(
   ${CMAKE_CURRENT_SOURCE_DIR}/stl_geometry
   ${CMAKE_CURRENT_BINARY_DIR}/bin
 )
+
+# Link to manual
+add_custom_command(
+  TARGET
+  ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND ln -sf
+  ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v3.0.pdf
+  ${CMAKE_CURRENT_BINARY_DIR}/bin
+)
+
