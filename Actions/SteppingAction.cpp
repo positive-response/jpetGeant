@@ -63,6 +63,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   PrimaryParticleInformation* info  = static_cast<PrimaryParticleInformation*> (aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation());
   if (info != 0 ) {
     //! particle quanta interact in phantom or frame (but not SD!)
-    info->SetGammaMultiplicity(PrimaryParticleInformation::kBackground);
+    double momentumChange = abs(aStep->GetPostStepPoint()->GetMomentum().mag2()-aStep->GetPreStepPoint()->GetMomentum().mag2()); 
+    if ( momentumChange > EventMessenger::GetEventMessenger()->GetAllowedMomentumTransfer() ) {
+      info->SetGammaMultiplicity(PrimaryParticleInformation::kBackground);
+    }
   }
 }
