@@ -75,6 +75,11 @@ public:
     return fExcludedMultiplicity;
   }
 
+  G4double GetAllowedMomentumTransfer()
+  {
+    return fAllowedMomentumTransfer;
+  }
+
 
   bool SetRandomSeed()
   {
@@ -103,6 +108,7 @@ private:
   G4UIcmdWithAnInteger* fCMDExcludedMulti;
   G4UIcmdWithABool* fRandomSeed;
   G4UIcmdWithABool* fSaveSeed;
+  G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer; 
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
@@ -113,6 +119,7 @@ private:
   G4int fExcludedMultiplicity = 1;
   bool fSetRandomSeed = true;
   bool fSaveRandomSeed = false;
+  G4double fAllowedMomentumTransfer = 1*keV;
 
 };
 

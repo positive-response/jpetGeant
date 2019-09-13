@@ -63,6 +63,11 @@ EventMessenger::EventMessenger()
   fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
   fSaveSeed->SetGuidance("Save random seed (default false).");
 
+  fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer",this);
+  fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
+  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV); 
+  fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
+
 }
 
 EventMessenger::~EventMessenger()
@@ -124,5 +129,9 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if (command == fAddDatetime) {
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
+  }
+
+  if (command == fCMDAllowedMomentumTransfer) {
+    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue); 
   }
 }
