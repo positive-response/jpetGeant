@@ -91,6 +91,17 @@ public:
     return fSaveRandomSeed;
   }
 
+  bool Save2g()
+  {
+    return fSave2g;
+  }
+
+  bool Save3g()
+  {
+    return fSave3g;
+  }
+
+
 
 private:
   static EventMessenger* fInstance;
@@ -108,6 +119,8 @@ private:
   G4UIcmdWithAnInteger* fCMDExcludedMulti;
   G4UIcmdWithABool* fRandomSeed;
   G4UIcmdWithABool* fSaveSeed;
+  G4UIcmdWithABool* fCMDSave2g;
+  G4UIcmdWithABool* fCMDSave3g;
   G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer; 
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
@@ -119,6 +132,8 @@ private:
   G4int fExcludedMultiplicity = 1;
   bool fSetRandomSeed = true;
   bool fSaveRandomSeed = false;
+  bool fSave2g = false;
+  bool fSave3g = false;
   G4double fAllowedMomentumTransfer = 1*keV;
 
 };

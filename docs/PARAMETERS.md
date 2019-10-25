@@ -53,6 +53,11 @@ Following options can be added to macro files, that are read by Geat4. Example f
 * change excluded value of multiplicity (1):
  `/jpetmc/event/excludedMulti`
   (above valid only with: /jpetmc/event/saveEvtsDetAcc)
+* /jpetmc/event/save2g
+  `save event when 2g were registered (default false)`
+* /jpetmc/event/save3g
+  `save event when 3g were registered (default false)`
+  Options save2g/save3g  and saveEvtsDetAcc are  separable !
 * print how many events were generated  
  `/jpetmc/event/printEvtStat`  
 * print out option during execution of the simulation - X in divisor (10^X) for number of printed events  

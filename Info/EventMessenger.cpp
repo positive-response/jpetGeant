@@ -50,6 +50,12 @@ EventMessenger::EventMessenger()
   fCMDExcludedMulti = new G4UIcmdWithAnInteger("/jpetmc/event/excludedMulti", this);
   fCMDExcludedMulti->SetGuidance("Set excluded  multiplicity (works only with saveEvtsDetAcc); def: 1");
 
+  fCMDSave2g = new G4UIcmdWithABool("/jpetmc/event/save2g", this);
+  fCMDSave2g->SetGuidance("Events with registered 2g will be saved (default false)");
+
+  fCMDSave3g = new G4UIcmdWithABool("/jpetmc/event/save3g",this);
+  fCMDSave3g->SetGuidance("Events with registered 3g will be saved (default false)");
+
 
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
   fPrintStatBar->SetGuidance("Print how many events was generated (in %)");
@@ -82,6 +88,8 @@ EventMessenger::~EventMessenger()
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
   delete fCMDExcludedMulti;
+  delete fCMDSave2g;
+  delete fCMDSave3g;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -134,4 +142,13 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if (command == fCMDAllowedMomentumTransfer) {
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue); 
   }
+
+  if (command == fCMDSave2g) {
+    fSave2g = fCMDSave2g->GetNewBoolValue(newValue);
+  }
+
+  if (command == fCMDSave3g) {
+    fSave3g = fCMDSave3g->GetNewBoolValue(newValue);
+  }
+
 }
