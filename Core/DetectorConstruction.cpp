@@ -40,7 +40,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 DetectorConstruction::DetectorConstruction() :
   G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
-  fLoadWrapping(true),fLoadModularLayer(true)
+  fLoadWrapping(true),fLoadModularLayer(false)
 
 {
   InitializeMaterials();
@@ -338,14 +338,13 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 
   const G4double radius_24[13] = {
     38.416, 38.346, 38.289, 38.244, 38.212, 38.192,
-    38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416
-  };
+    38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416};
   const G4double radius_8[13] = {
 	  13.4037, 13.2011, 13.0330, 12.9007, 12.8055, 12.7479, 12.7287,
       12.7479, 12.8055, 12.9007, 13.0330, 13.2011, 13.4037};
 
 
-  const G4double radius_16[13]= {
+  const G4double radius_16[13] = {
 	  25.8015, 25.6968, 25.61085, 25.54379, 25.49579, 25.4669, 25.45733,
 	  25.4669, 25.49579, 25.54379, 25.61085, 25.6968, 25.8015};
 
