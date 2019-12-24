@@ -48,7 +48,7 @@ int main (int argc, char** argv)
 
   std::cout << gRandom ->GetSeed() << std::endl;
 
-  // setRandomSeed();
+  setRandomSeed();
 
   G4UIExecutive* ui = 0;
   if (argc == 1) {
@@ -90,7 +90,7 @@ int main (int argc, char** argv)
 
 
   // G4Random::showEngineStatus();
-  std::cout << gRandom ->GetSeed() << std::endl;
+
   return 0;
 }
 
