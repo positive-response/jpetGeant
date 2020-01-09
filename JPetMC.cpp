@@ -24,31 +24,13 @@
 #include "Info/EventMessenger.h"
 #include <fstream>
 #include <random>
-#include <TRandom3.h>
 
-void setRandomSeed()
-{
-  long seed;
-
-  std::uniform_int_distribution<long> d(0, LONG_MAX);
-  std::random_device rd1;
-
-  seed = d(rd1);
-
-  G4Random::setTheEngine(new CLHEP::MTwistEngine());
-  G4Random::setTheSeed(seed);
-
-}
 
 
 int main (int argc, char** argv)
 {
-  delete gRandom;
-  gRandom = new TRandom3(0);
 
-  std::cout << gRandom ->GetSeed() << std::endl;
-
-  setRandomSeed();
+  G4Random::setTheEngine(new CLHEP::MTwistEngine());
 
   G4UIExecutive* ui = 0;
   if (argc == 1) {
@@ -88,8 +70,6 @@ int main (int argc, char** argv)
     file.close();
   }
 
-
-  // G4Random::showEngineStatus();
 
   return 0;
 }
