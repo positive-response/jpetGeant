@@ -19,6 +19,7 @@
 #include <G4Run.hh>
 #include <Randomize.hh>
 #include <TRandom3.h>
+#include <chrono>
 
 RunAction::RunAction(HistoManager* histo) : G4UserRunAction(),  fHistoManager(histo) {}
 
