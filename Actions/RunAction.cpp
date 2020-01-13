@@ -29,6 +29,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   fHistoManager->Book();
 
+  int mask = 01001010;
+
   if(fEvtMessenger->GetSeed() == 0){
     /**
      *
@@ -44,11 +46,11 @@ void RunAction::BeginOfRunAction(const G4Run*)
     system_clock::time_point now = system_clock::now();
     long seed = (UInt_t)(system_clock::to_time_t ( now )) * 677*::getpid();
     G4Random::setTheSeed(seed);
-    gRandom->SetSeed(seed);
+    gRandom->SetSeed(seed^mask);
   }
   else{
     gRandom->SetSeed(fEvtMessenger->GetSeed());
-    G4Random::setTheSeed(fEvtMessenger->GetSeed());
+    G4Random::setTheSeed(fEvtMessenger->GetSeed()^mask);
   }
 }
 
