@@ -22,31 +22,15 @@
 #include <G4INCLRandom.hh>
 #include <G4UImanager.hh>
 #include "Info/EventMessenger.h"
-#include <fstream> 
+#include <fstream>
 #include <random>
 
-void setRandomSeed()
-{
-  long seeds[2];
-  
-  std::uniform_int_distribution<long> d(0, LONG_MAX);
-  std::random_device rd1;
-
-  seeds[0] = d(rd1);
-  seeds[1] = d(rd1);
-  G4Random::setTheSeeds(seeds);
-
-  if (EventMessenger::GetEventMessenger()->SaveSeed()) {
-    std::ofstream file;
-    file.open ("seed", std::ofstream::out | std::ofstream::app);
-    file << seeds[0] << "\n" << seeds[1] << "\n";
-    file.close();
-  }
-}
 
 
 int main (int argc, char** argv)
 {
+
+  G4Random::setTheEngine(new CLHEP::MTwistEngine());
 
   G4UIExecutive* ui = 0;
   if (argc == 1) {
@@ -74,13 +58,19 @@ int main (int argc, char** argv)
     delete ui;
   }
 
-  if (EventMessenger::GetEventMessenger()->SetRandomSeed()) {
-    setRandomSeed();
-  }
-
 
   delete visManager;
   delete runManager;
+
+  if (EventMessenger::GetEventMessenger()->SaveSeed()) {
+    long seed = G4Random::getTheSeed();
+    std::ofstream file;
+    file.open ("seed", std::ofstream::out | std::ofstream::app);
+    file << seed << "\n";
+    file.close();
+  }
+
+
   return 0;
 }
 

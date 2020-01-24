@@ -81,9 +81,9 @@ public:
   }
 
 
-  bool SetRandomSeed()
+  G4int GetSeed()
   {
-    return fSetRandomSeed;
+    return fSeed;
   }
 
   bool SaveSeed()
@@ -106,9 +106,9 @@ private:
   G4UIcmdWithAnInteger* fCMDMinRegMulti;
   G4UIcmdWithAnInteger* fCMDMaxRegMulti;
   G4UIcmdWithAnInteger* fCMDExcludedMulti;
-  G4UIcmdWithABool* fRandomSeed;
+  G4UIcmdWithAnInteger* fSetSeed;
   G4UIcmdWithABool* fSaveSeed;
-  G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer; 
+  G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer;
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
@@ -117,7 +117,7 @@ private:
   G4int fMinRegisteredMultiplicity = 0;
   G4int fMaxRegisteredMultiplicity = 10;
   G4int fExcludedMultiplicity = 1;
-  bool fSetRandomSeed = true;
+  G4int fSeed = 0;
   bool fSaveRandomSeed = false;
   G4double fAllowedMomentumTransfer = 1*keV;
 
