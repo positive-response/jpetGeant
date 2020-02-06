@@ -3,4 +3,4 @@ geant_rootv6:
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - /var/www/jenkins_home/workspace/$JOB_BASE_NAME:/J-PET-geant4/
-  user: "1000:1000"
+  user: "9999:999"

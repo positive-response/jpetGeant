@@ -26,6 +26,7 @@
 #include <G4Polycone.hh>
 #include "RunManager.h"
 #include <G4Tubs.hh>
+#include <vector>
 
 DetectorConstruction* DetectorConstruction::fInstance = 0;
 
@@ -39,7 +40,8 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 DetectorConstruction::DetectorConstruction() :
   G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
-  fLoadWrapping(true), fLoadModularLayer(false)
+  fLoadWrapping(true),fLoadModularLayer(false)
+
 {
   InitializeMaterials();
   fMessenger = new DetectorConstructionMessenger(this);
@@ -73,6 +75,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //! scintillators for standard setup; right now always loaded
   ConstructScintillators();
 
+
   if(fLoadModularLayer){
     ConstructScintillatorsModularLayer();
   }
@@ -104,14 +107,14 @@ void DetectorConstruction::ConstructSDandField()
 {
   if (!fDetectorSD.Get()) {
     DetectorSD* det = new DetectorSD(
-      "/mydet/detector",
-      ReturnNumberOfScintillators(),
+      "/mydet/detector",ReturnNumberOfScintillators(),
       DetectorConstants::GetMergingTimeValueForScin());
     fDetectorSD.Put(det);
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fDetectorSD.Get());
   SetSensitiveDetector(fScinLog, fDetectorSD.Get());
   if (fLoadModularLayer) SetSensitiveDetector(fScinLogInModule, fDetectorSD.Get());
+
 }
 
 void DetectorConstruction::LoadGeometryForRun(G4int nr)
@@ -131,7 +134,7 @@ G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
   if (fLoadModularLayer) {
     return 504;
-  } else {
+    } else {
     return 192;
   }
 }
@@ -332,17 +335,91 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   //! radius0 = 38.186*cm
   //! displacement -> Angular displacement
   //! (1.04 degree / 0.01815 radius - fixed; value provided by Sushil)
-  const G4double radius_inner[13] = {
-    38.416, 38.346, 38.289, 38.244, 38.212, 38.192,
-    38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416
-  };
 
-  G4double phi1 = 0.0;
+  const G4double radius_24[13] = {
+    38.416, 38.346, 38.289, 38.244, 38.212, 38.192,
+    38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416};
+  const G4double radius_8[13] = {
+	  13.4037, 13.2011, 13.0330, 12.9007, 12.8055, 12.7479, 12.7287,
+      12.7479, 12.8055, 12.9007, 13.0330, 13.2011, 13.4037};
+
+
+  const G4double radius_16[13] = {
+	  25.8015, 25.6968, 25.61085, 25.54379, 25.49579, 25.4669, 25.45733,
+	  25.4669, 25.49579, 25.54379, 25.61085, 25.6968, 25.8015};
+
+
+  std::vector<G4double> radius_dynamic = std::vector<G4double>(13,0.0);
+  //G4double radius_dynamic[13]={0};
+
   //! sum of already constructed scintillators;
   G4int icopyI = 193;
 
+
+  G4double AngDisp_8 =   0.0531204920; // 3.0435^0
+  G4double AngDisp_16=   0.0272515011; // 1.561396^0
+  G4double AngDisp_24=   0.01815     ; // 1.04^0
+
+  G4double AngDisp_dynamic=0;
+  G4int numberofModules   =0;
+
+
+  //Assume: enum GeometryKind { Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+  //Single : for 24 modules layer
+  //Double : for 8 and 16 layer configuration
+
+  switch ( fGeoKind )
+  {
+   case GeometryKind::Geo24ModulesLayer:
+     for(int i=0; i<13; i++) { radius_dynamic[i] = radius_24[i]; }
+     numberofModules = 24;
+     AngDisp_dynamic = AngDisp_24;
+     ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+     break;
+   case GeometryKind::Geo24ModulesLayerDistributed:
+    for(int i=0; i<13; i++) { radius_dynamic[i] = radius_8[i]; }
+    numberofModules = 8;
+    AngDisp_dynamic = AngDisp_8;
+    ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+    for(int i=0; i<13; i++) {radius_dynamic[i] = radius_16[i]; }
+    numberofModules =16;
+    AngDisp_dynamic = AngDisp_16;
+    icopyI=297;
+    ConstructLayers( radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+    break;
+   default:
+    G4cout<<" Not a proper option chosen : choose either Single or Double"<<G4endl;
+    break;
+  };
+
+}
+
+void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI)
+{
+ G4double phi = 0.0;
+ G4double phi1 = 0.0;
+
+ 	for(int i=0; i<numberofModules; i++)
+ 	{
+    phi = (i*2*M_PI/numberofModules);
+
+    for(int j=-6; j<7; j++)
+    {
+      phi1 = phi + j * AngDisp_dynamic;
+			G4double radius_new = radius_dynamic[j + 6] * cm;
+			G4RotationMatrix rot = G4RotationMatrix();
+			rot.rotateZ(phi);
+			G4ThreeVector loc = G4ThreeVector(radius_new*cos(phi1), radius_new*sin(phi1),0.0);
+			G4Transform3D transform(rot,loc);
+			G4String nameNewI = "scin_"+G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
+			new G4PVPlacement(transform, fScinLogInModule, nameNewI, fWorldLogical, true, icopyI + i * 13 + j + 6, checkOverlaps);
+		}
+	 }
+}
+
+
   //! for Framework newly inserted scintillators need to have a unique numbering
-  for (int i = 0; i < DetectorConstants::modulesInModularLayer; i++) {
+ /* for (int i = 0; i < DetectorConstants::modulesInModularLayer; i++) {
     G4double phi = (i * 2 * M_PI / DetectorConstants::modulesInModularLayer);
     //! 13 centered modules
     for (int j = -6; j < 7; j++) {
@@ -359,8 +436,7 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
         true, icopyI + i * 13 + j + 6, checkOverlaps
       );
     }
-  }
-}
+  }*/
 
 /**
  * Method for construction of setup used in Run 3

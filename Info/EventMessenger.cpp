@@ -33,7 +33,7 @@ EventMessenger::EventMessenger()
   fDirectory->SetGuidance("Define events to save");
 
   fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
-  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector"); 
+  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector");
 
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
   fPrintStat->SetGuidance("Print how many events was generated");
@@ -57,15 +57,16 @@ EventMessenger::EventMessenger()
   fAddDatetime = new G4UIcmdWithABool("/jpetmc/output/AddDatetime", this);
   fAddDatetime->SetGuidance("Adds to the output file name date and time of simulation start.");
 
-  fRandomSeed = new G4UIcmdWithABool("/jpetmc/SetRandomSeed", this);
-  fRandomSeed->SetGuidance("Use random seed (default true).");
+  fSetSeed = new G4UIcmdWithAnInteger("/jpetmc/SetSeed", this);
+  fSetSeed->SetGuidance("Use specific seed. If 0 provided seed will be random.");
+  fSetSeed->SetDefaultValue(0);
 
   fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
   fSaveSeed->SetGuidance("Save random seed (default false).");
 
   fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer",this);
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
-  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV); 
+  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
 
 }
@@ -76,7 +77,7 @@ EventMessenger::~EventMessenger()
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
-  delete fRandomSeed;
+  delete fSetSeed;
   delete fSaveSeed;
   delete fCMDKillEventsEscapingWorld;
   delete fCMDMinRegMulti;
@@ -111,7 +112,7 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
   }
 
-  if (command == fCMDKillEventsEscapingWorld) { 
+  if (command == fCMDKillEventsEscapingWorld) {
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
   }
 
@@ -119,8 +120,8 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
   }
 
-  if (command == fRandomSeed) {
-    fSetRandomSeed = fRandomSeed->GetNewBoolValue(newValue);
+  if (command == fSetSeed) {
+    fSeed = fSetSeed->GetNewIntValue(newValue);
   }
 
   if (command == fSaveSeed) {
@@ -132,6 +133,6 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
 
   if (command == fCMDAllowedMomentumTransfer) {
-    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue); 
+    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
   }
 }
