@@ -118,6 +118,7 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
   {
     ChangeToBeam();
     fPrimGen->GetBeamParams()->SetEnergy(fGammaBeamSetEnergy->GetNewDoubleValue(newValue));
+  }
   else if (command == fGammaBeamSetPosition)
   {
     ChangeToBeam();

@@ -158,7 +158,7 @@ void MaterialParameters::Set_ComponentsIntensities()
   foPs2GIntensities.clear();
   foPs3GIntensities.clear();
   fdirectIntensities.clear();
-  G4double oPsTotalProbability = 0., G4double TotalIntensity = 0.;
+  G4double oPsTotalProbability = 0., TotalIntensity = 0.;
   for(unsigned i=0; i<foPsProbabilities.size(); i++)
   {
     oPsTotalProbability += foPsProbabilities[i];
