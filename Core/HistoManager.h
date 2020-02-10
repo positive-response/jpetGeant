@@ -58,18 +58,19 @@ public:
 
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
-  void SaveEvtPack(){ fTree->Fill(); };
-  void Clear(){ fEventPack->Clear(); };
+  void SaveEvtPack() {fTree->Fill();};
+  void Clear() {fEventPack->Clear();};
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
   void AddNewHit(DetectorHit*);
-  void SetEventNumber(int x){ fEventPack->SetEventNumber(x); };
-  void SetHistogramCreation(bool tf){ fMakeControlHisto = tf; };
-  bool MakeControlHisto(){ return fMakeControlHisto; };
+  void SetEventNumber(int x) {fEventPack->SetEventNumber(x);};
+  void SetHistogramCreation(bool tf) {fMakeControlHisto = tf;};
+  bool MakeControlHisto() {return fMakeControlHisto;};
   void FillHistoGenInfo(const G4Event* anEvent);
-  const JPetGeantEventInformation* GetGeantInfo(){ return fGeantInfo; }
+  const JPetGeantEventInformation* GetGeantInfo() {return fGeantInfo;}
   
-  void createHistogramWithAxes(TObject* object, TString xAxisName="Default X axis title [unit]", TString yAxisName="Default Y axis title [unit]", TString zAxisName="Default Z axis title [unit]");
+  void createHistogramWithAxes(TObject* object, TString xAxisName="Default X axis title [unit]", 
+                               TString yAxisName="Default Y axis title [unit]", TString zAxisName="Default Z axis title [unit]");
   void fillHistogram(const char* name, double xValue, doubleCheck yValue=doubleCheck(), doubleCheck zValue=doubleCheck());
   void writeError(const char* nameOfHistogram, const char* messageEnd );
   
@@ -77,7 +78,7 @@ public:
   T* getObject(const char* name)
   {
     TObject* tmp = fStats.FindObject(name);
-    if (!tmp) { return nullptr; }
+    if (!tmp) {return nullptr;}
     return dynamic_cast<T*>(tmp);
   }
   

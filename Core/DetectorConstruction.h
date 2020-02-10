@@ -58,26 +58,20 @@ public:
   void LoadGeometryForRun(G4int nr);
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
-  void ReloadMaterials( G4String material );
+  void ReloadMaterials(G4String material);
 
-  void LoadFrame(G4bool tf)
-  {
-    fLoadCADFrame = tf;
-  };
+  void LoadFrame(G4bool tf) {fLoadCADFrame = tf;};
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer( G4String module_name )
+  void ConstructModularLayer(G4String module_name)
   {
     fLoadModularLayer = true;
-    if ( module_name == "Single" ) { fGeoKind = GeometryKind::Geo24ModulesLayer; }
-    else if ( module_name == "Double" ) { fGeoKind = GeometryKind::Geo24ModulesLayerDistributed; }
-    else { fLoadModularLayer = false; }
+    if (module_name == "Single") {fGeoKind = GeometryKind::Geo24ModulesLayer;}
+    else if (module_name == "Double") {fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;}
+    else {fLoadModularLayer = false;}
   }
 
-  G4int GetRunNumber()
-  {
-    return fRunNumber;
-  };
+  G4int GetRunNumber() {return fRunNumber;};
   
 
 private:

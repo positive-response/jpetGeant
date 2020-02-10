@@ -46,10 +46,8 @@ G4double DetectorConstants::GetMergingTimeValueForScin()
 
 void DetectorConstants::SetMergingTimeValueForScin(G4double x)
 {
-  if (x <= 0.0) {
-    G4Exception("DetectorConstants", "DConst01", JustWarning,
-                "Time can not be negative! Nothing happend");
-  } else {
+  if (x <= 0.0) 
+    G4Exception("DetectorConstants", "DConst01", JustWarning, "Time can not be negative! Nothing happend");
+  else 
     fScinHitMergingTime = x;
-  }
 }

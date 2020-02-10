@@ -48,9 +48,9 @@ public:
   static MaterialConstants Temp;
   
   MaterialParameters();
-  MaterialParameters( std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
+  MaterialParameters(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
                       G4double pPsLF, G4double pPsFrac, 
-                      std::vector<G4double> DirectLF, std::vector<G4double> DirectProb );
+                      std::vector<G4double> DirectLF, std::vector<G4double> DirectProb);
   static const G4double oPsTauVaccum;
   static const G4double tauBulk;
   static const G4double direct3Gfraction;
@@ -60,28 +60,29 @@ public:
   static G4String AnnihlationMode;
   
   static void ClearTemp();
-  static void SetAnnihilationMode( G4String mode );
+  static void SetAnnihilationMode(G4String mode);
   
-  void SetMaterial( MaterialConstants mat );
-  void SetMaterialByName( G4String materialID );
-  void Add_oPsComponent( G4double Lifetime, G4double Probability );
-  void Set_oPsComponents( std::vector<G4double> oPsLF, std::vector<G4double> oPsProb );
-  void Set_pPsComponent( G4double Lifetime, G4double Fraction );
-  void Add_DirectComponent( G4double Lifetime, G4double Probability );
-  void Set_DirectComponents( std::vector<G4double> DirectLF, std::vector<G4double> DirectProb );
+  void SetMaterial(MaterialConstants mat);
+  void SetMaterialByName(G4String materialID);
+  void Add_oPsComponent(G4double Lifetime, G4double Probability);
+  void Set_oPsComponents(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb);
+  void Set_pPsComponent(G4double Lifetime, G4double Fraction);
+  void Add_DirectComponent(G4double Lifetime, G4double Probability);
+  void Set_DirectComponents(std::vector<G4double> DirectLF, std::vector<G4double> DirectProb);
 
-  G4double GetoPsIntensity2G( G4double oPsLifetime, G4double oPsProbability );
-  G4double GetoPsIntensity3G( G4double oPsLifetime, G4double oPsProbability );
+  G4double GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability);
+  G4double GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability);
   void Set_ComponentsIntensities();
+  void RenormalizeIntensities(G4double TotalIntensity);
   
   G4double GetoPs2GTotalIntensity();
   G4double GetoPs3GTotalIntensity();
   G4double GetDirect2GTotalIntensity();
   G4double GetDirect3GTotalIntensity();
   G4double GetpPs2GTotalIntensity();
-  G4double GetoPs2GLifetimeFromVector( double randNumber );
-  G4double GetoPs3GLifetimeFromVector( double randNumber );
-  G4double GetDirectLifetimeFromVector( double randNumber );
+  G4double GetoPs2GLifetimeFromVector(double randNumber);
+  G4double GetoPs3GLifetimeFromVector(double randNumber);
+  G4double GetDirectLifetimeFromVector(double randNumber);
   G4double GetpPsLifetime();
 
 private:

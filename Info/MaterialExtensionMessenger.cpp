@@ -22,9 +22,7 @@ MaterialExtensionMessenger*  MaterialExtensionMessenger::fInstance = nullptr;
 MaterialExtensionMessenger* MaterialExtensionMessenger::GetMaterialExtensionMessenger()
 {
   if ( fInstance == nullptr ) 
-  {
     fInstance = new MaterialExtensionMessenger();
-  }
   return fInstance;
 }
 
@@ -71,11 +69,11 @@ MaterialExtensionMessenger::~MaterialExtensionMessenger()
 void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == f3GammaOnly)
-    MaterialParameters::SetAnnihilationMode( "oPs3G" );
+    MaterialParameters::SetAnnihilationMode("oPs3G");
   else if (command == f2GammaOnly)
-    MaterialParameters::SetAnnihilationMode( "pPs2G" );
+    MaterialParameters::SetAnnihilationMode("pPs2G");
   else if (command == fPickOffOnly)
-    MaterialParameters::SetAnnihilationMode( "oPs2G" );
+    MaterialParameters::SetAnnihilationMode("oPs2G");
   else if (command == fXADAdd_oPsComponent)
   {
     G4String paramString = newValue;

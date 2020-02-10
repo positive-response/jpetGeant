@@ -37,8 +37,7 @@ public:
   static MaterialExtensionMessenger* GetMaterialExtensionMessenger();
 
   void SetNewValue(G4UIcommand*, G4String);
-
-  bool GenerateOnly3g(){ return fIsOnly3g;}
+  bool GenerateOnly3g() {return fIsOnly3g;}
 
 private:
   static MaterialExtensionMessenger* fInstance;

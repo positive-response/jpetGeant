@@ -31,7 +31,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   int mask = 01001010;
 
-  if(fEvtMessenger->GetSeed() == 0){
+  if(fEvtMessenger->GetSeed() == 0)
+  {
     /**
      *
      * If seed 0 is used we are seeding random generator with a number which is a
@@ -48,7 +49,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4Random::setTheSeed(seed);
     gRandom->SetSeed(seed^mask);
   }
-  else{
+  else
+  {
     gRandom->SetSeed(fEvtMessenger->GetSeed());
     G4Random::setTheSeed(fEvtMessenger->GetSeed()^mask);
   }

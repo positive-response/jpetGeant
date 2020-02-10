@@ -33,44 +33,44 @@ MaterialExtension::~MaterialExtension() {}
 
 void MaterialExtension::Add_oPsComponent( G4double Lifetime, G4double Probability )
 {
-  if( Lifetime < 0. || Lifetime > 142. ) 
+  if(Lifetime < 0. || Lifetime > 142.) 
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs lifetime not in the range [0, 142] ns"); 
   else if( Probability < 0. || Probability > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs probability not in the range [0, 1]"); 
   else 
-    Material->Add_oPsComponent( Lifetime, Probability );
+    Material->Add_oPsComponent(Lifetime, Probability);
 }
 
 void MaterialExtension::Add_directComponent( G4double Lifetime, G4double Probability )
 {
-  if( Lifetime < 0.1 || Lifetime > 0.6 ) 
+  if(Lifetime < 0.1 || Lifetime > 0.6) 
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct lifetime not in the range [0.1, 0.6] ns"); 
   else if( Probability < 0. || Probability > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct probability not in the range [0, 1]"); 
   else 
-    Material->Add_DirectComponent( Lifetime, Probability );
+    Material->Add_DirectComponent(Lifetime, Probability);
 }
 
-void MaterialExtension::Set_pPsComponent( G4double Lifetime, G4double Fraction )
+void MaterialExtension::Set_pPsComponent(G4double Lifetime, G4double Fraction)
 {
   if( Lifetime < 0. || Lifetime > 0.2 ) 
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs lifetime not in the range [0, 0.2] ns"); 
   else if( Fraction < 0. || Fraction > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs fraction not in the range [0, 1]"); 
   else 
-    Material->Set_pPsComponent( Lifetime, Fraction );
+    Material->Set_pPsComponent(Lifetime, Fraction);
 }
 
 const G4double MaterialExtension::GetLifetime( double randNumber, G4String channel )
 {
   if( channel == "ortho2G" )
-    return Material->GetoPs2GLifetimeFromVector( randNumber );
+    return Material->GetoPs2GLifetimeFromVector(randNumber);
   else if( channel == "ortho3G" )
-    return Material->GetoPs3GLifetimeFromVector( randNumber );  
+    return Material->GetoPs3GLifetimeFromVector(randNumber);  
   else if( channel == "para2G" )
     return Material->GetpPsLifetime();
   else
-    return Material->GetDirectLifetimeFromVector( randNumber );
+    return Material->GetDirectLifetimeFromVector(randNumber);
 }
 
 void MaterialExtension::ChangeMaterialConstants()
@@ -81,19 +81,19 @@ void MaterialExtension::ChangeMaterialConstants()
 const std::vector<G4double> MaterialExtension::GetEventsFraction()
 {
   std::vector<G4double> frac;
-  if( MaterialParameters::AnnihlationMode != "" )
+  if(MaterialParameters::AnnihlationMode != "")
   {
-    if( MaterialParameters::AnnihlationMode == "oPs3G" )
+    if(MaterialParameters::AnnihlationMode == "oPs3G")
     {
       frac = {0.,0.,0.,0.,1.};
       return frac;
     }
-    else if( MaterialParameters::AnnihlationMode == "oPs2G" )
+    else if(MaterialParameters::AnnihlationMode == "oPs2G")
     {
       frac = {0.,0.,1.,0.,0.};
       return frac;        
     }
-    else if( MaterialParameters::AnnihlationMode == "pPs2G" )
+    else if(MaterialParameters::AnnihlationMode == "pPs2G")
     {
       frac = {1.,0.,0.,0.,0.};
       return frac;              
