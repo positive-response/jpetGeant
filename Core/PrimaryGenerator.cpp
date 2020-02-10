@@ -182,24 +182,30 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   );
   std::vector<G4double> evtFractions = material->GetEventsFraction();
   G4double random = G4UniformRand();
-  G4double lifetime3g = material->GetoPsLifetime();
 
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
-  if (evtFractions[0] > random) {
-    // 2g
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, MaterialParameters::tauBulk));
-  } else if ( (evtFractions[0] + evtFractions[1]) > random ) {
-    // 2g pick off
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, lifetime3g));
-  } else if ( (evtFractions[0] + evtFractions[1] + evtFractions[2]) > random ) {
-    // 3g direct
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, MaterialParameters::tauBulk));
-  } else {
-    // 3g oPs
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, lifetime3g));
+  if( evtFractions[0] > random ) // pPs
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random, "para2G" ) ) );
+  }
+  else if( evtFractions[0] + evtFractions[1] > random ) // Direct 2G
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0], "" ) ) );      
+  }
+  else if( evtFractions[0] + evtFractions[1] + evtFractions[2] > random ) // oPs 2G
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0] - evtFractions[1], "ortho2G" ) ) );      
+  }
+  else if( evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random ) // Direct 3G
+  {
+    event->AddPrimaryVertex( GenerateThreeGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0] - evtFractions[1] - evtFractions[2], "" ) ) ); 
+  }
+  else // oPs 3G
+  {
+    event->AddPrimaryVertex( GenerateThreeGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], "ortho3G" ) ) ); 
   }
 
   // Add prompt gamma from sodium
@@ -256,23 +262,30 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   );
   std::vector<G4double> evtFractions = material->GetEventsFraction();
   G4double random = G4UniformRand();
-  G4double lifetime3g = material->GetoPsLifetime();
 
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
-  if (evtFractions[0] > random) {
-    //! 2g
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, MaterialParameters::tauBulk));
-  } else if ((evtFractions[0] + evtFractions[1]) > random) {
-    //! 2g pick off
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, lifetime3g));
-  } else if ((evtFractions[0] + evtFractions[1] + evtFractions[2]) > random) {
-    //! 3g direct
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, MaterialParameters::tauBulk));
-  } else {
-    //! 3g oPs
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, lifetime3g));
+
+  if( evtFractions[0] > random ) // pPs
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random, "para2G" ) ) );
+  }
+  else if( evtFractions[0] + evtFractions[1] > random ) // Direct 2G
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0], "" ) ) );      
+  }
+  else if( evtFractions[0] + evtFractions[1] + evtFractions[2] > random ) // oPs 2G
+  {
+    event->AddPrimaryVertex( GenerateTwoGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0] - evtFractions[1], "ortho2G" ) ) );      
+  }
+  else if( evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random ) // Direct 3G
+  {
+    event->AddPrimaryVertex( GenerateThreeGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[0] - evtFractions[1] - evtFractions[2], "" ) ) ); 
+  }
+  else // oPs 3G
+  {
+    event->AddPrimaryVertex( GenerateThreeGammaVertex( vtxPosition, T0, material->GetLifetime( random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], "ortho3G" ) ) ); 
   }
 
   //! Add prompt gamma from sodium
@@ -388,33 +401,6 @@ G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rIn, G4double z
   G4double z = zmax * (2 * G4UniformRand() - 1);
   G4ThreeVector positionA(r * ux, r * uy, z);
   return positionA;
-}
-
-std::tuple<G4ThreeVector, G4double, G4double> PrimaryGenerator::GetVerticesDistribution(
-  G4double maxXhalf, G4double maxYhalf, G4double maxZhalf
-) {
-  G4bool lookForVtx = false;
-  G4ThreeVector myPoint(0 * cm, 0 * cm, 0 * cm);
-  MaterialExtension* mat;
-
-  //! annihilation will occure only in materials where it was allowed @see MaterialExtension
-  //! annihilation rate 2g/3g also depends on the material type
-  //! now assumed equal distribution in the target - this may be modified in the future
-  while (!lookForVtx) {
-    G4double x_tmp = maxXhalf * (2 * G4UniformRand() - 1) * cm;
-    G4double y_tmp = maxYhalf * (2 * G4UniformRand() - 1) * cm;
-    G4double z_tmp = maxZhalf * (2 * G4UniformRand() - 1) * cm;
-    myPoint.setX(x_tmp);
-    myPoint.setY(y_tmp);
-    myPoint.setZ(z_tmp);
-    theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-    mat = (MaterialExtension*)theNavigator->LocateGlobalPointAndSetup(myPoint)->GetLogicalVolume()->GetMaterial();
-    lookForVtx = mat->IsTarget();
-  };
-
-  G4double ratio3g = mat->Get3gFraction();
-  G4double  lifetime3g = mat->GetoPsLifetime();
-  return std::make_tuple(myPoint, ratio3g, lifetime3g);
 }
 
 const G4ThreeVector PrimaryGenerator::GetRandomPointInFilledSphere(G4double radius)

@@ -19,6 +19,7 @@
 #include "DetectorConstruction.h"
 #include <G4SubtractionSolid.hh>
 #include "MaterialParameters.h"
+#include "MaterialExtension.h"
 #include "DetectorConstants.h"
 #include <G4RegionStore.hh>
 #include <G4UnionSolid.hh>
@@ -40,8 +41,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 
 DetectorConstruction::DetectorConstruction() :
   G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
-  fLoadWrapping(true),fLoadModularLayer(false)
-
+  fLoadWrapping(true), fLoadModularLayer(false)
 {
   InitializeMaterials();
   fMessenger = new DetectorConstructionMessenger(this);
@@ -75,7 +75,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //! scintillators for standard setup; right now always loaded
   ConstructScintillators();
 
-
   if(fLoadModularLayer){
     ConstructScintillatorsModularLayer();
   }
@@ -107,21 +106,20 @@ void DetectorConstruction::ConstructSDandField()
 {
   if (!fDetectorSD.Get()) {
     DetectorSD* det = new DetectorSD(
-      "/mydet/detector",ReturnNumberOfScintillators(),
+      "/mydet/detector", ReturnNumberOfScintillators(),
       DetectorConstants::GetMergingTimeValueForScin());
     fDetectorSD.Put(det);
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fDetectorSD.Get());
   SetSensitiveDetector(fScinLog, fDetectorSD.Get());
   if (fLoadModularLayer) SetSensitiveDetector(fScinLogInModule, fDetectorSD.Get());
-
 }
 
 void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
   fRunNumber = nr;
   if (fRunNumber == 3 ||fRunNumber == 5 ||fRunNumber == 6 ||fRunNumber == 7 || fRunNumber == 0) {
-    LoadFrame(true);
+    LoadFrame(false);
   } else {
     G4Exception(
       "DetectorConstruction","DC02", FatalException,
@@ -132,11 +130,10 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 
 G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
-  if (fLoadModularLayer) {
+  if (fLoadModularLayer) 
     return 504;
-    } else {
+  else
     return 192;
-  }
 }
 
 void DetectorConstruction::UpdateGeometry()
@@ -144,11 +141,13 @@ void DetectorConstruction::UpdateGeometry()
   RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
-void DetectorConstruction::ReloadMaterials()
+void DetectorConstruction::ReloadMaterials( G4String material )
 {
-  fXADMaterial->SetoPsFraction(MaterialParameters::GetXADoPsFraction());
-  fXADMaterial->SetoPsLifetime(MaterialParameters::GetXADoPsTau());
-  fXADMaterial->SetPickOffFraction(MaterialParameters::GetXADPickOffFraction());
+  if( material == "xad4" )
+  {
+    fXADMaterial->ChangeMaterialConstants();
+    fXADMaterial->FillIntensities();
+  }
 }
 
 void DetectorConstruction::InitializeMaterials()
@@ -156,46 +155,37 @@ void DetectorConstruction::InitializeMaterials()
   G4NistManager* nistManager = G4NistManager::Instance();
 
   nistManager->FindOrBuildMaterial("G4_AIR");
-  fAir = new MaterialExtension("air", G4Material::GetMaterial("G4_AIR"));
+  fAir = new MaterialExtension("", "air", G4Material::GetMaterial("G4_AIR"));
 
   nistManager->FindOrBuildMaterial("G4_KAPTON");
-  fKapton = new MaterialExtension("kapton", G4Material::GetMaterial("G4_KAPTON"));
+  fKapton = new MaterialExtension("Kapton", "kapton", G4Material::GetMaterial("G4_KAPTON"));
+  //fKapton->AllowsAnnihilations(true); ??
 
   nistManager->FindOrBuildMaterial("G4_Galactic");
-  fVacuum = new MaterialExtension("vacuum", G4Material::GetMaterial("G4_Galactic"));
+  fVacuum = new MaterialExtension("", "vacuum", G4Material::GetMaterial("G4_Galactic"));
 
   nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
-  fPlexiglass = new MaterialExtension(
-    "bigChamberRun6", G4Material::GetMaterial("G4_PLEXIGLASS")
-  );
+  fPlexiglass = new MaterialExtension("Plexiglass", "bigChamberRun6", G4Material::GetMaterial("G4_PLEXIGLASS"));
   fPlexiglass->AllowsAnnihilations(true);
 
   //! ref: https://www.sigmaaldrich.com/catalog/product/sigma/xad4
   nistManager->FindOrBuildMaterial("G4_POLYSTYRENE");
-  fXADMaterial = new MaterialExtension(
-    "XAD", G4Material::GetMaterial("G4_POLYSTYRENE")
-  );
+  fXADMaterial = new MaterialExtension("XAD4", "XAD", G4Material::GetMaterial("G4_POLYSTYRENE"));
   fXADMaterial->AllowsAnnihilations(true);
-  fXADMaterial->SetoPsFraction(MaterialParameters::GetXADoPsFraction());
-  fXADMaterial->SetoPsLifetime(MaterialParameters::GetXADoPsTau());
-  fXADMaterial->SetPickOffFraction(MaterialParameters::GetXADPickOffFraction());
 
   nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-  fScinMaterial = new MaterialExtension(
-    "scinMaterial", G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE")
-  );
+  fScinMaterial = new MaterialExtension("Scin", "scinMaterial", G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
 
   nistManager->FindOrBuildMaterial("G4_Al");
-  fAluminiumMaterial = new MaterialExtension("aluminium", G4Material::GetMaterial("G4_Al"));
+  fAluminiumMaterial = new MaterialExtension("Al", "aluminium", G4Material::GetMaterial("G4_Al"));
   fAluminiumMaterial->AllowsAnnihilations(true);
 
-  fSmallChamberMaterial = new MaterialExtension("smallChamber", G4Material::GetMaterial("G4_Al"));
+  fSmallChamberMaterial = new MaterialExtension("Al", "smallChamber", G4Material::GetMaterial("G4_Al"));
   fSmallChamberMaterial->AllowsAnnihilations(true);
 
+//Polyamide PA6
   nistManager->FindOrBuildMaterial("G4_NYLON-6-6");
-  fSmallChamberRun7Material = new MaterialExtension(
-    "smallChamberRun7", G4Material::GetMaterial("G4_NYLON-6-6")
-  );
+  fSmallChamberRun7Material = new MaterialExtension("PA6", "smallChamberRun7", G4Material::GetMaterial("G4_NYLON-6-6"));
   fSmallChamberRun7Material->AllowsAnnihilations(true);
 }
 
@@ -339,15 +329,14 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   const G4double radius_24[13] = {
     38.416, 38.346, 38.289, 38.244, 38.212, 38.192,
     38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416};
+    
   const G4double radius_8[13] = {
 	  13.4037, 13.2011, 13.0330, 12.9007, 12.8055, 12.7479, 12.7287,
       12.7479, 12.8055, 12.9007, 13.0330, 13.2011, 13.4037};
 
-
   const G4double radius_16[13] = {
 	  25.8015, 25.6968, 25.61085, 25.54379, 25.49579, 25.4669, 25.45733,
 	  25.4669, 25.49579, 25.54379, 25.61085, 25.6968, 25.8015};
-
 
   std::vector<G4double> radius_dynamic = std::vector<G4double>(13,0.0);
   //G4double radius_dynamic[13]={0};

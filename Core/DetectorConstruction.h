@@ -35,8 +35,7 @@
 #include <G4Cache.hh>
 #include <globals.hh>
 #include <G4Box.hh>
-#include <string>
-#include<vector>
+#include <vector>
 
 class DetectorConstructionMessenger;
 
@@ -50,8 +49,7 @@ const  G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-
- enum GeometryKind { Unknown, Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+  enum GeometryKind { Unknown, Geo24ModulesLayer, Geo24ModulesLayerDistributed};
 
   //! only single instance can exist
   static DetectorConstruction* GetInstance();
@@ -60,7 +58,7 @@ public:
   void LoadGeometryForRun(G4int nr);
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
-  void ReloadMaterials();
+  void ReloadMaterials( G4String material );
 
   void LoadFrame(G4bool tf)
   {

@@ -38,10 +38,7 @@ public:
 
   void SetNewValue(G4UIcommand*, G4String);
 
-  bool GenerateOnly3g()
-  {
-    return fIsOnly3g;
-  }
+  bool GenerateOnly3g(){ return fIsOnly3g;}
 
 private:
   static MaterialExtensionMessenger* fInstance;
@@ -49,12 +46,13 @@ private:
   ~MaterialExtensionMessenger();
   G4UIdirectory* fDirectory = nullptr;
   MaterialExtension* fMaterial = nullptr;
-  G4UIcmdWithoutParameter* fXAD3GammaOnly = nullptr;
-  G4UIcmdWithoutParameter* fXAD2GammaOnly = nullptr;
-  G4UIcmdWithoutParameter* fXADPickOffOnly = nullptr;
-  G4UIcmdWithADoubleAndUnit* fXADSet3gLifetime = nullptr;
-  G4UIcmdWithADouble* fXADSet3gFraction = nullptr;
-  G4UIcmdWithADouble* fXADSetPickOffFraction = nullptr;
+  G4UIcmdWithoutParameter* f3GammaOnly = nullptr;
+  G4UIcmdWithoutParameter* f2GammaOnly = nullptr;
+  G4UIcmdWithoutParameter* fPickOffOnly = nullptr;
+  G4UIcmdWithAString* fXADAdd_oPsComponent = nullptr;
+  G4UIcmdWithAString* fXADSet_pPsComponent = nullptr;
+  G4UIcmdWithAString* fXADAdd_directComponent = nullptr;
+  G4UIcmdWithAString* fReloadMaterials = nullptr;
 
   bool fIsOnly3g = true;
 };
