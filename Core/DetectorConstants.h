@@ -58,6 +58,7 @@ private:
   //! time in [ns]
   static G4double fScinHitMergingTime;
   static G4double fChamberCenter[3];
+
 };
 
 #endif

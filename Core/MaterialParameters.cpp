@@ -28,6 +28,8 @@ MaterialConstants::MaterialConstants(std::vector<G4double> oPsLF, std::vector<G4
 }
 
 const G4double MaterialParameters::oPsTauVaccum =  142.0 * ns;
+const G4double MaterialParameters::directTauMax = 0.6 * ns;
+const G4double MaterialParameters::pPsTauVaccum = 0.2 * ns;
 const G4double MaterialParameters::tauBulk = 0.3;
 const G4double MaterialParameters::direct3Gfraction =  0.002688;
 const G4double MaterialParameters::sodiumGammaEnergy = 1.2770 * MeV;
@@ -123,10 +125,10 @@ void MaterialParameters::SetAnnihilationMode(G4String mode)
   AnnihlationMode = mode;
 }
 
-void MaterialParameters::Add_oPsComponent(G4double Lifetime, G4double Probability)
+void MaterialParameters::Add_oPsComponent(G4double lifetime, G4double probability)
 {
-  foPsLifetimes.push_back(Lifetime);
-  foPsProbabilities.push_back(Probability);
+  foPsLifetimes.push_back(lifetime);
+  foPsProbabilities.push_back(probability);
 }
 
 void MaterialParameters::Set_oPsComponents(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb)
@@ -135,22 +137,22 @@ void MaterialParameters::Set_oPsComponents(std::vector<G4double> oPsLF, std::vec
   foPsProbabilities = oPsProb;    
 }
 
-void MaterialParameters::Set_pPsComponent(G4double Lifetime, G4double Fraction)
+void MaterialParameters::Set_pPsComponent(G4double lifetime, G4double fraction)
 {
-  fpPsLifetime = Lifetime;
-  fpPsFraction = Fraction;    
+  fpPsLifetime = lifetime;
+  fpPsFraction = fraction;    
 }
 
-void MaterialParameters::Add_DirectComponent(G4double Lifetime, G4double Probability)
+void MaterialParameters::Add_DirectComponent(G4double lifetime, G4double probability)
 {
-  fdirectLifetimes.push_back(Lifetime);
-  fdirectProbabilities.push_back(Probability);
+  fdirectLifetimes.push_back(lifetime);
+  fdirectProbabilities.push_back(probability);
 }
 
-void MaterialParameters::Set_DirectComponents(std::vector<G4double> DirectLF, std::vector<G4double> DirectProb)
+void MaterialParameters::Set_DirectComponents(std::vector<G4double> directLF, std::vector<G4double> directProb)
 {
-  fdirectLifetimes = DirectLF;
-  fdirectProbabilities = DirectProb;
+  fdirectLifetimes = directLF;
+  fdirectProbabilities = directProb;
 }
 
 void MaterialParameters::Set_ComponentsIntensities()

@@ -42,13 +42,40 @@ public:
   JPetGeantScinHits* ConstructNextHit();
   JPetGeantDecayTree* ConstructNextDecayTree();
 
-  JPetGeantScinHits* GetHit(int i) {return dynamic_cast<JPetGeantScinHits*>(fMCHits[i]);};
-  JPetGeantDecayTree* GetDecayTree(int i) {return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees[i]);};
-  JPetGeantEventInformation* GetEventInformation() {return fGenInfo;};
-  unsigned int GetNumberOfHits() {return fHitIndex;};
-  unsigned int GetNumberOfDecayTrees() {return fMCDecayTreesIndex;};
-  unsigned int GetEventNumber() {return fEvtIndex;};
-  void SetEventNumber(int x) {fEvtIndex = x;};
+  JPetGeantScinHits* GetHit(int i)
+  {
+    return dynamic_cast<JPetGeantScinHits*>(fMCHits[i]);
+  };
+
+  JPetGeantDecayTree* GetDecayTree(int i)
+  {
+    return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees[i]);
+  };
+
+  JPetGeantEventInformation* GetEventInformation()
+  {
+    return fGenInfo;
+  };
+
+  unsigned int GetNumberOfHits()
+  {
+    return fHitIndex;
+  };
+
+  unsigned int GetNumberOfDecayTrees()
+  {
+    return fMCDecayTreesIndex;
+  };
+
+  unsigned int GetEventNumber()
+  {
+    return fEvtIndex;
+  };
+
+  void SetEventNumber(int x)
+  {
+    fEvtIndex = x;
+  };
 
 private:
   TClonesArray fMCHits;

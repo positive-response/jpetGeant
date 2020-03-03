@@ -35,30 +35,125 @@ public:
 
   void Clear();
 
-  void SetThreeGammaGen(bool tf) {fGenGammaNum.SetBitNumber(2, tf);};
-  void SetTwoGammaGen(bool tf) {fGenGammaNum.SetBitNumber(1, tf);};
-  void SetPromptGammaGen(bool tf) {fGenGammaNum.SetBitNumber(0, tf);};
-  void SetRunNr(int x) {fnRun = x;};
-  void SetVtxPosition(double x, double y, double z) {fVtxPosition.SetXYZ(x, y, z);};
-  void SetVtxPromptPosition(double x, double y, double z) {fVtxPromptPosition.SetXYZ(x, y, z);};
-  void SetLifetime(double x) {fLifetime = x;};
-  void SetPromptLifetime(double x) {fPromptLifetime = x;};
-  bool GetThreeGammaGen() const {return fGenGammaNum.TestBitNumber(2);};
-  bool GetTwoGammaGen() const {return fGenGammaNum.TestBitNumber(1);};
-  bool GetPromptGammaGen() const {return fGenGammaNum.TestBitNumber(0);};
-  int GetRunNr() const {return fnRun;};
-  double GetVtxPositionX() const {return fVtxPosition.X();};
-  double GetVtxPositionY() const {return fVtxPosition.Y();};
-  double GetVtxPositionZ() const {return fVtxPosition.Z();};
-  double GetVtxPromptPositionX() const {return fVtxPromptPosition.X();};
-  double GetVtxPromptPositionY() const {return fVtxPromptPosition.Y();};
-  double GetVtxPromptPositionZ() const {return fVtxPromptPosition.Z();};
-  TVector3 GetVtxPromptPosition() const {return fVtxPromptPosition;}
-  TVector3 GetVtxPosition() const {return fVtxPosition;}
-  double GetLifetime() const {return fLifetime;};
-  double GetPromptLifetime() const {return fPromptLifetime;};
-  void SetMomentumGamma(int index, double x, double y, double z) {fMomentumGamma[index].SetXYZ(x, y, z);}
-  TVector3 GetMomentumGamma(int index) const {return fMomentumGamma[index];}
+  void SetThreeGammaGen(bool tf)
+  {
+    fGenGammaNum.SetBitNumber(2, tf);
+  };
+
+  void SetTwoGammaGen(bool tf)
+  {
+    fGenGammaNum.SetBitNumber(1, tf);
+  };
+
+  void SetPromptGammaGen(bool tf)
+  {
+    fGenGammaNum.SetBitNumber(0, tf);
+  };
+
+  void SetRunNr(int x)
+  {
+    fnRun = x;
+  };
+
+  void SetVtxPosition(double x, double y, double z)
+  {
+    fVtxPosition.SetXYZ(x, y, z);
+  };
+
+  void SetVtxPromptPosition(double x, double y, double z)
+  {
+    fVtxPromptPosition.SetXYZ(x, y, z);
+  };
+
+  void SetLifetime(double x)
+  {
+    fLifetime = x;
+  };
+
+  void SetPromptLifetime(double x)
+  {
+    fPromptLifetime = x;
+  };
+
+  bool GetThreeGammaGen() const
+  {
+    return fGenGammaNum.TestBitNumber(2);
+  };
+
+  bool GetTwoGammaGen() const
+  {
+    return fGenGammaNum.TestBitNumber(1);
+  };
+
+  bool GetPromptGammaGen() const
+  {
+    return fGenGammaNum.TestBitNumber(0);
+  };
+
+  int GetRunNr() const
+  {
+    return fnRun;
+  };
+
+  double GetVtxPositionX() const
+  {
+    return fVtxPosition.X();
+  };
+
+  double GetVtxPositionY() const
+  {
+    return fVtxPosition.Y();
+  };
+
+  double GetVtxPositionZ() const
+  {
+    return fVtxPosition.Z();
+  };
+
+  double GetVtxPromptPositionX() const
+  {
+    return fVtxPromptPosition.X();
+  };
+
+  double GetVtxPromptPositionY() const
+  {
+    return fVtxPromptPosition.Y();
+  };
+
+  double GetVtxPromptPositionZ() const
+  {
+    return fVtxPromptPosition.Z();
+  };
+
+  TVector3 GetVtxPromptPosition() const
+  {
+    return fVtxPromptPosition;
+  }
+
+  TVector3 GetVtxPosition() const
+  {
+    return fVtxPosition;
+  }
+
+  double GetLifetime() const
+  {
+    return fLifetime;
+  };
+
+  double GetPromptLifetime() const
+  {
+    return fPromptLifetime;
+  };
+
+  void SetMomentumGamma(int index, double x, double y, double z)
+  {
+    fMomentumGamma[index].SetXYZ(x, y, z);
+  }
+
+  TVector3 GetMomentumGamma(int index) const
+  {
+    return fMomentumGamma[index];
+  }
 
 private:
   const unsigned int fMaxGammaNumberIndex = 3;
@@ -78,6 +173,7 @@ private:
 
 private:
   ClassDef(JPetGeantEventInformation, 6)
+
 };
 
 #endif

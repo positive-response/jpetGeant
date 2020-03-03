@@ -42,21 +42,64 @@ public:
 
   inline void* operator new (size_t);
   inline void  operator delete (void*);
-  inline int operator == (const Trajectory& right) const {return (this == &right);}
+  inline int operator == (const Trajectory& right) const
+  {
+    return (this == &right);
+  }
 
   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
-  virtual void AppendStep(const G4Step* aStep);
-  virtual int GetPointEntries() const {return fPositionRecord->size();}
-  virtual G4VTrajectoryPoint* GetPoint(G4int i) const {return (*fPositionRecord)[i];}
-  virtual G4int GetTrackID() const {return fTrackID;}
-  virtual G4int GetParentID() const {return fParentID;}
-  virtual G4String GetParticleName() const { return fParticleName; }
-  virtual G4double GetCharge() const {return fPDGCharge;}
-  virtual G4int GetPDGEncoding() const {return fPDGEncoding;}
-  virtual G4ThreeVector GetInitialMomentum() const {return fMomentum;}
-  virtual G4ThreeVector GetVertexPosition() const {return fVertexPosition;}
 
-  G4double GetTime() const {return fGlobalTime;}
+  virtual void AppendStep(const G4Step* aStep);
+
+  virtual int GetPointEntries() const
+  {
+    return fPositionRecord->size();
+  }
+
+  virtual G4VTrajectoryPoint* GetPoint(G4int i) const
+  {
+    return (*fPositionRecord)[i];
+  }
+
+  virtual G4int GetTrackID() const
+  {
+    return fTrackID;
+  }
+
+  virtual G4int GetParentID() const
+  {
+    return fParentID;
+  }
+
+  virtual G4String GetParticleName() const
+  {
+    return fParticleName;
+  }
+
+  virtual G4double GetCharge() const
+  {
+    return fPDGCharge;
+  }
+
+  virtual G4int GetPDGEncoding() const
+  {
+    return fPDGEncoding;
+  }
+
+  virtual G4ThreeVector GetInitialMomentum() const
+  {
+    return fMomentum;
+  }
+
+  virtual G4ThreeVector GetVertexPosition() const
+  {
+    return fVertexPosition;
+  }
+
+  G4double GetTime() const
+  {
+    return fGlobalTime;
+  }
 
 private:
   TrajectoryPointContainer* fPositionRecord;

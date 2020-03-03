@@ -31,9 +31,6 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   fDirectory = new G4UIdirectory("/jpetmc/material/");
   fDirectory->SetGuidance("Commands for controling the geometry materials");
 
-  fDirectory = new G4UIdirectory("/jpetmc/material/xad4/");
-  fDirectory->SetGuidance("Commands for controling the XAD4 material properties");
-
   f3GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/threeGammaOnly", this);
   f3GammaOnly->SetGuidance("Only 3 gamma events will be generated (lifetime as for oPs)");
 
@@ -43,14 +40,14 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   fPickOffOnly = new G4UIcmdWithoutParameter("/jpetmc/material/pickOffOnly", this);
   fPickOffOnly->SetGuidance("Only 2 gamma events from pick-off/conversion will be generated (lifetime as for 3g)");
 
-  fXADAdd_oPsComponent = new G4UIcmdWithAString("/jpetmc/material/xad4/oPsComponent", this);
-  fXADAdd_oPsComponent->SetGuidance("Adding oPs annihilation component with mean lifetime and intensity");
+  fAdd_oPsComponent = new G4UIcmdWithAString("/jpetmc/material/oPsComponent", this);
+  fAdd_oPsComponent->SetGuidance("Adding oPs annihilation component with mean lifetime and intensity");
   
-  fXADSet_pPsComponent = new G4UIcmdWithAString("/jpetmc/material/xad4/pPsComponent", this);
-  fXADSet_pPsComponent->SetGuidance("Setting pPs annihilation component to mean lifetime and intensity");
+  fSet_pPsComponent = new G4UIcmdWithAString("/jpetmc/material/pPsComponent", this);
+  fSet_pPsComponent->SetGuidance("Setting pPs annihilation component to mean lifetime and intensity");
   
-  fXADAdd_directComponent = new G4UIcmdWithAString("/jpetmc/material/xad4/directComponent", this);
-  fXADAdd_directComponent->SetGuidance("Adding direct positron annihilation component with mean lifetime and intensity");
+  fAdd_directComponent = new G4UIcmdWithAString("/jpetmc/material/directComponent", this);
+  fAdd_directComponent->SetGuidance("Adding direct positron annihilation component with mean lifetime and intensity");
   
   fReloadMaterials = new G4UIcmdWithAString("/jpetmc/material/reloadMaterials", this);
   fReloadMaterials->SetGuidance("Reloading material for parameters given by user");
@@ -61,9 +58,9 @@ MaterialExtensionMessenger::~MaterialExtensionMessenger()
   delete f3GammaOnly;
   delete f2GammaOnly;
   delete fPickOffOnly;
-  delete fXADAdd_oPsComponent;
-  delete fXADSet_pPsComponent;
-  delete fXADAdd_directComponent;
+  delete fAdd_oPsComponent;
+  delete fSet_pPsComponent;
+  delete fAdd_directComponent;
 }
 
 void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -74,7 +71,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::SetAnnihilationMode("pPs2G");
   else if (command == fPickOffOnly)
     MaterialParameters::SetAnnihilationMode("oPs2G");
-  else if (command == fXADAdd_oPsComponent)
+  else if (command == fAdd_oPsComponent)
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);
@@ -84,7 +81,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::Temp.oPsLifetimes.push_back(meanLifetime);
     MaterialParameters::Temp.oPsProbabilities.push_back(probability);
   }
-  else if (command == fXADSet_pPsComponent) 
+  else if (command == fSet_pPsComponent) 
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);
@@ -94,7 +91,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::Temp.pPsLifetime = meanLifetime;
     MaterialParameters::Temp.pPsFraction = fraction;
   }
-  else if (command == fXADAdd_directComponent) 
+  else if (command == fAdd_directComponent) 
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);

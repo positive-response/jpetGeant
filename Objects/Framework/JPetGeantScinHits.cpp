@@ -44,8 +44,7 @@ JPetGeantScinHits::JPetGeantScinHits(
 
 void JPetGeantScinHits::Fill(
   int evID, int scinID, int trkID, int trkPDG, int nInter, float ene, float time
-) 
-{
+) {
   this->SetEvtID(evID);
   this->SetScinID(scinID);
   this->SetTrackID(trkID);
@@ -58,8 +57,7 @@ void JPetGeantScinHits::Fill(
 void JPetGeantScinHits::Fill(
   int evID, int scinID, int trkID, int trkPDG, int nInter, float ene, float time,
   TVector3 hit, TVector3 polIn, TVector3 polOut, TVector3 momeIn, TVector3 momeOut
-) 
-{
+) {
   this->SetEvtID(evID);
   this->SetScinID(scinID);
   this->SetTrackID(trkID);

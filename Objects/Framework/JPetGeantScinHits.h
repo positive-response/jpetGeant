@@ -49,40 +49,171 @@ public:
 
   void Clean();
 
-  void SetEvtID(int x) {fEvtID = x;};
-  void SetScinID(int x) {fScinID = x;};
-  void SetTrackID(int x) {fTrackID = x;};
-  void SetTrackPDG(int x) {fTrackPDGencoding = x;};
-  void SetNumOfInteractions(int x) {fNumOfInteractions = x;};
-  void SetEneDepos(float x) {fEneDep = x;};
-  void SetTime(float x) {fTime = x;};
-  void SetHitPosition(TVector3 x) {fPosition = x;};
-  void SetHitPosition(float x, float y, float z) {fPosition.SetXYZ(x, y, z);};
-  void SetPolarizationIn(TVector3 x) {fPolarizationIn = x;};
-  void SetPolarizationIn(float x, float y, float z) {fPolarizationIn.SetXYZ(x, y, z);};
-  void SetPolarizationOut(TVector3 x) {fPolarizationOut = x;};
-  void SetPolarizationOut(float x, float y, float z) {fPolarizationOut.SetXYZ(x, y, z);};
-  void SetMomentumIn(TVector3 x) {fMomentumIn = x;};
-  void SetMomentumIn(float x, float y, float z) {fMomentumIn.SetXYZ(x, y, z);};
-  void SetMomentumOut(TVector3 x) {fMomentumOut = x;};
-  void SetMomentumOut(float x, float y, float z) {fMomentumOut.SetXYZ(x, y, z);};
-  int GetEvtID() {return fEvtID;};
-  int GetScinID() {return fScinID;};
-  int GetTrackID() {return fTrackID;};
-  int GetTrackPDG() {return fTrackPDGencoding;};
-  int GetNumOfInteractions() {return fNumOfInteractions;};
-  float GetEneDepos() {return fEneDep;};
-  float GetTime() {return fTime;};
-  TVector3 GetHitPosition() {return fPosition;};
-  TVector3 GetPolarizationIn() {return fPolarizationIn;};
-  TVector3 GetPolarizationOut() {return fPolarizationOut;};
-  TVector3 GetMomentumIn() {return fMomentumIn;};
-  TVector3 GetMomentumOut() {return fMomentumOut;};
+  void SetEvtID(int x)
+  {
+    fEvtID = x;
+  };
+
+  void SetScinID(int x)
+  {
+    fScinID = x;
+  };
+
+  void SetTrackID(int x)
+  {
+    fTrackID = x;
+  };
+
+  void SetTrackPDG(int x)
+  {
+    fTrackPDGencoding = x;
+  };
+
+  void SetNumOfInteractions(int x)
+  {
+    fNumOfInteractions = x;
+  };
+
+  void SetEneDepos(float x)
+  {
+    fEneDep = x;
+  };
+
+  void SetTime(float x)
+  {
+    fTime = x;
+  };
+
+  void SetHitPosition(TVector3 x)
+  {
+    fPosition = x;
+  };
+
+  void SetHitPosition(float x, float y, float z)
+  {
+    fPosition.SetXYZ(x, y, z);
+  };
+
+  void SetPolarizationIn(TVector3 x)
+  {
+    fPolarizationIn = x;
+  };
+
+  void SetPolarizationIn(float x, float y, float z)
+  {
+    fPolarizationIn.SetXYZ(x, y, z);
+  };
+
+  void SetPolarizationOut(TVector3 x)
+  {
+    fPolarizationOut = x;
+  };
+
+  void SetPolarizationOut(float x, float y, float z)
+  {
+    fPolarizationOut.SetXYZ(x, y, z);
+  };
+
+  void SetMomentumIn(TVector3 x)
+  {
+    fMomentumIn = x;
+  };
+
+  void SetMomentumIn(float x, float y, float z)
+  {
+    fMomentumIn.SetXYZ(x, y, z);
+  };
+
+  void SetMomentumOut(TVector3 x)
+  {
+    fMomentumOut = x;
+  };
+
+  void SetMomentumOut(float x, float y, float z)
+  {
+    fMomentumOut.SetXYZ(x, y, z);
+  };
+
+  int GetEvtID()
+  {
+    return fEvtID;
+  };
+
+  int GetScinID()
+  {
+    return fScinID;
+  };
+
+  int GetTrackID()
+  {
+    return fTrackID;
+  };
+
+  int GetTrackPDG()
+  {
+    return fTrackPDGencoding;
+  };
+
+  int GetNumOfInteractions()
+  {
+    return fNumOfInteractions;
+  };
+
+  float GetEneDepos()
+  {
+    return fEneDep;
+  };
+
+  float GetTime()
+  {
+    return fTime;
+  };
+
+  TVector3 GetHitPosition()
+  {
+    return fPosition;
+  };
+
+  TVector3 GetPolarizationIn()
+  {
+    return fPolarizationIn;
+  };
+
+  TVector3 GetPolarizationOut()
+  {
+    return fPolarizationOut;
+  };
+
+  TVector3 GetMomentumIn()
+  {
+    return fMomentumIn;
+  };
+
+  TVector3 GetMomentumOut()
+  {
+    return fMomentumOut;
+  };
+
   // generated cheatsheet
-  void SetGenGammaMultiplicity(int i) {fGenGammaMultiplicity = i;}
-  void SetGenGammaIndex(int i) {fGenGammaIndex = i;}
-  int GetGenGammaMultiplicity() {return fGenGammaMultiplicity;}
-  int GetGenGammaIndex() {return fGenGammaIndex;}
+  void SetGenGammaMultiplicity(int i)
+  {
+    fGenGammaMultiplicity = i;
+  }
+
+  void SetGenGammaIndex(int i)
+  {
+    fGenGammaIndex = i;
+  }
+
+  int GetGenGammaMultiplicity()
+  {
+    return fGenGammaMultiplicity;
+  }
+
+  int GetGenGammaIndex()
+  {
+    return fGenGammaIndex;
+  }
 
 private:
   int fEvtID;

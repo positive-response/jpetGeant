@@ -34,8 +34,7 @@ EventAction::~EventAction() {}
 void EventAction::BeginOfEventAction(const G4Event* anEvent)
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  if (fScinCollID < 0) 
-  {
+  if (fScinCollID < 0) {
     G4String colNam;
     fScinCollID = SDman->GetCollectionID(colNam = "detectorCollection");
   }
@@ -45,12 +44,11 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
 
-  if (anEvent->GetNumberOfPrimaryVertex() == 0) 
-    return;
-  if(fEvtMessenger->KillEventsEscapingWorld()) 
-  {
-    if(G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted())
+  if (anEvent->GetNumberOfPrimaryVertex() == 0) return;
+  if(fEvtMessenger->KillEventsEscapingWorld()) {
+    if(G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted()){
       return;
+    }
   }
 
   WriteToFile(anEvent);
@@ -66,12 +64,10 @@ void EventAction::WriteToFile(const G4Event* anEvent)
   //save information about registered events
   G4HCofThisEvent* HCE = anEvent->GetHCofThisEvent();
   DetectorHitsCollection* DHC = 0;
-  if (HCE) 
-  {
+  if (HCE) {
     DHC = dynamic_cast<DetectorHitsCollection*>(HCE->GetHC(fScinCollID));
     int n_hit = DHC->entries();
-    for (int i = 0; i < n_hit; i++) 
-    {
+    for (int i = 0; i < n_hit; i++) {
       DetectorHit* dh =  dynamic_cast<DetectorHit*>(DHC->GetHit(i));
       fHisto->AddNewHit(dh);
     }

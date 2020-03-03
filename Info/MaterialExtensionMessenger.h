@@ -48,9 +48,9 @@ private:
   G4UIcmdWithoutParameter* f3GammaOnly = nullptr;
   G4UIcmdWithoutParameter* f2GammaOnly = nullptr;
   G4UIcmdWithoutParameter* fPickOffOnly = nullptr;
-  G4UIcmdWithAString* fXADAdd_oPsComponent = nullptr;
-  G4UIcmdWithAString* fXADSet_pPsComponent = nullptr;
-  G4UIcmdWithAString* fXADAdd_directComponent = nullptr;
+  G4UIcmdWithAString* fAdd_oPsComponent = nullptr;
+  G4UIcmdWithAString* fSet_pPsComponent = nullptr;
+  G4UIcmdWithAString* fAdd_directComponent = nullptr;
   G4UIcmdWithAString* fReloadMaterials = nullptr;
 
   bool fIsOnly3g = true;

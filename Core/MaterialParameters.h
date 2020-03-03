@@ -52,6 +52,8 @@ public:
                       G4double pPsLF, G4double pPsFrac, 
                       std::vector<G4double> DirectLF, std::vector<G4double> DirectProb);
   static const G4double oPsTauVaccum;
+  static const G4double directTauMax;
+  static const G4double pPsTauVaccum;
   static const G4double tauBulk;
   static const G4double direct3Gfraction;
 //! doi 10.2478/umcschem-2013-0012          1/372

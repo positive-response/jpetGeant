@@ -27,8 +27,7 @@ public:
   virtual void Initialize(G4HCofThisEvent* HCE);
 
 private:
-  struct HitParameters 
-  {
+  struct HitParameters {
     public:
       G4int fID = -1;
       G4double fTime = 0.0;

@@ -128,6 +128,28 @@ void DetectorConstruction::ReloadMaterials(G4String material)
     fXADMaterial->ChangeMaterialConstants();
     fXADMaterial->FillIntensities();
   }
+  else if( material == "kapton" )
+  {
+    fKapton->ChangeMaterialConstants();
+    fKapton->FillIntensities();      
+  }
+  else if( material == "aluminium" )
+  {
+    fAluminiumMaterial->ChangeMaterialConstants();
+    fAluminiumMaterial->FillIntensities();
+    fSmallChamberMaterial->ChangeMaterialConstants();
+    fSmallChamberMaterial->FillIntensities();
+  }
+  else if( material == "plexiglass" )
+  {
+    fPlexiglass->ChangeMaterialConstants();
+    fPlexiglass->FillIntensities();
+  }
+  else if( material == "pa6" )
+  {
+    fSmallChamberRun7Material->ChangeMaterialConstants();
+    fSmallChamberRun7Material->FillIntensities();
+  }
 }
 
 void DetectorConstruction::InitializeMaterials()
@@ -299,7 +321,6 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 	  25.4669, 25.49579, 25.54379, 25.61085, 25.6968, 25.8015};
 
   std::vector<G4double> radius_dynamic = std::vector<G4double>(13,0.0);
-  //G4double radius_dynamic[13]={0};
 
   //! sum of already constructed scintillators;
   G4int icopyI = 193;

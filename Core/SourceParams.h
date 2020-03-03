@@ -27,14 +27,42 @@ public:
   SourceParams();
   ~SourceParams();
 
-  void SetGammasNumber(G4int i) {howManyGammas = i;}
+  void SetGammasNumber(G4int i)
+  {
+    howManyGammas = i;
+  }
+
   void SetShape(G4String& newShape);
-  void SetShapeCenterPosition(G4double x, G4double y, G4double z) {shapeCenterPosition.set(x, y, z);}
-  void SetShapeDim(G4int i, G4double x) {shapeDim[i] = x;}
-  G4int GetGammasNumber() {return howManyGammas;}
-  G4String GetShape() {return shape;}
-  G4double GetShapeDim(G4int i) {return shapeDim[i];}
-  G4ThreeVector GetShapeCenterPosition() {return shapeCenterPosition;}
+
+  void SetShapeCenterPosition(G4double x, G4double y, G4double z)
+  {
+    shapeCenterPosition.set(x, y, z);
+  }
+
+  void SetShapeDim(G4int i, G4double x)
+  {
+    shapeDim[i] = x;
+  }
+
+  G4int GetGammasNumber()
+  {
+    return howManyGammas;
+  }
+
+  G4String GetShape()
+  {
+    return shape;
+  }
+
+  G4double GetShapeDim(G4int i)
+  {
+    return shapeDim[i];
+  }
+
+  G4ThreeVector GetShapeCenterPosition()
+  {
+    return shapeCenterPosition;
+  }
 
 private:
   G4int howManyGammas;
@@ -43,6 +71,7 @@ private:
   G4ThreeVector shapeCenterPosition;
   //! array of dimensions, for cylinder [0] - radius, [1] - z
   G4double shapeDim[10] = {0 * cm};
+
 };
 
 #endif

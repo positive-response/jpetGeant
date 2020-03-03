@@ -42,7 +42,6 @@ public:
 private:
   //! return: vtx position, 2/3g ratio, meanlifetime;
   //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
- // std::tuple<G4ThreeVector, G4double, G4double> GetVerticesDistribution(G4double, G4double, G4double);
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionInFilledSphere(const G4ThreeVector center, G4double radius);
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionAlongStepVector(const G4ThreeVector center, const G4ThreeVector direction);
   G4PrimaryVertex* GenerateTwoGammaVertex(const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime2g);

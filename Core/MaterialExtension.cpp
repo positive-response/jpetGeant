@@ -31,34 +31,34 @@ MaterialExtension::MaterialExtension( G4String materialType, const G4String& nam
 
 MaterialExtension::~MaterialExtension() {}
 
-void MaterialExtension::Add_oPsComponent( G4double Lifetime, G4double Probability )
+void MaterialExtension::Add_oPsComponent( G4double lifetime, G4double probability )
 {
-  if(Lifetime < 0. || Lifetime > 142.) 
+  if(lifetime < 0. * ns || lifetime > MaterialParameters::oPsTauVaccum) 
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs lifetime not in the range [0, 142] ns"); 
-  else if( Probability < 0. || Probability > 1.)
-    G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs probability not in the range [0, 1]"); 
+  else if( probability < 0. || probability > 100.)
+    G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs probability not in the range [0, 100] %"); 
   else 
-    Material->Add_oPsComponent(Lifetime, Probability);
+    Material->Add_oPsComponent(lifetime, probability);
 }
 
-void MaterialExtension::Add_directComponent( G4double Lifetime, G4double Probability )
+void MaterialExtension::Add_directComponent( G4double lifetime, G4double probability )
 {
-  if(Lifetime < 0.1 || Lifetime > 0.6) 
-    G4Exception("MaterialExtension", "ME01", JustWarning, "given direct lifetime not in the range [0.1, 0.6] ns"); 
-  else if( Probability < 0. || Probability > 1.)
-    G4Exception("MaterialExtension", "ME01", JustWarning, "given direct probability not in the range [0, 1]"); 
+  if(lifetime < 0. * ns || lifetime > MaterialParameters::directTauMax) 
+    G4Exception("MaterialExtension", "ME01", JustWarning, "given direct lifetime not in the range [0, 0.6] ns"); 
+  else if( probability < 0. || probability > 100.)
+    G4Exception("MaterialExtension", "ME01", JustWarning, "given direct probability not in the range [0, 100] %"); 
   else 
-    Material->Add_DirectComponent(Lifetime, Probability);
+    Material->Add_DirectComponent(lifetime, probability);
 }
 
-void MaterialExtension::Set_pPsComponent(G4double Lifetime, G4double Fraction)
+void MaterialExtension::Set_pPsComponent(G4double lifetime, G4double fraction)
 {
-  if( Lifetime < 0. || Lifetime > 0.2 ) 
+  if( lifetime < 0. * ns || lifetime > 0.2 ) 
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs lifetime not in the range [0, 0.2] ns"); 
-  else if( Fraction < 0. || Fraction > 1.)
+  else if( fraction < 0. || fraction > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs fraction not in the range [0, 1]"); 
   else 
-    Material->Set_pPsComponent(Lifetime, Fraction);
+    Material->Set_pPsComponent(lifetime, fraction);
 }
 
 const G4double MaterialExtension::GetLifetime( double randNumber, G4String channel )

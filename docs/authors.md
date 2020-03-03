@@ -1,6 +1,6 @@
 # Authors
 
-- [Daria Kisielewska](https://github.com/daria137)  main former developer
+- [Daria Kisielewska](https://github.com/daria137)  former main developer
 - [Wojciech Krzemień](https://github.com/wkrzemien) main recent developer
 - [Kamil Dulski](https://github.com/kdulski)        developing manager
 - [Sushil Sharma](https://github.com/pnp-sushil)

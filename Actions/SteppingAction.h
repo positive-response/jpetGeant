@@ -24,6 +24,7 @@ public:
   SteppingAction();
   ~SteppingAction();
   virtual void UserSteppingAction(const G4Step*);
+
 };
 
 #endif

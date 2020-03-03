@@ -52,8 +52,7 @@ Trajectory::Trajectory(const G4Track* aTrack) : G4VTrajectory(), fPositionRecord
 Trajectory::~Trajectory()
 {
   size_t i;
-  for (i = 0; i < fPositionRecord->size(); i++) 
-  {
+  for (i = 0; i < fPositionRecord->size(); i++) {
     delete (*fPositionRecord)[i];
   }
   fPositionRecord->clear();
@@ -62,13 +61,11 @@ Trajectory::~Trajectory()
 
 void Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
-  if (!secondTrajectory) 
-    return;
+  if (!secondTrajectory) return;
   Trajectory* seco = (Trajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
   //! initial point of the second trajectory should not be merged
-  for (int i = 1; i < ent; i++) 
-  {
+  for (int i = 1; i < ent; i++) {
     fPositionRecord->push_back((*(seco->fPositionRecord))[i]);
   }
   delete (*seco->fPositionRecord)[0];
@@ -77,5 +74,7 @@ void Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 
 void Trajectory::AppendStep(const G4Step* aStep)
 {
-  fPositionRecord->push_back(new G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition()));
+  fPositionRecord->push_back(
+    new G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition())
+  );
 }

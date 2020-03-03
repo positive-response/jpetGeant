@@ -322,7 +322,6 @@ void HistoManager::writeError(const char* nameOfHistogram, const char* messageEn
   if( existenceCheck == fErrorCounts.end() )
   {
     fErrorCounts.insert(std::string(nameOfHistogram));
-  //  ERROR(std::string("Histogram with name ") + std::string(nameOfHistogram) + std::string(messageEnd) );
     std::cout << "!!![Error]!!!  -  Histogram with name " << nameOfHistogram  << " " << messageEnd << std::endl;
   }
 }
