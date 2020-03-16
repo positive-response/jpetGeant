@@ -33,19 +33,25 @@
 class MaterialExtension : public G4Material
 {
 public:
-  MaterialExtension(G4String materialType, const G4String& name, const G4Material* baseMaterial);
+  MaterialExtension(const G4String& materialType, const G4String& name, const G4Material* baseMaterial);
   ~MaterialExtension();
 
   G4Material* GetMaterial(){return fMaterial;};
   void Add_oPsComponent(G4double Lifetime, G4double Probability);
   void Add_directComponent(G4double Lifetime, G4double Probability);
   void Set_pPsComponent(G4double Lifetime, G4double Fraction);
-  const G4double GetLifetime(double randNumber, G4String channel);
+  const G4double GetLifetime(double randNumber, G4String channel) const;
+  
+/* Changing lifetime and intensity parameters of Material to the parameters from 
+ * the dummy object MaterialParameters::Temp that are currently set on it.
+ * This object allows to modify its parameters by the user on the macro level
+ * After every call of ChangeMaterialConstants() object MaterialParameters::Temp
+   is cleared in the meesenger for further modification of different material*/
   void ChangeMaterialConstants();
 
-  void FillIntensities() {Material->Set_ComponentsIntensities();};
+  void FillIntensities() {fMaterialParameters->Set_ComponentsIntensities();};
   //! 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
-  const std::vector<G4double> GetEventsFraction();
+  const std::vector<G4double> GetEventsFraction() const;
 
   G4bool IsTarget() {return fTarget;};
   void AllowsAnnihilations(G4bool tf) {fTarget = tf;};
@@ -54,11 +60,11 @@ public:
   G4bool IsExtended() const {return true;}
 
 private:
-  G4Material* fMaterial;
+  G4Material* fMaterial = nullptr;
   MaterialExtensionMessenger* fMaterialExtensionMessenger
     = MaterialExtensionMessenger::GetMaterialExtensionMessenger();
   G4bool fTarget;
-  MaterialParameters *Material;
+  MaterialParameters *fMaterialParameters = nullptr;
 };
 
 #endif

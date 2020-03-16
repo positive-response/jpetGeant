@@ -32,19 +32,19 @@ void HistoManager::createHistogramWithAxes(TObject* object, TString xAxisName, T
   TClass *cl = object->IsA();
   if (cl->InheritsFrom("TH1D"))
   {
-    TH1D* tempHisto = dynamic_cast<TH1D*>(object);
+    TH1D* tempHisto = static_cast<TH1D*>(object);
     tempHisto->GetXaxis()->SetTitle(xAxisName);
     tempHisto->GetYaxis()->SetTitle(yAxisName);
   }
   else if (cl->InheritsFrom("TH2D"))
   {
-    TH2D* tempHisto = dynamic_cast<TH2D*>(object);
+    TH2D* tempHisto = static_cast<TH2D*>(object);
     tempHisto->GetXaxis()->SetTitle(xAxisName);
     tempHisto->GetYaxis()->SetTitle(yAxisName);
   }
   else if (cl->InheritsFrom("TH3D"))
   {
-    TH3D* tempHisto = dynamic_cast<TH3D*>(object);
+    TH3D* tempHisto = static_cast<TH3D*>(object);
     tempHisto->GetXaxis()->SetTitle(xAxisName);
     tempHisto->GetYaxis()->SetTitle(yAxisName);
     tempHisto->GetZaxis()->SetTitle(zAxisName);
@@ -63,12 +63,12 @@ void HistoManager::fillHistogram(const char* name, double xValue, doubleCheck yV
   TClass *cl = tempObject->IsA();
   if (cl->InheritsFrom("TH1D"))
   {
-    TH1D* tempHisto = dynamic_cast<TH1D*>(tempObject);
+    TH1D* tempHisto = static_cast<TH1D*>(tempObject);
     tempHisto->Fill(xValue);
   }
   else if (cl->InheritsFrom("TH2D"))
   {
-    TH2D* tempHisto = dynamic_cast<TH2D*>(tempObject);
+    TH2D* tempHisto = static_cast<TH2D*>(tempObject);
     if (yValue.isChanged)
       tempHisto->Fill(xValue, yValue.value);
     else
@@ -76,18 +76,25 @@ void HistoManager::fillHistogram(const char* name, double xValue, doubleCheck yV
   }
   else if (cl->InheritsFrom("TH3D"))
   {
-    TH3D* tempHisto = dynamic_cast<TH3D*>(tempObject);
+    TH3D* tempHisto = static_cast<TH3D*>(tempObject);
     if (zValue.isChanged)
       tempHisto->Fill(xValue, yValue.value, zValue.value);
     else if (yValue.isChanged)
       writeError(name, " does not received argument for Y and Z axis");
     else
       writeError(name, " does not received argument for Z axis");
-  }  
+  }
+  else
+  {
+    writeError(name, " is not of any of used types (TH1D, TH2D, TH3D)" );
+  }
 }
 
 void HistoManager::Book()
 {
+  if(bookStatus)
+    return;
+  
   G4String fileName = "mcGeant.root";
 
   if (fEvtMessenger->AddDatetime())
@@ -123,8 +130,10 @@ void HistoManager::Book()
   fTree->SetAutoSave(1000000000);
   fBranchEventPack = fTree->Branch("eventPack", &fEventPack, bufsize, splitlevel);
 
-  if (MakeControlHisto()) 
+  if (GetMakeControlHisto()) 
     BookHistograms();
+  
+  bookStatus = true;
 }
 
 void HistoManager::BookHistograms()
@@ -233,7 +242,7 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     fGeantInfo->SetLifetime(info->GetLifetime() / ps);
     fGeantInfo->SetRunNr(info->GetRunNr());
 
-    if (MakeControlHisto()) 
+    if (GetMakeControlHisto()) 
     {
       if (is2g) 
       {
@@ -259,7 +268,7 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     fGeantInfo->SetVtxPromptPosition(info->GetVtxPositionX() / cm, info->GetVtxPositionY() / cm, info->GetVtxPositionZ() / cm);
     fGeantInfo->SetRunNr(info->GetRunNr());
     
-    if (MakeControlHisto()) 
+    if (GetMakeControlHisto()) 
     {
       fillHistogram("gen_gamma_multiplicity", 1 );
       fillHistogram("gen_prompt_lifetime", info->GetLifetime() / ps );
@@ -291,7 +300,7 @@ void HistoManager::AddNewHit(DetectorHit* hit)
   geantHit->SetGenGammaMultiplicity(hit->GetGenGammaMultiplicity());
   geantHit->SetGenGammaIndex(hit->GetGenGammaIndex());
 
-  if (MakeControlHisto()) 
+  if (GetMakeControlHisto()) 
   {
     fillHistogram("gen_hit_time", hit->GetTime() / ps);
     fillHistogram("gen_hit_eneDepos", hit->GetEdep() / keV);
@@ -305,7 +314,7 @@ void HistoManager::Save()
   if (!fRootFile) 
     return;
   fTree->Write();
-  if (MakeControlHisto()) 
+  if (GetMakeControlHisto()) 
   {
     TIterator* it = fStats.MakeIterator();
     TObject* obj;
@@ -318,10 +327,11 @@ void HistoManager::Save()
 
 void HistoManager::writeError(const char* nameOfHistogram, const char* messageEnd)
 {
-  std::set<std::string>::iterator existenceCheck = fErrorCounts.find(std::string(nameOfHistogram));
-  if( existenceCheck == fErrorCounts.end() )
-  {
-    fErrorCounts.insert(std::string(nameOfHistogram));
-    std::cout << "!!![Error]!!!  -  Histogram with name " << nameOfHistogram  << " " << messageEnd << std::endl;
-  }
+    std::string histName (nameOfHistogram);
+    bool histExists =  (fErrorCounts.find(histName) != fErrorCounts.end());
+    if (!histExists) 
+    {
+        fErrorCounts.insert(histName);
+        std::cout << "!!![Error]!!!  -  Histogram with name " << histName << " " << messageEnd << std::endl;
+    }
 }

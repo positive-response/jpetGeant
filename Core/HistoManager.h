@@ -36,9 +36,8 @@
 class TFile;
 class TTree;
 
-class doubleCheck
+struct doubleCheck
 {
-public:
   bool isChanged = false;
   double value = 0.;
   doubleCheck(){}
@@ -65,7 +64,7 @@ public:
   void AddNewHit(DetectorHit*);
   void SetEventNumber(int x) {fEventPack->SetEventNumber(x);};
   void SetHistogramCreation(bool tf) {fMakeControlHisto = tf;};
-  bool MakeControlHisto() {return fMakeControlHisto;};
+  bool GetMakeControlHisto() {return fMakeControlHisto;};
   void FillHistoGenInfo(const G4Event* anEvent);
   const JPetGeantEventInformation* GetGeantInfo() {return fGeantInfo;}
   
@@ -83,15 +82,16 @@ public:
   }
   
 private:
+  bool bookStatus = false;
   bool fMakeControlHisto;
-  TFile* fRootFile;
-  TTree* fTree;
-  TBranch* fBranchTrk;
-  TBranch* fBranchScin;
-  TBranch* fBranchEventPack;
+  TFile* fRootFile = nullptr;
+  TTree* fTree = nullptr;
+  TBranch* fBranchTrk = nullptr;
+  TBranch* fBranchScin = nullptr;
+  TBranch* fBranchEventPack = nullptr;
 
-  JPetGeantEventPack* fEventPack;
-  JPetGeantEventInformation* fGeantInfo;
+  JPetGeantEventPack* fEventPack = nullptr;
+  JPetGeantEventInformation* fGeantInfo = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
   void BookHistograms();

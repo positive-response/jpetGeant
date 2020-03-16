@@ -24,9 +24,9 @@
 
 struct MaterialConstants
 {
-  MaterialConstants(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
+  MaterialConstants(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb, 
                     G4double pPsLF, G4double pPsFrac, 
-                    std::vector<G4double> DirLF, std::vector<G4double> DirProb);
+                    const std::vector<G4double> & DirLF, const std::vector<G4double> & DirProb);
   std::vector<G4double> oPsLifetimes;
   std::vector<G4double> oPsProbabilities;
   G4double pPsLifetime;
@@ -48,12 +48,13 @@ public:
   static MaterialConstants Temp;
   
   MaterialParameters();
-  MaterialParameters(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
+  MaterialParameters(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb, 
                       G4double pPsLF, G4double pPsFrac, 
-                      std::vector<G4double> DirectLF, std::vector<G4double> DirectProb);
+                      const std::vector<G4double> & DirectLF, const std::vector<G4double> & DirectProb);
   static const G4double oPsTauVaccum;
   static const G4double directTauMax;
   static const G4double pPsTauVaccum;
+  static const G4double pPsTauMax;
   static const G4double tauBulk;
   static const G4double direct3Gfraction;
 //! doi 10.2478/umcschem-2013-0012          1/372
@@ -67,10 +68,10 @@ public:
   void SetMaterial(MaterialConstants mat);
   void SetMaterialByName(G4String materialID);
   void Add_oPsComponent(G4double Lifetime, G4double Probability);
-  void Set_oPsComponents(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb);
+  void Set_oPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb);
   void Set_pPsComponent(G4double Lifetime, G4double Fraction);
   void Add_DirectComponent(G4double Lifetime, G4double Probability);
-  void Set_DirectComponents(std::vector<G4double> DirectLF, std::vector<G4double> DirectProb);
+  void Set_DirectComponents(const std::vector<G4double> & DirectLF, const std::vector<G4double> & DirectProb);
 
   G4double GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability);
   G4double GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability);

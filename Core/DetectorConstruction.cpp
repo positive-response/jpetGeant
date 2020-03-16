@@ -121,7 +121,7 @@ void DetectorConstruction::UpdateGeometry()
   RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
-void DetectorConstruction::ReloadMaterials(G4String material)
+void DetectorConstruction::ReloadMaterials(const G4String& material)
 {
   if( material == "xad4" )
   {
@@ -279,7 +279,6 @@ void DetectorConstruction::ConstructScintillators()
         G4String nameWrapping = "wrapping_" + G4UIcommand::ConvertToString(icopy);
         new G4PVPlacement(transform, wrappingLog, nameWrapping, fWorldLogical, true, icopy, checkOverlaps);
       }
-      
       icopy++;
     }
   }

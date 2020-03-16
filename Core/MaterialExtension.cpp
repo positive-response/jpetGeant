@@ -16,7 +16,7 @@
 #include "MaterialParameters.h"
 #include "MaterialExtension.h"
 
-MaterialExtension::MaterialExtension( G4String materialType, const G4String& name, const G4Material* baseMaterial) :
+MaterialExtension::MaterialExtension( const G4String& materialType, const G4String& name, const G4Material* baseMaterial) :
   G4Material(
     name, baseMaterial->GetDensity(), baseMaterial, baseMaterial->GetState(),
     baseMaterial->GetTemperature(), baseMaterial->GetPressure()
@@ -24,8 +24,8 @@ MaterialExtension::MaterialExtension( G4String materialType, const G4String& nam
 {
   fTarget = false ;
   //! depends on the material typ
-  Material = new MaterialParameters();
-  Material->SetMaterialByName(materialType);
+  fMaterialParameters = new MaterialParameters();
+  fMaterialParameters->SetMaterialByName(materialType);
   FillIntensities();
 }
 
@@ -33,52 +33,52 @@ MaterialExtension::~MaterialExtension() {}
 
 void MaterialExtension::Add_oPsComponent( G4double lifetime, G4double probability )
 {
-  if(lifetime < 0. * ns || lifetime > MaterialParameters::oPsTauVaccum) 
+  if(lifetime < 0. || lifetime > MaterialParameters::oPsTauVaccum) // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs lifetime not in the range [0, 142] ns"); 
   else if( probability < 0. || probability > 100.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs probability not in the range [0, 100] %"); 
   else 
-    Material->Add_oPsComponent(lifetime, probability);
+    fMaterialParameters->Add_oPsComponent(lifetime, probability);
 }
 
 void MaterialExtension::Add_directComponent( G4double lifetime, G4double probability )
 {
-  if(lifetime < 0. * ns || lifetime > MaterialParameters::directTauMax) 
+  if(lifetime < 0. || lifetime > MaterialParameters::directTauMax) // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct lifetime not in the range [0, 0.6] ns"); 
   else if( probability < 0. || probability > 100.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct probability not in the range [0, 100] %"); 
   else 
-    Material->Add_DirectComponent(lifetime, probability);
+    fMaterialParameters->Add_DirectComponent(lifetime, probability);
 }
 
 void MaterialExtension::Set_pPsComponent(G4double lifetime, G4double fraction)
 {
-  if( lifetime < 0. * ns || lifetime > 0.2 ) 
+  if( lifetime < 0. || lifetime > MaterialParameters::pPsTauMax )                           // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs lifetime not in the range [0, 0.2] ns"); 
   else if( fraction < 0. || fraction > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs fraction not in the range [0, 1]"); 
   else 
-    Material->Set_pPsComponent(lifetime, fraction);
+    fMaterialParameters->Set_pPsComponent(lifetime, fraction);
 }
 
-const G4double MaterialExtension::GetLifetime( double randNumber, G4String channel )
+const G4double MaterialExtension::GetLifetime( double randNumber, G4String channel ) const
 {
   if( channel == "ortho2G" )
-    return Material->GetoPs2GLifetimeFromVector(randNumber);
+    return fMaterialParameters->GetoPs2GLifetimeFromVector(randNumber);
   else if( channel == "ortho3G" )
-    return Material->GetoPs3GLifetimeFromVector(randNumber);  
+    return fMaterialParameters->GetoPs3GLifetimeFromVector(randNumber);  
   else if( channel == "para2G" )
-    return Material->GetpPsLifetime();
+    return fMaterialParameters->GetpPsLifetime();
   else
-    return Material->GetDirectLifetimeFromVector(randNumber);
+    return fMaterialParameters->GetDirectLifetimeFromVector(randNumber);
 }
 
 void MaterialExtension::ChangeMaterialConstants()
 {
-  Material->SetMaterialByName("");
+  fMaterialParameters->SetMaterialByName("");
 }
 
-const std::vector<G4double> MaterialExtension::GetEventsFraction()
+const std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if(MaterialParameters::AnnihlationMode != "")
@@ -100,11 +100,11 @@ const std::vector<G4double> MaterialExtension::GetEventsFraction()
     }
   }
     
-  G4double pPs = Material->GetpPs2GTotalIntensity();
-  G4double direct2g = Material->GetDirect2GTotalIntensity();
-  G4double oPs2G = Material->GetoPs2GTotalIntensity();
-  G4double direct3g = Material->GetDirect3GTotalIntensity();
-  G4double oPs3G = Material->GetoPs3GTotalIntensity();
+  G4double pPs = fMaterialParameters->GetpPs2GTotalIntensity();
+  G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();
+  G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
+  G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
+  G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
 
   //! 2g direct // 2g pickoff // 3g direct // 3g oPs
   frac = {

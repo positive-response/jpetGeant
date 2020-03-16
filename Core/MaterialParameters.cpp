@@ -15,9 +15,9 @@
 
 #include "MaterialParameters.h"
 
-MaterialConstants::MaterialConstants(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
+MaterialConstants::MaterialConstants(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb, 
                                         G4double pPsLF, G4double pPsFrac, 
-                                        std::vector<G4double> DirLF, std::vector<G4double> DirProb)
+                                        const std::vector<G4double> & DirLF, const std::vector<G4double> & DirProb)
 {
   oPsLifetimes = oPsLF;
   oPsProbabilities = oPsProb;
@@ -29,7 +29,7 @@ MaterialConstants::MaterialConstants(std::vector<G4double> oPsLF, std::vector<G4
 
 const G4double MaterialParameters::oPsTauVaccum =  142.0 * ns;
 const G4double MaterialParameters::directTauMax = 0.6 * ns;
-const G4double MaterialParameters::pPsTauVaccum = 0.2 * ns;
+const G4double MaterialParameters::pPsTauMax = 0.2 * ns;
 const G4double MaterialParameters::tauBulk = 0.3;
 const G4double MaterialParameters::direct3Gfraction =  0.002688;
 const G4double MaterialParameters::sodiumGammaEnergy = 1.2770 * MeV;
@@ -65,9 +65,9 @@ MaterialParameters::MaterialParameters()
   AnnihlationMode = "";
 }
 
-MaterialParameters::MaterialParameters(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb, 
-                      G4double pPsLF, G4double pPsFrac, 
-                      std::vector<G4double> DirectLF, std::vector<G4double> DirectProb)
+MaterialParameters::MaterialParameters(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb, 
+                                        G4double pPsLF, G4double pPsFrac, 
+                                        const std::vector<G4double> & DirectLF, const std::vector<G4double> & DirectProb)
 {
   foPsLifetimes = oPsLF;
   foPsProbabilities = oPsProb; 
@@ -131,7 +131,7 @@ void MaterialParameters::Add_oPsComponent(G4double lifetime, G4double probabilit
   foPsProbabilities.push_back(probability);
 }
 
-void MaterialParameters::Set_oPsComponents(std::vector<G4double> oPsLF, std::vector<G4double> oPsProb)
+void MaterialParameters::Set_oPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb)
 {
   foPsLifetimes = oPsLF;
   foPsProbabilities = oPsProb;    
@@ -149,7 +149,7 @@ void MaterialParameters::Add_DirectComponent(G4double lifetime, G4double probabi
   fdirectProbabilities.push_back(probability);
 }
 
-void MaterialParameters::Set_DirectComponents(std::vector<G4double> directLF, std::vector<G4double> directProb)
+void MaterialParameters::Set_DirectComponents(const std::vector<G4double> & directLF, const std::vector<G4double> & directProb)
 {
   fdirectLifetimes = directLF;
   fdirectProbabilities = directProb;

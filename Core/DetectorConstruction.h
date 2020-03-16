@@ -58,12 +58,12 @@ public:
   void LoadGeometryForRun(G4int nr);
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
-  void ReloadMaterials(G4String material);
+  void ReloadMaterials(const G4String& material);
 
   void LoadFrame(G4bool tf) {fLoadCADFrame = tf;};
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(G4String module_name)
+  void ConstructModularLayer(const G4String& module_name)
   {
     fLoadModularLayer = true;
     if (module_name == "Single") {fGeoKind = GeometryKind::Geo24ModulesLayer;}
@@ -71,7 +71,7 @@ public:
     else {fLoadModularLayer = false;}
   }
 
-  G4int GetRunNumber() {return fRunNumber;};
+  G4int GetRunNumber() const {return fRunNumber;};
   
 
 private:
@@ -80,7 +80,7 @@ private:
 
   DetectorConstruction();
   virtual ~DetectorConstruction();
-  DetectorConstructionMessenger* fMessenger;
+  DetectorConstructionMessenger* fMessenger = nullptr;
 
   //! Load materials from NIST database
   void InitializeMaterials();
@@ -110,22 +110,22 @@ private:
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
 
-  G4Box* fWorldSolid;
-  G4LogicalVolume* fWorldLogical;
-  G4VPhysicalVolume* fWorldPhysical;
+  G4Box* fWorldSolid = nullptr;
+  G4LogicalVolume* fWorldLogical = nullptr;
+  G4VPhysicalVolume* fWorldPhysical = nullptr;
 
-  MaterialExtension* fAir;
-  MaterialExtension* fKapton;
-  MaterialExtension* fVacuum;
-  MaterialExtension* fPlexiglass;
-  MaterialExtension* fXADMaterial;
-  MaterialExtension* fScinMaterial;
-  MaterialExtension* fAluminiumMaterial;
-  MaterialExtension* fSmallChamberMaterial;
-  MaterialExtension* fSmallChamberRun7Material;
+  MaterialExtension* fAir = nullptr;
+  MaterialExtension* fKapton = nullptr;
+  MaterialExtension* fVacuum = nullptr;
+  MaterialExtension* fPlexiglass = nullptr;
+  MaterialExtension* fXADMaterial = nullptr;
+  MaterialExtension* fScinMaterial = nullptr;
+  MaterialExtension* fAluminiumMaterial = nullptr;
+  MaterialExtension* fSmallChamberMaterial = nullptr;
+  MaterialExtension* fSmallChamberRun7Material = nullptr;
 
-  G4LogicalVolume* fScinLog;
-  G4LogicalVolume* fScinLogInModule;
+  G4LogicalVolume* fScinLog = nullptr;
+  G4LogicalVolume* fScinLogInModule = nullptr;
   G4Cache<DetectorSD*> fDetectorSD;
   // Geometry Kind for the modular layer
   GeometryKind fGeoKind = GeometryKind::Unknown;
