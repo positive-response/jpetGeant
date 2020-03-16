@@ -68,7 +68,10 @@ public:
     fLoadModularLayer = true;
     if (module_name == "Single") {fGeoKind = GeometryKind::Geo24ModulesLayer;}
     else if (module_name == "Double") {fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;}
-    else {fLoadModularLayer = false;}
+    else {
+        fLoadModularLayer = false;
+        fGeoKind = GeometryKind::Unknown;
+    }
   }
 
   G4int GetRunNumber() const {return fRunNumber;};

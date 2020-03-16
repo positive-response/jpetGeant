@@ -53,7 +53,7 @@ public:
   //! 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
   const std::vector<G4double> GetEventsFraction() const;
 
-  G4bool IsTarget() {return fTarget;};
+  G4bool IsTarget() const {return fTarget;};
   void AllowsAnnihilations(G4bool tf) {fTarget = tf;};
   void Print() const {;};
 
