@@ -82,7 +82,7 @@ public:
   }
   
 private:
-  bool bookStatus = false;
+  bool fbookStatus = false;
   bool fMakeControlHisto;
   TFile* fRootFile = nullptr;
   TTree* fTree = nullptr;

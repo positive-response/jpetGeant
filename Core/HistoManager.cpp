@@ -92,7 +92,7 @@ void HistoManager::fillHistogram(const char* name, double xValue, doubleCheck yV
 
 void HistoManager::Book()
 {
-  if(bookStatus)
+  if(fbookStatus)
     return;
   
   G4String fileName = "mcGeant.root";
@@ -133,7 +133,7 @@ void HistoManager::Book()
   if (GetMakeControlHisto()) 
     BookHistograms();
   
-  bookStatus = true;
+  fbookStatus = true;
 }
 
 void HistoManager::BookHistograms()
