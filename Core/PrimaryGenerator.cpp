@@ -21,6 +21,7 @@
 #include "DetectorConstruction.h"
 #include <G4RandomDirection.hh>
 #include "MaterialParameters.h"
+#include "MaterialExtension.h"
 #include "DetectorConstants.h"
 #include "PrimaryGenerator.h"
 #include <G4SystemOfUnits.hh>
@@ -182,28 +183,28 @@ void PrimaryGenerator::GenerateEvtSmallChamber(G4Event* event, const G4double ef
   if (evtFractions[0] > random) // pPs
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random, "para2G")));
+                            material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)));
   }
   else if (evtFractions[0] + evtFractions[1] > random) // Direct 2G
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0], "")));   
+                            material->GetLifetime(random - evtFractions[0], MaterialExtension::DecayChannel::Direct)));   
   }
   else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) // oPs 2G
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0] - evtFractions[1], "ortho2G")));    
+                            material->GetLifetime(random - evtFractions[0] - evtFractions[1], MaterialExtension::DecayChannel::Ortho2G)));    
   }
   else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) // Direct 3G
   {
     event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], "")));
+                            material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)));
   }
   else // oPs 3G
   {
     event->AddPrimaryVertex( GenerateThreeGammaVertex(vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], "ortho3G")));
-  }
+                            material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], MaterialExtension::DecayChannel::Ortho3G)));
+  } 
 
   // Add prompt gamma from sodium
   G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
@@ -264,27 +265,27 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   if (evtFractions[0] > random) // pPs
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random, "para2G")));
+                            material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)));
   }
   else if (evtFractions[0] + evtFractions[1] > random) // Direct 2G
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0], "")));   
+                            material->GetLifetime(random - evtFractions[0], MaterialExtension::DecayChannel::Direct)));   
   }
   else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) // oPs 2G
   {
     event->AddPrimaryVertex(GenerateTwoGammaVertex( vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0] - evtFractions[1], "ortho2G")));    
+                            material->GetLifetime(random - evtFractions[0] - evtFractions[1], MaterialExtension::DecayChannel::Ortho2G)));    
   }
   else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) // Direct 3G
   {
     event->AddPrimaryVertex(GenerateThreeGammaVertex(vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], "")));
+                            material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)));
   }
   else // oPs 3G
   {
     event->AddPrimaryVertex( GenerateThreeGammaVertex(vtxPosition, T0, 
-                            material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], "ortho3G")));
+                            material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], MaterialExtension::DecayChannel::Ortho3G)));
   } 
 
   //! Add prompt gamma from sodium
@@ -299,7 +300,7 @@ void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
   G4PrimaryVertex* vertex = new G4PrimaryVertex(vtxCoor, 0);
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particleDefinition = particleTable->FindParticle("gamma");
-  const G4double ene = beamParams->GetEne();
+  const G4double ene = beamParams->GetEnergy();
   G4ThreeVector momentum = beamParams->GetMomentum();
   G4double px = ene * momentum.x();
   G4double py = ene * momentum.y();

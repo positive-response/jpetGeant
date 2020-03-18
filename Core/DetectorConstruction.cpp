@@ -150,6 +150,10 @@ void DetectorConstruction::ReloadMaterials(const G4String& material)
     fSmallChamberRun7Material->ChangeMaterialConstants();
     fSmallChamberRun7Material->FillIntensities();
   }
+  else
+  {
+    G4Exception("DetectorConstruction","DC01", FatalException, "Wrong material ID given to reload");
+  }
 }
 
 void DetectorConstruction::InitializeMaterials()
@@ -157,37 +161,37 @@ void DetectorConstruction::InitializeMaterials()
   G4NistManager* nistManager = G4NistManager::Instance();
 
   nistManager->FindOrBuildMaterial("G4_AIR");
-  fAir = new MaterialExtension("", "air", G4Material::GetMaterial("G4_AIR"));
+  fAir = new MaterialExtension(MaterialParameters::MaterialID::mAir, "air", G4Material::GetMaterial("G4_AIR"));
 
   nistManager->FindOrBuildMaterial("G4_KAPTON");
-  fKapton = new MaterialExtension("Kapton", "kapton", G4Material::GetMaterial("G4_KAPTON"));
+  fKapton = new MaterialExtension(MaterialParameters::MaterialID::mKapton, "kapton", G4Material::GetMaterial("G4_KAPTON"));
   //fKapton->AllowsAnnihilations(true); ??
 
   nistManager->FindOrBuildMaterial("G4_Galactic");
-  fVacuum = new MaterialExtension("", "vacuum", G4Material::GetMaterial("G4_Galactic"));
+  fVacuum = new MaterialExtension(MaterialParameters::MaterialID::mAir, "vacuum", G4Material::GetMaterial("G4_Galactic"));
 
   nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
-  fPlexiglass = new MaterialExtension("Plexiglass", "bigChamberRun6", G4Material::GetMaterial("G4_PLEXIGLASS"));
+  fPlexiglass = new MaterialExtension(MaterialParameters::MaterialID::mPlexiglass, "bigChamberRun6", G4Material::GetMaterial("G4_PLEXIGLASS"));
   fPlexiglass->AllowsAnnihilations(true);
 
   //! ref: https://www.sigmaaldrich.com/catalog/product/sigma/xad4
   nistManager->FindOrBuildMaterial("G4_POLYSTYRENE");
-  fXADMaterial = new MaterialExtension("XAD4", "XAD", G4Material::GetMaterial("G4_POLYSTYRENE"));
+  fXADMaterial = new MaterialExtension(MaterialParameters::MaterialID::mXAD4, "XAD", G4Material::GetMaterial("G4_POLYSTYRENE"));
   fXADMaterial->AllowsAnnihilations(true);
 
   nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-  fScinMaterial = new MaterialExtension("Scin", "scinMaterial", G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
+  fScinMaterial = new MaterialExtension(MaterialParameters::MaterialID::mScin, "scinMaterial", G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
 
   nistManager->FindOrBuildMaterial("G4_Al");
-  fAluminiumMaterial = new MaterialExtension("Al", "aluminium", G4Material::GetMaterial("G4_Al"));
+  fAluminiumMaterial = new MaterialExtension(MaterialParameters::MaterialID::mAl, "aluminium", G4Material::GetMaterial("G4_Al"));
   fAluminiumMaterial->AllowsAnnihilations(true);
 
-  fSmallChamberMaterial = new MaterialExtension("Al", "smallChamber", G4Material::GetMaterial("G4_Al"));
+  fSmallChamberMaterial = new MaterialExtension(MaterialParameters::MaterialID::mAl, "smallChamber", G4Material::GetMaterial("G4_Al"));
   fSmallChamberMaterial->AllowsAnnihilations(true);
 
 //Polyamide PA6
   nistManager->FindOrBuildMaterial("G4_NYLON-6-6");
-  fSmallChamberRun7Material = new MaterialExtension("PA6", "smallChamberRun7", G4Material::GetMaterial("G4_NYLON-6-6"));
+  fSmallChamberRun7Material = new MaterialExtension(MaterialParameters::MaterialID::mPA6, "smallChamberRun7", G4Material::GetMaterial("G4_NYLON-6-6"));
   fSmallChamberRun7Material->AllowsAnnihilations(true);
 }
 

@@ -14,6 +14,7 @@
  */
 
 #include "MaterialParameters.h"
+#include "MaterialExtension.h"
 
 MaterialConstants::MaterialConstants(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb, 
                                         G4double pPsLF, G4double pPsFrac, 
@@ -75,7 +76,7 @@ MaterialParameters::MaterialParameters(const std::vector<G4double> & oPsLF, cons
   fpPsFraction = pPsFrac;
   fdirectLifetimes = DirectLF;
   fdirectProbabilities = DirectProb;
-  Set_ComponentsIntensities();
+  SetComponentsIntensities();
   AnnihlationMode = "";
 }
 
@@ -97,24 +98,24 @@ void MaterialParameters::SetMaterial(MaterialConstants mat)
   fpPsFraction = mat.pPsFraction;
   fdirectLifetimes = mat.directLifetimes;
   fdirectProbabilities = mat.directProbabilities;
-  Set_ComponentsIntensities();
+  SetComponentsIntensities();
 }
 
-void MaterialParameters::SetMaterialByName(G4String materialID)
+void MaterialParameters::SetMaterialByName(MaterialID materialID)
 {
-  if(materialID == "XAD4")
+  if(materialID == MaterialID::mXAD4)
     SetMaterial(XAD4);
-  else if(materialID == "Al")
+  else if(materialID == MaterialID::mAl)
     SetMaterial(Al);
-  else if(materialID == "Kapton")
+  else if(materialID == MaterialID::mKapton)
     SetMaterial(Kapton);
-  else if(materialID == "Plexiglass")
+  else if(materialID == MaterialID::mPlexiglass)
     SetMaterial(Plexiglass);
-  else if(materialID == "Scin")
+  else if(materialID == MaterialID::mScin)
     SetMaterial(Scin);
-  else if(materialID == "PA6")
+  else if(materialID == MaterialID::mPA6)
     SetMaterial(PA6);
-  else if(materialID == "Air")
+  else if(materialID == MaterialID::mAir)
     SetMaterial(Air);
   else
     SetMaterial(Temp);
@@ -125,37 +126,37 @@ void MaterialParameters::SetAnnihilationMode(G4String mode)
   AnnihlationMode = mode;
 }
 
-void MaterialParameters::Add_oPsComponent(G4double lifetime, G4double probability)
+void MaterialParameters::AddoPsComponent(G4double lifetime, G4double probability)
 {
   foPsLifetimes.push_back(lifetime);
   foPsProbabilities.push_back(probability);
 }
 
-void MaterialParameters::Set_oPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb)
+void MaterialParameters::SetoPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb)
 {
   foPsLifetimes = oPsLF;
   foPsProbabilities = oPsProb;    
 }
 
-void MaterialParameters::Set_pPsComponent(G4double lifetime, G4double fraction)
+void MaterialParameters::SetpPsComponent(G4double lifetime, G4double fraction)
 {
   fpPsLifetime = lifetime;
   fpPsFraction = fraction;    
 }
 
-void MaterialParameters::Add_DirectComponent(G4double lifetime, G4double probability)
+void MaterialParameters::AddDirectComponent(G4double lifetime, G4double probability)
 {
   fdirectLifetimes.push_back(lifetime);
   fdirectProbabilities.push_back(probability);
 }
 
-void MaterialParameters::Set_DirectComponents(const std::vector<G4double> & directLF, const std::vector<G4double> & directProb)
+void MaterialParameters::SetDirectComponents(const std::vector<G4double> & directLF, const std::vector<G4double> & directProb)
 {
   fdirectLifetimes = directLF;
   fdirectProbabilities = directProb;
 }
 
-void MaterialParameters::Set_ComponentsIntensities()
+void MaterialParameters::SetComponentsIntensities()
 {
   foPs2GIntensities.clear();
   foPs3GIntensities.clear();
@@ -268,10 +269,7 @@ G4double MaterialParameters::GetoPs2GLifetimeFromVector(double randNumber)
     if(randNumberNorm > foPs2GIntensities[i])
       return foPsLifetimes[i];
   }
-  if(foPsLifetimes.size())
-    return foPsLifetimes[foPsLifetimes.size() - 1];
-  else
-    return oPsTauVaccum;
+  return GetLifetimeVector(foPsLifetimes);
 }
 
 G4double MaterialParameters::GetoPs3GLifetimeFromVector(double randNumber)
@@ -284,10 +282,7 @@ G4double MaterialParameters::GetoPs3GLifetimeFromVector(double randNumber)
     if(randNumberNorm > foPs3GIntensities[i])
         return foPsLifetimes[i];
   }
-  if(foPsLifetimes.size())
-    return foPsLifetimes[foPsLifetimes.size() - 1];
-  else
-    return oPsTauVaccum;
+  return GetLifetimeVector(foPsLifetimes);
 }
 
 G4double MaterialParameters::GetDirectLifetimeFromVector(double randNumber)
@@ -300,13 +295,18 @@ G4double MaterialParameters::GetDirectLifetimeFromVector(double randNumber)
     if(randNumberNorm > fdirectIntensities[i])
       return fdirectLifetimes[i];
   }
-  if(fdirectLifetimes.size())
-    return fdirectLifetimes[fdirectLifetimes.size() - 1];
-  else
-    return oPsTauVaccum;
+  return GetLifetimeVector(fdirectLifetimes);
 }
 
 G4double MaterialParameters::GetpPsLifetime()
 { 
   return fpPsLifetime; 
+}
+
+G4double MaterialParameters::GetLifetimeVector(std::vector<G4double> vectorToCheck)
+{
+  if(vectorToCheck.size())
+    return vectorToCheck[vectorToCheck.size() - 1];
+  else
+    return oPsTauVaccum;
 }

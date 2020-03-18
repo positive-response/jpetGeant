@@ -16,7 +16,7 @@
 #include "MaterialParameters.h"
 #include "MaterialExtension.h"
 
-MaterialExtension::MaterialExtension( const G4String& materialType, const G4String& name, const G4Material* baseMaterial) :
+MaterialExtension::MaterialExtension( MaterialParameters::MaterialID materialID, const G4String& name, const G4Material* baseMaterial) :
   G4Material(
     name, baseMaterial->GetDensity(), baseMaterial, baseMaterial->GetState(),
     baseMaterial->GetTemperature(), baseMaterial->GetPressure()
@@ -25,57 +25,61 @@ MaterialExtension::MaterialExtension( const G4String& materialType, const G4Stri
   fTarget = false ;
   //! depends on the material typ
   fMaterialParameters = new MaterialParameters();
-  fMaterialParameters->SetMaterialByName(materialType);
+  fMaterialParameters->SetMaterialByName(materialID);
   FillIntensities();
 }
 
 MaterialExtension::~MaterialExtension() {}
 
-void MaterialExtension::Add_oPsComponent( G4double lifetime, G4double probability )
+void MaterialExtension::AddoPsComponent( G4double lifetime, G4double probability )
 {
   if(lifetime < 0. || lifetime > MaterialParameters::oPsTauVaccum) // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs lifetime not in the range [0, 142] ns"); 
   else if( probability < 0. || probability > 100.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given oPs probability not in the range [0, 100] %"); 
   else 
-    fMaterialParameters->Add_oPsComponent(lifetime, probability);
+    fMaterialParameters->AddoPsComponent(lifetime, probability);
 }
 
-void MaterialExtension::Add_directComponent( G4double lifetime, G4double probability )
+void MaterialExtension::AddDirectComponent( G4double lifetime, G4double probability )
 {
   if(lifetime < 0. || lifetime > MaterialParameters::directTauMax) // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct lifetime not in the range [0, 0.6] ns"); 
   else if( probability < 0. || probability > 100.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given direct probability not in the range [0, 100] %"); 
   else 
-    fMaterialParameters->Add_DirectComponent(lifetime, probability);
+    fMaterialParameters->AddDirectComponent(lifetime, probability);
 }
 
-void MaterialExtension::Set_pPsComponent(G4double lifetime, G4double fraction)
+void MaterialExtension::SetpPsComponent(G4double lifetime, G4double fraction)
 {
   if( lifetime < 0. || lifetime > MaterialParameters::pPsTauMax )                           // lifetime given in ns
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs lifetime not in the range [0, 0.2] ns"); 
   else if( fraction < 0. || fraction > 1.)
     G4Exception("MaterialExtension", "ME01", JustWarning, "given pPs fraction not in the range [0, 1]"); 
   else 
-    fMaterialParameters->Set_pPsComponent(lifetime, fraction);
+    fMaterialParameters->SetpPsComponent(lifetime, fraction);
 }
 
-const G4double MaterialExtension::GetLifetime( double randNumber, G4String channel ) const
+const G4double MaterialExtension::GetLifetime( double randNumber, DecayChannel channel ) const
 {
-  if( channel == "ortho2G" )
+  if( channel == DecayChannel::Ortho2G )
     return fMaterialParameters->GetoPs2GLifetimeFromVector(randNumber);
-  else if( channel == "ortho3G" )
+  else if( channel == DecayChannel::Ortho3G )
     return fMaterialParameters->GetoPs3GLifetimeFromVector(randNumber);  
-  else if( channel == "para2G" )
+  else if( channel == DecayChannel::Para2G )
     return fMaterialParameters->GetpPsLifetime();
-  else
+  else if( channel == DecayChannel::Direct )
     return fMaterialParameters->GetDirectLifetimeFromVector(randNumber);
+  else
+  {
+    G4Exception("MaterialExtension", "ME01", JustWarning, "wrong decay channel for GetLifetime function");
+  }
 }
 
 void MaterialExtension::ChangeMaterialConstants()
 {
-  fMaterialParameters->SetMaterialByName("");
+  fMaterialParameters->SetMaterialByName(MaterialParameters::MaterialID::mUnknown);
 }
 
 const std::vector<G4double> MaterialExtension::GetEventsFraction() const

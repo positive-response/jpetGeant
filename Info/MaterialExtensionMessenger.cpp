@@ -40,14 +40,14 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   fPickOffOnly = new G4UIcmdWithoutParameter("/jpetmc/material/pickOffOnly", this);
   fPickOffOnly->SetGuidance("Only 2 gamma events from pick-off/conversion will be generated (lifetime as for 3g)");
 
-  fAdd_oPsComponent = new G4UIcmdWithAString("/jpetmc/material/oPsComponent", this);
-  fAdd_oPsComponent->SetGuidance("Adding oPs annihilation component with mean lifetime and intensity");
+  fAddoPsComponent = new G4UIcmdWithAString("/jpetmc/material/oPsComponent", this);
+  fAddoPsComponent->SetGuidance("Adding oPs annihilation component with mean lifetime and intensity");
   
-  fSet_pPsComponent = new G4UIcmdWithAString("/jpetmc/material/pPsComponent", this);
-  fSet_pPsComponent->SetGuidance("Setting pPs annihilation component to mean lifetime and intensity");
+  fSetpPsComponent = new G4UIcmdWithAString("/jpetmc/material/pPsComponent", this);
+  fSetpPsComponent->SetGuidance("Setting pPs annihilation component to mean lifetime and intensity");
   
-  fAdd_directComponent = new G4UIcmdWithAString("/jpetmc/material/directComponent", this);
-  fAdd_directComponent->SetGuidance("Adding direct positron annihilation component with mean lifetime and intensity");
+  fAddDirectComponent = new G4UIcmdWithAString("/jpetmc/material/directComponent", this);
+  fAddDirectComponent->SetGuidance("Adding direct positron annihilation component with mean lifetime and intensity");
   
   fReloadMaterials = new G4UIcmdWithAString("/jpetmc/material/reloadMaterials", this);
   fReloadMaterials->SetGuidance("Reloading material for parameters given by user");
@@ -58,9 +58,9 @@ MaterialExtensionMessenger::~MaterialExtensionMessenger()
   delete f3GammaOnly;
   delete f2GammaOnly;
   delete fPickOffOnly;
-  delete fAdd_oPsComponent;
-  delete fSet_pPsComponent;
-  delete fAdd_directComponent;
+  delete fAddoPsComponent;
+  delete fSetpPsComponent;
+  delete fAddDirectComponent;
 }
 
 void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -71,7 +71,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::SetAnnihilationMode("pPs2G");
   else if (command == fPickOffOnly)
     MaterialParameters::SetAnnihilationMode("oPs2G");
-  else if (command == fAdd_oPsComponent)
+  else if (command == fAddoPsComponent)
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);
@@ -81,7 +81,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::Temp.oPsLifetimes.push_back(meanLifetime);
     MaterialParameters::Temp.oPsProbabilities.push_back(probability);
   }
-  else if (command == fSet_pPsComponent) 
+  else if (command == fSetpPsComponent) 
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);
@@ -91,7 +91,7 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
     MaterialParameters::Temp.pPsLifetime = meanLifetime;
     MaterialParameters::Temp.pPsFraction = fraction;
   }
-  else if (command == fAdd_directComponent) 
+  else if (command == fAddDirectComponent) 
   {
     G4String paramString = newValue;
     std::istringstream is(paramString);

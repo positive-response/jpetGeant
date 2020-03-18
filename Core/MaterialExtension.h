@@ -33,14 +33,16 @@
 class MaterialExtension : public G4Material
 {
 public:
-  MaterialExtension(const G4String& materialType, const G4String& name, const G4Material* baseMaterial);
+  enum DecayChannel { Ortho2G, Ortho3G, Para2G, Direct};
+    
+  MaterialExtension(MaterialParameters::MaterialID materialID, const G4String& name, const G4Material* baseMaterial);
   ~MaterialExtension();
 
   G4Material* GetMaterial(){return fMaterial;};
-  void Add_oPsComponent(G4double Lifetime, G4double Probability);
-  void Add_directComponent(G4double Lifetime, G4double Probability);
-  void Set_pPsComponent(G4double Lifetime, G4double Fraction);
-  const G4double GetLifetime(double randNumber, G4String channel) const;
+  void AddoPsComponent(G4double Lifetime, G4double Probability);
+  void AddDirectComponent(G4double Lifetime, G4double Probability);
+  void SetpPsComponent(G4double Lifetime, G4double Fraction);
+  const G4double GetLifetime(double randNumber, DecayChannel channel) const;
   
 /* Changing lifetime and intensity parameters of Material to the parameters from 
  * the dummy object MaterialParameters::Temp that are currently set on it.
@@ -49,7 +51,7 @@ public:
    is cleared in the meesenger for further modification of different material*/
   void ChangeMaterialConstants();
 
-  void FillIntensities() {fMaterialParameters->Set_ComponentsIntensities();};
+  void FillIntensities() {fMaterialParameters->SetComponentsIntensities();};
   //! 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
   const std::vector<G4double> GetEventsFraction() const;
 

@@ -38,6 +38,8 @@ struct MaterialConstants
 class MaterialParameters
 {
 public:
+  enum MaterialID { mUnknown, mXAD4, mAl, mKapton, mPlexiglass, mScin, mPA6, mAir};
+    
   static const MaterialConstants XAD4;
   static const MaterialConstants Al;
   static const MaterialConstants Kapton;
@@ -66,16 +68,16 @@ public:
   static void SetAnnihilationMode(G4String mode);
   
   void SetMaterial(MaterialConstants mat);
-  void SetMaterialByName(G4String materialID);
-  void Add_oPsComponent(G4double Lifetime, G4double Probability);
-  void Set_oPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb);
-  void Set_pPsComponent(G4double Lifetime, G4double Fraction);
-  void Add_DirectComponent(G4double Lifetime, G4double Probability);
-  void Set_DirectComponents(const std::vector<G4double> & DirectLF, const std::vector<G4double> & DirectProb);
+  void SetMaterialByName(MaterialID materialID);
+  void AddoPsComponent(G4double Lifetime, G4double Probability);
+  void SetoPsComponents(const std::vector<G4double> & oPsLF, const std::vector<G4double> & oPsProb);
+  void SetpPsComponent(G4double Lifetime, G4double Fraction);
+  void AddDirectComponent(G4double Lifetime, G4double Probability);
+  void SetDirectComponents(const std::vector<G4double> & DirectLF, const std::vector<G4double> & DirectProb);
 
   G4double GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability);
   G4double GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability);
-  void Set_ComponentsIntensities();
+  void SetComponentsIntensities();
   void RenormalizeIntensities(G4double TotalIntensity);
   
   G4double GetoPs2GTotalIntensity();
@@ -87,6 +89,7 @@ public:
   G4double GetoPs3GLifetimeFromVector(double randNumber);
   G4double GetDirectLifetimeFromVector(double randNumber);
   G4double GetpPsLifetime();
+  G4double GetLifetimeVector(std::vector<G4double> vectorToCheck);
 
 private:
 //There can be more than 1 component of oPs so that is why vector is used
