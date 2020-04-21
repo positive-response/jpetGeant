@@ -33,7 +33,7 @@ DetectorConstruction* DetectorConstruction::fInstance = 0;
 
 DetectorConstruction* DetectorConstruction::GetInstance()
 {
-  if (fInstance == 0) 
+  if (fInstance == 0)
     fInstance = new DetectorConstruction();
   return fInstance;
 }
@@ -84,25 +84,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {
-  if (!fDetectorSD.Get()) 
-  {
+  if (!fDetectorSD.Get()) {
     DetectorSD* det = new DetectorSD(
-      "/mydet/detector", ReturnNumberOfScintillators(),
+      "/mydet/detector", maxScinID,
       DetectorConstants::GetMergingTimeValueForScin());
     fDetectorSD.Put(det);
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fDetectorSD.Get());
   SetSensitiveDetector(fScinLog, fDetectorSD.Get());
-  if (fLoadModularLayer) 
+  if (fLoadModularLayer){
     SetSensitiveDetector(fScinLogInModule, fDetectorSD.Get());
+  }
 }
 
 void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
   fRunNumber = nr;
-  if (fRunNumber == 3 ||fRunNumber == 5 ||fRunNumber == 6 ||fRunNumber == 7 || fRunNumber == 0) 
+  if (fRunNumber == 3 ||fRunNumber == 5 ||fRunNumber == 6 ||fRunNumber == 7 || fRunNumber == 0)
     LoadFrame(false);
-  else 
+  else
   {
     G4Exception("DetectorConstruction","DC02", FatalException, "This run setup is not implemented ");
   }
@@ -110,7 +110,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 
 G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
-  if (fLoadModularLayer) 
+  if (fLoadModularLayer)
     return 504;
   else
     return 192;
@@ -131,7 +131,7 @@ void DetectorConstruction::ReloadMaterials(const G4String& material)
   else if( material == "kapton" )
   {
     fKapton->ChangeMaterialConstants();
-    fKapton->FillIntensities();      
+    fKapton->FillIntensities();
   }
   else if( material == "aluminium" )
   {
@@ -209,7 +209,7 @@ void DetectorConstruction::ConstructFrameCAD()
   mesh1->SetScale(mm);
   G4VSolid* cad_solid1 = mesh1->TessellatedMesh();
   G4LogicalVolume* cad_logical = new G4LogicalVolume( cad_solid1, fAluminiumMaterial, "cad_logical");
-  
+
   G4VisAttributes* detVisAtt =  new G4VisAttributes(G4Colour(0.9, 0.9, 0.9));
   detVisAtt->SetForceWireframe(true);
   detVisAtt->SetForceSolid(true);
@@ -228,7 +228,7 @@ void DetectorConstruction::ConstructScintillators()
     DetectorConstants::scinDim[0] / 2.0,
     DetectorConstants::scinDim[1] / 2.0,
     DetectorConstants::scinDim[2] / 2.0);
-  
+
   fScinLog = new G4LogicalVolume(scinBox, fScinMaterial, "scinLogical");
   G4VisAttributes* BoxVisAtt =  new G4VisAttributes(G4Colour(0.447059, 0.623529, 0.811765));
   BoxVisAtt->SetForceWireframe(true);
@@ -253,9 +253,9 @@ void DetectorConstruction::ConstructScintillators()
   BoxVisAttWrapping->SetForceSolid(true);
 
   G4int icopy = 1;
-  for (int j = 0; j < DetectorConstants::layers; j++) 
+  for (int j = 0; j < DetectorConstants::layers; j++)
   {
-    for (int i = 0; i < DetectorConstants::nSegments[j]; i++) 
+    for (int i = 0; i < DetectorConstants::nSegments[j]; i++)
     {
       G4double phi = i * 2 * M_PI / DetectorConstants::nSegments[j];
       G4double fi = M_PI / DetectorConstants::nSegments[j];
@@ -275,7 +275,7 @@ void DetectorConstruction::ConstructScintillators()
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
       new G4PVPlacement(transform, fScinLog, name, fWorldLogical, true, icopy, checkOverlaps);
 
-      if (fLoadWrapping) 
+      if (fLoadWrapping)
       {
         G4VSolid* unionSolid = new G4SubtractionSolid("wrapping", wrappingBox, scinBoxFree);
         wrappingLog = new G4LogicalVolume(unionSolid, fKapton, "wrappingLogical");
@@ -316,7 +316,7 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 
   const G4double radius_24[13] = {38.416, 38.346, 38.289, 38.244, 38.212, 38.192,
     38.186, 38.192, 38.212, 38.244, 38.289, 38.346, 38.416};
-    
+
   const G4double radius_8[13] = {13.4037, 13.2011, 13.0330, 12.9007, 12.8055, 12.7479, 12.7287,
       12.7479, 12.8055, 12.9007, 13.0330, 13.2011, 13.4037};
 
@@ -325,44 +325,41 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 
   std::vector<G4double> radius_dynamic = std::vector<G4double>(13,0.0);
 
-  //! sum of already constructed scintillators;
-  G4int icopyI = 193;
-
+  //! starting ID for modular layer
+  G4int icopyI = 201;
 
   G4double AngDisp_8 =   0.0531204920; // 3.0435^0
   G4double AngDisp_16=   0.0272515011; // 1.561396^0
   G4double AngDisp_24=   0.01815     ; // 1.04^0
 
-  G4double AngDisp_dynamic=0;
-  G4int numberofModules   =0;
-
+  G4double AngDisp_dynamic =0;
+  G4int numberofModules =0;
 
   //Assume: enum GeometryKind { Geo24ModulesLayer, Geo24ModulesLayerDistributed};
   //Single : for 24 modules layer
   //Double : for 8 and 16 layer configuration
 
-  switch (fGeoKind)
-  {
-   case GeometryKind::Geo24ModulesLayer:
-     for (int i=0; i<13; i++) {radius_dynamic[i] = radius_24[i];}
-     numberofModules = 24;
-     AngDisp_dynamic = AngDisp_24;
-     ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
-     break;
-   case GeometryKind::Geo24ModulesLayerDistributed:
-    for (int i=0; i<13; i++) {radius_dynamic[i] = radius_8[i];}
-    numberofModules = 8;
-    AngDisp_dynamic = AngDisp_8;
-    ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
-    for (int i=0; i<13; i++) {radius_dynamic[i] = radius_16[i];}
-    numberofModules = 16;
-    AngDisp_dynamic = AngDisp_16;
-    icopyI = 297;
-    ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
-    break;
-   default:
-    G4cout << " Not a proper option chosen : choose either Single or Double" << G4endl;
-    break;
+  switch (fGeoKind) {
+    case GeometryKind::Geo24ModulesLayer:
+      for (int i=0; i<13; i++) {radius_dynamic[i] = radius_24[i];}
+      numberofModules = 24;
+      AngDisp_dynamic = AngDisp_24;
+      ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+      break;
+    case GeometryKind::Geo24ModulesLayerDistributed:
+      for (int i=0; i<13; i++) {radius_dynamic[i] = radius_8[i];}
+      numberofModules = 8;
+      AngDisp_dynamic = AngDisp_8;
+      ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+      for (int i=0; i<13; i++) {radius_dynamic[i] = radius_16[i];}
+      numberofModules = 16;
+      AngDisp_dynamic = AngDisp_16;
+      icopyI += 8*13;
+      ConstructLayers(radius_dynamic, numberofModules, AngDisp_dynamic, icopyI);
+      break;
+    default:
+      G4cout << " Not a proper option chosen : choose either Single or Double" << G4endl;
+      break;
   }
 }
 
@@ -387,27 +384,6 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
     }
   }
 }
-
-
-  //! for Framework newly inserted scintillators need to have a unique numbering
- /* for (int i = 0; i < DetectorConstants::modulesInModularLayer; i++) {
-    G4double phi = (i * 2 * M_PI / DetectorConstants::modulesInModularLayer);
-    //! 13 centered modules
-    for (int j = -6; j < 7; j++) {
-      //! 0.01815 - Angular displacement of 1.04 degree
-      phi1 = phi + j * 0.01815;
-      G4double radius1 = radius_inner[j + 6] * cm;
-      G4RotationMatrix rot = G4RotationMatrix();
-      rot.rotateZ(phi);
-      G4ThreeVector loc = G4ThreeVector(radius1 * cos(phi1), radius1 * sin(phi1), 0.0);
-      G4Transform3D transform(rot, loc);
-      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
-      new G4PVPlacement(
-        transform, fScinLogInModule, nameNewI, fWorldLogical,
-        true, icopyI + i * 13 + j + 6, checkOverlaps
-      );
-    }
-  }*/
 
 /**
  * Method for construction of setup used in Run 3
