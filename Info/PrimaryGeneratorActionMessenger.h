@@ -56,7 +56,6 @@ private:
   G4UIcmdWithAnInteger* fNemaPosition = nullptr;
   G4UIcmdWith3VectorAndUnit* fSetChamberCenter = nullptr;
   G4UIcmdWithADoubleAndUnit* fSetChamberEffectivePositronRadius = nullptr;
-
 };
 
 #endif

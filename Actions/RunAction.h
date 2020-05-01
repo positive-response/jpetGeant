@@ -36,6 +36,7 @@ public:
 
 private:
   HistoManager* fHistoManager;
+  EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
 };
 

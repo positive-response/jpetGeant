@@ -20,9 +20,8 @@ EventMessenger* EventMessenger::fInstance = nullptr;
 
 EventMessenger* EventMessenger::GetEventMessenger()
 {
-  if ( fInstance == nullptr ) {
+  if (fInstance == nullptr)
     fInstance = new EventMessenger();
-  }
   return fInstance;
 }
 
@@ -33,7 +32,7 @@ EventMessenger::EventMessenger()
   fDirectory->SetGuidance("Define events to save");
 
   fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
-  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector"); 
+  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector");
 
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
   fPrintStat->SetGuidance("Print how many events was generated");
@@ -50,22 +49,22 @@ EventMessenger::EventMessenger()
   fCMDExcludedMulti = new G4UIcmdWithAnInteger("/jpetmc/event/excludedMulti", this);
   fCMDExcludedMulti->SetGuidance("Set excluded  multiplicity (works only with saveEvtsDetAcc); def: 1");
 
-
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
   fPrintStatBar->SetGuidance("Print how many events was generated (in %)");
 
   fAddDatetime = new G4UIcmdWithABool("/jpetmc/output/AddDatetime", this);
   fAddDatetime->SetGuidance("Adds to the output file name date and time of simulation start.");
 
-  fRandomSeed = new G4UIcmdWithABool("/jpetmc/SetRandomSeed", this);
-  fRandomSeed->SetGuidance("Use random seed (default true).");
+  fSetSeed = new G4UIcmdWithAnInteger("/jpetmc/SetSeed", this);
+  fSetSeed->SetGuidance("Use specific seed. If 0 provided seed will be random.");
+  fSetSeed->SetDefaultValue(0);
 
   fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
   fSaveSeed->SetGuidance("Save random seed (default false).");
 
   fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer",this);
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
-  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV); 
+  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
 
 }
@@ -76,7 +75,7 @@ EventMessenger::~EventMessenger()
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
-  delete fRandomSeed;
+  delete fSetSeed;
   delete fSaveSeed;
   delete fCMDKillEventsEscapingWorld;
   delete fCMDMinRegMulti;
@@ -87,51 +86,28 @@ EventMessenger::~EventMessenger()
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
 
-  if (command == fPrintStat) {
+  if (command == fPrintStat)
     fPrintStatistics = fPrintStat->GetNewBoolValue(newValue);
-  }
-
-  if (command == fPrintStatPower) {
+  else if (command == fPrintStatPower)
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
-  }
-
-  if (command == fCMDMinRegMulti) {
+  else if (command == fCMDMinRegMulti)
     fMinRegisteredMultiplicity = fCMDMinRegMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fCMDMaxRegMulti) {
+  else if (command == fCMDMaxRegMulti)
     fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fPrintStatBar) {
+  else if (command == fPrintStatBar)
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
-  }
-
-  if (command == fAddDatetime) {
+  else if (command == fAddDatetime)
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDKillEventsEscapingWorld) { 
+  else if (command == fCMDKillEventsEscapingWorld)
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDExcludedMulti){
+  else if (command == fCMDExcludedMulti)
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fRandomSeed) {
-    fSetRandomSeed = fRandomSeed->GetNewBoolValue(newValue);
-  }
-
-  if (command == fSaveSeed) {
+  else if (command == fSetSeed)
+    fSeed = fSetSeed->GetNewIntValue(newValue);
+  else if (command == fSaveSeed)
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-  }
-
-  if (command == fAddDatetime) {
+  else if (command == fAddDatetime)
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDAllowedMomentumTransfer) {
-    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue); 
-  }
+  else if (command == fCMDAllowedMomentumTransfer)
+    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
 }

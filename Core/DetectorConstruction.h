@@ -35,7 +35,7 @@
 #include <G4Cache.hh>
 #include <globals.hh>
 #include <G4Box.hh>
-#include <string>
+#include <vector>
 
 class DetectorConstructionMessenger;
 
@@ -49,6 +49,8 @@ const  G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
+  enum GeometryKind { Unknown, Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+
   //! only single instance can exist
   static DetectorConstruction* GetInstance();
   virtual G4VPhysicalVolume* Construct();
@@ -56,23 +58,24 @@ public:
   void LoadGeometryForRun(G4int nr);
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
-  void ReloadMaterials();
+  void ReloadMaterials(const G4String& material);
 
-  void LoadFrame(G4bool tf)
-  {
-    fLoadCADFrame = tf;
-  };
+  void LoadFrame(G4bool tf) {fLoadCADFrame = tf;};
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(bool tf)
+  void ConstructModularLayer(const G4String& module_name)
   {
-    fLoadModularLayer = tf;
+    fLoadModularLayer = true;
+    if (module_name == "Single") {fGeoKind = GeometryKind::Geo24ModulesLayer;}
+    else if (module_name == "Double") {fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;}
+    else {
+        fLoadModularLayer = false;
+        fGeoKind = GeometryKind::Unknown;
+    }
   }
 
-  G4int GetRunNumber()
-  {
-    return fRunNumber;
-  };
+  G4int GetRunNumber() const {return fRunNumber;};
+
 
 private:
   static G4ThreadLocal G4bool fConstructedSDandField;
@@ -80,7 +83,7 @@ private:
 
   DetectorConstruction();
   virtual ~DetectorConstruction();
-  DetectorConstructionMessenger* fMessenger;
+  DetectorConstructionMessenger* fMessenger = nullptr;
 
   //! Load materials from NIST database
   void InitializeMaterials();
@@ -99,6 +102,8 @@ private:
   //! Create target used in run7
   void ConstructTargetRun7();
 
+  void ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI);
+
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
   //! Flag for loading frame from CAD file
@@ -108,23 +113,27 @@ private:
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
 
-  G4Box* fWorldSolid;
-  G4LogicalVolume* fWorldLogical;
-  G4VPhysicalVolume* fWorldPhysical;
+  G4Box* fWorldSolid = nullptr;
+  G4LogicalVolume* fWorldLogical = nullptr;
+  G4VPhysicalVolume* fWorldPhysical = nullptr;
 
-  MaterialExtension* fAir;
-  MaterialExtension* fKapton;
-  MaterialExtension* fVacuum;
-  MaterialExtension* fPlexiglass;
-  MaterialExtension* fXADMaterial;
-  MaterialExtension* fScinMaterial;
-  MaterialExtension* fAluminiumMaterial;
-  MaterialExtension* fSmallChamberMaterial;
-  MaterialExtension* fSmallChamberRun7Material;
+  MaterialExtension* fAir = nullptr;
+  MaterialExtension* fKapton = nullptr;
+  MaterialExtension* fVacuum = nullptr;
+  MaterialExtension* fPlexiglass = nullptr;
+  MaterialExtension* fXADMaterial = nullptr;
+  MaterialExtension* fScinMaterial = nullptr;
+  MaterialExtension* fAluminiumMaterial = nullptr;
+  MaterialExtension* fSmallChamberMaterial = nullptr;
+  MaterialExtension* fSmallChamberRun7Material = nullptr;
 
-  G4LogicalVolume* fScinLog;
-  G4LogicalVolume* fScinLogInModule;
+  G4LogicalVolume* fScinLog = nullptr;
+  G4LogicalVolume* fScinLogInModule = nullptr;
   G4Cache<DetectorSD*> fDetectorSD;
+  // Geometry Kind for the modular layer
+  GeometryKind fGeoKind = GeometryKind::Unknown;
+  // Maximum ID of the scintillators
+  G4int maxScinID = 512;
 };
 
 #endif
