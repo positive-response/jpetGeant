@@ -29,6 +29,7 @@ class PhysicsList: public G4VModularPhysicsList
 public:
   PhysicsList();
   virtual ~PhysicsList();
+  void SetCuts() override;
 };
 
 #endif

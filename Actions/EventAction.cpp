@@ -69,6 +69,9 @@ void EventAction::WriteToFile(const G4Event* anEvent)
     int n_hit = DHC->entries();
     for (int i = 0; i < n_hit; i++) {
       DetectorHit* dh =  dynamic_cast<DetectorHit*>(DHC->GetHit(i));
+      // Forcefully cut the ramnants from the cut on photon durinng first interaction----     
+      // double EnergyDeposit = dh->GetEdep();
+      // if(EnergyDeposit*1000<60) continue;
       fHisto->AddNewHit(dh);
     }
   }
