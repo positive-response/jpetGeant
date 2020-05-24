@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,8 +16,8 @@
 #ifndef VTX_INFORMATION_H
 #define VTX_INFORMATION_H 1
 
-#include <G4VUserPrimaryVertexInformation.hh>
 #include <G4ThreeVector.hh>
+#include <G4VUserPrimaryVertexInformation.hh>
 #include <globals.hh>
 
 class VtxInformation : public G4VUserPrimaryVertexInformation
@@ -28,20 +28,20 @@ public:
   void Clear();
   virtual void Print() const;
 
-  void SetThreeGammaGen(G4bool tf) {fThreeGammaGen = tf;};
-  void SetTwoGammaGen(G4bool tf) {fTwoGammaGen = tf;};
-  void SetPromptGammaGen(G4bool tf) {fPromptGammaGen = tf;};
-  void SetRunNr(G4int x) {fnRun = x;};
+  void SetThreeGammaGen(G4bool tf) { fThreeGammaGen = tf; };
+  void SetTwoGammaGen(G4bool tf) { fTwoGammaGen = tf; };
+  void SetPromptGammaGen(G4bool tf) { fPromptGammaGen = tf; };
+  void SetRunNr(G4int x) { fnRun = x; };
   void SetVtxPosition(G4double x, G4double y, G4double z);
-  void SetLifetime(G4double x) {fLifetime = x;};
-  G4bool GetThreeGammaGen() {return fThreeGammaGen;};
-  G4bool GetTwoGammaGen() {return fTwoGammaGen;};
-  G4bool GetPromptGammaGen() {return fPromptGammaGen;};
-  G4int  GetRunNr() {return fnRun;};
-  G4double GetVtxPositionX() {return fVtxPosition.x();};
-  G4double GetVtxPositionY() {return fVtxPosition.y();};
-  G4double GetVtxPositionZ() {return fVtxPosition.z();};
-  G4double GetLifetime() {return fLifetime;};
+  void SetLifetime(G4double x) { fLifetime = x; };
+  G4bool GetThreeGammaGen() { return fThreeGammaGen; };
+  G4bool GetTwoGammaGen() { return fTwoGammaGen; };
+  G4bool GetPromptGammaGen() { return fPromptGammaGen; };
+  G4int GetRunNr() { return fnRun; };
+  G4double GetVtxPositionX() { return fVtxPosition.x(); };
+  G4double GetVtxPositionY() { return fVtxPosition.y(); };
+  G4double GetVtxPositionZ() { return fVtxPosition.z(); };
+  G4double GetLifetime() { return fLifetime; };
 
 private:
   G4ThreeVector fVtxPosition;
@@ -50,7 +50,6 @@ private:
   G4bool fPromptGammaGen;
   G4int fnRun;
   G4double fLifetime;
-
 };
 
-#endif
+#endif /* !VTX_INFORMATION_H */

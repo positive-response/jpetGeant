@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,20 +16,21 @@
 #ifndef DETECTORCONSTRUCTION_H
 #define DETECTORCONSTRUCTION_H 1
 
-#include <G4VUserDetectorConstruction.hh>
-#include <G4VPhysicalVolume.hh>
-#include <G4GeometryManager.hh>
 #include "MaterialExtension.h"
-#include <G4SystemOfUnits.hh>
-#include <G4MaterialTable.hh>
+#include "DetectorSD.h"
+
+#include <G4VUserDetectorConstruction.hh>
+#include <G4GeometryManager.hh>
+#include <G4VPhysicalVolume.hh>
 #include <G4LogicalVolume.hh>
+#include <G4MaterialTable.hh>
+#include <G4SystemOfUnits.hh>
 #include <G4VisAttributes.hh>
 #include <G4NistManager.hh>
 #include <G4PVPlacement.hh>
 #include <G4SDManager.hh>
 #include <G4Material.hh>
 #include <G4Element.hh>
-#include "DetectorSD.h"
 #include <G4Colour.hh>
 #include <CADMesh.hh>
 #include <G4Cache.hh>
@@ -40,16 +41,21 @@
 class DetectorConstructionMessenger;
 
 //! Flag for debugging purposes
-const  G4bool checkOverlaps = false;
+const G4bool checkOverlaps = false;
 
 /**
-* @class DetectorConstruction
-* @brief creating detector; can read the CAD geometry
-*/
+ * @class DetectorConstruction
+ * @brief creating detector; can read the CAD geometry
+ */
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  enum GeometryKind { Unknown, Geo24ModulesLayer, Geo24ModulesLayerDistributed};
+  enum GeometryKind
+  {
+    Unknown,
+    Geo24ModulesLayer,
+    Geo24ModulesLayerDistributed
+  };
 
   //! only single instance can exist
   static DetectorConstruction* GetInstance();
@@ -60,22 +66,23 @@ public:
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
 
-  void LoadFrame(G4bool tf) {fLoadCADFrame = tf;};
+  void LoadFrame(G4bool tf) { fLoadCADFrame = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
   void ConstructModularLayer(const G4String& module_name)
   {
     fLoadModularLayer = true;
-    if (module_name == "Single") {fGeoKind = GeometryKind::Geo24ModulesLayer;}
-    else if (module_name == "Double") {fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;}
-    else {
-        fLoadModularLayer = false;
-        fGeoKind = GeometryKind::Unknown;
+    if (module_name == "Single") {
+      fGeoKind = GeometryKind::Geo24ModulesLayer;
+    } else if (module_name == "Double") {
+      fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;
+    } else {
+      fLoadModularLayer = false;
+      fGeoKind = GeometryKind::Unknown;
     }
   }
 
-  G4int GetRunNumber() const {return fRunNumber;};
-
+  G4int GetRunNumber() const { return fRunNumber; };
 
 private:
   static G4ThreadLocal G4bool fConstructedSDandField;
@@ -102,7 +109,10 @@ private:
   //! Create target used in run7
   void ConstructTargetRun7();
 
-  void ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI);
+  void ConstructLayers(
+    std::vector<G4double>& radius_dynamic, G4int& numberofModules,
+    G4double& AngDisp_dynamic, G4int& icopyI
+  );
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
@@ -136,4 +146,4 @@ private:
   G4int maxScinID = 512;
 };
 
-#endif
+#endif /* !DETECTORCONSTRUCTION_H */

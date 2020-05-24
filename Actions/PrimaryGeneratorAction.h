@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -17,15 +17,17 @@
 #define PRIMARYGENERATORACTION_H 1
 
 #include "../Info/PrimaryGeneratorActionMessenger.h"
-#include <G4VUserPrimaryGeneratorAction.hh>
 #include "../Core/PrimaryGenerator.h"
 #include "../Core/HistoManager.h"
 #include "../Core/SourceParams.h"
 #include "../Core/BeamParams.h"
+
+#include <G4VUserPrimaryGeneratorAction.hh>
 #include <G4Event.hh>
 #include <globals.hh>
 
-struct IsotopeParams {
+struct IsotopeParams
+{
   G4String shape;
 };
 
@@ -41,30 +43,15 @@ public:
   virtual void GeneratePrimaries(G4Event*);
   void SetSourceTypeInfo(G4String);
 
-  BeamParams* GetBeamParams()
-  {
-    return fBeam;
-  }
+  BeamParams* GetBeamParams() { return fBeam; }
 
-  SourceParams* GetIsotopeParams()
-  {
-    return fIsotope;
-  }
+  SourceParams* GetIsotopeParams() { return fIsotope; }
 
-  G4String GetSourceTypeInfo()
-  {
-    return fGenerateSourceType;
-  }
+  G4String GetSourceTypeInfo() { return fGenerateSourceType; }
 
-  void SetNemaPoint(G4int i)
-  {
-    fNemaPoint = i;
-  }
+  void SetNemaPoint(G4int i) { fNemaPoint = i; }
 
-  G4int GetNemaPoint()
-  {
-    return fNemaPoint;
-  }
+  G4int GetNemaPoint() { return fNemaPoint; }
 
   void SetEffectivePositronRadius(G4double);
 
@@ -78,7 +65,6 @@ private:
   SourceParams* fIsotope = nullptr;
   G4int fNemaPoint = -1;
   G4double fEffectivePositronRadius = 0.5 * cm;
-
 };
 
-#endif
+#endif /* !PRIMARYGENERATORACTION_H */

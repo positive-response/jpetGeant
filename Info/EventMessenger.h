@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -23,29 +23,28 @@
 #include <G4UIcmdWithADouble.hh>
 #include <G4UIcmdWithAString.hh>
 #include <G4UIcmdWithABool.hh>
-#include <G4UIcmdWithABool.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4UIdirectory.hh>
 #include <G4UImessenger.hh>
 #include <globals.hh>
 
-class EventMessenger: public G4UImessenger
+class EventMessenger : public G4UImessenger
 {
 public:
   static EventMessenger* GetEventMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 
-  bool KillEventsEscapingWorld() {return fKillEventsEscapingWorld;}
-  bool PrintStatistics() {return fPrintStatistics;}
-  bool ShowProgress() {return fShowProgress;}
-  G4int GetPowerPrintStat() {return fPrintPower;}
-  bool AddDatetime() {return fOutputWithDatetime;}
-  G4int GetMinRegMultiplicity() {return fMinRegisteredMultiplicity;}
-  G4int GetMaxRegMultiplicity() {return fMaxRegisteredMultiplicity;}
-  G4int GetExcludedMultiplicity() {return fExcludedMultiplicity;}
-  G4double GetAllowedMomentumTransfer() {return fAllowedMomentumTransfer;}
-  G4int GetSeed() {return fSeed;}
-  bool SaveSeed() {return fSaveRandomSeed;}
+  bool KillEventsEscapingWorld() { return fKillEventsEscapingWorld; }
+  bool PrintStatistics() { return fPrintStatistics; }
+  bool ShowProgress() { return fShowProgress; }
+  G4int GetPowerPrintStat() { return fPrintPower; }
+  bool AddDatetime() { return fOutputWithDatetime; }
+  G4int GetMinRegMultiplicity() { return fMinRegisteredMultiplicity; }
+  G4int GetMaxRegMultiplicity() { return fMaxRegisteredMultiplicity; }
+  G4int GetExcludedMultiplicity() { return fExcludedMultiplicity; }
+  G4double GetAllowedMomentumTransfer() { return fAllowedMomentumTransfer; }
+  G4int GetSeed() { return fSeed; }
+  bool SaveSeed() { return fSaveRandomSeed; }
 
 private:
   static EventMessenger* fInstance;
@@ -74,7 +73,7 @@ private:
   G4int fExcludedMultiplicity = 1;
   G4int fSeed = 0;
   bool fSaveRandomSeed = false;
-  G4double fAllowedMomentumTransfer = 1*keV;
+  G4double fAllowedMomentumTransfer = 1 * keV;
 };
 
-#endif
+#endif /* !EVENTMESSENGER_H */

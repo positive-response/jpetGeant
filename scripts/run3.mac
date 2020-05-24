@@ -1,9 +1,5 @@
-# Initialize kernel
-#
-#/control/execute init_vis.mac
-
+# Geometry for run 3
 /jpetmc/detector/loadGeomForRun 3
 /run/initialize
 
 /run/beamOn 1000000
-#

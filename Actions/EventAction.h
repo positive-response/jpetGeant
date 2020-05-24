@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,6 +20,7 @@
 #include "../Objects/Framework/JPetGeantScinHits.h"
 #include "../Info/EventMessenger.h"
 #include "../Core/HistoManager.h"
+
 #include <G4UserEventAction.hh>
 #include <globals.hh>
 #include <memory>
@@ -46,4 +47,4 @@ private:
   void WriteToFile(const G4Event* anEvent);
 };
 
-#endif
+#endif /* !EVENTACTION_H */

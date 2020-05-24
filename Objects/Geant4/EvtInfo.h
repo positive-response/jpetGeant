@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,9 +16,9 @@
 #ifndef EVTINFO_H
 #define EVTINFO_H 1
 
-#include <globals.hh>
-#include <TVector3.h>
 #include <TObject.h>
+#include <TVector3.h>
+#include <globals.hh>
 
 class EvtInfo : public TObject
 {
@@ -37,4 +37,4 @@ private:
   ClassDef(EvtInfo, 1)
 };
 
-#endif
+#endif /* !EVTINFO_H */

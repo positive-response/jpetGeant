@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -14,8 +14,9 @@
  */
 
 #include "../Objects/Geant4/Trajectory.h"
-#include <G4TrackingManager.hh>
 #include "TrackingAction.h"
+
+#include <G4TrackingManager.hh>
 #include <G4Track.hh>
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)

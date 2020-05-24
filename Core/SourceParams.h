@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -27,42 +27,16 @@ public:
   SourceParams();
   ~SourceParams();
 
-  void SetGammasNumber(G4int i)
-  {
-    howManyGammas = i;
-  }
-
+  void SetGammasNumber(G4int i) { howManyGammas = i; }
   void SetShape(G4String& newShape);
-
-  void SetShapeCenterPosition(G4double x, G4double y, G4double z)
-  {
+  void SetShapeCenterPosition(G4double x, G4double y, G4double z) {
     shapeCenterPosition.set(x, y, z);
   }
-
-  void SetShapeDim(G4int i, G4double x)
-  {
-    shapeDim[i] = x;
-  }
-
-  G4int GetGammasNumber()
-  {
-    return howManyGammas;
-  }
-
-  G4String GetShape()
-  {
-    return shape;
-  }
-
-  G4double GetShapeDim(G4int i)
-  {
-    return shapeDim[i];
-  }
-
-  G4ThreeVector GetShapeCenterPosition()
-  {
-    return shapeCenterPosition;
-  }
+  void SetShapeDim(G4int i, G4double x) { shapeDim[i] = x; }
+  G4int GetGammasNumber() { return howManyGammas; }
+  G4String GetShape() { return shape; }
+  G4double GetShapeDim(G4int i) { return shapeDim[i]; }
+  G4ThreeVector GetShapeCenterPosition() { return shapeCenterPosition; }
 
 private:
   G4int howManyGammas;
@@ -71,7 +45,6 @@ private:
   G4ThreeVector shapeCenterPosition;
   //! array of dimensions, for cylinder [0] - radius, [1] - z
   G4double shapeDim[10] = {0 * cm};
-
 };
 
-#endif
+#endif /* !SOURCEPARAMS_H */

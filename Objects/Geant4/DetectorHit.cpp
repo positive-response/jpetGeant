@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -15,11 +15,10 @@
 
 #include "DetectorHit.h"
 
-DetectorHit::DetectorHit() :
-  G4VHit(), fScinID(0), fTrackID(-1), fTrackPDG(0), fEdep(0.0), fTime(0),
-  fPos(0), fNumInteractions(0), fPolarizationIn(0, 0, 0),
-  fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0), fMomentumOut(0, 0, 0),
-  fGenGammaMultiplicity(0), fGenGammaIndex(0) {}
+DetectorHit::DetectorHit() : G4VHit(), fScinID(0), fTrackID(-1), fTrackPDG(0),
+fEdep(0.0), fTime(0), fPos(0), fNumInteractions(0), fPolarizationIn(0, 0, 0),
+fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0), fMomentumOut(0, 0, 0),
+fGenGammaMultiplicity(0), fGenGammaIndex(0) {}
 
 DetectorHit::~DetectorHit() {}
 
@@ -47,12 +46,6 @@ void DetectorHit::AddPosition(G4ThreeVector xyz, G4double weight)
   fSumWeightPosition += weight;
 }
 
-G4double  DetectorHit::GetTime()
-{
-  return fTime / fSumWeightTime;
-}
+G4double DetectorHit::GetTime() { return fTime / fSumWeightTime; }
 
-G4ThreeVector  DetectorHit::GetPosition()
-{
-  return fPos / fSumWeightPosition;
-}
+G4ThreeVector DetectorHit::GetPosition() { return fPos / fSumWeightPosition; }
