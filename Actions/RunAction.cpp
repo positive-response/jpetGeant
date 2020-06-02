@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -13,15 +13,16 @@
  *  @file RunAction.cpp
  */
 
+#include "RunAction.h"
+
 #include <G4SystemOfUnits.hh>
 #include <G4UnitsTable.hh>
-#include "RunAction.h"
-#include <G4Run.hh>
 #include <Randomize.hh>
 #include <TRandom3.h>
+#include <G4Run.hh>
 #include <chrono>
 
-RunAction::RunAction(HistoManager* histo) : G4UserRunAction(),  fHistoManager(histo) {}
+RunAction::RunAction(HistoManager* histo) : G4UserRunAction(), fHistoManager(histo) {}
 
 RunAction::~RunAction() {}
 
@@ -31,9 +32,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   int mask = 01001010;
 
-  if(fEvtMessenger->GetSeed() == 0){
+  if (fEvtMessenger->GetSeed() == 0) {
     /**
-     *
      * If seed 0 is used we are seeding random generator with a number which is a
      * combination of current time and process PID. Bu doing so seed is unique in
      * time and space.
@@ -44,17 +44,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
      */
     using namespace std::chrono;
     system_clock::time_point now = system_clock::now();
-    long seed = (UInt_t)(system_clock::to_time_t ( now )) * 677*::getpid();
+    long seed = (UInt_t)(system_clock::to_time_t(now)) * 677 * ::getpid();
     G4Random::setTheSeed(seed);
-    gRandom->SetSeed(seed^mask);
-  }
-  else{
+    gRandom->SetSeed(seed ^ mask);
+  } else {
     gRandom->SetSeed(fEvtMessenger->GetSeed());
-    G4Random::setTheSeed(fEvtMessenger->GetSeed()^mask);
+    G4Random::setTheSeed(fEvtMessenger->GetSeed() ^ mask);
   }
 }
 
-void RunAction::EndOfRunAction(const G4Run*)
-{
-  fHistoManager->Save();
-}
+void RunAction::EndOfRunAction(const G4Run*) { fHistoManager->Save(); }

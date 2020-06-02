@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,17 +16,16 @@
 #include "../Info/DetectorConstructionMessenger.h"
 #include "../Core/DetectorConstants.h"
 
-DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector)
-  : fDetector(detector)
+DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector) : fDetector(detector)
 {
   fDirectory = new G4UIdirectory("/jpetmc/detector/");
   fDirectory->SetGuidance("Commands for controling the geometry");
 
-  fLoadGeomForRun  = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadGeomForRun", this);
+  fLoadGeomForRun = new G4UIcmdWithAnInteger("/jpetmc/detector/loadGeomForRun", this);
   fLoadGeomForRun->SetGuidance("Set RUN number to simulate");
   fLoadGeomForRun->SetDefaultValue(kDefaultRunNumber);
 
-  fLoadIdealGeometry = new  G4UIcmdWithAnInteger("/jpetmc/detector/loadIdealGeom", this);
+  fLoadIdealGeometry = new G4UIcmdWithAnInteger("/jpetmc/detector/loadIdealGeom", this);
   fLoadIdealGeometry->SetGuidance("Generate ideal geometry for 1-4 layers");
   fLoadIdealGeometry->SetDefaultValue(1);
 
@@ -39,7 +38,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadOnlyScintillators = new G4UIcmdWithoutParameter("/jpetmc/detector/loadOnlyScintillators", this);
   fLoadOnlyScintillators->SetGuidance("Generate only scintillators (for test purposes)");
 
-  // Bool converted into string
+  //! Bool converted into string
   fLoadModularLayer = new G4UIcmdWithAString("/jpetmc/detector/loadModularLayer", this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
 
@@ -62,32 +61,29 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
 
 void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fLoadGeomForRun) 
-  {
+  if (command == fLoadGeomForRun) {
     fDetector->LoadGeometryForRun(fLoadGeomForRun->GetNewIntValue(newValue));
     fDetector->UpdateGeometry();
-  }
-  else if (command == fLoadIdealGeometry) 
-    G4Exception( "DetectorConstructionMessenger", "DCM01", JustWarning, "Option is not yet implemented" );
-  else if (command == fLoadJPetBasicGeometry) 
-  {
+  } else if (command == fLoadIdealGeometry){
+    G4Exception(
+      "DetectorConstructionMessenger", "DCM01",
+      JustWarning, "Option is not yet implemented"
+    );
+  } else if (command == fLoadJPetBasicGeometry) {
     fDetector->LoadFrame(true);
     fDetector->UpdateGeometry();
-  }
-  else if (command == fLoadJPetExtendedGeometry) 
-    G4Exception("DetectorConstructionMessenger", "DCM01", JustWarning, "Option is not yet implemented");
-  else if (command == fLoadOnlyScintillators) 
-  {
+  } else if (command == fLoadJPetExtendedGeometry) {
+    G4Exception(
+      "DetectorConstructionMessenger", "DCM01",
+      JustWarning, "Option is not yet implemented"
+    );
+  } else if (command == fLoadOnlyScintillators) {
     fDetector->LoadFrame(false);
     fDetector->UpdateGeometry();
-  }
-  else if (command == fLoadModularLayer) 
-  {
+  } else if (command == fLoadModularLayer) {
     fDetector->ConstructModularLayer(newValue);
     fDetector->UpdateGeometry();
-  }
-  else if (command == fScinHitMergingTime) 
-  {
+  } else if (command == fScinHitMergingTime) {
     DetectorConstants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
     fDetector->UpdateGeometry();
   }
