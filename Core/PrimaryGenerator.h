@@ -41,8 +41,6 @@ public:
   virtual void GeneratePrimaryVertex(G4Event*){};
 
 private:
-  //! return: vtx position, 2/3g ratio, meanlifetime;
-  //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionInFilledSphere(
     const G4ThreeVector center, G4double radius
   );

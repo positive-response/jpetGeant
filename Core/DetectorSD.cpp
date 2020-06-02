@@ -50,8 +50,8 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if (edep == 0.0) {
     double momentumChange = abs(aStep->GetPostStepPoint()->GetMomentum().mag2() - aStep->GetPreStepPoint()->GetMomentum().mag2());
     if (momentumChange > EventMessenger::GetEventMessenger()->GetAllowedMomentumTransfer()) {
-      // particle quanta interact in detector but does not deposit energy
-      // (vide Rayleigh scattering)
+      //! particle quanta interact in detector but does not deposit energy
+      //! (vide Rayleigh scattering)
       if (aStep->GetTrack()->GetParentID() == 0) {
         PrimaryParticleInformation* info = dynamic_cast<PrimaryParticleInformation*>(
           aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation()
@@ -95,7 +95,6 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       PrimaryParticleInformation* info = static_cast<PrimaryParticleInformation*>(
         aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation()
       );
-
       if (info != 0) {
         newHit->SetGenGammaMultiplicity(info->GetGammaMultiplicity());
         newHit->SetGenGammaIndex(info->GetIndex());
@@ -103,7 +102,6 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
       }
     }
-
     G4int id = fDetectorCollection->insert(newHit);
     previousHits[currentScinCopy].fID = id - 1;
     previousHits[currentScinCopy].fTime = currentTime;

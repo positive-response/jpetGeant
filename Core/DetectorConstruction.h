@@ -140,9 +140,9 @@ private:
   G4LogicalVolume* fScinLog = nullptr;
   G4LogicalVolume* fScinLogInModule = nullptr;
   G4Cache<DetectorSD*> fDetectorSD;
-  // Geometry Kind for the modular layer
+  //! Geometry Kind for the modular layer
   GeometryKind fGeoKind = GeometryKind::Unknown;
-  // Maximum ID of the scintillators
+  //! Maximum ID of the scintillators
   G4int maxScinID = 512;
 };
 

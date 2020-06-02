@@ -38,7 +38,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fLoadOnlyScintillators = new G4UIcmdWithoutParameter("/jpetmc/detector/loadOnlyScintillators", this);
   fLoadOnlyScintillators->SetGuidance("Generate only scintillators (for test purposes)");
 
-  // Bool converted into string
+  //! Bool converted into string
   fLoadModularLayer = new G4UIcmdWithAString("/jpetmc/detector/loadModularLayer", this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
 

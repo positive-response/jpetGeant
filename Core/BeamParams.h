@@ -25,7 +25,7 @@ class BeamParams
 {
 public:
   BeamParams();
-  /// \param x is the energy expressed in keV
+  //! \param x is the energy expressed in keV
   void SetEnergy(G4double x) { energy = x * keV; };
   void SetVtxPosition(G4double x, G4double y, G4double z);
   void SetPolarization(G4double x, G4double y, G4double z);

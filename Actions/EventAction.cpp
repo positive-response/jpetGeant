@@ -55,12 +55,12 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
 
 void EventAction::WriteToFile(const G4Event* anEvent)
 {
-  // save information about generated events
+  //! save information about generated events
   G4int id = anEvent->GetEventID();
   fHisto->SetEventNumber(id);
   fHisto->FillHistoGenInfo(anEvent);
 
-  // save information about registered events
+  //! save information about registered events
   G4HCofThisEvent* HCE = anEvent->GetHCofThisEvent();
   DetectorHitsCollection* DHC = 0;
   if (HCE) {
@@ -72,6 +72,6 @@ void EventAction::WriteToFile(const G4Event* anEvent)
     }
   }
 
-  // save to disk
+  //! save to output file
   fHisto->SaveEvtPack();
 }

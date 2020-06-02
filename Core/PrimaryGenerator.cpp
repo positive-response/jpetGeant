@@ -53,10 +53,10 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
   Double_t mass_secondaries[3] = {0., 0., 0.};
 
   TGenPhaseSpace event;
-  TLorentzVector vec_pozytonium(0.0, 0.0, 0.0, 1022 * keV);
-  Bool_t test = event.SetDecay(vec_pozytonium, 3, mass_secondaries);
+  TLorentzVector positonium(0.0, 0.0, 0.0, 1022 * keV);
+  Bool_t test = event.SetDecay(positonium, 3, mass_secondaries);
   if (!test) {
-    std::cout << "error: generate_gamma : createThreeEvts:" << test << std::endl;
+    G4cout << "error: generate_gamma : createThreeEvts:" << test << G4endl;
   }
 
   Double_t weight;
@@ -108,10 +108,10 @@ G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(
   Double_t mass_secondaries[2] = {0., 0.};
 
   TGenPhaseSpace event;
-  TLorentzVector vec_pozytonium(0.0, 0.0, 0.0, 1022 * keV);
-  Bool_t test = event.SetDecay(vec_pozytonium, 2, mass_secondaries);
+  TLorentzVector positonium(0.0, 0.0, 0.0, 1022 * keV);
+  Bool_t test = event.SetDecay(positonium, 2, mass_secondaries);
   if (!test) {
-    std::cout << "error: generate_gamma : createTwoEvts:" << test << std::endl;
+    G4cout << "Error: generate_gamma : createTwoEvts" << test << G4endl;
   }
 
   event.Generate();
@@ -230,25 +230,30 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   ));
 }
 
+/**
+ * @param maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
+ * @return: vtx position, 2/3g ratio, meanlifetime;
+ */
 std::tuple<G4ThreeVector, MaterialExtension*>
 PrimaryGenerator::GetVerticesDistributionInFilledSphere(
   const G4ThreeVector center, G4double radius
 ) {
-  G4bool lookForVtx = false;
-  G4ThreeVector myPoint(0 * cm, 0 * cm, 0 * cm);
-  MaterialExtension* mat;
+  G4bool vertexFound = false;
+  G4ThreeVector vertex(0 * cm, 0 * cm, 0 * cm);
+  MaterialExtension* material;
 
   //! annihilation will occure only in materials where it was allowed
   //! @see MaterialExtension
   //! annihilation rate 2g/3g also depends on the material type
-  while (!lookForVtx) {
-    myPoint = GetRandomPointInFilledSphere(radius) + center;
+  while (!vertexFound) {
+    vertex = GetRandomPointInFilledSphere(radius) + center;
     theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-    mat = (MaterialExtension*)theNavigator->LocateGlobalPointAndSetup(myPoint)
-    ->GetLogicalVolume()->GetMaterial();
-    lookForVtx = mat->IsTarget();
+    material = (MaterialExtension*)theNavigator
+      ->LocateGlobalPointAndSetup(vertex)
+      ->GetLogicalVolume()->GetMaterial();
+    vertexFound = material->IsTarget();
   };
-  return std::make_tuple(myPoint, mat);
+  return std::make_tuple(vertex, material);
 }
 
 std::tuple<G4ThreeVector, MaterialExtension*>

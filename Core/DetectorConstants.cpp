@@ -34,18 +34,24 @@ void DetectorConstants::SetChamberCenter(const G4ThreeVector xyz)
   fChamberCenter[2] = xyz.z();
 }
 
-const G4ThreeVector DetectorConstants::GetChamberCenter() { return G4ThreeVector(fChamberCenter[0], fChamberCenter[1], fChamberCenter[2]); }
+const G4ThreeVector DetectorConstants::GetChamberCenter()
+{
+  return G4ThreeVector(fChamberCenter[0], fChamberCenter[1], fChamberCenter[2]);
+}
 
-G4double DetectorConstants::GetMergingTimeValueForScin() { return fScinHitMergingTime; }
+G4double DetectorConstants::GetMergingTimeValueForScin()
+{
+  return fScinHitMergingTime;
+}
 
 void DetectorConstants::SetMergingTimeValueForScin(G4double x)
 {
-  if (x <= 0.0)
-  {
-    G4Exception("DetectorConstants", "DConst01", JustWarning, "Time can not be negative! Nothing happend");
-  }
-  else
-  {
+  if (x <= 0.0) {
+    G4Exception(
+      "DetectorConstants", "DConst01",
+      JustWarning, "Merging time cannot be negative!"
+    );
+  } else {
     fScinHitMergingTime = x;
   }
 }
