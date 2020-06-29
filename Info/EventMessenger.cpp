@@ -110,3 +110,68 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
   }
 }
+
+void EventMessenger::ClearHitOrigin()
+{
+  if(hitOrigin.size() > 0) {
+    hitOrigin.clear();
+  }
+}
+
+void EventMessenger::FillHitOrigin(int originIndex, InteractionType type, int originMultiplicity)
+{
+  bool isItFirstInteraction = true;
+  for (unsigned i = 0; i < hitOrigin.size(); i++) {
+    if (hitOrigin[i][0] == originIndex) {
+      isItFirstInteraction = false;
+      switch(type) {
+        case scattActivePart:
+          hitOrigin[i][2]++;
+          break;
+        case scattNonActivePart:
+          hitOrigin[i][3]++;
+          break;
+        case secondaryPart:
+          hitOrigin[i][4]++;
+          break;
+      }
+    }
+  }
+  if (isItFirstInteraction) {
+    std::vector<int> tempHitOrigin = {originIndex, originMultiplicity, 0, 0, 0};
+    switch(type) {
+      case scattActivePart:
+        tempHitOrigin[2]++;
+        break;
+      case scattNonActivePart:
+        tempHitOrigin[3]++;
+        break;
+      case secondaryPart:
+        tempHitOrigin[4]++;
+        break;
+    }
+    hitOrigin.push_back(tempHitOrigin);
+  }
+}
+
+void EventMessenger::PassToEventMap(int originIndex, int originMultiplicity)
+{
+  bool isItFirstInteraction = true;
+  for (unsigned i = 0; i < hitOrigin.size(); i++) {
+    if (hitOrigin[i][0] == originIndex) {
+      eventMap.push_back(hitOrigin[i]);
+      isItFirstInteraction = false;
+    }
+  }
+  if (isItFirstInteraction) {
+    std::vector<int> tempHitOrigin = {originIndex, originMultiplicity, 0, 0, 0};
+    eventMap.push_back(tempHitOrigin);
+  }
+}
+
+void EventMessenger::PrintInfo()
+{
+  for (unsigned i = 0; i < hitOrigin.size(); i++) {
+    std::cout << hitOrigin[i][0] << " " << hitOrigin[i][1] << " " << hitOrigin[i][2] << " " << hitOrigin[i][3] << " " << hitOrigin[i][4] << std::endl;
+  }
+}

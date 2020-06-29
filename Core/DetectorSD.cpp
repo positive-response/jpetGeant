@@ -42,6 +42,8 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, fDetectorCollection);
 
   std::fill(previousHits.begin(), previousHits.end(), HitParameters());
+ // EventMessenger::GetEventMessenger()->PrintInfo();
+  EventMessenger::GetEventMessenger()->ClearHitOrigin();
 }
 
 G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
@@ -57,6 +59,7 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
           aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation()
         );
         if (info != nullptr) {
+          EventMessenger::GetEventMessenger()->FillHitOrigin(aStep->GetTrack()->GetTrackID(), EventMessenger::GetEventMessenger()->InteractionType::scattActivePart, testParentIDold);
           info->SetGammaMultiplicity(PrimaryParticleInformation::kBackground);
         }
       }
@@ -97,10 +100,21 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       );
       if (info != 0) {
         newHit->SetGenGammaMultiplicity(info->GetGammaMultiplicity());
+        testParentIDold = info->GetGammaMultiplicity();                     //Added information about last gamma generated
         newHit->SetGenGammaIndex(info->GetIndex());
         //! should be marked as scattering
         info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
+        EventMessenger::GetEventMessenger()->PassToEventMap(aStep->GetTrack()->GetTrackID(), testParentIDold);
+        EventMessenger::GetEventMessenger()->FillHitOrigin(aStep->GetTrack()->GetTrackID(), EventMessenger::GetEventMessenger()->InteractionType::scattActivePart, testParentIDold);
       }
+    }
+    else
+    {
+    // This is multiple scattering and compton that does not come from primary gamma generated (pair creation, electron scattering, ...)
+      EventMessenger::GetEventMessenger()->PassToEventMap(aStep->GetTrack()->GetTrackID(), testParentIDold);
+      EventMessenger::GetEventMessenger()->FillHitOrigin(aStep->GetTrack()->GetTrackID(), EventMessenger::GetEventMessenger()->InteractionType::secondaryPart, testParentIDold);
+      newHit->SetGenGammaMultiplicity(testParentIDold * 10);
+      testParentIDold *= 10;
     }
     G4int id = fDetectorCollection->insert(newHit);
     previousHits[currentScinCopy].fID = id - 1;

@@ -33,6 +33,8 @@ private:
     G4int fID = -1;
     G4double fTime = 0.0;
   };
+  
+  int testParentIDold = 0;
 
   G4double timeIntervals;
   G4int totScinNum;

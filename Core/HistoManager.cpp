@@ -225,6 +225,11 @@ void HistoManager::BookHistograms()
     ),
     "Gamma quanta multiplicity: 2=2g; 3=3g", "Lifetime (2/3g) [ps]"
   );
+  
+  createHistogramWithAxes(
+    new TH1D("gen_hits_multiplicity", "Multiplicity of the hit", 3000, -0.5, 2999.5),
+    "Multiplicity of the hit", "Entries"
+  );
 }
 
 void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
@@ -353,14 +358,13 @@ void HistoManager::AddNewHit(DetectorHit* hit)
   );
   geantHit->SetGenGammaMultiplicity(hit->GetGenGammaMultiplicity());
   geantHit->SetGenGammaIndex(hit->GetGenGammaIndex());
-
+  
   if (GetMakeControlHisto()) {
     fillHistogram("gen_hit_time", hit->GetTime()/ps);
     fillHistogram("gen_hit_eneDepos", hit->GetEdep()/keV);
     fillHistogram("gen_hits_z_pos", hit->GetPosition().getZ()/cm);
-    fillHistogram(
-      "gen_hits_xy_pos", hit->GetPosition().getX()/cm, hit->GetPosition().getY()/cm
-    );
+    fillHistogram("gen_hits_xy_pos", hit->GetPosition().getX()/cm, hit->GetPosition().getY()/cm);
+    fillHistogram("gen_hits_multiplicity", hit->GetGenGammaMultiplicity());
   }
 }
 

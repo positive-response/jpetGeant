@@ -45,6 +45,15 @@ public:
   G4double GetAllowedMomentumTransfer() { return fAllowedMomentumTransfer; }
   G4int GetSeed() { return fSeed; }
   bool SaveSeed() { return fSaveRandomSeed; }
+  
+  enum InteractionType {
+    scattActivePart, scattNonActivePart, secondaryPart
+  };
+  
+  void ClearHitOrigin();
+  void FillHitOrigin(int originIndex, InteractionType type, int originMultiplicity);
+  void PassToEventMap(int originIndex, int originMultiplicity);
+  void PrintInfo();
 
 private:
   static EventMessenger* fInstance;
@@ -74,6 +83,14 @@ private:
   G4int fSeed = 0;
   bool fSaveRandomSeed = false;
   G4double fAllowedMomentumTransfer = 1 * keV;
+  
+//Every element in hitMap is corresponding to given hit registered in the scintillators
+  std::vector<std::vector<int>> eventMap;
+//First element - trackID, Second - origin gamma, Third - scatterings in scintillator before hit registered
+//Fourth - scatterings in non-active part of the detector before hit registered, Fifth - secondary particle
+//Every set of elements correspond to different origin (parentID)
+  std::vector<std::vector<int>> hitOrigin;
+    
 };
 
 #endif /* !EVENTMESSENGER_H */
