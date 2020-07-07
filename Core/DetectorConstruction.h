@@ -50,11 +50,27 @@ const G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  enum GeometryKind
-  {
+  enum GeometryKind {
     Unknown,
     Geo24ModulesLayer,
     Geo24ModulesLayerDistributed
+  };
+  
+  enum DimensionsType {
+    Standard,
+    Modular,
+  };
+  
+  struct ScintillatorGeometry {
+    G4int fID;
+    G4double fPhiAngle;
+    G4double fPhiModule;
+    G4double fRadius;
+    G4int fLayer;
+    G4int fChannel;
+    G4int fNmbOfThresholds;
+    G4int fNmbOfPMsInMatrix;
+    DimensionsType fDimensionsType;
   };
 
   //! only single instance can exist
@@ -66,11 +82,12 @@ public:
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
 
+  //! Basic geometry with 3 layers of scintillators
+  void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
   void LoadFrame(G4bool tf) { fLoadCADFrame = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(const G4String& module_name)
-  {
+  void ConstructModularLayer(const G4String& module_name) {
     fLoadModularLayer = true;
     if (module_name == "Single") {
       fGeoKind = GeometryKind::Geo24ModulesLayer;
@@ -81,6 +98,16 @@ public:
       fGeoKind = GeometryKind::Unknown;
     }
   }
+  void CreatGeometryFile(G4bool tf) { fCreateGeometryFile = tf; };
+  void AddScintillatorToGeometryFile(G4int ID, G4double angle, G4double moduleAngle, G4double radius, 
+                                     G4int layer, G4int channel, G4int thresholds, 
+                                     G4int pmtsInMatrix, DimensionsType dimensionsType) {
+    ScintillatorGeometry newScin = {ID, angle, moduleAngle, radius, layer, channel, thresholds, 
+                                                            pmtsInMatrix, dimensionsType};
+    GeometryFileContent.push_back(newScin);
+  };
+  void CreateGeometryFile();
+  unsigned GetChannelNumber(unsigned scinID, unsigned threshold);
 
   G4int GetRunNumber() const { return fRunNumber; };
 
@@ -111,17 +138,20 @@ private:
 
   void ConstructLayers(
     std::vector<G4double>& radius_dynamic, G4int& numberofModules,
-    G4double& AngDisp_dynamic, G4int& icopyI
-  );
+    G4double& AngDisp_dynamic, G4int& icopyI);
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
+  //! Flag for loading standard 3 layers of the scintillators
+  G4bool fLoadScintillators;
   //! Flag for loading frame from CAD file
   G4bool fLoadCADFrame;
   //! Flag for loading wrapping tf the scintillators
   G4bool fLoadWrapping;
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
+  //! Flag for creating file with geometry
+  G4bool fCreateGeometryFile;
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -144,6 +174,10 @@ private:
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
+  
+  std::vector<ScintillatorGeometry> GeometryFileContent;
+  G4int layerNumber = 0;
+  G4int channelNumber = 0;
 };
 
 #endif /* !DETECTORCONSTRUCTION_H */
