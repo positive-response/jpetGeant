@@ -368,6 +368,31 @@ void HistoManager::AddNewHit(DetectorHit* hit)
   }
 }
 
+void HistoManager::AddNodeToDecayTree(int nodeID, int previousNodeID, int trackID)
+{
+  int evtID = fEventPack->GetEventNumber() + 1;
+  InteractionType interactionType = InteractionType::secondaryPart;
+  
+  if (nodeID - previousNodeID == 10)
+    interactionType = InteractionType::scattNonActivePart;
+  else if (nodeID - previousNodeID == 100)
+    interactionType = InteractionType::scattActivePart;
+  
+  bool firstInteraction = (previousNodeID < 10 ? true : false);
+  
+  if ( fEventPack->GetNumberOfDecayTrees() < evtID ) {
+    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
+    if (firstInteraction)
+      newDecayTree->AddNode(previousNodeID, -1, trackID, InteractionType::primaryGamma);
+    newDecayTree->AddNode(nodeID, previousNodeID, trackID, interactionType);
+  } else {
+    JPetGeantDecayTree* decayTree = fEventPack->GetDecayTree(evtID - 1);
+    if (firstInteraction)
+      decayTree->AddNode(previousNodeID, -1, trackID, InteractionType::primaryGamma);
+    decayTree->AddNode(nodeID, previousNodeID, trackID, interactionType);
+  }
+}
+
 void HistoManager::Save()
 {
   if (!fRootFile) return;

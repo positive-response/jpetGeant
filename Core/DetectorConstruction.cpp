@@ -48,6 +48,11 @@ fLoadWrapping(true), fLoadModularLayer(false)
 
 DetectorConstruction::~DetectorConstruction() { delete fMessenger; }
 
+void DetectorConstruction::SetHistoManager(HistoManager* histo)
+{
+  fHistoManager = histo;
+}
+
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -96,6 +101,7 @@ void DetectorConstruction::ConstructSDandField()
     DetectorSD* det = new DetectorSD(
       "/mydet/detector", maxScinID, DetectorConstants::GetMergingTimeValueForScin()
     );
+    det->SetHistoManager(fHistoManager);
     fDetectorSD.Put(det);
   }
 

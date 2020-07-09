@@ -34,5 +34,5 @@ void ActionInitialization::Build() const
   SetUserAction(new RunAction(histo));
   SetUserAction(new PrimaryGeneratorAction(histo));
   SetUserAction(new TrackingAction);
-  SetUserAction(new SteppingAction);
+  SetUserAction(new SteppingAction(histo));
 }

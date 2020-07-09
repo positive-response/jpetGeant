@@ -25,6 +25,7 @@ G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHisto(histo)
   fBeam = new BeamParams();
   fIsotope = new SourceParams();
   fMessenger = new PrimaryGeneratorActionMessenger(this);
+  DetectorConstruction::GetInstance()->SetHistoManager(histo);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()

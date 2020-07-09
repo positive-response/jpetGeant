@@ -22,7 +22,7 @@
 #include <G4RunManager.hh>
 #include <G4UImanager.hh>
 
-SteppingAction::SteppingAction()
+SteppingAction::SteppingAction(HistoManager* histo) : fHisto(histo)
 {
   G4TransportationManager::GetTransportationManager()
   ->GetNavigatorForTracking()->SetPushVerbosity(0);
@@ -82,7 +82,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     //! particle quanta interact in phantom or frame (but not SD!)
     double momentumChange = abs(aStep->GetPostStepPoint()->GetMomentum().mag2() - aStep->GetPreStepPoint()->GetMomentum().mag2());
     if (momentumChange > EventMessenger::GetEventMessenger()->GetAllowedMomentumTransfer()) {
-      EventMessenger::GetEventMessenger()->FillHitOrigin(aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetTrackID(), EventMessenger::GetEventMessenger()->InteractionType::scattNonActivePart, info->GetGammaMultiplicity());
+      fHisto->AddNodeToDecayTree(info->GetGammaMultiplicity() + 10, info->GetGammaMultiplicity(), 
+                                        aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetTrackID());
       info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 10);
     }
   }

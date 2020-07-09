@@ -17,6 +17,8 @@
 #define DETECTORSD_H 1
 
 #include "../Objects/Geant4/DetectorHit.h"
+#include "HistoManager.h"
+
 #include <G4VSensitiveDetector.hh>
 
 class DetectorSD : public G4VSensitiveDetector
@@ -25,6 +27,8 @@ public:
   DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue);
   virtual ~DetectorSD();
   virtual void Initialize(G4HCofThisEvent* HCE);
+  
+  void SetHistoManager(HistoManager* histo) {fHisto = histo;}
 
 private:
   struct HitParameters
@@ -33,6 +37,8 @@ private:
     G4int fID = -1;
     G4double fTime = 0.0;
   };
+  
+  HistoManager* fHisto = nullptr;
   
   int testParentIDold = 0;
 
