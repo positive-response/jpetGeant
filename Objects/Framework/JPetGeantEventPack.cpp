@@ -18,14 +18,21 @@
 ClassImp(JPetGeantEventPack)
 
     JPetGeantEventPack::JPetGeantEventPack()
-    : fMCHits("JPetGeantScinHits", 10000), fMCDecayTrees("JPetGeantDecayTree", 1000), fEvtIndex(0), fHitIndex(0), fMCDecayTreesIndex(0)
+    : fMCHits("JPetGeantScinHits", 10000), fMCDecayTrees("JPetGeantDecayTree", 1000), 
+    fEvtIndex(0), fHitIndex(0), fMCDecayTreesIndex(0)
 {
   fGenInfo = new JPetGeantEventInformation();
 }
 
-JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit() { return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++)); }
+JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit() 
+{ 
+  return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++)); 
+}
 
-JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree() { return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++)); }
+JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree() 
+{ 
+  return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++)); 
+}
 
 JPetGeantEventPack::~JPetGeantEventPack()
 {

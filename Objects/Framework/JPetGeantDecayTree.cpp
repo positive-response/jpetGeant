@@ -14,6 +14,7 @@
  */
 
 #include "JPetGeantDecayTree.h"
+#include <iostream>
 
 ClassImp(JPetGeantDecayTree)
 
@@ -33,12 +34,12 @@ InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID)
 int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
 {
   int previousNodeID = nodeID;
-  for (unsigned i=0; i<fNodeConnections.size(); i++) {
-    if (std::get<0>(fNodeConnections[i])  == nodeID && std::get<1>(fNodeConnections[i]) != -1 
+  for (int i=fNodeConnections.size()-1; i>=0; i--) {
+    if (std::get<0>(fNodeConnections[i]) == nodeID && std::get<1>(fNodeConnections[i]) != -1 
                                                     && std::get<2>(fNodeConnections[i]) == trackID)
       return std::get<1>(fNodeConnections[i]);
     else if (std::get<0>(fNodeConnections[i]) == nodeID && std::get<1>(fNodeConnections[i]) != -1)
-      previousNodeID = std::get<1>(fNodeConnections[i]);
+      return std::get<1>(fNodeConnections[i]);
   }
   return previousNodeID;
 }
@@ -46,11 +47,11 @@ int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
 int JPetGeantDecayTree::GetPrimaryNodeID(int nodeID, int trackID)
 {
   int previousNodeID = nodeID, primaryNodeID = nodeID;
-  while (previousNodeID >= 0) {
+  while (previousNodeID >= 10) {
     primaryNodeID = previousNodeID;
     previousNodeID = GetPreviousNodeID(primaryNodeID, trackID);
   }
-  return primaryNodeID;
+  return previousNodeID;
 }
 
 void JPetGeantDecayTree::AddNode(int nodeID, int previousNodeID, int trackID, InteractionType interactionType)

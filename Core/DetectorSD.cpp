@@ -102,7 +102,7 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         //! should be marked as scattering
         info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
         if (fHisto)
-          fHisto->AddNodeToDecayTree(info->GetGammaMultiplicity() + 100, info->GetGammaMultiplicity(), 
+          fHisto->AddNodeToDecayTree(testParentIDold + 100, testParentIDold, 
                                         aStep->GetTrack()->GetTrackID());
       }
     }
