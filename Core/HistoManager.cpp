@@ -370,7 +370,7 @@ void HistoManager::AddNewHit(DetectorHit* hit)
 
 void HistoManager::AddNodeToDecayTree(int nodeID, int previousNodeID, int trackID)
 {
-  int evtID = fEventPack->GetEventNumber() + 1;
+  unsigned evtID = fEventPack->GetEventNumber() + 1;
   InteractionType interactionType = InteractionType::secondaryPart;
   
   if (nodeID - previousNodeID == 10)

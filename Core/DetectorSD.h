@@ -45,7 +45,7 @@ private:
   G4double timeIntervals;
   G4int totScinNum;
   std::vector<HitParameters> previousHits;
-  DetectorHitsCollection* fDetectorCollection;
+  DetectorHitsCollection* fDetectorCollection = nullptr;
 
 protected:
   virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);

@@ -23,7 +23,7 @@
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(HistoManager*);
+  explicit SteppingAction(HistoManager*);
   ~SteppingAction();
   virtual void UserSteppingAction(const G4Step*);
   

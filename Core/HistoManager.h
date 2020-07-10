@@ -69,9 +69,9 @@ public:
   void AddNodeToDecayTree(int nodeID, int previousNodeID, int trackID);
   void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
-  bool GetMakeControlHisto() { return fMakeControlHisto; };
+  bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
-  const JPetGeantEventInformation* GetGeantInfo() { return fGeantInfo; }
+  JPetGeantEventInformation* const GetGeantInfo() { return fGeantInfo; };
   
   void createHistogramWithAxes(
     TObject* object,

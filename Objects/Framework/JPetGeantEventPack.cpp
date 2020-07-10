@@ -23,9 +23,9 @@ ClassImp(JPetGeantEventPack)
   fGenInfo = new JPetGeantEventInformation();
 }
 
-JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit() { return (JPetGeantScinHits*)fMCHits.ConstructedAt(fHitIndex++); }
+JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit() { return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++)); }
 
-JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree() { return (JPetGeantDecayTree*)fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++); }
+JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree() { return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++)); }
 
 JPetGeantEventPack::~JPetGeantEventPack()
 {

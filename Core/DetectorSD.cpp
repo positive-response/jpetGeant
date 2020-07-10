@@ -23,7 +23,7 @@
 #include <algorithm>
 
 DetectorSD::DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue) :
-G4VSensitiveDetector(name), totScinNum(scinSum), timeIntervals(timeMergeValue)
+G4VSensitiveDetector(name), timeIntervals(timeMergeValue), totScinNum(scinSum)
 {
   collectionName.insert("detectorCollection");
   previousHits.resize(totScinNum + 1);
