@@ -104,8 +104,6 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fSeed = fSetSeed->GetNewIntValue(newValue);
   } else if (command == fSaveSeed) {
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-  } else if (command == fAddDatetime) {
-    fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
   } else if (command == fCMDAllowedMomentumTransfer){
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
   }

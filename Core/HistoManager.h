@@ -57,7 +57,6 @@ class HistoManager
 {
 public:
   HistoManager();
-  HistoManager(const HistoManager& histoManager);
   ~HistoManager();
 
   void Book(); //! call once; book (create) all trees and histograms

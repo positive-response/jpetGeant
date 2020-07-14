@@ -26,22 +26,6 @@ HistoManager::HistoManager() : fMakeControlHisto(true)
   fGeantInfo = fEventPack->GetEventInformation();
 }
 
-HistoManager::HistoManager(const HistoManager& histoManager)
-{
-  fBookStatus = histoManager.fBookStatus;
-  fMakeControlHisto = histoManager.fMakeControlHisto;
-  fRootFile = histoManager.fRootFile;
-  fTree = histoManager.fTree;
-  fBranchTrk = histoManager.fBranchTrk;
-  fBranchScin = histoManager.fBranchScin;
-  fBranchEventPack = histoManager.fBranchEventPack;
-  fEventPack = histoManager.fEventPack;
-  fGeantInfo = histoManager.fGeantInfo;
-  fEvtMessenger = histoManager.fEvtMessenger;
-  // fStats = histoManager.fStats;
-  fErrorCounts = histoManager.fErrorCounts;
-}
-
 HistoManager::~HistoManager() {}
 
 void HistoManager::createHistogramWithAxes(
