@@ -48,7 +48,7 @@ public:
   void AddoPsComponent(G4double lifetime, G4double probability);
   void AddDirectComponent(G4double lifetime, G4double probability);
   void SetpPsComponent(G4double lifetime, G4double fraction);
-  const G4double GetLifetime(double randNumber, DecayChannel channel) const;
+  G4double GetLifetime(double randNumber, DecayChannel channel) const;
 
   /*
    * Changing lifetime and intensity parameters of Material to the parameters from
@@ -61,7 +61,7 @@ public:
 
   void FillIntensities() { fMaterialParameters->SetComponentsIntensities(); };
   //! 2g direct; 2g pickoff (lifetime 3g); 3g direct; 3g oPs (lifetime 3g)
-  const std::vector<G4double> GetEventsFraction() const;
+  std::vector<G4double> GetEventsFraction() const;
 
   G4bool IsTarget() const { return fTarget; };
   void AllowsAnnihilations(G4bool tf) { fTarget = tf; };

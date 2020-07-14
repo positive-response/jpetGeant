@@ -18,6 +18,8 @@
 #include "../Core/DetectorConstruction.h"
 #include "../Core/DetectorConstants.h"
 
+PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() {}
+
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction) : fPrimGen(primGeneratorAction)
 {
   fDirectory = new G4UIdirectory("/jpetmc/source/");

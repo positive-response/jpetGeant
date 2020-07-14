@@ -22,6 +22,8 @@
 #include <G4Run.hh>
 #include <chrono>
 
+RunAction::RunAction() {}
+
 RunAction::RunAction(HistoManager* histo) : G4UserRunAction(), fHistoManager(histo) {}
 
 RunAction::~RunAction() {}

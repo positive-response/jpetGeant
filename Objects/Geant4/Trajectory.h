@@ -37,7 +37,7 @@ class Trajectory : public G4VTrajectory
 {
 public:
   Trajectory();
-  Trajectory(const G4Track* aTrack);
+  explicit Trajectory(const G4Track* track);
   virtual ~Trajectory();
 
   inline void* operator new(size_t);
@@ -81,8 +81,9 @@ inline void* Trajectory::operator new(size_t)
   return (void*) myTrajectoryAllocator->MallocSingle();
 }
 
-inline void Trajectory::operator delete(void* aTrajectory) {
-  myTrajectoryAllocator->FreeSingle((Trajectory*)aTrajectory);
+inline void Trajectory::operator delete(void* trajectory)
+{
+  myTrajectoryAllocator->FreeSingle(static_cast<Trajectory*>(trajectory));
 }
 
 #endif /* !TRAJECTORY_H */

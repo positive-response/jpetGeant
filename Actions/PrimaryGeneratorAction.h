@@ -38,7 +38,8 @@ struct IsotopeParams
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  PrimaryGeneratorAction(HistoManager* histo);
+  PrimaryGeneratorAction();
+  explicit PrimaryGeneratorAction(HistoManager* histo);
   ~PrimaryGeneratorAction();
   virtual void GeneratePrimaries(G4Event*);
   void SetSourceTypeInfo(G4String);

@@ -16,6 +16,8 @@
 #include "../Info/DetectorConstructionMessenger.h"
 #include "../Core/DetectorConstants.h"
 
+DetectorConstructionMessenger::DetectorConstructionMessenger() {}
+
 DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector) : fDetector(detector)
 {
   fDirectory = new G4UIdirectory("/jpetmc/detector/");

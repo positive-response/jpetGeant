@@ -18,6 +18,8 @@
 
 #include <G4PrimaryVertex.hh>
 
+PrimaryGeneratorAction::PrimaryGeneratorAction() {}
+
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) :
 G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHisto(histo)
 {

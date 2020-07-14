@@ -25,6 +25,8 @@
 #include <G4SDManager.hh>
 #include <G4Event.hh>
 
+EventAction::EventAction() {}
+
 EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID(-1)
 {
   fHisto = histo;
@@ -32,7 +34,7 @@ EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID
 
 EventAction::~EventAction() {}
 
-void EventAction::BeginOfEventAction(const G4Event* anEvent)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   if (fScinCollID < 0) {

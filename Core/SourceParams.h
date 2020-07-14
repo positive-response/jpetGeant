@@ -33,10 +33,10 @@ public:
     shapeCenterPosition.set(x, y, z);
   }
   void SetShapeDim(G4int i, G4double x) { shapeDim[i] = x; }
-  G4int GetGammasNumber() { return howManyGammas; }
-  G4String GetShape() { return shape; }
-  G4double GetShapeDim(G4int i) { return shapeDim[i]; }
-  G4ThreeVector GetShapeCenterPosition() { return shapeCenterPosition; }
+  G4int GetGammasNumber() const { return howManyGammas; }
+  G4String GetShape() const { return shape; }
+  G4double GetShapeDim(G4int i) const { return shapeDim[i]; }
+  G4ThreeVector GetShapeCenterPosition() const { return shapeCenterPosition; }
 
 private:
   G4int howManyGammas;
