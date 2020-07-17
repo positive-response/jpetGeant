@@ -39,6 +39,20 @@
 #include <vector>
 
 class DetectorConstructionMessenger;
+struct Channel;
+struct Layer;
+struct PM;
+struct Scin;
+struct Setup {
+  int fId;
+  std::string fDescription;
+  friend std::ostream& operator <<(std::ostream& os, Setup const& setup)
+  {
+    return os << "         {\n            \"id\" : " << setup.fId << ",\n"
+              << "            \"description\" : \"" << setup.fDescription << "\"\n         }";
+  }
+};
+struct Slot;
 
 //! Flag for debugging purposes
 const G4bool checkOverlaps = false;
@@ -54,23 +68,6 @@ public:
     Unknown,
     Geo24ModulesLayer,
     Geo24ModulesLayerDistributed
-  };
-  
-  enum DimensionsType {
-    Standard,
-    Modular,
-  };
-  
-  struct ScintillatorGeometry {
-    G4int fID;
-    G4double fPhiAngle;
-    G4double fPhiModule;
-    G4double fRadius;
-    G4int fLayer;
-    G4int fChannel;
-    G4int fNmbOfThresholds;
-    G4int fNmbOfPMsInMatrix;
-    DimensionsType fDimensionsType;
   };
 
   //! only single instance can exist
@@ -98,17 +95,10 @@ public:
       fGeoKind = GeometryKind::Unknown;
     }
   }
-  void CreatGeometryFile(G4bool tf) { fCreateGeometryFile = tf; };
-  void AddScintillatorToGeometryFile(G4int ID, G4double angle, G4double moduleAngle, G4double radius, 
-                                     G4int layer, G4int channel, G4int thresholds, 
-                                     G4int pmtsInMatrix, DimensionsType dimensionsType) {
-    ScintillatorGeometry newScin = {ID, angle, moduleAngle, radius, layer, channel, thresholds, 
-                                                            pmtsInMatrix, dimensionsType};
-    GeometryFileContent.push_back(newScin);
-  };
+  void CreateGeometryFileFlag(G4bool tf) { fCreateGeometryFile = tf; };
+  void SetOldStyleOfGeometryFile(G4bool tf) { fCreateOldGeometryFileStyle = tf; };
   void CreateGeometryFile();
-  unsigned GetChannelNumber(unsigned scinID, unsigned threshold);
-
+  
   G4int GetRunNumber() const { return fRunNumber; };
 
 private:
@@ -152,6 +142,8 @@ private:
   G4bool fLoadModularLayer;
   //! Flag for creating file with geometry
   G4bool fCreateGeometryFile;
+  //! Flag for choosing old style of geometry file
+  G4bool fCreateOldGeometryFileStyle;
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -175,9 +167,148 @@ private:
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
   
-  std::vector<ScintillatorGeometry> GeometryFileContent;
-  G4int layerNumber = 0;
-  G4int channelNumber = 0;
+  std::vector<Channel> fChannelContainer;
+  std::vector<Layer> fLayerContainer;
+  std::vector<PM> fPmContainer;
+  std::vector<Scin> fScinContainer;
+  Setup fSetup = {1, "Setup with 0 layers"};
+  std::vector<Slot> fSlotContainer;
+  G4int fLayerNumber = 0;
+  G4int fChannelNumber = 0;
 };
 
+struct Channel {
+  int fId;
+  int fPm_id;
+  int fThr_num;
+  int fThr_val;
+  Channel(int id, int pm_id, int thr_num, int thr_val) : fId(id), fPm_id(pm_id),
+                                                fThr_num(thr_num), fThr_val(thr_val) {}
+  friend std::ostream& operator <<(std::ostream& os, Channel const& channel)
+  {
+    return os << "         {\n            \"id\" : " << channel.fId << ",\n"
+              << "            \"pm_id\" : " << channel.fPm_id << ",\n"
+              << "            \"thr_num\" : " << channel.fThr_num << ",\n"
+              << "            \"thr_val\" : " << channel.fThr_val << "\n         }";
+  }
+  friend std::ostream& operator <<=(std::ostream& os, Channel const& channel)
+  {
+    return os << "         {\n            \"PMs_id\" : " << channel.fPm_id << ",\n"
+              << "            \"FEBs_id\" : " << "1" << ",\n"
+              << "            \"TRBs_id\" : " << "1" << ",\n"
+              << "            \"FEB\" : " << (channel.fId)%12 << ",\n"
+              << "            \"channel\" : " << channel.fId << ",\n"
+              << "            \"local_number\" : " << channel.fThr_num << ",\n"
+              << "            \"threshold\" : \"" << channel.fThr_val << "\"\n         }";
+  }
+};
+
+struct Layer {
+  int fId;
+  std::string fName;
+  double fRadius;
+  int fSetup_id;
+  Layer(int id, std::string name, double radius, int setup_id) : fId(id), fName(name),
+                                                fRadius(radius), fSetup_id(setup_id) {}
+  friend std::ostream& operator <<(std::ostream& os, Layer const& layer)
+  {
+    return os << "         {\n            \"id\" : " << layer.fId << ",\n"
+              << "            \"name\" : \"" << layer.fName << "\",\n"
+              << "            \"radius\" : " << layer.fRadius << ",\n"
+              << "            \"setup_id\" : " << layer.fSetup_id << "\n         }";
+  }
+  friend std::ostream& operator <<=(std::ostream& os, Layer const& layer)
+  {
+    return os << "         {\n            \"id\" : \"" << layer.fId << "\",\n"
+              << "            \"name\" : \"" << layer.fName << "\",\n"
+              << "            \"radius\" : " << layer.fRadius << ",\n"
+              << "            \"frames_id\" : " << layer.fSetup_id << ",\n"
+              << "            \"active\" : \"true\"\n         }";
+  }
+};
+
+struct PM {
+  int fId;
+  std::string fDescription;
+  int fScin_id;
+  int fPos_in_matrix;
+  std::string fSide;
+  PM(int id, std::string description, int scin_id, int pos_in_matrix, std::string side) : fId(id), 
+                                                fDescription(description), fScin_id(scin_id),
+                                                fPos_in_matrix(pos_in_matrix), fSide(side) {}
+  friend std::ostream& operator <<(std::ostream& os, PM const& pm)
+  {
+    return os << "         {\n            \"id\" : " << pm.fId << ",\n"
+              << "            \"description\" : " << pm.fDescription << ",\n"
+              << "            \"scin_id\" : " << pm.fScin_id << ",\n"
+              << "            \"pos_in_matrix\" : " << pm.fPos_in_matrix << ",\n"
+              << "            \"side\" : \"" << pm.fSide << "\"\n         }";
+  }
+  friend std::ostream& operator <<=(std::ostream& os, PM const& pm)
+  {
+    return os << "         {\n            \"id\" : " << pm.fId << ",\n"
+              << "            \"barrelSlots_id\" : " << pm.fScin_id << ",\n"
+              << "            \"scintillators_id\" : " << pm.fScin_id << ",\n"
+              << "            \"FEBs_id\" : 1,\n"
+              << "            \"is_right_side\": \"" << (pm.fSide == "B" ? "true" : "false") << "\"\n         }";
+  }
+};
+
+struct Scin {
+  int fId;
+  int fSlot_id;
+  double fHeight;
+  double fWidth;
+  double fLength;
+  double fX_center;
+  double fY_center;
+  double fZ_center;
+  Scin(int id, int slot_id, double height, double width, double length, double x_center, double y_center,
+        double z_center) : fId(id), fSlot_id(slot_id), fHeight(height), fWidth(width), fLength(length),
+                            fX_center(x_center), fY_center(y_center), fZ_center(z_center) {}
+  friend std::ostream& operator <<(std::ostream& os, Scin const& scin)
+  {
+    return os << "         {\n            \"id\" : " << scin.fId << ",\n"
+              << "            \"slot_id\" : " << scin.fSlot_id << ",\n"
+              << "            \"height\" : " << scin.fHeight << ",\n"
+              << "            \"width\" : " << scin.fWidth << ",\n"
+              << "            \"length\" : " << scin.fLength << ",\n"
+              << "            \"xcenter\" : " << scin.fX_center << ",\n"
+              << "            \"ycenter\" : " << scin.fY_center << ",\n"
+              << "            \"zcenter\" : " << scin.fZ_center << "\n         }";
+  }
+  friend std::ostream& operator <<=(std::ostream& os, Scin const& scin)
+  {
+    return os << "         {\n            \"id\" : " << scin.fId << ",\n"
+              << "            \"barrelSlots_id\" : " << scin.fId << ",\n"
+              << "            \"height\" : " << scin.fHeight << ",\n"
+              << "            \"width\" : " << scin.fWidth << ",\n"
+              << "            \"length\" : " << scin.fLength << ",\n"
+              << "            \"attenuation_length\": 0\n         }";
+  }
+};
+
+struct Slot {
+  int fId;
+  int fLayer_id;
+  double fTheta;
+  std::string fType;
+  Slot(int id, int layer_id, double theta, std::string type) : fId(id), fLayer_id(layer_id),
+                                                fTheta(theta), fType(type) {}
+  friend std::ostream& operator <<(std::ostream& os, Slot const& slot)
+  {
+    return os << "         {\n            \"id\" : " << slot.fId << ",\n"
+              << "            \"layer_id\" : " << slot.fLayer_id << ",\n"
+              << "            \"theta\" : " << slot.fTheta << ",\n"
+              << "            \"type\" : \"" << slot.fType << "\"\n         }";
+  }
+  friend std::ostream& operator <<=(std::ostream& os, Slot const& slot)
+  {
+    return os << "         {\n            \"id\" : " << slot.fId << ",\n"
+              << "            \"frame_id\": 1,\n            \"name\": \"1\",\n"
+              << "            \"layers_id\" : \"" << slot.fLayer_id << "\",\n"
+              << "            \"theta1\" : " << slot.fTheta << ",\n"
+              << "            \"active\": \"true\"\n         }";
+  }
+};
 #endif /* !DETECTORCONSTRUCTION_H */

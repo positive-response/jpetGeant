@@ -27,6 +27,7 @@
 #include <G4SolidStore.hh>
 #include <G4UnionSolid.hh>
 #include <G4Polycone.hh>
+#include <TBufferJSON.h>
 #include <G4Tubs.hh>
 #include <iostream>
 #include <vector>
@@ -293,10 +294,13 @@ void DetectorConstruction::ConstructScintillators()
   boxVisAttWrapping->SetForceSolid(true);
 
   G4int icopy = 1;
-  G4int oldLayerNumber = layerNumber;
+  G4int oldLayerNumber = fLayerNumber;
   G4int moduleNumber = 0;
   for (int j = 0; j < DetectorConstants::layers; j++) {
-    layerNumber = oldLayerNumber + j + 1;
+    fLayerNumber = oldLayerNumber + j + 1;
+    Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), DetectorConstants::radius[j]/10 /*to cm*/, fSetup.fId);
+    fLayerContainer.push_back(layTemp);
+    fSetup.fDescription = "Setup with " + std::to_string(fLayerNumber) + " layers";
     for (int i = 0; i < DetectorConstants::nSegments[j]; i++) {
       moduleNumber++;
       G4double phi = i * 2 * M_PI / DetectorConstants::nSegments[j];
@@ -317,9 +321,23 @@ void DetectorConstruction::ConstructScintillators()
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
       
       if (fCreateGeometryFile) {
-        AddScintillatorToGeometryFile(moduleNumber, (phi+fi)*180/M_PI, (phi+fi)*180/M_PI, DetectorConstants::radius[j], layerNumber, 
-                                      channelNumber, 4/*thresholds*/, 1/*pmts in matrix*/, DimensionsType::Standard);
-        channelNumber+=8;     // Beacuse 4 thresholds for two sides - 4*2
+        for (unsigned i=0; i<4; i++) {
+          Channel channTemp(fChannelNumber+i+1, 2*(moduleNumber - 1)+1, i+1, (i+1)*80);
+          fChannelContainer.push_back(channTemp);
+          
+          Channel channTemp2(fChannelNumber+i+5, 2*(moduleNumber - 1)+2, i+1, (i+1)*80);
+          fChannelContainer.push_back(channTemp2);
+        }
+        PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), moduleNumber, (int)moduleNumber, "A");
+        fPmContainer.push_back(pmTemp);
+        PM pmTemp2(2*(moduleNumber - 1)+2, std::to_string(2*(moduleNumber - 1)+2), moduleNumber, (int)moduleNumber, "B");
+        fPmContainer.push_back(pmTemp2);
+        Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim[0], DetectorConstants::scinDim[1], DetectorConstants::scinDim[2],
+                        DetectorConstants::radius[j]*cos((phi+fi)*180/M_PI)/10, DetectorConstants::radius[j]*sin((phi+fi)*180/M_PI)/10, 0);
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, (phi+fi)*180/M_PI, "single");
+        fSlotContainer.push_back(slotTemp);
+        fChannelNumber+=8;     // Because 4 thresholds for two sides - 4*2
       }
     
       new G4PVPlacement(
@@ -435,8 +453,13 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
 {
   G4double phi = 0.0;
   G4double phi1 = 0.0;
-  layerNumber++;
+  fLayerNumber++;
   
+  Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), radius_dynamic[6], fSetup.fId);
+  fLayerContainer.push_back(layTemp);
+  fSetup.fDescription = "Setup with " + std::to_string(fLayerNumber) + " layers";
+  
+  G4int moduleNumber = 0;
   for (int i = 0; i < numberofModules; i++){
     phi = (i * 2 * M_PI / numberofModules);
     for (int j = -6; j < 7; j++) {
@@ -446,12 +469,29 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
       rot.rotateZ(phi);
       G4ThreeVector loc = G4ThreeVector(radius_new * cos(phi1), radius_new * sin(phi1), 0.0);
       G4Transform3D transform(rot, loc);
-      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
+      moduleNumber = icopyI + i * 13 + j + 6;
+      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(moduleNumber);
       
       if (fCreateGeometryFile) {
-        AddScintillatorToGeometryFile(icopyI + i * 13 + j + 6, phi1*180/M_PI, phi*180/M_PI, radius_new, layerNumber, 
-                                      channelNumber, 2/*thresholds*/, 4/*pmts in matrix*/, DimensionsType::Modular);
-        channelNumber+=4;     // Beacuse 2 thresholds for 2 sides - 2*2
+        for (unsigned i=0; i<2; i++) {
+          Channel channTemp(fChannelNumber+i+1, 2*(moduleNumber - 1)+1, i+1, 0);
+          fChannelContainer.push_back(channTemp);
+          
+          Channel channTemp2(fChannelNumber+i+3, 2*(moduleNumber - 1)+2, i+1, 0);
+          fChannelContainer.push_back(channTemp2);
+        }
+        PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), (2*(moduleNumber - 1)+1)%4 + 1, 
+                        (int)moduleNumber, "A");
+        fPmContainer.push_back(pmTemp);
+        PM pmTemp2(2*(moduleNumber - 1)+2, std::to_string(2*(moduleNumber - 1)+2), (2*(moduleNumber - 1)+2)%4 + 1, 
+                        (int)moduleNumber, "B");
+        fPmContainer.push_back(pmTemp2);
+        Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim_inModule[0], DetectorConstants::scinDim_inModule[1], 
+                      DetectorConstants::scinDim_inModule[2], (radius_new/cm)*cos(phi1*180/M_PI), (radius_new/cm)*sin(phi1*180/M_PI), 0);
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, phi*180/M_PI, "module");
+        fSlotContainer.push_back(slotTemp);
+        fChannelNumber+=4;     // Beacuse 2 thresholds for 2 sides - 2*2
       }
       
       new G4PVPlacement(
@@ -863,116 +903,107 @@ void DetectorConstruction::CreateGeometryFile()
   fileWithGeometry.open(fileName, std::ios::out);
   G4cout << "--- Saving simulated geometry to " << fileName << " ---" << G4endl;
   if (fileWithGeometry.is_open()) {
-    G4int pmID = 0;
-    std::map<G4int,G4double> layer_Radius;
-    fileWithGeometry << "{\n  \"" << fRunNumber+90 << "\": {\n      \"channel\" : [\n";
-    for (unsigned i=0; i<GeometryFileContent.size(); i++) {
-      if (layer_Radius.find(GeometryFileContent[i].fLayer) == layer_Radius.end()) {
-        layer_Radius.insert(std::pair<int,double>(GeometryFileContent[i].fLayer, GeometryFileContent[i].fRadius));
-      } else {
-        if(layer_Radius.at(GeometryFileContent[i].fLayer) > GeometryFileContent[i].fRadius)
-          layer_Radius.at(GeometryFileContent[i].fLayer) = GeometryFileContent[i].fRadius;
+    if (fCreateOldGeometryFileStyle) {
+      int channelShift = 260;
+      fileWithGeometry << "{\n    \"" << fRunNumber+90 << "\": {\n      \"FEBs\": [\n";
+      fileWithGeometry << "         {\n            \"active\": \"true\",\n";
+      fileWithGeometry << "            \"no_time_outputs_per_input\": 1,\n";
+      fileWithGeometry << "            \"id\": 1,\n            \"status\": \"OK\",\n";
+      fileWithGeometry << "            \"version\": 1,\n            \"TRBs_id\": 1,\n";
+      fileWithGeometry << "            \"time_outputs_per_input\": 4,\n            \"creator_id\": 1,\n";
+      fileWithGeometry << "            \"description\": \"\"\n         }\n      ],\n";
+      fileWithGeometry << "      \"TRBs\": [\n         {\n";
+      fileWithGeometry << "            \"channel\": " << channelShift << ",\n            \"id\": 1,\n";
+      fileWithGeometry << "            \"type\": 0\n         }\n      ],\n";
+      fileWithGeometry << "      \"scintillators\": [\n";
+      for (unsigned i=0; i<fScinContainer.size(); i++) {
+        fileWithGeometry <<= fScinContainer[i];
+        if (i<fScinContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
-      for (unsigned thr=0; thr<(unsigned)GeometryFileContent[i].fNmbOfThresholds; thr++) {
-        fileWithGeometry << "         {\n            \"id\" : " << GeometryFileContent[i].fChannel + thr + 1;
-        fileWithGeometry << ",\n            \"pm_id\" : " << pmID+1 << ",\n            \"thr_num\" : ";
-        fileWithGeometry << thr + 1 << ",\n            \"thr_val\" : " << 80*(thr+1);
-        fileWithGeometry << "\n         },\n";
-          
-        fileWithGeometry << "         {\n            \"id\" : " << GeometryFileContent[i].fChannel 
-                                                            + thr + 1 + GeometryFileContent[i].fNmbOfThresholds;
-        fileWithGeometry << ",\n            \"pm_id\" : " << pmID+2 << ",\n            \"thr_num\" : ";
-        fileWithGeometry << thr + 1 << ",\n            \"thr_val\" : " << 80*(thr+1);
-        if (i == GeometryFileContent.size() - 1)
-          fileWithGeometry << "\n         }\n";
-        else
-          fileWithGeometry << "\n         },\n";
+      fileWithGeometry << "      ],\n";
+      fileWithGeometry << "      \"barrelSlots\": [\n";
+      for (unsigned i=0; i<fSlotContainer.size(); i++) {
+        fileWithGeometry <<= fSlotContainer[i];
+        if (i<fSlotContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
-      pmID+=2; // Two sides
-    }
-    fileWithGeometry << "      ],\n      \"layer\" : [\n";
-    for (auto it=layer_Radius.begin(); it!=layer_Radius.end(); ++it) {
-      fileWithGeometry << "         {\n            \"id\" : " << it->first << ",\n            \"name\" : \"";
-      fileWithGeometry << "Layer nr " << it->first << "\",\n            \"radius\" : " << it->second / cm;
-      fileWithGeometry << ",\n            \"setup_id\" : 1";
-      if (std::next(it,1) == layer_Radius.end())
-        fileWithGeometry << "\n         }\n";
-      else
-        fileWithGeometry << "\n         },\n";
-    }
-    fileWithGeometry << "      ],\n      \"pm\" : [\n";
-    pmID = 0;
-    for (unsigned i=0; i<GeometryFileContent.size(); i++) {
-      for (unsigned pm=0; pm<(unsigned)GeometryFileContent[i].fNmbOfPMsInMatrix; pm++) {
-        fileWithGeometry << "         {\n            \"description\" : " << pmID+pm+1 << ",\n";
-        fileWithGeometry << "            \"id\" : " << pmID+1 << ",\n            \"pos_in_matrix\" : ";
-        fileWithGeometry << pm+1 << ",\n            \"scin_id\" : " << GeometryFileContent[i].fID << ",\n";
-        fileWithGeometry << "            \"side\" : \"A\"\n         },\n";
-        
-        fileWithGeometry << "         {\n            \"description\" : " << pmID+pm+1+GeometryFileContent[i].fNmbOfPMsInMatrix;
-        fileWithGeometry << ",\n            \"id\" : " << pmID+1+GeometryFileContent[i].fNmbOfPMsInMatrix << ",\n            \"";
-        fileWithGeometry << "pos_in_matrix\" : " << pm+1 << ",\n            \"scin_id\" : " << GeometryFileContent[i].fID;
-        if (i == GeometryFileContent.size() - 1)
-          fileWithGeometry << ",\n            \"side\" : \"B\"\n         }\n";
-        else
-          fileWithGeometry << ",\n            \"side\" : \"B\"\n         },\n";
+      fileWithGeometry << "      ],\n      \"PMCalibs\": \"\",\n      \"PMs\": [\n";
+      for (unsigned i=0; i<fPmContainer.size(); i++) {
+        fileWithGeometry <<= fPmContainer[i];
+        if (i<fPmContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
-      pmID+=2*GeometryFileContent[i].fNmbOfPMsInMatrix; // pmts in matrix
-    }
-    fileWithGeometry << "      ],\n      \"scin\" : [\n";
-    G4double tempScinDim[3] = {0,0,0};
-    for (unsigned i=0; i<GeometryFileContent.size(); i++) {
-      if (GeometryFileContent[i].fDimensionsType == DimensionsType::Standard) {
-        std::copy(std::begin(DetectorConstants::scinDim), std::end(DetectorConstants::scinDim), 
-                  std::begin(tempScinDim));
-      } else {
-        std::copy(std::begin(DetectorConstants::scinDim_inModule), std::end(DetectorConstants::scinDim_inModule), 
-                  std::begin(tempScinDim));
+      fileWithGeometry << "      ],\n      \"TOMBChannels\": [\n";
+      for (unsigned i=0; i<fChannelContainer.size(); i++) {
+        fileWithGeometry <<= fChannelContainer[i];
+        if (i<fChannelContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
-      fileWithGeometry << "         {\n            \"height\" : " << tempScinDim[0]*mm << ",\n";
-      fileWithGeometry << "            \"id\" : " << GeometryFileContent[i].fID << ",\n";
-      fileWithGeometry << "            \"length\" : " << tempScinDim[2]*mm << ",\n            \"slot_id\" : ";
-      fileWithGeometry << GeometryFileContent[i].fID << ",\n            \"width\" : " << tempScinDim[1]*mm << ",\n";
-      fileWithGeometry << "            \"xcenter\" : " << GeometryFileContent[i].fRadius*cos(GeometryFileContent[i].fPhiAngle);
-      fileWithGeometry << ",\n            \"ycenter\" : " << GeometryFileContent[i].fRadius*sin(GeometryFileContent[i].fPhiAngle);
-      fileWithGeometry << ",\n            \"zcenter\" : 0\n";
-      if (i == GeometryFileContent.size() - 1)
-        fileWithGeometry << "         }\n";
-      else
-        fileWithGeometry << "         },\n";
-    }
-    fileWithGeometry << "      ],\n      \"setup\" : [\n         {\n            \"description\" : \"Setup with ";
-    fileWithGeometry << layer_Radius.size() << " layer(s)\",\n            \"id\" : 1\n         }\n      ],\n";
-    fileWithGeometry << "      \"slot\" : [\n";
-    
-    if (GeometryFileContent.size() > 0) {
-      fileWithGeometry << "         {\n            \"id\" : " << GeometryFileContent[0].fID << ",\n";
-      fileWithGeometry << "            \"layer_id\" : " << GeometryFileContent[0].fLayer << ",\n";
-      fileWithGeometry << "            \"theta\" : " << GeometryFileContent[0].fPhiModule << ",\n";
-      if (GeometryFileContent[0].fDimensionsType == DimensionsType::Standard) {
-        fileWithGeometry << "            \"type\" : \"single\"\n";
-      } else {
-        fileWithGeometry << "            \"type\" : \"module\"\n";
+      fileWithGeometry << "      ],\n      \"frames\": [\n";
+      fileWithGeometry << "         {\n            \"active\": \"true\",\n";
+      fileWithGeometry << "            \"id\": 1,\n            \"status\": \"OK\",\n";
+      fileWithGeometry << "            \"version\": 1,\n            \"creator_id\": 1,\n";
+      fileWithGeometry << "            \"description\": \"Big barrel stub setup\"\n";
+      fileWithGeometry << "         }\n      ],\n      \"layers\": [\n";
+      for (unsigned i=0; i<fLayerContainer.size(); i++) {
+        fileWithGeometry <<= fLayerContainer[i];
+        if (i<fLayerContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
-      if (GeometryFileContent.size() == 1)
-        fileWithGeometry << "         }\n";
-    }
-    for (unsigned i=1; i<GeometryFileContent.size(); i++) {
-      if (GeometryFileContent[i].fPhiModule != GeometryFileContent[i-1].fPhiModule) {
-        fileWithGeometry << "         },\n";
-        fileWithGeometry << "         {\n            \"id\" : " << GeometryFileContent[i].fID << ",\n";
-        fileWithGeometry << "            \"layer_id\" : " << GeometryFileContent[i].fLayer << ",\n";
-        fileWithGeometry << "            \"theta\" : " << GeometryFileContent[i].fPhiModule << ",\n";
-        if (GeometryFileContent[i].fDimensionsType == DimensionsType::Standard) {
-          fileWithGeometry << "            \"type\" : \"single\"\n";
-        } else {
-          fileWithGeometry << "            \"type\" : \"module\"\n";
-        }
+      fileWithGeometry << "      ]\n  }\n}" << std::endl;
+      fileWithGeometry.close();
+    } else {
+      fileWithGeometry << "{\n  \"" << fRunNumber+90 << "\": {\n      \"channel\" : [\n";
+      for (unsigned i=0; i<fChannelContainer.size(); i++) {
+        fileWithGeometry << fChannelContainer[i];
+        if (i<fChannelContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
       }
+      fileWithGeometry << "      ],\n";
+      fileWithGeometry << "      \"layer\" : [\n";
+      for (unsigned i=0; i<fLayerContainer.size(); i++) {
+        fileWithGeometry << fLayerContainer[i];
+        if (i<fLayerContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
+      }
+      fileWithGeometry << "      ],\n";
+      fileWithGeometry << "      \"pm\" : [\n";
+      for (unsigned i=0; i<fPmContainer.size(); i++) {
+        fileWithGeometry << fPmContainer[i];
+        if (i<fPmContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
+      }
+      fileWithGeometry << "      ],\n";
+      fileWithGeometry << "      \"scin\" : [\n";
+      for (unsigned i=0; i<fScinContainer.size(); i++) {
+        fileWithGeometry << fScinContainer[i];
+        if (i<fScinContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
+      }
+      fileWithGeometry << "      ],\n";
+      fileWithGeometry << "      \"setup\" : [\n";
+      fileWithGeometry << fSetup;
+      fileWithGeometry << "\n      ],\n";
+      fileWithGeometry << "      \"slot\" : [\n";
+      for (unsigned i=0; i<fSlotContainer.size(); i++) {
+        fileWithGeometry << fSlotContainer[i];
+        if (i<fSlotContainer.size()-1)
+          fileWithGeometry << ",";
+        fileWithGeometry << "\n";
+      }
+      fileWithGeometry << "      ]\n    }\n}\n";
+      fileWithGeometry.close();
     }
-            fileWithGeometry << "         }\n";
-    fileWithGeometry << "      ]\n   }\n}\n";
-    fileWithGeometry.close();
   }
   else {
     G4Exception("DetectorConstruction", "DC03",

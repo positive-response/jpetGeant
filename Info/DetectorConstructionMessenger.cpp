@@ -46,6 +46,9 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   
   fCreateGeometryFile = new G4UIcmdWithoutParameter("/jpetmc/detector/createGeometryFile", this);
   fCreateGeometryFile->SetGuidance("Create a Json file for the simulated setup");
+  
+  fCreateOldGeometryFileStyle = new G4UIcmdWithoutParameter("/jpetmc/detector/createOldGeometryFileStyle", this);
+  fCreateOldGeometryFileStyle->SetGuidance("Json file will be created with old style");
 }
 
 DetectorConstructionMessenger::~DetectorConstructionMessenger()
@@ -56,6 +59,8 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fLoadOnlyScintillators;
   delete fLoadModularLayer;
   delete fScinHitMergingTime;
+  delete fCreateGeometryFile;
+  delete fCreateOldGeometryFileStyle;
 }
 
 void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -82,6 +87,8 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     DetectorConstants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
     fDetector->UpdateGeometry();
   } else if (command == fCreateGeometryFile) {
-    fDetector->CreatGeometryFile(true);
+    fDetector->CreateGeometryFileFlag(true);
+  } else if (command == fCreateOldGeometryFileStyle) {
+    fDetector->SetOldStyleOfGeometryFile(true);
   }
 }

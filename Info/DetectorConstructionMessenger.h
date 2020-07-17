@@ -48,6 +48,7 @@ private:
   G4UIcmdWithAString* fLoadModularLayer = nullptr;
   G4UIcmdWithADoubleAndUnit* fScinHitMergingTime = nullptr;
   G4UIcmdWithoutParameter* fCreateGeometryFile = nullptr;
+  G4UIcmdWithoutParameter* fCreateOldGeometryFileStyle = nullptr;
 };
 
 #endif /* !DETECTORCONSTRUCTIONMESSENGER_H */
