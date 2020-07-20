@@ -53,7 +53,7 @@ private:
 // 0 - secondary particle generation
   std::map<int, InteractionType> fNodeInteractionType;
     
-  ClassDef(JPetGeantDecayTree, 1)
+  ClassDef(JPetGeantDecayTree, 2)
 };
 
 #endif /* !JPETGEANTDECAYTREE_H */
