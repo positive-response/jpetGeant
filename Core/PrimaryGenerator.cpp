@@ -218,7 +218,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
     //! oPs 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
       vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], MaterialExtension::DecayChannel::Ortho3G)
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], MaterialExtension::DecayChannel::Ortho3G)
     ));
   }
 
@@ -314,7 +314,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
     //! oPs 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
       vtxPosition, T0, material->GetLifetime(
-        random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4],
+        random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3],
         MaterialExtension::DecayChannel::Ortho3G)
       )
     );
