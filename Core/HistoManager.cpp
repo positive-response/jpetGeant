@@ -373,7 +373,7 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int previousNodeID, int trackI
   if (!fEvtMessenger->GetCreateDecayTreeFlag())
     return;
   
-  unsigned evtID = fEventPack->GetEventNumber() + 1;
+  unsigned evtID = GetEventNumber() + 1;
   InteractionType interactionType = InteractionType::secondaryPart;
   
   if (nodeID - previousNodeID == 10)
@@ -385,6 +385,7 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int previousNodeID, int trackI
   
   if ( fEventPack->GetNumberOfDecayTrees() < evtID ) {
     JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
+    newDecayTree->Clean();
     if (firstInteraction)
       newDecayTree->AddNode(previousNodeID, -1, trackID, InteractionType::primaryGamma);
     newDecayTree->AddNode(nodeID, previousNodeID, trackID, interactionType);

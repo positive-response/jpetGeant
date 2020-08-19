@@ -101,16 +101,16 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         newHit->SetGenGammaIndex(info->GetIndex());
         //! should be marked as scattering
         info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
-        if (fHisto)
-          fHisto->AddNodeToDecayTree(testParentIDold + 100, testParentIDold, 
+        if (fHistoManager)
+          fHistoManager->AddNodeToDecayTree(testParentIDold + 100, testParentIDold, 
                                         aStep->GetTrack()->GetTrackID());
       }
     }
     else
     {
     // This is multiple scattering and compton that does not come from primary gamma generated (pair creation, electron scattering, ...)
-      if (fHisto)
-        fHisto->AddNodeToDecayTree(testParentIDold*10, testParentIDold, aStep->GetTrack()->GetTrackID());
+      if (fHistoManager)
+        fHistoManager->AddNodeToDecayTree(testParentIDold*10, testParentIDold, aStep->GetTrack()->GetTrackID());
       newHit->SetGenGammaMultiplicity(testParentIDold * 10);
       testParentIDold *= 10;
     }

@@ -28,7 +28,7 @@ public:
   virtual ~DetectorSD();
   virtual void Initialize(G4HCofThisEvent* HCE);
   
-  void SetHistoManager(HistoManager* histo) {fHisto = histo;}
+  void SetHistoManager(HistoManager* histo) {fHistoManager = histo;}
 
 private:
   struct HitParameters
@@ -38,7 +38,7 @@ private:
     G4double fTime = 0.0;
   };
   
-  HistoManager* fHisto = nullptr;
+  HistoManager* fHistoManager = nullptr;
   
   int testParentIDold = 0;
 

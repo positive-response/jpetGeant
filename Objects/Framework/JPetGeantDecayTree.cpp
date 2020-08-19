@@ -26,9 +26,24 @@ JPetGeantDecayTree::~JPetGeantDecayTree()
   fNodeInteractionType.clear();
 }
 
-InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID)
+void JPetGeantDecayTree::Clean()
 {
-  return fNodeInteractionType.at(nodeID);
+  this->ClearVectors();
+}
+
+void JPetGeantDecayTree::ClearVectors() 
+{
+  fNodeConnections.clear();
+  fNodeInteractionType.clear();
+}
+
+InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID, int trackID)
+{
+  for (int i=fNodeInteractionType.size()-1; i>=0; i--) {
+    if (std::get<0>(fNodeInteractionType[i]) == nodeID && std::get<2>(fNodeInteractionType[i]) == trackID)
+      return std::get<1>(fNodeInteractionType[i]);
+  }
+  return InteractionType::unknown;
 }
 
 int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
@@ -57,5 +72,5 @@ int JPetGeantDecayTree::GetPrimaryNodeID(int nodeID, int trackID)
 void JPetGeantDecayTree::AddNode(int nodeID, int previousNodeID, int trackID, InteractionType interactionType)
 {
   fNodeConnections.push_back(std::make_tuple(nodeID, previousNodeID, trackID));
-  fNodeInteractionType.insert(fNodeInteractionType.begin(), std::pair<int,InteractionType>(nodeID, interactionType));
+  fNodeInteractionType.push_back(std::make_tuple(nodeID, interactionType, trackID));
 }

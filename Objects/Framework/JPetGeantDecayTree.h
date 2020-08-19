@@ -29,7 +29,7 @@
  */
 
 enum InteractionType {
-  primaryGamma, scattActivePart, scattNonActivePart, secondaryPart
+  primaryGamma, scattActivePart, scattNonActivePart, secondaryPart, unknown
 };
 
 class JPetGeantDecayTree : public TObject
@@ -39,7 +39,9 @@ public:
   JPetGeantDecayTree();
   ~JPetGeantDecayTree();
   
-  InteractionType GetInteractionType(int nodeID);
+  void Clean();
+  void ClearVectors();
+  InteractionType GetInteractionType(int nodeID, int trackID);
   int GetPreviousNodeID(int nodeID, int trackID);
   int GetPrimaryNodeID(int nodeID, int trackID);
   void AddNode(int nodeID, int previousNodeID, int trackID, InteractionType interactionType);
@@ -48,10 +50,10 @@ private:
 // fNodeTrackConnections is constructed as {nodeID, previous NodeID, connecting trackID}
 // previous node for primary gamma = -1
   std::vector<std::tuple<int, int, int>> fNodeConnections;
-// fNodeInteractionType connects nodeID with the type of interaction
+// fNodeInteractionType connects nodeID with the type of interaction and trackID
 // types of interaction: 100 - scattering in active part, 10 scattering in non-active part
 // 0 - secondary particle generation
-  std::map<int, InteractionType> fNodeInteractionType;
+  std::vector<std::tuple<int, InteractionType, int>> fNodeInteractionType;
     
   ClassDef(JPetGeantDecayTree, 2)
 };

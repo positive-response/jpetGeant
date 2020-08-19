@@ -68,6 +68,7 @@ public:
   void AddNewHit(DetectorHit*);
   void AddNodeToDecayTree(int nodeID, int previousNodeID, int trackID);
   void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
+  int GetEventNumber() {return fEventPack->GetEventNumber();};
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
