@@ -28,6 +28,7 @@ RunAction::RunAction(HistoManager* histo) : G4UserRunAction(), fHistoManager(his
 
 RunAction::~RunAction() {}
 
+// cppcheck-suppress unusedFunction
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   fHistoManager->Book();
@@ -55,4 +56,5 @@ void RunAction::BeginOfRunAction(const G4Run*)
   }
 }
 
+// cppcheck-suppress unusedFunction
 void RunAction::EndOfRunAction(const G4Run*) { fHistoManager->Save(); }

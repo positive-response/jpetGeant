@@ -28,6 +28,7 @@ JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit()
   return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++));
 }
 
+// cppcheck-suppress unusedFunction
 JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree()
 {
   return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++));

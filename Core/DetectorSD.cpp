@@ -44,6 +44,7 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
   std::fill(fPreviousHits.begin(), fPreviousHits.end(), HitParameters());
 }
 
+// cppcheck-suppress unusedFunction
 G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();

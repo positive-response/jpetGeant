@@ -34,6 +34,7 @@ EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID
 
 EventAction::~EventAction() {}
 
+// cppcheck-suppress unusedFunction
 void EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -44,6 +45,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
   fHisto->Clear();
 }
 
+// cppcheck-suppress unusedFunction
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
   if (anEvent->GetNumberOfPrimaryVertex() == 0) return;

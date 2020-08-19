@@ -60,6 +60,7 @@ Trajectory::~Trajectory()
   delete fPositionRecord;
 }
 
+// cppcheck-suppress unusedFunction
 void Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
   if (!secondTrajectory) return;
@@ -73,6 +74,7 @@ void Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   seco->fPositionRecord->clear();
 }
 
+// cppcheck-suppress unusedFunction
 void Trajectory::AppendStep(const G4Step* aStep)
 {
   fPositionRecord->push_back(new G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition()));

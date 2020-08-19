@@ -128,6 +128,7 @@ void MaterialParameters::AddoPsComponent(G4double lifetime, G4double probability
   foPsProbabilities.push_back(probability);
 }
 
+// cppcheck-suppress unusedFunction
 void MaterialParameters::SetoPsComponents(
   const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb
 ) {
@@ -147,6 +148,7 @@ void MaterialParameters::AddDirectComponent(G4double lifetime, G4double probabil
   fDirectProbabilities.push_back(probability);
 }
 
+// cppcheck-suppress unusedFunction
 void MaterialParameters::SetDirectComponents(
   const std::vector<G4double>& directLF, const std::vector<G4double>& directProb
 ) {

@@ -61,6 +61,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fScinHitMergingTime;
 }
 
+// cppcheck-suppress unusedFunction
 void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fLoadGeomForRun) {
