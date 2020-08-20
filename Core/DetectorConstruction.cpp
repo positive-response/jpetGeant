@@ -20,16 +20,20 @@
 #include "MaterialExtension.h"
 #include "RunManager.h"
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/algorithm/string.hpp>
 #include <G4PhysicalVolumeStore.hh>
 #include <G4LogicalVolumeStore.hh>
 #include <G4SubtractionSolid.hh>
+#include <boost/optional.hpp>
 #include <G4RegionStore.hh>
 #include <G4SolidStore.hh>
 #include <G4UnionSolid.hh>
 #include <G4Polycone.hh>
-#include <TBufferJSON.h>
 #include <G4Tubs.hh>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 DetectorConstruction* DetectorConstruction::fInstance = 0;
@@ -321,11 +325,11 @@ void DetectorConstruction::ConstructScintillators()
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
       
       if (fCreateGeometryFile) {
-        for (unsigned i=0; i<4; i++) {
-          Channel channTemp(fChannelNumber+i+1, 2*(moduleNumber - 1)+1, i+1, (i+1)*80);
+        for (unsigned k=0; k<4; k++) {
+          Channel channTemp(fChannelNumber+k+1, 2*(moduleNumber - 1)+1, k+1, (k+1)*80);
           fChannelContainer.push_back(channTemp);
           
-          Channel channTemp2(fChannelNumber+i+5, 2*(moduleNumber - 1)+2, i+1, (i+1)*80);
+          Channel channTemp2(fChannelNumber+k+5, 2*(moduleNumber - 1)+2, k+1, (k+1)*80);
           fChannelContainer.push_back(channTemp2);
         }
         PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), moduleNumber, (int)moduleNumber, "A");
@@ -473,11 +477,11 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
       G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(moduleNumber);
       
       if (fCreateGeometryFile) {
-        for (unsigned i=0; i<2; i++) {
-          Channel channTemp(fChannelNumber+i+1, 2*(moduleNumber - 1)+1, i+1, 0);
+        for (unsigned k=0; k<2; k++) {
+          Channel channTemp(fChannelNumber+k+1, 2*(moduleNumber - 1)+1, k+1, 0);
           fChannelContainer.push_back(channTemp);
           
-          Channel channTemp2(fChannelNumber+i+3, 2*(moduleNumber - 1)+2, i+1, 0);
+          Channel channTemp2(fChannelNumber+k+3, 2*(moduleNumber - 1)+2, k+1, 0);
           fChannelContainer.push_back(channTemp2);
         }
         PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), (2*(moduleNumber - 1)+1)%4 + 1, 
@@ -903,105 +907,209 @@ void DetectorConstruction::CreateGeometryFile()
   fileWithGeometry.open(fileName, std::ios::out);
   G4cout << "--- Saving simulated geometry to " << fileName << " ---" << G4endl;
   if (fileWithGeometry.is_open()) {
+    int runNumber = fRunNumber+90;
     if (fCreateOldGeometryFileStyle) {
       int channelShift = 260;
-      fileWithGeometry << "{\n    \"" << fRunNumber+90 << "\": {\n      \"FEBs\": [\n";
-      fileWithGeometry << "         {\n            \"active\": \"true\",\n";
-      fileWithGeometry << "            \"no_time_outputs_per_input\": 1,\n";
-      fileWithGeometry << "            \"id\": 1,\n            \"status\": \"OK\",\n";
-      fileWithGeometry << "            \"version\": 1,\n            \"TRBs_id\": 1,\n";
-      fileWithGeometry << "            \"time_outputs_per_input\": 4,\n            \"creator_id\": 1,\n";
-      fileWithGeometry << "            \"description\": \"\"\n         }\n      ],\n";
-      fileWithGeometry << "      \"TRBs\": [\n         {\n";
-      fileWithGeometry << "            \"channel\": " << channelShift << ",\n            \"id\": 1,\n";
-      fileWithGeometry << "            \"type\": 0\n         }\n      ],\n";
-      fileWithGeometry << "      \"scintillators\": [\n";
+      
+      boost::property_tree::ptree jsonFile, full, partial, element;
+      std::string runNumberStr = std::to_string(runNumber) + std::string(".");
+      
+      element.put("active", "true");
+      element.put("no_time_outputs_per_input", "*" + std::to_string(1) + "*");
+      element.put("id", "*" + std::to_string(1) + "*");
+      element.put("status", "OK");
+      element.put("version", "*" + std::to_string(1) + "*");
+      element.put("TRBs_id", "*" + std::to_string(1) + "*");
+      element.put("time_outputs_per_input", "*" + std::to_string(4) + "*");
+      element.put("creator_id", "*" + std::to_string(1) + "*");
+      element.put("description", "");
+      partial.push_back(std::make_pair("", element));
+      full.add_child("FEBs", partial);
+      
+      element.clear();
+      partial.clear();
+      element.put("channel", "*" + std::to_string(channelShift) + "*");
+      element.put("id", "*" + std::to_string(1) + "*");
+      element.put("type", "*" + std::to_string(0) + "*");
+      partial.push_back(std::make_pair("", element));
+      full.add_child("TRBs", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fScinContainer.size(); i++) {
-        fileWithGeometry <<= fScinContainer[i];
-        if (i<fScinContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        element.put("barrelSlots_id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        std::stringstream stream, stream2, stream3;
+        stream << std::fixed << std::setprecision(0) << fScinContainer[i].fHeight;
+        element.put("height", "*" + stream.str() + "*");
+        stream2 << std::fixed << std::setprecision(0) << fScinContainer[i].fWidth;
+        element.put("width", "*" + stream2.str() + "*");
+        stream3 << std::fixed << std::setprecision(0) << fScinContainer[i].fLength;
+        element.put("length", "*" + stream3.str() + "*");
+        element.put("attenuation_length", "*" + std::to_string(0) + "*");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n";
-      fileWithGeometry << "      \"barrelSlots\": [\n";
+      full.add_child("scintillators", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fSlotContainer.size(); i++) {
-        fileWithGeometry <<= fSlotContainer[i];
-        if (i<fSlotContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fSlotContainer[i].fId) + "*");
+        element.put("frame_id", "*" + std::to_string(1) + "*");
+        element.put("name", std::to_string(1));
+        element.put("layers_id", std::to_string(1));
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(3) << fSlotContainer[i].fTheta;
+        element.put("theta1", "*" + stream.str() + "*");
+        element.put("active", "true");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n      \"PMCalibs\": \"\",\n      \"PMs\": [\n";
+      full.add_child("barrelSlots", partial);
+      
+      partial.clear();
+      full.add_child("PMCalibs", partial);
       for (unsigned i=0; i<fPmContainer.size(); i++) {
-        fileWithGeometry <<= fPmContainer[i];
-        if (i<fPmContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fPmContainer[i].fId) + "*");
+        element.put("barrelSlots_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
+        element.put("scintillators_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
+        element.put("FEBs_id", "*" + std::to_string(1) + "*");
+        element.put("is_right_side", (fPmContainer[i].fSide == "B" ? "true" : "false"));
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n      \"TOMBChannels\": [\n";
+      full.add_child("PMs", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fChannelContainer.size(); i++) {
-        fileWithGeometry <<= fChannelContainer[i];
-        if (i<fChannelContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("PMs_id", "*" + std::to_string(fChannelContainer[i].fPm_id) + "*");
+        element.put("FEBs_id", std::to_string(1));
+        element.put("TRBs_id", std::to_string(1));
+        element.put("FEB", "*" + std::to_string((fChannelContainer[i].fId)%12) + "*");
+        element.put("channel", "*" + std::to_string(fChannelContainer[i].fId) + "*");
+        element.put("local_number", "*" + std::to_string(fChannelContainer[i].fThr_num) + "*");
+        element.put("threshold", "*" + std::to_string(fChannelContainer[i].fThr_val) + "*");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n      \"frames\": [\n";
-      fileWithGeometry << "         {\n            \"active\": \"true\",\n";
-      fileWithGeometry << "            \"id\": 1,\n            \"status\": \"OK\",\n";
-      fileWithGeometry << "            \"version\": 1,\n            \"creator_id\": 1,\n";
-      fileWithGeometry << "            \"description\": \"Big barrel stub setup\"\n";
-      fileWithGeometry << "         }\n      ],\n      \"layers\": [\n";
+      full.add_child("TOMBChannels", partial);
+      
+      partial.clear();
+      element.clear();
+      element.put("active", "true");
+      element.put("id", "*" + std::to_string(1) + "*");
+      element.put("status", "OK");
+      element.put("version", "*" + std::to_string(1) + "*");
+      element.put("creator_id", "*" + std::to_string(1) + "*");
+      element.put("description", "Big barrel stub setup");
+      partial.push_back(std::make_pair("", element));
+      full.add_child("frames", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fLayerContainer.size(); i++) {
-        fileWithGeometry <<= fLayerContainer[i];
-        if (i<fLayerContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fLayerContainer[i].fId) + "*");
+        element.put("name", fLayerContainer[i].fName);
+        element.put("radius", "*" + std::to_string(fLayerContainer[i].fRadius) + "*");
+        element.put("frames_id", "*" + std::to_string(fLayerContainer[i].fSetup_id) + "*");
+        element.put("active", "true");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ]\n  }\n}" << std::endl;
+      full.add_child("layers", partial);
+      
+      jsonFile.add_child(runNumberStr, full);
+      std::stringstream ss;
+      boost::property_tree::json_parser::write_json(ss, jsonFile);
+      std::string json = ss.str();
+      std::string placeholder = "\"*", placeholder2 = "*\"";
+      replace(json, placeholder);
+      replace(json, placeholder2);
+      
+      fileWithGeometry << json;
       fileWithGeometry.close();
     } else {
-      fileWithGeometry << "{\n  \"" << fRunNumber+90 << "\": {\n      \"channel\" : [\n";
+      boost::property_tree::ptree jsonFile, full, partial, element;
+      std::string runNumberStr = std::to_string(runNumber) + std::string(".");
       for (unsigned i=0; i<fChannelContainer.size(); i++) {
-        fileWithGeometry << fChannelContainer[i];
-        if (i<fChannelContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fChannelContainer[i].fId) + "*");
+        element.put("pm_id", "*" + std::to_string(fChannelContainer[i].fPm_id) + "*");
+        element.put("thr_num", "*" + std::to_string(fChannelContainer[i].fThr_num) + "*");
+        element.put("thr_val", "*" + std::to_string(fChannelContainer[i].fThr_val) + "*");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n";
-      fileWithGeometry << "      \"layer\" : [\n";
+      full.add_child("channel", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fLayerContainer.size(); i++) {
-        fileWithGeometry << fLayerContainer[i];
-        if (i<fLayerContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fLayerContainer[i].fId) + "*");
+        element.put("name", fLayerContainer[i].fName);
+        element.put("radius", "*" + std::to_string(fLayerContainer[i].fRadius) + "*");
+        element.put("setup_id", "*" + std::to_string(fLayerContainer[i].fSetup_id) + "*");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n";
-      fileWithGeometry << "      \"pm\" : [\n";
+      full.add_child("layer", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fPmContainer.size(); i++) {
-        fileWithGeometry << fPmContainer[i];
-        if (i<fPmContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fPmContainer[i].fId) + "*");
+        element.put("description", "*" + fPmContainer[i].fDescription + "*");
+        element.put("scin_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
+        element.put("pos_in_matrix", "*" + std::to_string(fPmContainer[i].fPos_in_matrix) + "*");
+        element.put("side", fPmContainer[i].fSide);
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n";
-      fileWithGeometry << "      \"scin\" : [\n";
+      full.add_child("pm", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fScinContainer.size(); i++) {
-        fileWithGeometry << fScinContainer[i];
-        if (i<fScinContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        element.put("slot_id", "*" + std::to_string(fScinContainer[i].fSlot_id) + "*");
+        std::stringstream stream, stream2, stream3;
+        stream << std::fixed << std::setprecision(0) << fScinContainer[i].fHeight;
+        element.put("height", "*" + stream.str() + "*");
+        stream2 << std::fixed << std::setprecision(0) << fScinContainer[i].fWidth;
+        element.put("width", "*" + stream2.str() + "*");
+        stream3 << std::fixed << std::setprecision(0) << fScinContainer[i].fLength;
+        element.put("length", "*" + stream3.str() + "*");
+        element.put("xcenter", "*" + std::to_string(fScinContainer[i].fX_center) + "*");
+        element.put("ycenter", "*" + std::to_string(fScinContainer[i].fY_center) + "*");
+        element.put("zcenter", "*" + std::to_string(fScinContainer[i].fZ_center) + "*");
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ],\n";
-      fileWithGeometry << "      \"setup\" : [\n";
-      fileWithGeometry << fSetup;
-      fileWithGeometry << "\n      ],\n";
-      fileWithGeometry << "      \"slot\" : [\n";
+      full.add_child("scin", partial);
+      
+      partial.clear();
+      element.clear();
+      element.put("description", fSetup.fDescription);
+      element.put("id", "*" + std::to_string(fSetup.fId) + "*");
+      partial.push_back(std::make_pair("", element));
+      full.add_child("setup", partial);
+      
+      partial.clear();
       for (unsigned i=0; i<fSlotContainer.size(); i++) {
-        fileWithGeometry << fSlotContainer[i];
-        if (i<fSlotContainer.size()-1)
-          fileWithGeometry << ",";
-        fileWithGeometry << "\n";
+        element.clear();
+        element.put("id", "*" + std::to_string(fSlotContainer[i].fId) + "*");
+        element.put("layer_id", "*" + std::to_string(fSlotContainer[i].fLayer_id) + "*");
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(3) << fSlotContainer[i].fTheta;
+        element.put("theta", "*" + stream.str() + "*");
+        element.put("type", fSlotContainer[i].fType);
+        partial.push_back(std::make_pair("", element));
       }
-      fileWithGeometry << "      ]\n    }\n}\n";
+      full.add_child("slot", partial);
+      
+      jsonFile.add_child(runNumberStr, full);
+      std::stringstream ss;
+      boost::property_tree::json_parser::write_json(ss, jsonFile);
+      std::string json = ss.str();
+      std::string placeholder = "\"*", placeholder2 = "*\"";
+      replace(json, placeholder);
+      replace(json, placeholder2);
+      
+      fileWithGeometry << json;
       fileWithGeometry.close();
     }
   }
@@ -1009,4 +1117,9 @@ void DetectorConstruction::CreateGeometryFile()
     G4Exception("DetectorConstruction", "DC03",
       JustWarning, "Failed to open a file to save geometry");
   }
+}
+
+void replace(std::string& json, const std::string& placeholder) 
+{
+    boost::replace_all<std::string>(json, placeholder, "");
 }

@@ -288,7 +288,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
-
+  
   if (evtFractions[0] > random) {
     //! pPs
     event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)));

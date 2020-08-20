@@ -46,11 +46,6 @@ struct Scin;
 struct Setup {
   int fId;
   std::string fDescription;
-  friend std::ostream& operator <<(std::ostream& os, Setup const& setup)
-  {
-    return os << "         {\n            \"id\" : " << setup.fId << ",\n"
-              << "            \"description\" : \"" << setup.fDescription << "\"\n         }";
-  }
 };
 struct Slot;
 
@@ -184,23 +179,6 @@ struct Channel {
   int fThr_val;
   Channel(int id, int pm_id, int thr_num, int thr_val) : fId(id), fPm_id(pm_id),
                                                 fThr_num(thr_num), fThr_val(thr_val) {}
-  friend std::ostream& operator <<(std::ostream& os, Channel const& channel)
-  {
-    return os << "         {\n            \"id\" : " << channel.fId << ",\n"
-              << "            \"pm_id\" : " << channel.fPm_id << ",\n"
-              << "            \"thr_num\" : " << channel.fThr_num << ",\n"
-              << "            \"thr_val\" : " << channel.fThr_val << "\n         }";
-  }
-  friend std::ostream& operator <<=(std::ostream& os, Channel const& channel)
-  {
-    return os << "         {\n            \"PMs_id\" : " << channel.fPm_id << ",\n"
-              << "            \"FEBs_id\" : " << "1" << ",\n"
-              << "            \"TRBs_id\" : " << "1" << ",\n"
-              << "            \"FEB\" : " << (channel.fId)%12 << ",\n"
-              << "            \"channel\" : " << channel.fId << ",\n"
-              << "            \"local_number\" : " << channel.fThr_num << ",\n"
-              << "            \"threshold\" : \"" << channel.fThr_val << "\"\n         }";
-  }
 };
 
 struct Layer {
@@ -210,21 +188,6 @@ struct Layer {
   int fSetup_id;
   Layer(int id, std::string name, double radius, int setup_id) : fId(id), fName(name),
                                                 fRadius(radius), fSetup_id(setup_id) {}
-  friend std::ostream& operator <<(std::ostream& os, Layer const& layer)
-  {
-    return os << "         {\n            \"id\" : " << layer.fId << ",\n"
-              << "            \"name\" : \"" << layer.fName << "\",\n"
-              << "            \"radius\" : " << layer.fRadius << ",\n"
-              << "            \"setup_id\" : " << layer.fSetup_id << "\n         }";
-  }
-  friend std::ostream& operator <<=(std::ostream& os, Layer const& layer)
-  {
-    return os << "         {\n            \"id\" : \"" << layer.fId << "\",\n"
-              << "            \"name\" : \"" << layer.fName << "\",\n"
-              << "            \"radius\" : " << layer.fRadius << ",\n"
-              << "            \"frames_id\" : " << layer.fSetup_id << ",\n"
-              << "            \"active\" : \"true\"\n         }";
-  }
 };
 
 struct PM {
@@ -236,56 +199,20 @@ struct PM {
   PM(int id, std::string description, int scin_id, int pos_in_matrix, std::string side) : fId(id), 
                                                 fDescription(description), fScin_id(scin_id),
                                                 fPos_in_matrix(pos_in_matrix), fSide(side) {}
-  friend std::ostream& operator <<(std::ostream& os, PM const& pm)
-  {
-    return os << "         {\n            \"id\" : " << pm.fId << ",\n"
-              << "            \"description\" : " << pm.fDescription << ",\n"
-              << "            \"scin_id\" : " << pm.fScin_id << ",\n"
-              << "            \"pos_in_matrix\" : " << pm.fPos_in_matrix << ",\n"
-              << "            \"side\" : \"" << pm.fSide << "\"\n         }";
-  }
-  friend std::ostream& operator <<=(std::ostream& os, PM const& pm)
-  {
-    return os << "         {\n            \"id\" : " << pm.fId << ",\n"
-              << "            \"barrelSlots_id\" : " << pm.fScin_id << ",\n"
-              << "            \"scintillators_id\" : " << pm.fScin_id << ",\n"
-              << "            \"FEBs_id\" : 1,\n"
-              << "            \"is_right_side\": \"" << (pm.fSide == "B" ? "true" : "false") << "\"\n         }";
-  }
 };
 
 struct Scin {
   int fId;
   int fSlot_id;
-  double fHeight;
-  double fWidth;
-  double fLength;
+  float fHeight;
+  float fWidth;
+  float fLength;
   double fX_center;
   double fY_center;
   double fZ_center;
   Scin(int id, int slot_id, double height, double width, double length, double x_center, double y_center,
         double z_center) : fId(id), fSlot_id(slot_id), fHeight(height), fWidth(width), fLength(length),
                             fX_center(x_center), fY_center(y_center), fZ_center(z_center) {}
-  friend std::ostream& operator <<(std::ostream& os, Scin const& scin)
-  {
-    return os << "         {\n            \"id\" : " << scin.fId << ",\n"
-              << "            \"slot_id\" : " << scin.fSlot_id << ",\n"
-              << "            \"height\" : " << scin.fHeight << ",\n"
-              << "            \"width\" : " << scin.fWidth << ",\n"
-              << "            \"length\" : " << scin.fLength << ",\n"
-              << "            \"xcenter\" : " << scin.fX_center << ",\n"
-              << "            \"ycenter\" : " << scin.fY_center << ",\n"
-              << "            \"zcenter\" : " << scin.fZ_center << "\n         }";
-  }
-  friend std::ostream& operator <<=(std::ostream& os, Scin const& scin)
-  {
-    return os << "         {\n            \"id\" : " << scin.fId << ",\n"
-              << "            \"barrelSlots_id\" : " << scin.fId << ",\n"
-              << "            \"height\" : " << scin.fHeight << ",\n"
-              << "            \"width\" : " << scin.fWidth << ",\n"
-              << "            \"length\" : " << scin.fLength << ",\n"
-              << "            \"attenuation_length\": 0\n         }";
-  }
 };
 
 struct Slot {
@@ -295,20 +222,7 @@ struct Slot {
   std::string fType;
   Slot(int id, int layer_id, double theta, std::string type) : fId(id), fLayer_id(layer_id),
                                                 fTheta(theta), fType(type) {}
-  friend std::ostream& operator <<(std::ostream& os, Slot const& slot)
-  {
-    return os << "         {\n            \"id\" : " << slot.fId << ",\n"
-              << "            \"layer_id\" : " << slot.fLayer_id << ",\n"
-              << "            \"theta\" : " << slot.fTheta << ",\n"
-              << "            \"type\" : \"" << slot.fType << "\"\n         }";
-  }
-  friend std::ostream& operator <<=(std::ostream& os, Slot const& slot)
-  {
-    return os << "         {\n            \"id\" : " << slot.fId << ",\n"
-              << "            \"frame_id\": 1,\n            \"name\": \"1\",\n"
-              << "            \"layers_id\" : \"" << slot.fLayer_id << "\",\n"
-              << "            \"theta1\" : " << slot.fTheta << ",\n"
-              << "            \"active\": \"true\"\n         }";
-  }
 };
+
+void replace(std::string& json, const std::string& placeholder);
 #endif /* !DETECTORCONSTRUCTION_H */
