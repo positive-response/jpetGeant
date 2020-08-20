@@ -27,7 +27,7 @@ endforeach()
 
 list(APPEND FOLDERS ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter -lboost_system")
 
 ################################################################################
 ## Project version number
@@ -94,6 +94,32 @@ include(${Geant4_USE_FILE})
 ## Include CADMesh
 find_package(cadmesh REQUIRED)
 include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
+
+################################################################################
+## Include Boost
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.50 REQUIRED 
+             COMPONENTS filesystem
+                        program_options
+                        regex
+                        system
+                        log_setup
+                        log
+                        date_time
+                        thread
+                        chrono
+                        atomic
+                        )
+
+if(NOT TARGET Boost::filesystem)
+    add_library(Boost::filesystem IMPORTED INTERFACE)
+    set_property(TARGET Boost::filesystem PROPERTY
+        INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+    set_property(TARGET Boost::filesystem PROPERTY
+        INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
+endif()
 
 ################################################################################
 ## Include ROOT
