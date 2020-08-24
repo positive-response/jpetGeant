@@ -36,7 +36,7 @@ public:
   virtual void EndOfRunAction(const G4Run*);
 
 private:
-  HistoManager* fHistoManager;
+  HistoManager* fHistoManager = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 };
 

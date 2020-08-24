@@ -100,23 +100,13 @@ include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.50 REQUIRED 
-             COMPONENTS filesystem
-                        program_options
-                        regex
-                        system
-                        log_setup
-                        log
-                        date_time
-                        thread
-                        chrono
-                        )
+find_package(Boost 1.58 REQUIRED)
 
-if(NOT TARGET Boost::filesystem)
-    add_library(Boost::filesystem IMPORTED INTERFACE)
-    set_property(TARGET Boost::filesystem PROPERTY
+if(NOT TARGET Boost::boost)
+    add_library(Boost::boost IMPORTED INTERFACE)
+    set_property(TARGET Boost::boost PROPERTY
         INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-    set_property(TARGET Boost::filesystem PROPERTY
+    set_property(TARGET Boost::boost PROPERTY
         INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
 endif()
 
