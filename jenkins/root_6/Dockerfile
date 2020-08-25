@@ -8,6 +8,7 @@ RUN apt-get update \
   gcc \
   gfortran \
   git \
+  libboost-all-dev\
   libgif-dev \
   libgsl0-dev \
   libjpeg-dev \
@@ -38,15 +39,6 @@ RUN apt-get update \
   freeglut3-dev \
   graphviz \
   && localedef -i en_US -f UTF-8 en_US.UTF-8
-
-RUN rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /framework-dependencies
-RUN mkdir -p /framework-dependencies/lib
-RUN mkdir -p /framework-dependencies/include
-RUN wget https://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz -P /framework-dependencies
-RUN tar xvxf /framework-dependencies/boost_1_58_0.tar.gz
-RUN cd /boost_1_58_0 && ./bootstrap.sh 
-RUN cd /boost_1_58_0 && ./b2 install --prefix=/framework-dependencies --with-regex --with-test --with-program_options --with-filesystem --with-log
 
 RUN wget https://root.cern.ch/download/root_v6.08.06.source.tar.gz
 RUN tar xvzf root_v6.08.06.source.tar.gz
