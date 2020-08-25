@@ -248,9 +248,9 @@ PrimaryGenerator::GetVerticesDistributionInFilledSphere(
   while (!vertexFound) {
     vertex = GetRandomPointInFilledSphere(radius) + center;
     theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-    material = (MaterialExtension*)theNavigator
-      ->LocateGlobalPointAndSetup(vertex)
-      ->GetLogicalVolume()->GetMaterial();
+    material = dynamic_cast<MaterialExtension*>(
+      theNavigator->LocateGlobalPointAndSetup(vertex)->GetLogicalVolume()->GetMaterial()
+    );
     vertexFound = material->IsTarget();
   };
   return std::make_tuple(vertex, material);
@@ -267,8 +267,9 @@ PrimaryGenerator::GetVerticesDistributionAlongStepVector(
   while (!lookForVtx) {
     myPoint = myNextPoint;
     theNavigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-    mat = (MaterialExtension*)theNavigator->LocateGlobalPointAndSetup(myPoint)
-    ->GetLogicalVolume()->GetMaterial();
+    mat = dynamic_cast<MaterialExtension*>(
+      theNavigator->LocateGlobalPointAndSetup(myPoint)->GetLogicalVolume()->GetMaterial()
+    );
     lookForVtx = mat->IsTarget();
     myNextPoint = myPoint + direction;
   };

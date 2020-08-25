@@ -16,6 +16,8 @@
 #include "../Info/DetectorConstructionMessenger.h"
 #include "../Core/DetectorConstants.h"
 
+DetectorConstructionMessenger::DetectorConstructionMessenger() {}
+
 DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detector) : fDetector(detector)
 {
   fDirectory = new G4UIdirectory("/jpetmc/detector/");
@@ -63,6 +65,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fCreateOldGeometryFileStyle;
 }
 
+// cppcheck-suppress unusedFunction
 void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fLoadTargetForRun) {
