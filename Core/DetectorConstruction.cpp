@@ -48,6 +48,7 @@ fLoadWrapping(true), fLoadModularLayer(false)
 
 DetectorConstruction::~DetectorConstruction() { delete fMessenger; }
 
+// cppcheck-suppress unusedFunction
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -90,6 +91,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return fWorldPhysical;
 }
 
+// cppcheck-suppress unusedFunction
 void DetectorConstruction::ConstructSDandField()
 {
   if (!fDetectorSD.Get()) {
@@ -122,6 +124,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
   }
 }
 
+// cppcheck-suppress unusedFunction
 G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
   if (fLoadModularLayer) return 504;

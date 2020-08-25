@@ -66,21 +66,21 @@ public:
     const std::vector<G4double>& directLF, const std::vector<G4double>& directProb
   );
 
-  G4double GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability);
-  G4double GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability);
+  static G4double GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability);
+  static G4double GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability);
   void SetComponentsIntensities();
   void RenormalizeIntensities(G4double TotalIntensity);
 
-  G4double GetoPs2GTotalIntensity();
-  G4double GetoPs3GTotalIntensity();
-  G4double GetDirect2GTotalIntensity();
-  G4double GetDirect3GTotalIntensity();
-  G4double GetpPs2GTotalIntensity();
+  G4double GetoPs2GTotalIntensity() const;
+  G4double GetoPs3GTotalIntensity() const;
+  G4double GetDirect2GTotalIntensity() const;
+  G4double GetDirect3GTotalIntensity() const;
+  G4double GetpPs2GTotalIntensity() const;
   G4double GetoPs2GLifetimeFromVector(double randNumber);
   G4double GetoPs3GLifetimeFromVector(double randNumber);
   G4double GetDirectLifetimeFromVector(double randNumber);
-  G4double GetpPsLifetime();
-  G4double GetLifetimeVector(std::vector<G4double> vectorToCheck);
+  G4double GetpPsLifetime() const;
+  static G4double GetLifetimeVector(std::vector<G4double> vectorToCheck);
 
   static const G4double foPsTauVaccum;
   static const G4double fDirectTauMax;

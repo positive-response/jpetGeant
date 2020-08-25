@@ -32,7 +32,8 @@
 class DetectorConstructionMessenger : public G4UImessenger
 {
 public:
-  DetectorConstructionMessenger(DetectorConstruction* detector);
+  DetectorConstructionMessenger();
+  explicit DetectorConstructionMessenger(DetectorConstruction* detector);
   ~DetectorConstructionMessenger();
   void SetNewValue(G4UIcommand*, G4String);
   const int kDefaultRunNumber = 5;

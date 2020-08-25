@@ -243,18 +243,11 @@ void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
     }
   }
 
-  double theta_12 = (180. / TMath::Pi()) * (
-    fGeantInfo->GetMomentumGamma(1)).Angle(fGeantInfo->GetMomentumGamma(2)
-  );
-  double theta_23 = (180. / TMath::Pi()) * (
-    fGeantInfo->GetMomentumGamma(2)).Angle(fGeantInfo->GetMomentumGamma(3)
-  );
+  double theta_12 = (180. / TMath::Pi()) * (fGeantInfo->GetMomentumGamma(1)).Angle(fGeantInfo->GetMomentumGamma(2));
+  double theta_23 = (180. / TMath::Pi()) * (fGeantInfo->GetMomentumGamma(2)).Angle(fGeantInfo->GetMomentumGamma(3));
 
-  fillHistogram("gen_3g_angles", theta_12, theta_23);
-  fillHistogram(
-    "gen_energy", fGeantInfo->GetMomentumGamma(1).Mag(),
-    fGeantInfo->GetMomentumGamma(2).Mag()
-  );
+  fillHistogram("gen_3g_angles", theta_12, doubleCheck(theta_23));
+  fillHistogram("gen_energy", fGeantInfo->GetMomentumGamma(1).Mag(), doubleCheck(fGeantInfo->GetMomentumGamma(2).Mag()));
   fillHistogram("gen_g_ene", fGeantInfo->GetMomentumGamma(1).Mag());
 }
 
@@ -291,16 +284,16 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     if (GetMakeControlHisto()) {
       if (is2g) {
         fillHistogram("gen_gamma_multiplicity", 2);
-        fillHistogram("gen_gamma_multiplicity_vs_lifetime", 2, info->GetLifetime() / ps);
+        fillHistogram("gen_gamma_multiplicity_vs_lifetime", 2, doubleCheck(info->GetLifetime() / ps));
       }
       if (is3g) {
         fillHistogram("gen_gamma_multiplicity", 3);
-        fillHistogram("gen_gamma_multiplicity_vs_lifetime", 3, info->GetLifetime() / ps);
+        fillHistogram("gen_gamma_multiplicity_vs_lifetime", 3, doubleCheck(info->GetLifetime() / ps));
       }
       fillHistogram("gen_lifetime", info->GetLifetime() / ps);
-      fillHistogram("gen_XY", info->GetVtxPositionX() / cm, info->GetVtxPositionY() / cm);
-      fillHistogram("gen_XZ", info->GetVtxPositionX() / cm, info->GetVtxPositionZ() / cm);
-      fillHistogram("gen_YZ", info->GetVtxPositionY() / cm, info->GetVtxPositionZ() / cm);
+      fillHistogram("gen_XY", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionY() / cm));
+      fillHistogram("gen_XZ", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
+      fillHistogram("gen_YZ", info->GetVtxPositionY() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
     }
   }
 
@@ -315,9 +308,9 @@ void HistoManager::AddGenInfo(VtxInformation* info)
     if (GetMakeControlHisto()) {
       fillHistogram("gen_gamma_multiplicity", 1);
       fillHistogram("gen_prompt_lifetime", info->GetLifetime() / ps);
-      fillHistogram("gen_prompt_XY", info->GetVtxPositionX() / cm, info->GetVtxPositionY() / cm);
-      fillHistogram("gen_prompt_XZ", info->GetVtxPositionX() / cm, info->GetVtxPositionZ() / cm);
-      fillHistogram("gen_prompt_YZ", info->GetVtxPositionY() / cm, info->GetVtxPositionZ() / cm);
+      fillHistogram("gen_prompt_XY", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionY() / cm));
+      fillHistogram("gen_prompt_XZ", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
+      fillHistogram("gen_prompt_YZ", info->GetVtxPositionY() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
     }
   }
 }
@@ -358,9 +351,7 @@ void HistoManager::AddNewHit(DetectorHit* hit)
     fillHistogram("gen_hit_time", hit->GetTime()/ps);
     fillHistogram("gen_hit_eneDepos", hit->GetEdep()/keV);
     fillHistogram("gen_hits_z_pos", hit->GetPosition().getZ()/cm);
-    fillHistogram(
-      "gen_hits_xy_pos", hit->GetPosition().getX()/cm, hit->GetPosition().getY()/cm
-    );
+    fillHistogram("gen_hits_xy_pos", hit->GetPosition().getX()/cm, doubleCheck(hit->GetPosition().getY()/cm));
   }
 }
 
