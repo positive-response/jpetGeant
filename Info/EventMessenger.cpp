@@ -88,7 +88,7 @@ EventMessenger::~EventMessenger()
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fPrintStat){
+  if (command == fPrintStat) {
     fPrintStatistics = fPrintStat->GetNewBoolValue(newValue);
   } else if (command == fPrintStatPower) {
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
@@ -98,9 +98,9 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
   } else if (command == fPrintStatBar) {
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
-  } else if (command == fAddDatetime){
+  } else if (command == fAddDatetime) {
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  } else if (command == fCMDKillEventsEscapingWorld){
+  } else if (command == fCMDKillEventsEscapingWorld) {
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
   } else if (command == fCMDExcludedMulti) {
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);

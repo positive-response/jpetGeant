@@ -30,6 +30,7 @@ SteppingAction::SteppingAction(HistoManager* histo) : fHisto(histo)
 
 SteppingAction::~SteppingAction() {}
 
+// cppcheck-suppress unusedFunction
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   //! Primary particles, that escape the world volume without interaction

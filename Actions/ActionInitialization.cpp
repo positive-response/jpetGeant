@@ -25,8 +25,10 @@ ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 ActionInitialization::~ActionInitialization() {}
 
+// cppcheck-suppress unusedFunction
 void ActionInitialization::BuildForMaster() const {}
 
+// cppcheck-suppress unusedFunction
 void ActionInitialization::Build() const
 {
   HistoManager* histo = new HistoManager();

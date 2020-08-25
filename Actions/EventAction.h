@@ -35,6 +35,7 @@
 class EventAction : public G4UserEventAction
 {
 public:
+  EventAction();
   explicit EventAction(HistoManager* histo);
   virtual ~EventAction();
   virtual void BeginOfEventAction(const G4Event*);

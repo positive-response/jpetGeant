@@ -42,7 +42,7 @@ struct doubleCheck
   bool isChanged = false;
   double value = 0.;
   doubleCheck() {}
-  doubleCheck(double newValue) {
+  explicit doubleCheck(double newValue) {
     value = newValue;
     isChanged = true;
   }
@@ -72,7 +72,7 @@ public:
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
-  JPetGeantEventInformation* const GetGeantInfo() { return fGeantInfo; };
+  JPetGeantEventInformation* const GetGeantInfo() const { return fGeantInfo; };
   
   void createHistogramWithAxes(
     TObject* object,
@@ -82,8 +82,7 @@ public:
   );
 
   void fillHistogram(
-    const char* name, double xValue, doubleCheck yValue = doubleCheck(),
-    doubleCheck zValue = doubleCheck()
+    const char* name, double xValue, doubleCheck yValue = doubleCheck(), doubleCheck zValue = doubleCheck()
   );
   void writeError(const char* nameOfHistogram, const char* messageEnd);
 
@@ -98,7 +97,7 @@ public:
 
 private:
   bool fBookStatus = false;
-  bool fMakeControlHisto;
+  bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;
   TTree* fTree = nullptr;
   TBranch* fBranchTrk = nullptr;

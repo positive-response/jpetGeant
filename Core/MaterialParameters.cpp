@@ -20,14 +20,8 @@ MaterialConstants::MaterialConstants(
   const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb,
   G4double pPsLF, G4double pPsFrac, const std::vector<G4double>& dirLF,
   const std::vector<G4double>& dirProb
-) {
-  oPsLifetimes = oPsLF;
-  oPsProbabilities = oPsProb;
-  pPsLifetime = pPsLF;
-  pPsFraction = pPsFrac;
-  directLifetimes = dirLF;
-  directProbabilities = dirProb;
-}
+) : oPsLifetimes(oPsLF), oPsProbabilities(oPsProb), pPsLifetime(pPsLF),
+pPsFraction(pPsFrac), directLifetimes(dirLF), directProbabilities(dirProb) {}
 
 const G4double MaterialParameters::foPsTauVaccum = 142.0 * ns;
 const G4double MaterialParameters::fDirectTauMax = 0.6 * ns;
@@ -83,15 +77,11 @@ MaterialParameters::MaterialParameters(
   const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb,
   G4double pPsLF, G4double pPsFrac, const std::vector<G4double>& directLF,
   const std::vector<G4double>& directProb
-) {
-  foPsLifetimes = oPsLF;
-  foPsProbabilities = oPsProb;
-  fpPsLifetime = pPsLF;
-  fpPsFraction = pPsFrac;
-  fDirectLifetimes = directLF;
-  fDirectProbabilities = directProb;
+) : foPsLifetimes(oPsLF), foPsProbabilities(oPsProb), fpPsLifetime(pPsLF),
+fpPsFraction(pPsFrac), fDirectLifetimes(directLF),
+fDirectProbabilities(directProb)
+{
   SetComponentsIntensities();
-  fAnnihlationMode = "";
 }
 
 void MaterialParameters::ClearTemp()
@@ -138,6 +128,7 @@ void MaterialParameters::AddoPsComponent(G4double lifetime, G4double probability
   foPsProbabilities.push_back(probability);
 }
 
+// cppcheck-suppress unusedFunction
 void MaterialParameters::SetoPsComponents(
   const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb
 ) {
@@ -157,6 +148,7 @@ void MaterialParameters::AddDirectComponent(G4double lifetime, G4double probabil
   fDirectProbabilities.push_back(probability);
 }
 
+// cppcheck-suppress unusedFunction
 void MaterialParameters::SetDirectComponents(
   const std::vector<G4double>& directLF, const std::vector<G4double>& directProb
 ) {
@@ -216,7 +208,7 @@ void MaterialParameters::RenormalizeIntensities(G4double totalIntensity)
   }
 }
 
-G4double MaterialParameters::GetoPs2GTotalIntensity()
+G4double MaterialParameters::GetoPs2GTotalIntensity() const
 {
   G4double totalIntensity = 0.;
   for (unsigned i = 0; i < foPs2GIntensities.size(); i++){
@@ -225,7 +217,7 @@ G4double MaterialParameters::GetoPs2GTotalIntensity()
   return totalIntensity;
 }
 
-G4double MaterialParameters::GetoPs3GTotalIntensity()
+G4double MaterialParameters::GetoPs3GTotalIntensity() const
 {
   G4double totalIntensity = 0.;
   for (unsigned i = 0; i < foPs3GIntensities.size(); i++){
@@ -234,7 +226,7 @@ G4double MaterialParameters::GetoPs3GTotalIntensity()
   return totalIntensity;
 }
 
-G4double MaterialParameters::GetDirect2GTotalIntensity()
+G4double MaterialParameters::GetDirect2GTotalIntensity() const
 {
   G4double totalIntensity = 0.;
   for (unsigned i = 0; i < fDirectIntensities.size(); i++) {
@@ -243,7 +235,7 @@ G4double MaterialParameters::GetDirect2GTotalIntensity()
   return totalIntensity * (1. - fDirect3Gfraction);
 }
 
-G4double MaterialParameters::GetDirect3GTotalIntensity()
+G4double MaterialParameters::GetDirect3GTotalIntensity() const
 {
   G4double totalIntensity = 0.;
   for (unsigned i = 0; i < fDirectIntensities.size(); i++){
@@ -252,7 +244,7 @@ G4double MaterialParameters::GetDirect3GTotalIntensity()
   return totalIntensity * fDirect3Gfraction;
 }
 
-G4double MaterialParameters::GetpPs2GTotalIntensity()
+G4double MaterialParameters::GetpPs2GTotalIntensity() const
 {
   return fpPsIntensity;
 }
@@ -315,7 +307,7 @@ G4double MaterialParameters::GetDirectLifetimeFromVector(double randNumber)
   return GetLifetimeVector(fDirectLifetimes);
 }
 
-G4double MaterialParameters::GetpPsLifetime() { return fpPsLifetime; }
+G4double MaterialParameters::GetpPsLifetime() const { return fpPsLifetime; }
 
 G4double MaterialParameters::GetLifetimeVector(std::vector<G4double> vectorToCheck)
 {

@@ -31,20 +31,19 @@ public:
   void SetHistoManager(HistoManager* histo) {fHistoManager = histo;}
 
 private:
-  struct HitParameters
-  {
-  public:
-    G4int fID = -1;
-    G4double fTime = 0.0;
+  struct HitParameters {
+    public:
+      G4int fID = -1;
+      G4double fTime = 0.0;
   };
   
   HistoManager* fHistoManager = nullptr;
   
   int testParentIDold = 0;
 
-  G4double timeIntervals;
-  G4int totScinNum;
-  std::vector<HitParameters> previousHits;
+  G4double fTimeIntervals;
+  G4int fToTScinNum;
+  std::vector<HitParameters> fPreviousHits;
   DetectorHitsCollection* fDetectorCollection = nullptr;
 
 protected:

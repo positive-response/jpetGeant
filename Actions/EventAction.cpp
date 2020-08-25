@@ -25,6 +25,8 @@
 #include <G4SDManager.hh>
 #include <G4Event.hh>
 
+EventAction::EventAction() {}
+
 EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID(-1)
 {
   fHistoManager = histo;
@@ -32,7 +34,8 @@ EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID
 
 EventAction::~EventAction() {}
 
-void EventAction::BeginOfEventAction(const G4Event* anEvent)
+// cppcheck-suppress unusedFunction
+void EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   if (fScinCollID < 0) {
@@ -42,6 +45,7 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
   fHistoManager->Clear();
 }
 
+// cppcheck-suppress unusedFunction
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
   if (anEvent->GetNumberOfPrimaryVertex() == 0) return;

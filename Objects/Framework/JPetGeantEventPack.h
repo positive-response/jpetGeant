@@ -37,7 +37,7 @@ class JPetGeantEventPack : public TObject
 public:
   JPetGeantEventPack();
   ~JPetGeantEventPack();
-  void Clear();
+  void Clear(Option_t* = "");
 
   JPetGeantScinHits* ConstructNextHit();
   JPetGeantDecayTree* ConstructNextDecayTree();
