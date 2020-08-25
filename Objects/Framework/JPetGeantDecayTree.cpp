@@ -37,6 +37,7 @@ void JPetGeantDecayTree::ClearVectors()
   fNodeInteractionType.clear();
 }
 
+// cppcheck-suppress unusedFunction
 InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID, int trackID)
 {
   for (int i=fNodeInteractionType.size()-1; i>=0; i--) {
@@ -46,6 +47,7 @@ InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID, int trackID)
   return InteractionType::unknown;
 }
 
+// cppcheck-suppress unusedFunction
 int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
 {
   int previousNodeID = nodeID;
@@ -59,6 +61,7 @@ int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
   return previousNodeID;
 }
 
+// cppcheck-suppress unusedFunction
 int JPetGeantDecayTree::GetPrimaryNodeID(int nodeID, int trackID)
 {
   int previousNodeID = nodeID, primaryNodeID = nodeID;
