@@ -26,8 +26,6 @@ HistoManager::HistoManager() : fMakeControlHisto(true)
   fGeantInfo = fEventPack->GetEventInformation();
 }
 
-HistoManager::HistoManager(const &HistoManager) {}
-
 HistoManager::~HistoManager() {}
 
 void HistoManager::createHistogramWithAxes(
