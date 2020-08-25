@@ -23,14 +23,15 @@ fMCDecayTrees("JPetGeantDecayTree", 1000), fEvtIndex(0), fHitIndex(0), fMCDecayT
   fGenInfo = new JPetGeantEventInformation();
 }
 
-JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit() 
-{ 
-  return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++)); 
+JPetGeantScinHits* JPetGeantEventPack::ConstructNextHit()
+{
+  return dynamic_cast<JPetGeantScinHits*>(fMCHits.ConstructedAt(fHitIndex++));
 }
 
-JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree() 
-{ 
-  return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++)); 
+// cppcheck-suppress unusedFunction
+JPetGeantDecayTree* JPetGeantEventPack::ConstructNextDecayTree()
+{
+  return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees.ConstructedAt(fMCDecayTreesIndex++));
 }
 
 JPetGeantEventPack::~JPetGeantEventPack()

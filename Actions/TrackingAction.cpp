@@ -19,6 +19,7 @@
 #include <G4TrackingManager.hh>
 #include <G4Track.hh>
 
+// cppcheck-suppress unusedFunction
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   //! Create trajectory only for primaries
@@ -26,4 +27,5 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   fpTrackingManager->SetTrajectory(new Trajectory(aTrack));
 }
 
+// cppcheck-suppress unusedFunction
 void TrackingAction::PostUserTrackingAction(const G4Track*) {}

@@ -72,8 +72,7 @@ public:
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
-  JPetGeantEventInformation* const GetGeantInfo() const { return fGeantInfo; };
-  
+  const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
   void createHistogramWithAxes(
     TObject* object,
     TString xAxisName = "Default X axis title [unit]",

@@ -85,7 +85,7 @@ void MaterialExtension::SetpPsComponent(G4double lifetime, G4double fraction)
   }
 }
 
-const G4double MaterialExtension::GetLifetime(double randNumber, DecayChannel channel) const
+G4double MaterialExtension::GetLifetime(double randNumber, DecayChannel channel) const
 {
   if (channel == DecayChannel::Ortho2G) {
     return fMaterialParameters->GetoPs2GLifetimeFromVector(randNumber);
@@ -109,7 +109,7 @@ void MaterialExtension::ChangeMaterialConstants()
   fMaterialParameters->SetMaterialByName(MaterialParameters::MaterialID::mUnknown);
 }
 
-const std::vector<G4double> MaterialExtension::GetEventsFraction() const
+std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if (MaterialParameters::fAnnihlationMode != "") {
