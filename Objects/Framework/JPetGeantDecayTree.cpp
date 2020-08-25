@@ -47,7 +47,6 @@ InteractionType JPetGeantDecayTree::GetInteractionType(int nodeID, int trackID)
   return InteractionType::unknown;
 }
 
-// cppcheck-suppress unusedFunction
 int JPetGeantDecayTree::GetPreviousNodeID(int nodeID, int trackID)
 {
   int previousNodeID = nodeID;
