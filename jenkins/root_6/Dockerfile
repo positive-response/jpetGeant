@@ -8,7 +8,7 @@ RUN apt-get update \
   gcc \
   gfortran \
   git \
-  libboost1.67-dev
+  libboost1.67-dev \
   libgif-dev \
   libgsl0-dev \
   libjpeg-dev \
