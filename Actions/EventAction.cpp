@@ -27,7 +27,7 @@
 
 EventAction::EventAction() {}
 
-EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID(-1), fHistoManager(histo)
+EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fHistoManager(histo), fScinCollID(-1)
 {}
 
 EventAction::~EventAction() {}
