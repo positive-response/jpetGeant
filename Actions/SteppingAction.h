@@ -28,7 +28,7 @@ public:
   virtual void UserSteppingAction(const G4Step*);
   
 private:
-  HistoManager* fHisto;
+  HistoManager* fHistoManager = nullptr;
 };
 
 #endif /* !STEPPINGACTION_H */
