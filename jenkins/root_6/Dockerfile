@@ -1,9 +1,7 @@
 FROM ubuntu:xenial
-LABEL MAINTAINER Kamil Rakoczy <kamil.rakoczy@student.uj.edu.pl>
+LABEL MAINTAINER Aleksander Gajos <aleksander.gajos@uj.edu.pl>
 
 RUN apt-get update && apt-get -y install git libboost-all-dev libtbb-dev cmake libfftw3-3 libfftw3-dev sshpass wget g++
->>>>>>> 546451b... Update & simplify Jenkins tests
-
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
