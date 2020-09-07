@@ -186,7 +186,7 @@ struct Layer {
   std::string fName;
   double fRadius;
   int fSetup_id;
-  Layer(int id, std::string name, double radius, int setup_id) : fId(id), fName(name),
+  Layer(int id, const std::string& name, double radius, int setup_id) : fId(id), fName(name),
                                                 fRadius(radius), fSetup_id(setup_id) {}
 };
 
@@ -196,7 +196,7 @@ struct PM {
   int fScin_id;
   int fPos_in_matrix;
   std::string fSide;
-  PM(int id, std::string description, int scin_id, int pos_in_matrix, std::string side) : fId(id), 
+  PM(int id, const std::string& description, int scin_id, int pos_in_matrix, const std::string& side) : fId(id), 
                                                 fDescription(description), fScin_id(scin_id),
                                                 fPos_in_matrix(pos_in_matrix), fSide(side) {}
 };
@@ -220,7 +220,7 @@ struct Slot {
   int fLayer_id;
   double fTheta;
   std::string fType;
-  Slot(int id, int layer_id, double theta, std::string type) : fId(id), fLayer_id(layer_id),
+  Slot(int id, int layer_id, double theta, const std::string& type) : fId(id), fLayer_id(layer_id),
                                                 fTheta(theta), fType(type) {}
 };
 
