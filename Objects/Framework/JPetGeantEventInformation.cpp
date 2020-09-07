@@ -23,7 +23,7 @@ fnRun(0), fLifetime(0), fPromptLifetime(0), fMomentumGamma(4) {}
 
 JPetGeantEventInformation::~JPetGeantEventInformation() {}
 
-void JPetGeantEventInformation::Clear()
+void JPetGeantEventInformation::Clear(Option_t*)
 {
   fGenGammaNum.ResetAllBits();
   fnRun = 0;
