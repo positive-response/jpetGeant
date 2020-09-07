@@ -95,6 +95,8 @@ public:
   }
 
 private:
+  HistoManager(const HistoManager &histoManagerToCopy);
+    
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;
