@@ -32,7 +32,8 @@ class PrimaryGeneratorAction;
 class PrimaryGeneratorActionMessenger : public G4UImessenger
 {
 public:
-  PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction);
+  PrimaryGeneratorActionMessenger();
+  explicit PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction);
   ~PrimaryGeneratorActionMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 

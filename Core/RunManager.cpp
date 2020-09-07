@@ -16,6 +16,7 @@
 #include "../Actions/EventAction.h"
 #include "RunManager.h"
 
+// cppcheck-suppress unusedFunction
 void RunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
   InitializeEventLoop(n_event, macroFile, n_select);

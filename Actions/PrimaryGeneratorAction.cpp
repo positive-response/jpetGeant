@@ -18,6 +18,8 @@
 
 #include <G4PrimaryVertex.hh>
 
+PrimaryGeneratorAction::PrimaryGeneratorAction() {}
+
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) :
 G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHisto(histo)
 {
@@ -47,6 +49,7 @@ void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
   }
 }
 
+// cppcheck-suppress unusedFunction
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   //! if setup for dedicated run is set then ignore its modifications made by user

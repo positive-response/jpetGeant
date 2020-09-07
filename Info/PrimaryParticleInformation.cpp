@@ -37,4 +37,5 @@ void PrimaryParticleInformation::SetGenMomentum(G4double x, G4double y, G4double
   fGenMomentum.setZ(z);
 }
 
+// cppcheck-suppress unusedFunction
 void PrimaryParticleInformation::Print() const {}

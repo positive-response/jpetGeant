@@ -33,7 +33,7 @@ public:
   JPetGeantEventInformation();
   ~JPetGeantEventInformation();
 
-  void Clear();
+  void Clear(Option_t* = "");
   void SetThreeGammaGen(bool tf) { fGenGammaNum.SetBitNumber(2, tf); };
   void SetTwoGammaGen(bool tf) { fGenGammaNum.SetBitNumber(1, tf); };
   void SetPromptGammaGen(bool tf) { fGenGammaNum.SetBitNumber(0, tf); };
