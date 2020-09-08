@@ -39,14 +39,8 @@
 #include <vector>
 
 class DetectorConstructionMessenger;
-struct Channel;
 struct Layer;
-struct PM;
 struct Scin;
-struct Setup {
-  int fId;
-  std::string fDescription;
-};
 struct Slot;
 
 //! Flag for debugging purposes
@@ -138,7 +132,7 @@ private:
   //! Flag for creating file with geometry
   G4bool fCreateGeometryFile;
   //! Flag for choosing old style of geometry file
-  G4bool fCreateOldGeometryFileStyle;
+  G4bool fCreateOldGeometryFileStyle = false;
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -162,23 +156,10 @@ private:
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
   
-  std::vector<Channel> fChannelContainer;
   std::vector<Layer> fLayerContainer;
-  std::vector<PM> fPmContainer;
   std::vector<Scin> fScinContainer;
-  Setup fSetup = {1, "Setup with 0 layers"};
   std::vector<Slot> fSlotContainer;
   G4int fLayerNumber = 0;
-  G4int fChannelNumber = 0;
-};
-
-struct Channel {
-  int fId;
-  int fPm_id;
-  int fThr_num;
-  int fThr_val;
-  Channel(int id, int pm_id, int thr_num, int thr_val) : fId(id), fPm_id(pm_id),
-                                                fThr_num(thr_num), fThr_val(thr_val) {}
 };
 
 struct Layer {
@@ -188,17 +169,6 @@ struct Layer {
   int fSetup_id;
   Layer(int id, const std::string& name, double radius, int setup_id) : fId(id), fName(name),
                                                 fRadius(radius), fSetup_id(setup_id) {}
-};
-
-struct PM {
-  int fId;
-  std::string fDescription;
-  int fScin_id;
-  int fPos_in_matrix;
-  std::string fSide;
-  PM(int id, const std::string& description, int scin_id, int pos_in_matrix, const std::string& side) : fId(id), 
-                                                fDescription(description), fScin_id(scin_id),
-                                                fPos_in_matrix(pos_in_matrix), fSide(side) {}
 };
 
 struct Scin {

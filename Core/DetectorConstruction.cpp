@@ -305,9 +305,8 @@ void DetectorConstruction::ConstructScintillators()
   G4int moduleNumber = 0;
   for (int j = 0; j < DetectorConstants::layers; j++) {
     fLayerNumber = oldLayerNumber + j + 1;
-    Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), DetectorConstants::radius[j]/10 /*to cm*/, fSetup.fId);
+    Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), DetectorConstants::radius[j]/10 /*to cm*/, 1);
     fLayerContainer.push_back(layTemp);
-    fSetup.fDescription = "Setup with " + std::to_string(fLayerNumber) + " layers";
     for (int i = 0; i < DetectorConstants::nSegments[j]; i++) {
       moduleNumber++;
       G4double phi = i * 2 * M_PI / DetectorConstants::nSegments[j];
@@ -328,23 +327,11 @@ void DetectorConstruction::ConstructScintillators()
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
       
       if (fCreateGeometryFile) {
-        for (unsigned k=0; k<4; k++) {
-          Channel channTemp(fChannelNumber+k+1, 2*(moduleNumber - 1)+1, k+1, (k+1)*80);
-          fChannelContainer.push_back(channTemp);
-          
-          Channel channTemp2(fChannelNumber+k+5, 2*(moduleNumber - 1)+2, k+1, (k+1)*80);
-          fChannelContainer.push_back(channTemp2);
-        }
-        PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), moduleNumber, (int)moduleNumber, "A");
-        fPmContainer.push_back(pmTemp);
-        PM pmTemp2(2*(moduleNumber - 1)+2, std::to_string(2*(moduleNumber - 1)+2), moduleNumber, (int)moduleNumber, "B");
-        fPmContainer.push_back(pmTemp2);
         Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim[0], DetectorConstants::scinDim[1], DetectorConstants::scinDim[2],
                         DetectorConstants::radius[j]*cos((phi+fi)*180/M_PI)/10, DetectorConstants::radius[j]*sin((phi+fi)*180/M_PI)/10, 0);
         fScinContainer.push_back(scinTemp);
         Slot slotTemp(moduleNumber, fLayerNumber, (phi+fi)*180/M_PI, "single");
         fSlotContainer.push_back(slotTemp);
-        fChannelNumber+=8;     // Because 4 thresholds for two sides - 4*2
       }
     
       new G4PVPlacement(
@@ -462,9 +449,8 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
   G4double phi1 = 0.0;
   fLayerNumber++;
   
-  Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), radius_dynamic[6], fSetup.fId);
+  Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), radius_dynamic[6], 1);
   fLayerContainer.push_back(layTemp);
-  fSetup.fDescription = "Setup with " + std::to_string(fLayerNumber) + " layers";
   
   G4int moduleNumber = 0;
   for (int i = 0; i < numberofModules; i++){
@@ -480,25 +466,11 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
       G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(moduleNumber);
       
       if (fCreateGeometryFile) {
-        for (unsigned k=0; k<2; k++) {
-          Channel channTemp(fChannelNumber+k+1, 2*(moduleNumber - 1)+1, k+1, 0);
-          fChannelContainer.push_back(channTemp);
-          
-          Channel channTemp2(fChannelNumber+k+3, 2*(moduleNumber - 1)+2, k+1, 0);
-          fChannelContainer.push_back(channTemp2);
-        }
-        PM pmTemp(2*(moduleNumber - 1)+1, std::to_string(2*(moduleNumber - 1)+1), (2*(moduleNumber - 1)+1)%4 + 1, 
-                        (int)moduleNumber, "A");
-        fPmContainer.push_back(pmTemp);
-        PM pmTemp2(2*(moduleNumber - 1)+2, std::to_string(2*(moduleNumber - 1)+2), (2*(moduleNumber - 1)+2)%4 + 1, 
-                        (int)moduleNumber, "B");
-        fPmContainer.push_back(pmTemp2);
         Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim_inModule[0], DetectorConstants::scinDim_inModule[1], 
                       DetectorConstants::scinDim_inModule[2], (radius_new/cm)*cos(phi1*180/M_PI), (radius_new/cm)*sin(phi1*180/M_PI), 0);
         fScinContainer.push_back(scinTemp);
         Slot slotTemp(moduleNumber, fLayerNumber, phi*180/M_PI, "module");
         fSlotContainer.push_back(slotTemp);
-        fChannelNumber+=4;     // Beacuse 2 thresholds for 2 sides - 2*2
       }
       
       new G4PVPlacement(
@@ -912,32 +884,10 @@ void DetectorConstruction::CreateGeometryFile()
   if (fileWithGeometry.is_open()) {
     int runNumber = fRunNumber+90;
     if (fCreateOldGeometryFileStyle) {
-      int channelShift = 260;
-      
+      G4cout << "--- Creating old style of the geometry file ---" << G4endl;
       boost::property_tree::ptree jsonFile, full, partial, element;
       std::string runNumberStr = std::to_string(runNumber) + std::string(".");
-      
-      element.put("active", "true");
-      element.put("no_time_outputs_per_input", "*" + std::to_string(1) + "*");
-      element.put("id", "*" + std::to_string(1) + "*");
-      element.put("status", "OK");
-      element.put("version", "*" + std::to_string(1) + "*");
-      element.put("TRBs_id", "*" + std::to_string(1) + "*");
-      element.put("time_outputs_per_input", "*" + std::to_string(4) + "*");
-      element.put("creator_id", "*" + std::to_string(1) + "*");
-      element.put("description", "");
-      partial.push_back(std::make_pair("", element));
-      full.add_child("FEBs", partial);
-      
-      element.clear();
-      partial.clear();
-      element.put("channel", "*" + std::to_string(channelShift) + "*");
-      element.put("id", "*" + std::to_string(1) + "*");
-      element.put("type", "*" + std::to_string(0) + "*");
-      partial.push_back(std::make_pair("", element));
-      full.add_child("TRBs", partial);
-      
-      partial.clear();
+
       for (unsigned i=0; i<fScinContainer.size(); i++) {
         element.clear();
         element.put("id", "*" + std::to_string(fScinContainer[i].fId) + "*");
@@ -968,45 +918,7 @@ void DetectorConstruction::CreateGeometryFile()
         partial.push_back(std::make_pair("", element));
       }
       full.add_child("barrelSlots", partial);
-      
-      partial.clear();
-      full.add_child("PMCalibs", partial);
-      for (unsigned i=0; i<fPmContainer.size(); i++) {
-        element.clear();
-        element.put("id", "*" + std::to_string(fPmContainer[i].fId) + "*");
-        element.put("barrelSlots_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
-        element.put("scintillators_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
-        element.put("FEBs_id", "*" + std::to_string(1) + "*");
-        element.put("is_right_side", (fPmContainer[i].fSide == "B" ? "true" : "false"));
-        partial.push_back(std::make_pair("", element));
-      }
-      full.add_child("PMs", partial);
-      
-      partial.clear();
-      for (unsigned i=0; i<fChannelContainer.size(); i++) {
-        element.clear();
-        element.put("PMs_id", "*" + std::to_string(fChannelContainer[i].fPm_id) + "*");
-        element.put("FEBs_id", std::to_string(1));
-        element.put("TRBs_id", std::to_string(1));
-        element.put("FEB", "*" + std::to_string((fChannelContainer[i].fId)%12) + "*");
-        element.put("channel", "*" + std::to_string(fChannelContainer[i].fId) + "*");
-        element.put("local_number", "*" + std::to_string(fChannelContainer[i].fThr_num) + "*");
-        element.put("threshold", "*" + std::to_string(fChannelContainer[i].fThr_val) + "*");
-        partial.push_back(std::make_pair("", element));
-      }
-      full.add_child("TOMBChannels", partial);
-      
-      partial.clear();
-      element.clear();
-      element.put("active", "true");
-      element.put("id", "*" + std::to_string(1) + "*");
-      element.put("status", "OK");
-      element.put("version", "*" + std::to_string(1) + "*");
-      element.put("creator_id", "*" + std::to_string(1) + "*");
-      element.put("description", "Big barrel stub setup");
-      partial.push_back(std::make_pair("", element));
-      full.add_child("frames", partial);
-      
+  
       partial.clear();
       for (unsigned i=0; i<fLayerContainer.size(); i++) {
         element.clear();
@@ -1030,18 +942,10 @@ void DetectorConstruction::CreateGeometryFile()
       fileWithGeometry << json;
       fileWithGeometry.close();
     } else {
+      G4cout << "--- Creating new style of the geometry file ---" << G4endl;
       boost::property_tree::ptree jsonFile, full, partial, element;
       std::string runNumberStr = std::to_string(runNumber) + std::string(".");
-      for (unsigned i=0; i<fChannelContainer.size(); i++) {
-        element.clear();
-        element.put("id", "*" + std::to_string(fChannelContainer[i].fId) + "*");
-        element.put("pm_id", "*" + std::to_string(fChannelContainer[i].fPm_id) + "*");
-        element.put("thr_num", "*" + std::to_string(fChannelContainer[i].fThr_num) + "*");
-        element.put("thr_val", "*" + std::to_string(fChannelContainer[i].fThr_val) + "*");
-        partial.push_back(std::make_pair("", element));
-      }
-      full.add_child("channel", partial);
-      
+
       partial.clear();
       for (unsigned i=0; i<fLayerContainer.size(); i++) {
         element.clear();
@@ -1052,19 +956,7 @@ void DetectorConstruction::CreateGeometryFile()
         partial.push_back(std::make_pair("", element));
       }
       full.add_child("layer", partial);
-      
-      partial.clear();
-      for (unsigned i=0; i<fPmContainer.size(); i++) {
-        element.clear();
-        element.put("id", "*" + std::to_string(fPmContainer[i].fId) + "*");
-        element.put("description", "*" + fPmContainer[i].fDescription + "*");
-        element.put("scin_id", "*" + std::to_string(fPmContainer[i].fScin_id) + "*");
-        element.put("pos_in_matrix", "*" + std::to_string(fPmContainer[i].fPos_in_matrix) + "*");
-        element.put("side", fPmContainer[i].fSide);
-        partial.push_back(std::make_pair("", element));
-      }
-      full.add_child("pm", partial);
-      
+
       partial.clear();
       for (unsigned i=0; i<fScinContainer.size(); i++) {
         element.clear();
@@ -1083,14 +975,7 @@ void DetectorConstruction::CreateGeometryFile()
         partial.push_back(std::make_pair("", element));
       }
       full.add_child("scin", partial);
-      
-      partial.clear();
-      element.clear();
-      element.put("description", fSetup.fDescription);
-      element.put("id", "*" + std::to_string(fSetup.fId) + "*");
-      partial.push_back(std::make_pair("", element));
-      full.add_child("setup", partial);
-      
+
       partial.clear();
       for (unsigned i=0; i<fSlotContainer.size(); i++) {
         element.clear();
