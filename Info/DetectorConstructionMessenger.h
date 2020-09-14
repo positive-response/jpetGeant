@@ -41,14 +41,15 @@ public:
 private:
   DetectorConstruction* fDetector = nullptr;
   G4UIdirectory* fDirectory = nullptr;
-  G4UIcmdWithAnInteger* fLoadGeomForRun = nullptr;
+  G4UIcmdWithAnInteger* fLoadTargetForRun = nullptr;
   G4UIcmdWithAnInteger* fLoadIdealGeometry = nullptr;
   G4UIcmdWithoutParameter* fLoadJPetBasicGeometry = nullptr;
-  G4UIcmdWithoutParameter* fLoadJPetExtendedGeometry = nullptr;
   G4UIcmdWithoutParameter* fLoadOnlyScintillators = nullptr;
   //! Null pointer assigned to the modular layer -
   G4UIcmdWithAString* fLoadModularLayer = nullptr;
   G4UIcmdWithADoubleAndUnit* fScinHitMergingTime = nullptr;
+  G4UIcmdWithoutParameter* fCreateGeometryFile = nullptr;
+  G4UIcmdWithoutParameter* fCreateOldGeometryFileStyle = nullptr;
 };
 
 #endif /* !DETECTORCONSTRUCTIONMESSENGER_H */

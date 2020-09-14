@@ -20,14 +20,20 @@
 #include "MaterialExtension.h"
 #include "RunManager.h"
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/algorithm/string.hpp>
 #include <G4PhysicalVolumeStore.hh>
 #include <G4LogicalVolumeStore.hh>
 #include <G4SubtractionSolid.hh>
+#include <boost/optional.hpp>
 #include <G4RegionStore.hh>
 #include <G4SolidStore.hh>
 #include <G4UnionSolid.hh>
 #include <G4Polycone.hh>
 #include <G4Tubs.hh>
+#include <iostream>
+#include <iomanip>
 #include <vector>
 
 DetectorConstruction* DetectorConstruction::fInstance = 0;
@@ -39,8 +45,8 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 }
 
 DetectorConstruction::DetectorConstruction() :
-G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
-fLoadWrapping(true), fLoadModularLayer(false)
+G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(false), 
+fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false), fCreateGeometryFile(false)
 {
   InitializeMaterials();
   fMessenger = new DetectorConstructionMessenger(this);
@@ -66,10 +72,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     0, G4ThreeVector(), fWorldLogical, "worldPhysical", 0, false, 0, checkOverlaps
   );
 
-  //! scintillators for standard setup; right now always loaded
-  ConstructScintillators();
-
-  if (fLoadModularLayer){
+  if (fLoadScintillators) {
+    //! scintillators for standard setup
+    ConstructScintillators();
+  }
+  if (fLoadModularLayer) {
     ConstructScintillatorsModularLayer();
   }
   if (fLoadCADFrame) {
@@ -77,15 +84,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   }
   if (fRunNumber == 3) {
     ConstructTargetRun3();
-  }
-  if (fRunNumber == 5) {
+  } else if (fRunNumber == 5) {
     ConstructTargetRun5();
-  }
-  if (fRunNumber == 6) {
+  } else if (fRunNumber == 6) {
     ConstructTargetRun6();
-  }
-  if (fRunNumber == 7) {
+  } else if (fRunNumber == 7) {
     ConstructTargetRun7();
+  }
+  
+  if (fCreateGeometryFile) {
+    CreateGeometryFile();
   }
 
   return fWorldPhysical;
@@ -293,8 +301,14 @@ void DetectorConstruction::ConstructScintillators()
   boxVisAttWrapping->SetForceSolid(true);
 
   G4int icopy = 1;
+  G4int oldLayerNumber = fLayerNumber;
+  G4int moduleNumber = 0;
   for (int j = 0; j < DetectorConstants::layers; j++) {
+    fLayerNumber = oldLayerNumber + j + 1;
+    Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), DetectorConstants::radius[j]/10 /*to cm*/, 1);
+    fLayerContainer.push_back(layTemp);
     for (int i = 0; i < DetectorConstants::nSegments[j]; i++) {
+      moduleNumber++;
       G4double phi = i * 2 * M_PI / DetectorConstants::nSegments[j];
       G4double fi = M_PI / DetectorConstants::nSegments[j];
 
@@ -311,6 +325,15 @@ void DetectorConstruction::ConstructScintillators()
 
       G4Transform3D transform(rot, loc);
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
+      
+      if (fCreateGeometryFile) {
+        Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim[0], DetectorConstants::scinDim[1], DetectorConstants::scinDim[2],
+                        DetectorConstants::radius[j]*cos((phi+fi)*180/M_PI)/10, DetectorConstants::radius[j]*sin((phi+fi)*180/M_PI)/10, 0);
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, (phi+fi)*180/M_PI, "single");
+        fSlotContainer.push_back(slotTemp);
+      }
+    
       new G4PVPlacement(
         transform, fScinLog, name, fWorldLogical, true, icopy, checkOverlaps
       );
@@ -419,11 +442,17 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   }
 }
 
-void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& angDisp_dynamic, G4int& icopyI)
+void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, 
+                                           G4double& angDisp_dynamic, G4int& icopyI)
 {
   G4double phi = 0.0;
   G4double phi1 = 0.0;
-
+  fLayerNumber++;
+  
+  Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), radius_dynamic[6], 1);
+  fLayerContainer.push_back(layTemp);
+  
+  G4int moduleNumber = 0;
   for (int i = 0; i < numberofModules; i++){
     phi = (i * 2 * M_PI / numberofModules);
     for (int j = -6; j < 7; j++) {
@@ -433,7 +462,17 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
       rot.rotateZ(phi);
       G4ThreeVector loc = G4ThreeVector(radius_new * cos(phi1), radius_new * sin(phi1), 0.0);
       G4Transform3D transform(rot, loc);
-      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
+      moduleNumber = icopyI + i * 13 + j + 6;
+      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(moduleNumber);
+      
+      if (fCreateGeometryFile) {
+        Scin scinTemp(moduleNumber, moduleNumber, DetectorConstants::scinDim_inModule[0], DetectorConstants::scinDim_inModule[1], 
+                      DetectorConstants::scinDim_inModule[2], (radius_new/cm)*cos(phi1*180/M_PI), (radius_new/cm)*sin(phi1*180/M_PI), 0);
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, phi*180/M_PI, "module");
+        fSlotContainer.push_back(slotTemp);
+      }
+      
       new G4PVPlacement(
         transform, fScinLogInModule, nameNewI, fWorldLogical,
         true, icopyI + i * 13 + j + 6, checkOverlaps
@@ -834,4 +873,141 @@ void DetectorConstruction::ConstructTargetRun7()
     transform, xadFilling_logical, "xadFillingGeom",
     fWorldLogical, true, 0, checkOverlaps
   );
+}
+
+void DetectorConstruction::CreateGeometryFile()
+{
+  std::ofstream fileWithGeometry;
+  std::string fileName = "newGeometry.json";
+  fileWithGeometry.open(fileName, std::ios::out);
+  G4cout << "--- Saving simulated geometry to " << fileName << " ---" << G4endl;
+  if (fileWithGeometry.is_open()) {
+    int runNumber = fRunNumber+90;
+    if (fCreateOldGeometryFileStyle) {
+      G4cout << "--- Creating old style of the geometry file ---" << G4endl;
+      boost::property_tree::ptree jsonFile, full, partial, element;
+      std::string runNumberStr = std::to_string(runNumber) + std::string(".");
+
+      for (unsigned i=0; i<fScinContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        element.put("barrelSlots_id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        std::stringstream stream, stream2, stream3;
+        stream << std::fixed << std::setprecision(0) << fScinContainer[i].fHeight;
+        element.put("height", "*" + stream.str() + "*");
+        stream2 << std::fixed << std::setprecision(0) << fScinContainer[i].fWidth;
+        element.put("width", "*" + stream2.str() + "*");
+        stream3 << std::fixed << std::setprecision(0) << fScinContainer[i].fLength;
+        element.put("length", "*" + stream3.str() + "*");
+        element.put("attenuation_length", "*" + std::to_string(0) + "*");
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("scintillators", partial);
+      
+      partial.clear();
+      for (unsigned i=0; i<fSlotContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fSlotContainer[i].fId) + "*");
+        element.put("frame_id", "*" + std::to_string(1) + "*");
+        element.put("name", std::to_string(1));
+        element.put("layers_id", std::to_string(1));
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(3) << fSlotContainer[i].fTheta;
+        element.put("theta1", "*" + stream.str() + "*");
+        element.put("active", "true");
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("barrelSlots", partial);
+  
+      partial.clear();
+      for (unsigned i=0; i<fLayerContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fLayerContainer[i].fId) + "*");
+        element.put("name", fLayerContainer[i].fName);
+        element.put("radius", "*" + std::to_string(fLayerContainer[i].fRadius) + "*");
+        element.put("frames_id", "*" + std::to_string(fLayerContainer[i].fSetup_id) + "*");
+        element.put("active", "true");
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("layers", partial);
+      
+      jsonFile.add_child(runNumberStr, full);
+      std::stringstream ss;
+      boost::property_tree::json_parser::write_json(ss, jsonFile);
+      std::string json = ss.str();
+      std::string placeholder = "\"*", placeholder2 = "*\"";
+      replace(json, placeholder);
+      replace(json, placeholder2);
+      
+      fileWithGeometry << json;
+      fileWithGeometry.close();
+    } else {
+      G4cout << "--- Creating new style of the geometry file ---" << G4endl;
+      boost::property_tree::ptree jsonFile, full, partial, element;
+      std::string runNumberStr = std::to_string(runNumber) + std::string(".");
+
+      partial.clear();
+      for (unsigned i=0; i<fLayerContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fLayerContainer[i].fId) + "*");
+        element.put("name", fLayerContainer[i].fName);
+        element.put("radius", "*" + std::to_string(fLayerContainer[i].fRadius) + "*");
+        element.put("setup_id", "*" + std::to_string(fLayerContainer[i].fSetup_id) + "*");
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("layer", partial);
+
+      partial.clear();
+      for (unsigned i=0; i<fScinContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fScinContainer[i].fId) + "*");
+        element.put("slot_id", "*" + std::to_string(fScinContainer[i].fSlot_id) + "*");
+        std::stringstream stream, stream2, stream3;
+        stream << std::fixed << std::setprecision(0) << fScinContainer[i].fHeight;
+        element.put("height", "*" + stream.str() + "*");
+        stream2 << std::fixed << std::setprecision(0) << fScinContainer[i].fWidth;
+        element.put("width", "*" + stream2.str() + "*");
+        stream3 << std::fixed << std::setprecision(0) << fScinContainer[i].fLength;
+        element.put("length", "*" + stream3.str() + "*");
+        element.put("xcenter", "*" + std::to_string(fScinContainer[i].fX_center) + "*");
+        element.put("ycenter", "*" + std::to_string(fScinContainer[i].fY_center) + "*");
+        element.put("zcenter", "*" + std::to_string(fScinContainer[i].fZ_center) + "*");
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("scin", partial);
+
+      partial.clear();
+      for (unsigned i=0; i<fSlotContainer.size(); i++) {
+        element.clear();
+        element.put("id", "*" + std::to_string(fSlotContainer[i].fId) + "*");
+        element.put("layer_id", "*" + std::to_string(fSlotContainer[i].fLayer_id) + "*");
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(3) << fSlotContainer[i].fTheta;
+        element.put("theta", "*" + stream.str() + "*");
+        element.put("type", fSlotContainer[i].fType);
+        partial.push_back(std::make_pair("", element));
+      }
+      full.add_child("slot", partial);
+      
+      jsonFile.add_child(runNumberStr, full);
+      std::stringstream ss;
+      boost::property_tree::json_parser::write_json(ss, jsonFile);
+      std::string json = ss.str();
+      std::string placeholder = "\"*", placeholder2 = "*\"";
+      replace(json, placeholder);
+      replace(json, placeholder2);
+      
+      fileWithGeometry << json;
+      fileWithGeometry.close();
+    }
+  }
+  else {
+    G4Exception("DetectorConstruction", "DC03",
+      JustWarning, "Failed to open a file to save geometry");
+  }
+}
+
+void replace(std::string& json, const std::string& placeholder) 
+{
+    boost::replace_all<std::string>(json, placeholder, "");
 }

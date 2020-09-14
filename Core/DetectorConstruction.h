@@ -39,6 +39,9 @@
 #include <vector>
 
 class DetectorConstructionMessenger;
+struct Layer;
+struct Scin;
+struct Slot;
 
 //! Flag for debugging purposes
 const G4bool checkOverlaps = false;
@@ -50,8 +53,7 @@ const G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  enum GeometryKind
-  {
+  enum GeometryKind {
     Unknown,
     Geo24ModulesLayer,
     Geo24ModulesLayerDistributed
@@ -66,11 +68,12 @@ public:
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
 
+  //! Basic geometry with 3 layers of scintillators
+  void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
   void LoadFrame(G4bool tf) { fLoadCADFrame = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(const G4String& module_name)
-  {
+  void ConstructModularLayer(const G4String& module_name) {
     fLoadModularLayer = true;
     if (module_name == "Single") {
       fGeoKind = GeometryKind::Geo24ModulesLayer;
@@ -81,7 +84,10 @@ public:
       fGeoKind = GeometryKind::Unknown;
     }
   }
-
+  void CreateGeometryFileFlag(G4bool tf) { fCreateGeometryFile = tf; };
+  void SetOldStyleOfGeometryFile(G4bool tf) { fCreateOldGeometryFileStyle = tf; };
+  void CreateGeometryFile();
+  
   G4int GetRunNumber() const { return fRunNumber; };
 
 private:
@@ -111,17 +117,22 @@ private:
 
   void ConstructLayers(
     std::vector<G4double>& radius_dynamic, G4int& numberofModules,
-    G4double& AngDisp_dynamic, G4int& icopyI
-  );
+    G4double& AngDisp_dynamic, G4int& icopyI);
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
+  //! Flag for loading standard 3 layers of the scintillators
+  G4bool fLoadScintillators;
   //! Flag for loading frame from CAD file
   G4bool fLoadCADFrame;
   //! Flag for loading wrapping tf the scintillators
   G4bool fLoadWrapping;
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
+  //! Flag for creating file with geometry
+  G4bool fCreateGeometryFile;
+  //! Flag for choosing old style of geometry file
+  G4bool fCreateOldGeometryFileStyle = false;
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -144,6 +155,44 @@ private:
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
+  
+  std::vector<Layer> fLayerContainer;
+  std::vector<Scin> fScinContainer;
+  std::vector<Slot> fSlotContainer;
+  G4int fLayerNumber = 0;
 };
 
+struct Layer {
+  int fId;
+  std::string fName;
+  double fRadius;
+  int fSetup_id;
+  Layer(int id, const std::string& name, double radius, int setup_id) : fId(id), fName(name),
+                                                fRadius(radius), fSetup_id(setup_id) {}
+};
+
+struct Scin {
+  int fId;
+  int fSlot_id;
+  float fHeight;
+  float fWidth;
+  float fLength;
+  double fX_center;
+  double fY_center;
+  double fZ_center;
+  Scin(int id, int slot_id, double height, double width, double length, double x_center, double y_center,
+        double z_center) : fId(id), fSlot_id(slot_id), fHeight(height), fWidth(width), fLength(length),
+                            fX_center(x_center), fY_center(y_center), fZ_center(z_center) {}
+};
+
+struct Slot {
+  int fId;
+  int fLayer_id;
+  double fTheta;
+  std::string fType;
+  Slot(int id, int layer_id, double theta, const std::string& type) : fId(id), fLayer_id(layer_id),
+                                                fTheta(theta), fType(type) {}
+};
+
+void replace(std::string& json, const std::string& placeholder);
 #endif /* !DETECTORCONSTRUCTION_H */

@@ -1,8 +1,24 @@
 # Macro setting barrel and modular detector (24 part ring)
 # Using small annihilation chamber
 
+/jpetmc/detector/loadTargetForRun 5
+
+# Loading standard scintillators (3 layers)
+/jpetmc/detector/loadJPetBasicGeom
+
+# Loading modular layers
 /jpetmc/detector/loadModularLayer Single
-/jpetmc/detector/loadGeomForRun 5
+
+# Loading scintillators without frame
+/jpetmc/detector/loadOnlyScintillators
+
+# Creating geometry file for analysis of the Framework
+# Created in the same file as executable file with name newGeometry.json
+/jpetmc/detector/createGeometryFile
+
+# Option for old style of the json file
+#/jpetmc/detector/createOldGeometryFileStyle
+
 /run/initialize
 
 /run/beamOn 100000
