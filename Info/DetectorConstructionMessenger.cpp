@@ -45,12 +45,12 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   fScinHitMergingTime->SetGuidance("Define time range (ns) while merging hits in scintillators");
   fScinHitMergingTime->SetDefaultUnit("ns");
   fScinHitMergingTime->SetUnitCandidates("ns");
-  
-  fCreateGeometryFile = new G4UIcmdWithoutParameter("/jpetmc/detector/createGeometryFile", this);
-  fCreateGeometryFile->SetGuidance("Create a Json file for the simulated setup");
-  
-  fCreateOldGeometryFileStyle = new G4UIcmdWithoutParameter("/jpetmc/detector/createOldGeometryFileStyle", this);
-  fCreateOldGeometryFileStyle->SetGuidance("Json file will be created with old style");
+
+  fGeometryFileName = new G4UIcmdWithAString("/jpetmc/detector/geometryFileName", this);
+  fGeometryFileName->SetGuidance("Create a JSON file for the simulated setup with a given name.");
+
+  fCreateGeometryType = new G4UIcmdWithAString("/jpetmc/detector/createGeometryType", this);
+  fCreateGeometryType->SetGuidance("Set structure of output JSON file: barrel or modular.");
 }
 
 DetectorConstructionMessenger::~DetectorConstructionMessenger()
@@ -61,8 +61,8 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fLoadOnlyScintillators;
   delete fLoadModularLayer;
   delete fScinHitMergingTime;
-  delete fCreateGeometryFile;
-  delete fCreateOldGeometryFileStyle;
+  delete fGeometryFileName;
+  delete fCreateGeometryType;
 }
 
 // cppcheck-suppress unusedFunction
@@ -89,9 +89,14 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
   } else if (command == fScinHitMergingTime) {
     DetectorConstants::SetMergingTimeValueForScin(fScinHitMergingTime->GetNewDoubleValue(newValue));
     fDetector->UpdateGeometry();
-  } else if (command == fCreateGeometryFile) {
+  } else if (command == fGeometryFileName) {
     fDetector->CreateGeometryFileFlag(true);
-  } else if (command == fCreateOldGeometryFileStyle) {
-    fDetector->SetOldStyleOfGeometryFile(true);
+    if(!newValue.contains(".json")){
+      newValue.append(".json");
+    }
+    fDetector->SetGeometryFileName(newValue);
+  } else if (command == fCreateGeometryType) {
+    fDetector->CreateGeometryFileFlag(true);
+    fDetector->SetGeometryFileType(newValue);
   }
 }
