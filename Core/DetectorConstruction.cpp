@@ -1051,8 +1051,3 @@ void DetectorConstruction::CreateGeometryFile()
     G4Exception("DetectorConstruction", "DC03", JustWarning, "Unrecognized geometry file type, accepted formats: barrel, modular.");
   }
 }
-
-void replace(std::string& json, const std::string& placeholder)
-{
-    boost::replace_all<std::string>(json, placeholder, "");
-}
