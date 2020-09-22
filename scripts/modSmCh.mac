@@ -13,11 +13,8 @@
 /jpetmc/detector/loadOnlyScintillators
 
 # Creating geometry file for analysis of the Framework
-# Created in the same file as executable file with name newGeometry.json
-/jpetmc/detector/createGeometryFile
-
-# Option for old style of the json file
-#/jpetmc/detector/createOldGeometryFileStyle
+/jpetmc/detector/createGeometryType barrel
+/jpetmc/detector/geometryFileName modular_mc_setup.json
 
 /run/initialize
 

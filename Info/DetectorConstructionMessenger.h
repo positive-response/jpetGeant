@@ -48,8 +48,8 @@ private:
   //! Null pointer assigned to the modular layer -
   G4UIcmdWithAString* fLoadModularLayer = nullptr;
   G4UIcmdWithADoubleAndUnit* fScinHitMergingTime = nullptr;
-  G4UIcmdWithoutParameter* fCreateGeometryFile = nullptr;
-  G4UIcmdWithoutParameter* fCreateOldGeometryFileStyle = nullptr;
+  G4UIcmdWithAString* fGeometryFileName = nullptr;
+  G4UIcmdWithAString* fCreateGeometryType = nullptr;
 };
 
 #endif /* !DETECTORCONSTRUCTIONMESSENGER_H */

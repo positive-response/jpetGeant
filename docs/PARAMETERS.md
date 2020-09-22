@@ -72,3 +72,9 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/source/isotope/setPosition`  
 * set number of gamma quanta to generate 1 / 2 / 3 by the isotope  
  `/jpetmc/source/isotope/setNGamma`  
+
+## Creating .json file with geometry setup for J-PET Framework. If one of these two option will be put into macro, the output file will be created.
+* select a type of output file strucure - Big Barrel or Modular format (default "barrel")
+ `jpetmc/detector/createGeometryType`
+* name an output file (default name "mc_geant_setup.json")  
+ `/jpetmc/detector/geometryFileName`  
