@@ -66,9 +66,11 @@ public:
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
   void AddNewHit(DetectorHit*);
-  void AddNodeToDecayTree(int nodeID, int previousNodeID, int trackID);
+  void AddNodeToDecayTree(int nodeID, int trackID);
+  void SetParentIDofPhoton(int x) { fParentIDofPhoton = x; };
+  int GetParentIDofPhoton() { return fParentIDofPhoton; };
   void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
-  int GetEventNumber() {return fEventPack->GetEventNumber();};
+  int GetEventNumber() { return fEventPack->GetEventNumber(); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
@@ -96,7 +98,9 @@ public:
 
 private:
   HistoManager(const HistoManager &histoManagerToCopy);
-    
+
+  int fParentIDofPhoton = 0;
+  bool fEndOfEvent = true;
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;

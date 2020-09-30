@@ -18,6 +18,7 @@
 
 #include <TObject.h>
 #include <TVector3.h>
+#include <iostream>
 #include <vector>
 #include <tuple>
 #include <map>
@@ -32,6 +33,27 @@ enum InteractionType {
   primaryGamma, scattActivePart, scattNonActivePart, secondaryPart, unknown
 };
 
+struct Branch {
+  Branch() {};
+  Branch(int trackID, int primaryBranch);
+  int fTrackID;             //ID of the track corresponding to this branch
+  std::vector<int> fNodeIDs;    //container for all of the nodes
+  std::vector<InteractionType> fInteractionType;
+  int fPrimaryBranchID;       //-1 for branch coming from primary photon, primary branchId otherwise
+  
+  void AddNodeID(int nodeID, InteractionType interactionType);
+  // cppcheck-suppress unusedFunction
+  int GetTrackID() { return fTrackID; };
+  // cppcheck-suppress unusedFunction
+  int GetPrimaryNodeID() { return fNodeIDs[0]; };
+  // cppcheck-suppress unusedFunction
+  int GetLastNodeID() { return fNodeIDs[fNodeIDs.size()-1]; };
+  // cppcheck-suppress unusedFunction
+  int GetPrimaryBranchID() { return fPrimaryBranchID; };
+  int GetPreviousNodeID(int nodeID);
+  InteractionType GetInteractionType(int nodeID);
+};
+
 class JPetGeantDecayTree : public TObject
 {
 
@@ -41,19 +63,13 @@ public:
   
   void Clean();
   void ClearVectors();
-  InteractionType GetInteractionType(int nodeID, int trackID);
-  int GetPreviousNodeID(int nodeID, int trackID);
-  int GetPrimaryNodeID(int nodeID, int trackID);
-  void AddNode(int nodeID, int previousNodeID, int trackID, InteractionType interactionType);
+  
+  int FindPrimaryPhoton(int nodeID);
+  void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
 
 private:
-// fNodeTrackConnections is constructed as {nodeID, previous NodeID, connecting trackID}
-// previous node for primary gamma = -1
-  std::vector<std::tuple<int, int, int>> fNodeConnections;
-// fNodeInteractionType connects nodeID with the type of interaction and trackID
-// types of interaction: 100 - scattering in active part, 10 scattering in non-active part
-// 0 - secondary particle generation
-  std::vector<std::tuple<int, InteractionType, int>> fNodeInteractionType;
+  std::vector<Branch> fBranches;
+  std::map<int, int> fTrackBranchConnection;
     
   ClassDef(JPetGeantDecayTree, 2)
 };

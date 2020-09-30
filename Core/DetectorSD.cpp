@@ -98,22 +98,25 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       );
       if (info != 0) {
         newHit->SetGenGammaMultiplicity(info->GetGammaMultiplicity());
-        testParentIDold = info->GetGammaMultiplicity();                     //Added information about last gamma generated
         newHit->SetGenGammaIndex(info->GetIndex());
         //! should be marked as scattering
         info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
-        if (fHistoManager)
-          fHistoManager->AddNodeToDecayTree(testParentIDold + 100, testParentIDold, 
+        if (fHistoManager) {
+          fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity() - 100);
+          fHistoManager->AddNodeToDecayTree(info->GetGammaMultiplicity(), 
                                         aStep->GetTrack()->GetTrackID());
+          fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity());
+        }
       }
     }
     else
     {
     // This is multiple scattering and compton that does not come from primary gamma generated (pair creation, electron scattering, ...)
-      if (fHistoManager)
-        fHistoManager->AddNodeToDecayTree(testParentIDold*10, testParentIDold, aStep->GetTrack()->GetTrackID());
-      newHit->SetGenGammaMultiplicity(testParentIDold * 10);
-      testParentIDold *= 10;
+      if (fHistoManager) {
+        fHistoManager->AddNodeToDecayTree(fHistoManager->GetParentIDofPhoton() * 10, aStep->GetTrack()->GetTrackID());
+        fHistoManager->SetParentIDofPhoton(fHistoManager->GetParentIDofPhoton() * 10);
+      }
+      newHit->SetGenGammaMultiplicity(fHistoManager->GetParentIDofPhoton() * 10);
     }
     G4int id = fDetectorCollection->insert(newHit);
     fPreviousHits[currentScinCopy].fID = id - 1;

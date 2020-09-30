@@ -38,8 +38,6 @@ private:
   };
   
   HistoManager* fHistoManager = nullptr;
-  
-  int testParentIDold = 0;
 
   G4double fTimeIntervals;
   G4int fToTScinNum;
