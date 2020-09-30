@@ -70,7 +70,6 @@ void JPetGeantDecayTree::ClearVectors()
   fTrackBranchConnection.clear();
 }
 
-// cppcheck-suppress unusedFunction
 int JPetGeantDecayTree::FindPrimaryPhoton(int nodeID)
 {
   for (unsigned i=fBranches.size(); i>0; i--) {
