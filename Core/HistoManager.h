@@ -68,7 +68,7 @@ public:
   void AddNewHit(DetectorHit*);
   void AddNodeToDecayTree(int nodeID, int trackID);
   void SetParentIDofPhoton(int x) { fParentIDofPhoton = x; };
-  int GetParentIDofPhoton() { return fParentIDofPhoton; };
+  int GetParentIDofPhoton() const { return fParentIDofPhoton; };
   void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
   int GetEventNumber() { return fEventPack->GetEventNumber(); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };

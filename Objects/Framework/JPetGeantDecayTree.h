@@ -36,22 +36,22 @@ enum InteractionType {
 struct Branch {
   Branch() {};
   Branch(int trackID, int primaryBranch);
-  int fTrackID;             //ID of the track corresponding to this branch
+  int fTrackID = -1;             //ID of the track corresponding to this branch
   std::vector<int> fNodeIDs;    //container for all of the nodes
   std::vector<InteractionType> fInteractionType;
-  int fPrimaryBranchID;       //-1 for branch coming from primary photon, primary branchId otherwise
+  int fPrimaryBranchID = -1;       //-1 for branch coming from primary photon, primary branchId otherwise
   
   void AddNodeID(int nodeID, InteractionType interactionType);
   // cppcheck-suppress unusedFunction
-  int GetTrackID() { return fTrackID; };
+  int GetTrackID() const { return fTrackID; };
   // cppcheck-suppress unusedFunction
-  int GetPrimaryNodeID() { return fNodeIDs[0]; };
+  int GetPrimaryNodeID() const { return fNodeIDs[0]; };
   // cppcheck-suppress unusedFunction
-  int GetLastNodeID() { return fNodeIDs[fNodeIDs.size()-1]; };
+  int GetLastNodeID() const { return fNodeIDs[fNodeIDs.size()-1]; };
   // cppcheck-suppress unusedFunction
-  int GetPrimaryBranchID() { return fPrimaryBranchID; };
-  int GetPreviousNodeID(int nodeID);
-  InteractionType GetInteractionType(int nodeID);
+  int GetPrimaryBranchID() const { return fPrimaryBranchID; };
+  int GetPreviousNodeID(int nodeID) const;
+  InteractionType GetInteractionType(int nodeID) const;
 };
 
 class JPetGeantDecayTree : public TObject
