@@ -82,41 +82,42 @@ void MaterialExtension::ChangeMaterialConstants()
   fMaterialParameters->SetMaterialByName(MaterialParameters::MaterialID::mUnknown);
 }
 
-const std::vector<G4double> MaterialExtension::GetEventsFraction() const
+std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if(MaterialParameters::AnnihlationMode != "")
   {
-    if(MaterialParameters::AnnihlationMode == "oPs3G")
+    if(MaterialParameters::AnnihlationMode == "pPs3G")
     {
-      frac = {0.,0.,0.,0.,1.};
+      frac = {0.,0.,0.,0.,0.,1.};
+      return frac;
+    }
+    else if(MaterialParameters::AnnihlationMode == "oPs3G")
+    {
+      frac = {0.,0.,0.,0.,1.,0.};
       return frac;
     }
     else if(MaterialParameters::AnnihlationMode == "oPs2G")
     {
-      frac = {0.,0.,1.,0.,0.};
+      frac = {0.,0.,1.,0.,0.,0.};
       return frac;        
     }
     else if(MaterialParameters::AnnihlationMode == "pPs2G")
     {
-      frac = {1.,0.,0.,0.,0.};
+      frac = {1.,0.,0.,0.,0.,0.};
       return frac;              
     }
   }
-    
+  
   G4double pPs = fMaterialParameters->GetpPs2GTotalIntensity();
   G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();
   G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
   G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
   G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
+  G4double pPs3G = 0; //fMaterialParameters->GetpPs3GTotalIntensity();
 
   //! 2g direct // 2g pickoff // 3g direct // 3g oPs
-  frac = {
-  pPs,
-  direct2g,
-  oPs2G,
-  direct3g,
-  oPs3G
-  };
+  frac = { pPs, direct2g, oPs2G, direct3g, oPs3G, pPs3G };
   return frac;
 }
+ 

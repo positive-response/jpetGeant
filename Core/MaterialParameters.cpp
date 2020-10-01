@@ -28,6 +28,7 @@ MaterialConstants::MaterialConstants(const std::vector<G4double> & oPsLF, const 
   directProbabilities = DirProb;
 }
 
+const G4double MaterialParameters::pPsTauVaccum = 0.125 * ns;
 const G4double MaterialParameters::oPsTauVaccum =  142.0 * ns;
 const G4double MaterialParameters::directTauMax = 0.6 * ns;
 const G4double MaterialParameters::pPsTauMax = 0.2 * ns;

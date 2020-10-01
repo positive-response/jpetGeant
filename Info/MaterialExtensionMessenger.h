@@ -46,6 +46,7 @@ private:
   G4UIdirectory* fDirectory = nullptr;
   MaterialExtension* fMaterial = nullptr;
   G4UIcmdWithoutParameter* f3GammaOnly = nullptr;
+  G4UIcmdWithoutParameter* f3GammapPs = nullptr;
   G4UIcmdWithoutParameter* f2GammaOnly = nullptr;
   G4UIcmdWithoutParameter* fPickOffOnly = nullptr;
   G4UIcmdWithAString* fAddoPsComponent = nullptr;

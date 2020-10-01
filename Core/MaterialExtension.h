@@ -33,7 +33,7 @@
 class MaterialExtension : public G4Material
 {
 public:
-  enum DecayChannel { Ortho2G, Ortho3G, Para2G, Direct};
+  enum DecayChannel { Ortho2G, Ortho3G, Para2G, Direct, Para3G};
     
   MaterialExtension(MaterialParameters::MaterialID materialID, const G4String& name, const G4Material* baseMaterial);
   ~MaterialExtension();
@@ -53,7 +53,7 @@ public:
 
   void FillIntensities() {fMaterialParameters->SetComponentsIntensities();};
   //! 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
-  const std::vector<G4double> GetEventsFraction() const;
+  std::vector<G4double> GetEventsFraction() const;
 
   G4bool IsTarget() const {return fTarget;};
   void AllowsAnnihilations(G4bool tf) {fTarget = tf;};
@@ -63,8 +63,7 @@ public:
 
 private:
   G4Material* fMaterial = nullptr;
-  MaterialExtensionMessenger* fMaterialExtensionMessenger
-    = MaterialExtensionMessenger::GetMaterialExtensionMessenger();
+  MaterialExtensionMessenger* fMaterialExtensionMessenger = MaterialExtensionMessenger::GetMaterialExtensionMessenger();
   G4bool fTarget;
   MaterialParameters *fMaterialParameters = nullptr;
 };
