@@ -34,9 +34,11 @@ PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 
 PrimaryGenerator::~PrimaryGenerator() {}
 
-G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
-  const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime3g
+G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex( 
+  const MaterialExtension::DecayChannel channel, const G4ThreeVector vtxPosition, 
+  const G4double T0, const G4double lifetime3g
 ) {
+
   G4PrimaryVertex* vertex = new G4PrimaryVertex();
   VtxInformation* info = new VtxInformation();
 
@@ -59,15 +61,18 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
     G4cout << "error: generate_gamma : createThreeEvts:" << test << G4endl;
   }
 
-  Double_t weight;
+  Double_t weight = 1;
   Double_t weight_max = event.GetWtMax() * pow(10, -1);
-  Double_t rwt;
-  Double_t M_max = 7.65928 * pow(10, -6);
+  Double_t rwt = 1;
+  Double_t M_max = 1;
+  if(channel == MaterialExtension::DecayChannel::Ortho3G || channel == MaterialExtension::DecayChannel::Direct) {
+    M_max = 7.65928 * pow(10, -6);
+  } else if (channel ==MaterialExtension::DecayChannel::Para3G) {
+    M_max = 2.00967*pow(10,25); 
+  }
   do {
     weight = event.Generate();
-    weight = weight * calculate_mQED(
-      511.0, event.GetDecay(0)->E()/keV, event.GetDecay(1)->E()/keV, event.GetDecay(2)->E() / keV
-    );
+    weight = weight * calculate_mQED( channel, 511., event.GetDecay(0)->E() / keV, event.GetDecay(1)->E() / keV, event.GetDecay(2)->E() / keV );
     rwt = M_max * weight_max * (G4UniformRand());
   } while (rwt > weight);
 
@@ -191,36 +196,42 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
   if (evtFractions[0] > random) {
-    //! pPs
+  // pPs
     event->AddPrimaryVertex(GenerateTwoGammaVertex(
       vtxPosition, T0,
       material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)
     ));
   } else if (evtFractions[0] + evtFractions[1] > random) {
-    //! Direct 2G
+  // Direct 2G
     event->AddPrimaryVertex(GenerateTwoGammaVertex(
       vtxPosition, T0,
       material->GetLifetime(random - evtFractions[0], MaterialExtension::DecayChannel::Direct)
-    ));
+    ));   
   } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
-    //! oPs 2G
+  // oPs 2G
     event->AddPrimaryVertex(GenerateTwoGammaVertex(
       vtxPosition, T0,
       material->GetLifetime(random - evtFractions[0] - evtFractions[1], MaterialExtension::DecayChannel::Ortho2G)
-    ));
+    ));    
   } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
-    //! Direct 3G
+  // Direct 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      vtxPosition, T0,
+      MaterialExtension::DecayChannel::Direct, vtxPosition, T0,
       material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)
     ));
-  } else {
-    //! oPs 3G
+  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
+  // oPs 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], MaterialExtension::DecayChannel::Ortho3G)
+      MaterialExtension::DecayChannel::Ortho3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], MaterialExtension::DecayChannel::Ortho3G)
     ));
-  }
+  } else {
+  // pPs 3G
+    event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      MaterialExtension::DecayChannel::Para3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3]- evtFractions[4], MaterialExtension::DecayChannel::Para3G)
+    ));
+  } 
 
   //! Add prompt gamma from sodium
   G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
@@ -289,36 +300,43 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
-  
+
   if (evtFractions[0] > random) {
-    //! pPs
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(vtxPosition, T0, material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)));
+  // pPs
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, T0,
+      material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)
+    ));
   } else if (evtFractions[0] + evtFractions[1] > random) {
-    //! Direct 2G
+  // Direct 2G
     event->AddPrimaryVertex(GenerateTwoGammaVertex(
       vtxPosition, T0,
       material->GetLifetime(random - evtFractions[0], MaterialExtension::DecayChannel::Direct)
-    ));
+    ));   
   } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
-    //! oPs 2G
+  // oPs 2G
     event->AddPrimaryVertex(GenerateTwoGammaVertex(
       vtxPosition, T0,
       material->GetLifetime(random - evtFractions[0] - evtFractions[1], MaterialExtension::DecayChannel::Ortho2G)
-    ));
+    ));    
   } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
-    //! Direct 3G
+  // Direct 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      vtxPosition, T0,
-       material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)
-     ));
+      MaterialExtension::DecayChannel::Direct, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)
+    ));
+  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
+  // oPs 3G
+    event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      MaterialExtension::DecayChannel::Ortho3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], MaterialExtension::DecayChannel::Ortho3G)
+    ));
   } else {
-    //! oPs 3G
+  // pPs 3G
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      vtxPosition, T0, material->GetLifetime(
-        random - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4],
-        MaterialExtension::DecayChannel::Ortho3G)
-      )
-    );
+      MaterialExtension::DecayChannel::Para3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3]- evtFractions[4], MaterialExtension::DecayChannel::Para3G)
+    ));
   }
 
   //! Add prompt gamma from sodium
@@ -376,12 +394,12 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
   } else if (sourceParams->GetGammasNumber() == 3) {
     //! generate 3g
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      vtxPosition, 0.0f, MaterialParameters::foPsTauVaccum
+      MaterialExtension::DecayChannel::Ortho3G ,vtxPosition, 0.0f, MaterialParameters::foPsTauVaccum
     ));
   } else {
     G4Exception(
       "PrimaryGenerator", "PG01", FatalException,
-      "Program does not know how many gamma quanta is needed to be simulated"
+      "program does not know how many gamma quanta is needed to be simulated"
     );
   }
 }
@@ -466,9 +484,15 @@ const G4ThreeVector PrimaryGenerator::GetRandomPointOnSphere(G4double radius)
   return G4ThreeVector(x, y, z);
 }
 
-G4double PrimaryGenerator::calculate_mQED(Double_t mass_e, Double_t w1, Double_t w2, Double_t w3)
+G4double PrimaryGenerator::calculate_mQED(const MaterialExtension::DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3)
 {
-  return pow((mass_e - w1) / (w2 * w3), 2)
-    + pow((mass_e - w2) / (w1 * w3), 2)
-    + pow((mass_e - w3) / (w1 * w2), 2);
+  if(channel == MaterialExtension::DecayChannel::Ortho3G or channel == MaterialExtension::DecayChannel::Direct) {
+    return pow((mass_e - w1) / (w2 * w3), 2) + pow((mass_e - w2) / (w1 * w3), 2) + pow((mass_e - w3) / (w1 * w2), 2);
+  } else if (channel == MaterialExtension::DecayChannel::Para3G) {
+    return pow(w1*w2*w3,2)* pow(sin(acos((-pow(w1,2) - pow(w2,2) + pow(w3,2))/(2*w1*w2))) +
+				       sin(acos(( pow(w1,2) - pow(w2,2) - pow(w3,2))/(2*w3*w2))) +
+				       sin(acos((-pow(w1,2) + pow(w2,2) - pow(w3,2))/(2*w1*w3))), 2)* 
+				       (pow(mass_e-w3,2)*pow(w1-w2,2) + pow(mass_e-w1,2)*pow(w2-w3,2) + pow(mass_e-w2,2)*pow(w3-w1,2));
+  }
+  return 0;
 }

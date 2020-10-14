@@ -34,12 +34,12 @@
 class MaterialExtension : public G4Material
 {
 public:
-  enum DecayChannel {
-    Ortho2G, Ortho3G, Para2G, Direct
+  enum DecayChannel { 
+    Ortho2G, Ortho3G, Para2G, Direct, Para3G
   };
-
+    
   MaterialExtension(
-    MaterialParameters::MaterialID materialID,
+    MaterialParameters::MaterialID materialID, 
     const G4String& name, const G4Material* baseMaterial
   );
   ~MaterialExtension();
@@ -58,7 +58,6 @@ public:
    * is cleared in the meesenger for further modification of different material
   */
   void ChangeMaterialConstants();
-
   void FillIntensities() { fMaterialParameters->SetComponentsIntensities(); };
   //! 2g direct; 2g pickoff (lifetime 3g); 3g direct; 3g oPs (lifetime 3g)
   std::vector<G4double> GetEventsFraction() const;

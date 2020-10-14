@@ -113,7 +113,10 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if (MaterialParameters::fAnnihlationMode != "") {
-    if (MaterialParameters::fAnnihlationMode == "oPs3G") {
+    if(MaterialParameters::fAnnihlationMode == "pPs3G") {
+      frac = {0.,0.,0.,0.,0.,1.};
+      return frac;
+    } else if (MaterialParameters::fAnnihlationMode == "oPs3G") {
       frac = {0., 0., 0., 0., 1.};
       return frac;
     } else if (MaterialParameters::fAnnihlationMode == "oPs2G") {
@@ -130,8 +133,10 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
   G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
   G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
   G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
+  G4double pPs3G = 0; //fMaterialParameters->GetpPs3GTotalIntensity();
 
   //! 2g direct // 2g pickoff // 3g direct // 3g oPs
-  frac = { pPs, direct2g, oPs2G, direct3g, oPs3G };
+  frac = { pPs, direct2g, oPs2G, direct3g, oPs3G, pPs3G };
   return frac;
 }
+ 
