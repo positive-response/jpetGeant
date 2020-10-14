@@ -61,14 +61,14 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
     G4cout << "error: generate_gamma : createThreeEvts:" << test << G4endl;
   }
 
-  Double_t weight;
+  Double_t weight = 1;
   Double_t weight_max = event.GetWtMax() * pow(10, -1);
-  Double_t rwt;
-  Double_t M_max;
+  Double_t rwt = 1;
+  Double_t M_max = 1;
   if(channel == MaterialExtension::DecayChannel::Ortho3G || channel == MaterialExtension::DecayChannel::Direct) {
     M_max = 7.65928 * pow(10, -6);
   } else if (channel ==MaterialExtension::DecayChannel::Para3G) {
-	  M_max = 2.00967*pow(10,25); 
+    M_max = 2.00967*pow(10,25); 
   }
   do {
     weight = event.Generate();
@@ -394,7 +394,7 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
   } else if (sourceParams->GetGammasNumber() == 3) {
     //! generate 3g
     event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      MaterialExtension::DecayChannel::Ortho3G ,vtxPosition, 0.0f, MaterialParameters::oPsTauVaccum
+      MaterialExtension::DecayChannel::Ortho3G ,vtxPosition, 0.0f, MaterialParameters::foPsTauVaccum
     ));
   } else {
     G4Exception(
@@ -489,9 +489,10 @@ G4double PrimaryGenerator::calculate_mQED(const MaterialExtension::DecayChannel 
   if(channel == MaterialExtension::DecayChannel::Ortho3G or channel == MaterialExtension::DecayChannel::Direct) {
     return pow((mass_e - w1) / (w2 * w3), 2) + pow((mass_e - w2) / (w1 * w3), 2) + pow((mass_e - w3) / (w1 * w2), 2);
   } else if (channel == MaterialExtension::DecayChannel::Para3G) {
-    return pow(w1*w2*w3,2)* pow(sin(acos((-pow(w1,2) - pow(w2,2) + pow(w3,2))/(2*w1*w2))) + \
-				       sin(acos(( pow(w1,2) - pow(w2,2) - pow(w3,2))/(2*w3*w2))) + \ 
+    return pow(w1*w2*w3,2)* pow(sin(acos((-pow(w1,2) - pow(w2,2) + pow(w3,2))/(2*w1*w2))) +
+				       sin(acos(( pow(w1,2) - pow(w2,2) - pow(w3,2))/(2*w3*w2))) +
 				       sin(acos((-pow(w1,2) + pow(w2,2) - pow(w3,2))/(2*w1*w3))), 2)* 
 				       (pow(mass_e-w3,2)*pow(w1-w2,2) + pow(mass_e-w1,2)*pow(w2-w3,2) + pow(mass_e-w2,2)*pow(w3-w1,2));
   }
+  return 0;
 }
