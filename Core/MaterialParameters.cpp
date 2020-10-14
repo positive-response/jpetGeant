@@ -23,6 +23,7 @@ MaterialConstants::MaterialConstants(
 ) : oPsLifetimes(oPsLF), oPsProbabilities(oPsProb), pPsLifetime(pPsLF),
 pPsFraction(pPsFrac), directLifetimes(dirLF), directProbabilities(dirProb) {}
 
+const G4double MaterialParameters::fpPsTauVaccum = 0.125 * ns;
 const G4double MaterialParameters::foPsTauVaccum = 142.0 * ns;
 const G4double MaterialParameters::fDirectTauMax = 0.6 * ns;
 const G4double MaterialParameters::fpPsTauMax = 0.2 * ns;

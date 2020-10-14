@@ -39,6 +39,9 @@
 #include <vector>
 
 class DetectorConstructionMessenger;
+struct Layer;
+struct Scin;
+struct Slot;
 
 //! Flag for debugging purposes
 const G4bool checkOverlaps = false;
@@ -50,8 +53,7 @@ const G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  enum GeometryKind
-  {
+  enum GeometryKind {
     Unknown,
     Geo24ModulesLayer,
     Geo24ModulesLayerDistributed
@@ -67,11 +69,12 @@ public:
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
 
+  //! Basic geometry with 3 layers of scintillators
+  void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
   void LoadFrame(G4bool tf) { fLoadCADFrame = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(const G4String& module_name)
-  {
+  void ConstructModularLayer(const G4String& module_name) {
     fLoadModularLayer = true;
     if (module_name == "Single") {
       fGeoKind = GeometryKind::Geo24ModulesLayer;
@@ -82,6 +85,12 @@ public:
       fGeoKind = GeometryKind::Unknown;
     }
   }
+
+  //! Writing out detector setup in json format
+  void CreateGeometryFileFlag(G4bool tf) { fCreateGeometryFile = tf; };
+  void SetGeometryFileName(G4String fileName) { fGeometryFileName = fileName; };
+  void SetGeometryFileType(G4String type) { fGeometryFileType = type; };
+  void CreateGeometryFile();
 
   G4int GetRunNumber() const { return fRunNumber; };
 
@@ -113,17 +122,22 @@ private:
 
   void ConstructLayers(
     std::vector<G4double>& radius_dynamic, G4int& numberofModules,
-    G4double& AngDisp_dynamic, G4int& icopyI
-  );
+    G4double& AngDisp_dynamic, G4int& icopyI);
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
+  //! Flag for loading standard 3 layers of the scintillators
+  G4bool fLoadScintillators;
   //! Flag for loading frame from CAD file
   G4bool fLoadCADFrame;
   //! Flag for loading wrapping tf the scintillators
   G4bool fLoadWrapping;
   //! Flag for loading modular (4th) layer
   G4bool fLoadModularLayer;
+  //! For creating file with geometry, by default not created, if yes, in big barrel format
+  G4bool fCreateGeometryFile = false;
+  G4String fGeometryFileName = "mc_geant_setup.json";
+  G4String fGeometryFileType = "barrel";
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -146,6 +160,52 @@ private:
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
+
+  std::vector<Layer> fLayerContainer;
+  std::vector<Scin> fScinContainer;
+  std::vector<Slot> fSlotContainer;
+  G4int fLayerNumber = 0;
 };
 
+struct Frame {
+  int fID;
+  int fCreatorID;
+  int fVersion;
+  std::string fStatus;
+  std::string fDescription;
+  bool fActive;
+};
+
+struct Layer {
+  int fID;
+  std::string fName;
+  double fRadius;
+  int fSetupID;
+  Layer(int id, const std::string& name, double radius, int setupID) :
+    fID(id), fName(name), fRadius(radius), fSetupID(setupID) {}
+};
+
+struct Slot {
+  int fID;
+  int fLayerID;
+  double fTheta;
+  std::string fType;
+  Slot(int id, int layerID, double theta, const std::string& type) :
+    fID(id), fLayerID(layerID), fTheta(theta), fType(type) {}
+};
+
+struct Scin {
+  int fID;
+  int fSlotID;
+  float fHeight;
+  float fWidth;
+  float fLength;
+  double fX_center;
+  double fY_center;
+  double fZ_center;
+  Scin(int id, int slotID, double height, double width, double length, double x_center, double y_center, double z_center) :
+    fID(id), fSlotID(slotID), fHeight(height), fWidth(width), fLength(length), fX_center(x_center), fY_center(y_center), fZ_center(z_center) {}
+};
+
+void replace(std::string& json, const std::string& placeholder);
 #endif /* !DETECTORCONSTRUCTION_H */

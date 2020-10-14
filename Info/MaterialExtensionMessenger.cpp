@@ -35,6 +35,9 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   f3GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/threeGammaOnly", this);
   f3GammaOnly->SetGuidance("Only 3 gamma events will be generated (lifetime as for oPs)");
 
+  f3GammapPs = new G4UIcmdWithoutParameter("/jpetmc/material/threeGammapPs", this);
+  f3GammapPs->SetGuidance("Only 3 gamma events from pPs decay will be generated (lifetime as for pPs)");
+
   f2GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/twoGammaOnly", this);
   f2GammaOnly->SetGuidance("Only 2 gamma events will be generated (lifetime as for pPs)");
 
@@ -57,6 +60,7 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
 MaterialExtensionMessenger::~MaterialExtensionMessenger()
 {
   delete f3GammaOnly;
+  delete f3GammapPs;
   delete f2GammaOnly;
   delete fPickOffOnly;
   delete fAddoPsComponent;
@@ -68,6 +72,8 @@ void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newV
 {
   if (command == f3GammaOnly) {
     MaterialParameters::SetAnnihilationMode("oPs3G");
+  } else if (command == f3GammapPs) {
+    MaterialParameters::SetAnnihilationMode("pPs3G");
   } else if (command == f2GammaOnly) {
     MaterialParameters::SetAnnihilationMode("pPs2G");
   } else if (command == fPickOffOnly) {

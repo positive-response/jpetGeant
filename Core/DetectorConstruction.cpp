@@ -20,14 +20,20 @@
 #include "MaterialExtension.h"
 #include "RunManager.h"
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/algorithm/string.hpp>
 #include <G4PhysicalVolumeStore.hh>
 #include <G4LogicalVolumeStore.hh>
 #include <G4SubtractionSolid.hh>
+#include <boost/optional.hpp>
 #include <G4RegionStore.hh>
 #include <G4SolidStore.hh>
 #include <G4UnionSolid.hh>
 #include <G4Polycone.hh>
 #include <G4Tubs.hh>
+#include <iostream>
+#include <iomanip>
 #include <vector>
 
 DetectorConstruction* DetectorConstruction::fInstance = 0;
@@ -39,8 +45,8 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 }
 
 DetectorConstruction::DetectorConstruction() :
-G4VUserDetectorConstruction(), fRunNumber(0), fLoadCADFrame(false),
-fLoadWrapping(true), fLoadModularLayer(false)
+G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(false),
+fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false)
 {
   InitializeMaterials();
   fMessenger = new DetectorConstructionMessenger(this);
@@ -71,10 +77,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     0, G4ThreeVector(), fWorldLogical, "worldPhysical", 0, false, 0, checkOverlaps
   );
 
-  //! scintillators for standard setup; right now always loaded
-  ConstructScintillators();
-
-  if (fLoadModularLayer){
+  if (fLoadScintillators) {
+    //! scintillators for standard setup
+    ConstructScintillators();
+  }
+  if (fLoadModularLayer) {
     ConstructScintillatorsModularLayer();
   }
   if (fLoadCADFrame) {
@@ -82,15 +89,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   }
   if (fRunNumber == 3) {
     ConstructTargetRun3();
-  }
-  if (fRunNumber == 5) {
+  } else if (fRunNumber == 5) {
     ConstructTargetRun5();
-  }
-  if (fRunNumber == 6) {
+  } else if (fRunNumber == 6) {
     ConstructTargetRun6();
-  }
-  if (fRunNumber == 7) {
+  } else if (fRunNumber == 7) {
     ConstructTargetRun7();
+  }
+
+  if (fCreateGeometryFile) {
+    CreateGeometryFile();
   }
 
   return fWorldPhysical;
@@ -299,8 +307,14 @@ void DetectorConstruction::ConstructScintillators()
   boxVisAttWrapping->SetForceSolid(true);
 
   G4int icopy = 1;
+  G4int oldLayerNumber = fLayerNumber;
+  G4int moduleNumber = 0;
   for (int j = 0; j < DetectorConstants::layers; j++) {
+    fLayerNumber = oldLayerNumber + j + 1;
+    Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), DetectorConstants::radius[j]/10 /*to cm*/, 1);
+    fLayerContainer.push_back(layTemp);
     for (int i = 0; i < DetectorConstants::nSegments[j]; i++) {
+      moduleNumber++;
       G4double phi = i * 2 * M_PI / DetectorConstants::nSegments[j];
       G4double fi = M_PI / DetectorConstants::nSegments[j];
 
@@ -317,6 +331,17 @@ void DetectorConstruction::ConstructScintillators()
 
       G4Transform3D transform(rot, loc);
       G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
+
+      if (fCreateGeometryFile) {
+        Scin scinTemp(
+          moduleNumber, moduleNumber, DetectorConstants::scinDim[0], DetectorConstants::scinDim[1], DetectorConstants::scinDim[2],
+          DetectorConstants::radius[j]*cos((phi+fi)*180/M_PI)/10, DetectorConstants::radius[j]*sin((phi+fi)*180/M_PI)/10, 0
+        );
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, (phi+fi)*180/M_PI, "single");
+        fSlotContainer.push_back(slotTemp);
+      }
+
       new G4PVPlacement(
         transform, fScinLog, name, fWorldLogical, true, icopy, checkOverlaps
       );
@@ -425,11 +450,17 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   }
 }
 
-void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& angDisp_dynamic, G4int& icopyI)
+void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules,
+                                           G4double& angDisp_dynamic, G4int& icopyI)
 {
   G4double phi = 0.0;
   G4double phi1 = 0.0;
+  fLayerNumber++;
 
+  Layer layTemp(fLayerNumber, "Layer nr " + std::to_string(fLayerNumber), radius_dynamic[6], 1);
+  fLayerContainer.push_back(layTemp);
+
+  G4int moduleNumber = 0;
   for (int i = 0; i < numberofModules; i++){
     phi = (i * 2 * M_PI / numberofModules);
     for (int j = -6; j < 7; j++) {
@@ -439,7 +470,19 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
       rot.rotateZ(phi);
       G4ThreeVector loc = G4ThreeVector(radius_new * cos(phi1), radius_new * sin(phi1), 0.0);
       G4Transform3D transform(rot, loc);
-      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(icopyI + i * 13 + j + 6);
+      moduleNumber = icopyI + i * 13 + j + 6;
+      G4String nameNewI = "scin_" + G4UIcommand::ConvertToString(moduleNumber);
+
+      if (fCreateGeometryFile) {
+        Scin scinTemp(
+          moduleNumber, moduleNumber, DetectorConstants::scinDim_inModule[0], DetectorConstants::scinDim_inModule[1],
+          DetectorConstants::scinDim_inModule[2], (radius_new/cm)*cos(phi1*180/M_PI), (radius_new/cm)*sin(phi1*180/M_PI), 0
+        );
+        fScinContainer.push_back(scinTemp);
+        Slot slotTemp(moduleNumber, fLayerNumber, phi*180/M_PI, "module");
+        fSlotContainer.push_back(slotTemp);
+      }
+
       new G4PVPlacement(
         transform, fScinLogInModule, nameNewI, fWorldLogical,
         true, icopyI + i * 13 + j + 6, checkOverlaps
@@ -840,4 +883,177 @@ void DetectorConstruction::ConstructTargetRun7()
     transform, xadFilling_logical, "xadFillingGeom",
     fWorldLogical, true, 0, checkOverlaps
   );
+}
+
+void DetectorConstruction::CreateGeometryFile()
+{
+  namespace pt = boost::property_tree;
+  using namespace std;
+
+  G4cout << "--- Saving simulated geometry to " << fGeometryFileName << " ---" << G4endl;
+  auto runNumStr = to_string(fRunNumber+90);
+  pt::ptree jsonFile, full, partial, element;
+
+  if (fGeometryFileType == "barrel") {
+    G4cout << "--- Creating geometry file in Framework Big Barrel Format ---" << G4endl;
+
+    //! Adding Frame object - only one, always the same
+    element.put("id", 1);
+    element.put("creator_id", 1);
+    element.put("status", "OK");
+    element.put("description", "Setup generated with J-PET Geant4 software");
+    element.put("active", "true");
+    element.put("version", 1);
+    partial.push_back(make_pair("", element));
+    full.add_child("frames", partial);
+
+    //! Adding scintillators from collection of Scin objects added during construction
+    partial.clear();
+    for (unsigned i=0; i<fScinContainer.size(); i++) {
+      auto id = to_string(fScinContainer[i].fID);
+      auto bsID = to_string(fScinContainer[i].fSlotID);
+      auto height = to_string(fScinContainer[i].fHeight);
+      height = height.substr(0, height.find(".", 0)+3);
+      auto width = to_string(fScinContainer[i].fWidth);
+      width = width.substr(0, width.find(".", 0)+3);
+      auto length = to_string(fScinContainer[i].fLength);
+      length = length.substr(0, length.find(".", 0)+3);
+
+      element.clear();
+      element.put("id", id);
+      element.put("barrelSlots_id", bsID);
+      element.put("height", height);
+      element.put("width", width);
+      element.put("length", length);
+      element.put("attenuation_length", "0");
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("scintillators", partial);
+
+    //! Adding slots
+    partial.clear();
+    for (unsigned i=0; i<fSlotContainer.size(); i++) {
+      auto id = to_string(fSlotContainer[i].fID);
+      auto layerID = to_string(fSlotContainer[i].fLayerID);
+      auto theta = to_string(fSlotContainer[i].fTheta);
+      theta = theta.substr(0, theta.find(".", 0)+3);
+
+      element.clear();
+      element.put("id", id);
+      element.put("frame_id", "1");
+      element.put("name", "1");
+      element.put("layers_id", layerID);
+      element.put("theta1", theta);
+      element.put("active", "true");
+
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("barrelSlots", partial);
+
+    //! Adding layers
+    partial.clear();
+    for (unsigned i=0; i<fLayerContainer.size(); i++) {
+      auto id = to_string(fLayerContainer[i].fID);
+      auto name = fLayerContainer[i].fName;
+      auto radius = to_string(fLayerContainer[i].fRadius);
+      radius = radius.substr(0, radius.find(".", 0)+3);
+      auto frameID = to_string(fLayerContainer[i].fSetupID);
+
+      element.clear();
+      element.put("id", id);
+      element.put("name", name);
+      element.put("radius", radius);
+      element.put("frames_id", frameID);
+      element.put("active", "true");
+
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("layers", partial);
+
+    jsonFile.add_child(runNumStr, full);
+    pt::write_json(fGeometryFileName, jsonFile);
+
+  } else if (fGeometryFileType == "modular") {
+
+    G4cout << "--- Creating geometry file in Framework Modular Format ---" << G4endl;
+
+    //! Adding Setup object - only one, always the same
+    element.put("id", 1);
+    element.put("description", "Setup generated with J-PET Geant4 software");
+    partial.push_back(make_pair("", element));
+    full.add_child("setup", partial);
+
+    //! Adding Layers
+    partial.clear();
+    for (unsigned i=0; i<fLayerContainer.size(); i++) {
+      auto id = to_string(fLayerContainer[i].fID);
+      auto name = fLayerContainer[i].fName;
+      auto radius = to_string(fLayerContainer[i].fRadius);
+      radius = radius.substr(0, radius.find(".", 0)+3);
+      auto setupID = to_string(fLayerContainer[i].fSetupID);
+
+      element.clear();
+      element.put("id", id);
+      element.put("name", name);
+      element.put("radius", radius);
+      element.put("setup_id", setupID);
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("layer", partial);
+
+    //! Adding scintillators
+    partial.clear();
+    for (unsigned i=0; i<fScinContainer.size(); i++) {
+      auto id = to_string(fScinContainer[i].fID);
+      auto slotID = to_string(fScinContainer[i].fSlotID);
+      auto height = to_string(fScinContainer[i].fHeight);
+      height = height.substr(0, height.find(".", 0)+3);
+      auto width = to_string(fScinContainer[i].fWidth);
+      width = width.substr(0, width.find(".", 0)+3);
+      auto length = to_string(fScinContainer[i].fLength);
+      length = length.substr(0, length.find(".", 0)+3);
+      auto x_center = to_string(fScinContainer[i].fX_center);
+      x_center = x_center.substr(0, x_center.find(".", 0)+3);
+      auto y_center = to_string(fScinContainer[i].fY_center);
+      y_center = y_center.substr(0, y_center.find(".", 0)+3);
+      auto z_center = to_string(fScinContainer[i].fZ_center);
+      z_center = z_center.substr(0, z_center.find(".", 0)+3);
+
+      element.clear();
+      element.put("id", id);
+      element.put("slot_id", slotID);
+      element.put("height", height);
+      element.put("width", width);
+      element.put("length", length);
+      element.put("xcenter", x_center);
+      element.put("ycenter", y_center);
+      element.put("zcenter", z_center);
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("scin", partial);
+
+    //! Adding slots
+    partial.clear();
+    for (unsigned i=0; i<fSlotContainer.size(); i++) {
+      auto id = to_string(fSlotContainer[i].fID);
+      auto layerID = to_string(fSlotContainer[i].fLayerID);
+      auto theta = to_string(fSlotContainer[i].fTheta);
+      theta = theta.substr(0, theta.find(".", 0)+3);
+      auto type = fSlotContainer[i].fType;
+
+      element.clear();
+      element.put("id", id);
+      element.put("layer_id", layerID);
+      element.put("theta", theta);
+      element.put("type", type);
+      partial.push_back(make_pair("", element));
+    }
+    full.add_child("slot", partial);
+
+    jsonFile.add_child(runNumStr, full);
+    pt::write_json(fGeometryFileName, jsonFile);
+
+  } else {
+    G4Exception("DetectorConstruction", "DC03", JustWarning, "Unrecognized geometry file type, accepted formats: barrel, modular.");
+  }
 }

@@ -41,6 +41,8 @@ public:
   virtual void GeneratePrimaryVertex(G4Event*){};
 
 private:
+  //! return: vtx position, 2/3g ratio, meanlifetime;
+  //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionInFilledSphere(
     const G4ThreeVector center, G4double radius
   );
@@ -51,20 +53,19 @@ private:
     const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime2g
   );
   G4PrimaryVertex* GenerateThreeGammaVertex(
-    const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime3g
+    const MaterialExtension::DecayChannel channel, const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime3g
   );
   G4PrimaryVertex* GeneratePromptGammaVertex(
-    const G4ThreeVector vtxPosition, const G4double T0,
-    const G4double lifetimePrompt, const G4double energy
+    const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetimePrompt, const G4double energy
   );
   G4ThreeVector VertexUniformInCylinder(G4double, G4double);
   G4double calculate_mQED(
-    Double_t mass_e, Double_t w1, Double_t w2, Double_t w3
+    const MaterialExtension::DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3
   );
   const G4ThreeVector GetRandomPointInFilledSphere(G4double radius);
   const G4ThreeVector GetRandomPointOnSphere(G4double radius);
-
-  G4Navigator* theNavigator = G4TransportationManager::GetTransportationManager()
+  
+  G4Navigator* theNavigator =  G4TransportationManager::GetTransportationManager()
   ->GetNavigatorForTracking();
 };
 
