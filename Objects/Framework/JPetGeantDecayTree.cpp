@@ -45,10 +45,12 @@ int Branch::GetPreviousNodeID(int nodeID) const
 // cppcheck-suppress unusedFunction
 InteractionType Branch::GetInteractionType(int nodeID) const
 {
-  for (unsigned i=fNodeIDs.size(); i>0; i--) {
-      if (fNodeIDs[i-1] == nodeID)
-        return fInteractionType[i-1];
+  for (unsigned i = fNodeIDs.size(); i > 0; i--)
+  {
+    if (fNodeIDs[i - 1] == nodeID)
+      return fInteractionType[i - 1];
   }
+  return kUnknownInteractionType;
 }
 
 JPetGeantDecayTree::JPetGeantDecayTree() {}
@@ -85,7 +87,7 @@ void JPetGeantDecayTree::AddNodeToBranch(int nodeID, int trackID, InteractionTyp
   if (search == fTrackBranchConnection.end()) {
     int branchSize = fBranches.size();
     int primaryBranchID = -1;
-    if (interactionType == secondaryPart)
+    if (interactionType == kSecondaryPart)
       primaryBranchID = FindPrimaryPhoton(nodeID/10);
     Branch newBranch(trackID, primaryBranchID);
     newBranch.AddNodeID(nodeID, interactionType);
@@ -94,5 +96,18 @@ void JPetGeantDecayTree::AddNodeToBranch(int nodeID, int trackID, InteractionTyp
   } else {
     int branchID = fTrackBranchConnection.at(trackID);
     fBranches[branchID].AddNodeID(nodeID, interactionType);
+  }
+}
+
+// cppcheck-suppress unusedFunction
+Branch JPetGeantDecayTree::GetBranch(unsigned trackID) const
+{
+  auto search = fTrackBranchConnection.find(trackID);
+  if (search != fTrackBranchConnection.end()) {
+    int branchID = fTrackBranchConnection.at(trackID);
+    return fBranches[branchID];
+  } else {
+    Branch newBranch;
+    return newBranch;
   }
 }

@@ -29,8 +29,13 @@
  * Class is not yet implemented
  */
 
-enum InteractionType {
-  primaryGamma, scattActivePart, scattNonActivePart, secondaryPart, unknown
+enum InteractionType
+{
+  kPrimaryGamma,
+  kScattActivePart,
+  kScattNonActivePart,
+  kSecondaryPart,
+  kUnknownInteractionType
 };
 
 struct Branch {
@@ -42,13 +47,9 @@ struct Branch {
   int fPrimaryBranchID = -1;       //-1 for branch coming from primary photon, primary branchId otherwise
   
   void AddNodeID(int nodeID, InteractionType interactionType);
-  // cppcheck-suppress unusedFunction
   int GetTrackID() const { return fTrackID; };
-  // cppcheck-suppress unusedFunction
   int GetPrimaryNodeID() const { return fNodeIDs[0]; };
-  // cppcheck-suppress unusedFunction
   int GetLastNodeID() const { return fNodeIDs[fNodeIDs.size()-1]; };
-  // cppcheck-suppress unusedFunction
   int GetPrimaryBranchID() const { return fPrimaryBranchID; };
   int GetPreviousNodeID(int nodeID) const;
   InteractionType GetInteractionType(int nodeID) const;
@@ -66,12 +67,14 @@ public:
   
   int FindPrimaryPhoton(int nodeID);
   void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
+  Branch GetBranch(unsigned trackID) const;
 
 private:
   std::vector<Branch> fBranches;
   std::map<int, int> fTrackBranchConnection;
-    
-  ClassDef(JPetGeantDecayTree, 2)
+     
+  ClassDef(JPetGeantDecayTree,3)
+
 };
 
 #endif /* !JPETGEANTDECAYTREE_H */
