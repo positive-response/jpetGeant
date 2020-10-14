@@ -369,12 +369,12 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
   if (!fEvtMessenger->GetCreateDecayTreeFlag())
     return;
   
-  InteractionType interactionType = InteractionType::secondaryPart;
+  InteractionType interactionType = InteractionType::kSecondaryPart;
   
   if (nodeID - fParentIDofPhoton == 10)
-    interactionType = InteractionType::scattNonActivePart;
+    interactionType = InteractionType::kScattNonActivePart;
   else if (nodeID - fParentIDofPhoton == 100)
-    interactionType = InteractionType::scattActivePart;
+    interactionType = InteractionType::kScattActivePart;
   
   bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
   
@@ -383,13 +383,13 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
     newDecayTree->Clean();
     fEndOfEvent = false;
     if (firstInteraction) {
-      newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::primaryGamma);
+      newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
     newDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   } else {
     JPetGeantDecayTree* decayTree = fEventPack->GetDecayTree(fEventPack->GetNumberOfDecayTrees() - 1);
     if (firstInteraction) {
-      decayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::primaryGamma);
+      decayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
     decayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   }
