@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -37,45 +37,21 @@ class JPetGeantEventPack : public TObject
 public:
   JPetGeantEventPack();
   ~JPetGeantEventPack();
-  void Clear();
+  void Clear(Option_t* = "");
 
   JPetGeantScinHits* ConstructNextHit();
   JPetGeantDecayTree* ConstructNextDecayTree();
-
-  JPetGeantScinHits* GetHit(int i)
-  {
+  JPetGeantScinHits* GetHit(int i) {
     return dynamic_cast<JPetGeantScinHits*>(fMCHits[i]);
   };
-
-  JPetGeantDecayTree* GetDecayTree(int i)
-  {
+  JPetGeantDecayTree* GetDecayTree(int i) {
     return dynamic_cast<JPetGeantDecayTree*>(fMCDecayTrees[i]);
   };
-
-  JPetGeantEventInformation* GetEventInformation()
-  {
-    return fGenInfo;
-  };
-
-  unsigned int GetNumberOfHits()
-  {
-    return fHitIndex;
-  };
-
-  unsigned int GetNumberOfDecayTrees()
-  {
-    return fMCDecayTreesIndex;
-  };
-
-  unsigned int GetEventNumber()
-  {
-    return fEvtIndex;
-  };
-
-  void SetEventNumber(int x)
-  {
-    fEvtIndex = x;
-  };
+  JPetGeantEventInformation* GetEventInformation() { return fGenInfo; };
+  unsigned int GetNumberOfHits() { return fHitIndex; };
+  unsigned int GetNumberOfDecayTrees() { return fMCDecayTreesIndex; };
+  unsigned int GetEventNumber() { return fEvtIndex; };
+  void SetEventNumber(int x) { fEvtIndex = x; };
 
 private:
   TClonesArray fMCHits;
@@ -88,4 +64,4 @@ private:
   ClassDef(JPetGeantEventPack, 2)
 };
 
-#endif
+#endif /* !JPETGEANTEVENTPACK_H */

@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -18,13 +18,12 @@
 
 #include <G4UserSteppingAction.hh>
 
-class SteppingAction: public G4UserSteppingAction
+class SteppingAction : public G4UserSteppingAction
 {
 public:
   SteppingAction();
   ~SteppingAction();
   virtual void UserSteppingAction(const G4Step*);
-
 };
 
-#endif
+#endif /* !STEPPINGACTION_H */

@@ -6,5 +6,4 @@
 #pragma link C++ class JPetGeantEventInformation+;
 #pragma link C++ class EvtInfo+;
 
-
 #endif

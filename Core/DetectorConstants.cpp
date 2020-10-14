@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,7 +20,7 @@ const G4double DetectorConstants::scinDim[3] = {1.9 * cm, 0.7 * cm, 50.0 * cm};
 const G4double DetectorConstants::radius[layers] = {42.5 * cm, 46.75 * cm, 57.5 * cm};
 const int DetectorConstants::nSegments[layers] = {48, 48, 96};
 const int DetectorConstants::nSegmentsExtraLayers[extraLayers] = {96, 96};
-const G4double DetectorConstants::radiusExtraLayers[extraLayers] =  {509 * mm, 533 * mm};
+const G4double DetectorConstants::radiusExtraLayers[extraLayers] = {509 * mm, 533 * mm};
 const G4double DetectorConstants::scinDim_inModule[3] = {2.5 * cm, 0.6 * cm, 50.0 * cm};
 const G4double DetectorConstants::wrappingThickness = 2 * 25.4 * pow(10, -6) * m;
 const G4double DetectorConstants::wrappingShift = 1 * pow(10, -5) * m;
@@ -47,8 +47,10 @@ G4double DetectorConstants::GetMergingTimeValueForScin()
 void DetectorConstants::SetMergingTimeValueForScin(G4double x)
 {
   if (x <= 0.0) {
-    G4Exception("DetectorConstants", "DConst01", JustWarning,
-                "Time can not be negative! Nothing happend");
+    G4Exception(
+      "DetectorConstants", "DConst01",
+      JustWarning, "Merging time cannot be negative!"
+    );
   } else {
     fScinHitMergingTime = x;
   }

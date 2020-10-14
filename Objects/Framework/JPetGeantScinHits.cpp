@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -18,29 +18,25 @@
 ClassImp(JPetGeantScinHits)
 
 JPetGeantScinHits::JPetGeantScinHits() :
-  TObject(), fEvtID(0), fScinID(0), fTrackID(0), fTrackPDGencoding(0),
-  fNumOfInteractions(0), fGenGammaIndex(0), fGenGammaMultiplicity(0),
-  fEneDep(0), fTime(0), fPosition(0, 0, 0), fPolarizationIn(0, 0, 0),
-  fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0), fMomentumOut(0, 0, 0) {}
-
+TObject(), fEvtID(0), fScinID(0), fTrackID(0), fTrackPDGencoding(0),
+fNumOfInteractions(0), fGenGammaIndex(0), fGenGammaMultiplicity(0), fEneDep(0),
+fTime(0), fPosition(0, 0, 0), fPolarizationIn(0, 0, 0),
+fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0), fMomentumOut(0, 0, 0) {}
 
 JPetGeantScinHits::JPetGeantScinHits(
   int evID, int scinID, int trkID, int trkPDG, int nInter, float ene, float time, TVector3 hit
-) : TObject(), fEvtID(evID), fScinID(scinID), fTrackID(trkID),
-  fTrackPDGencoding(trkPDG), fNumOfInteractions(nInter), fGenGammaIndex(0),
-  fGenGammaMultiplicity(0), fEneDep(ene), fTime(time), fPosition(hit),
-  fPolarizationIn(0, 0, 0), fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0),
-  fMomentumOut(0, 0, 0) {}
-
+) : TObject(), fEvtID(evID), fScinID(scinID), fTrackID(trkID), fTrackPDGencoding(trkPDG),
+fNumOfInteractions(nInter), fGenGammaIndex(0), fGenGammaMultiplicity(0),
+fEneDep(ene), fTime(time), fPosition(hit), fPolarizationIn(0, 0, 0),
+fPolarizationOut(0, 0, 0), fMomentumIn(0, 0, 0), fMomentumOut(0, 0, 0) {}
 
 JPetGeantScinHits::JPetGeantScinHits(
   int evID, int scinID, int trkID, int trkPDG, int nInter, float ene, float time,
-  TVector3 hit, TVector3 polIn, TVector3 polOut, TVector3 momeIn, TVector3 momeOut
-) : TObject(), fEvtID(evID), fScinID(scinID), fTrackID(trkID),
-  fTrackPDGencoding(trkPDG), fNumOfInteractions(nInter), fGenGammaIndex(0),
-  fGenGammaMultiplicity(0), fEneDep(ene), fTime(time), fPosition(hit),
-  fPolarizationIn(polIn), fPolarizationOut(polOut), fMomentumIn(momeIn),
-  fMomentumOut(momeOut) {}
+  TVector3 hit, TVector3 polIn, TVector3 polOut, TVector3 momeIn, TVector3 momeOut) :
+TObject(), fEvtID(evID), fScinID(scinID), fTrackID(trkID), fTrackPDGencoding(trkPDG),
+fNumOfInteractions(nInter), fGenGammaIndex(0), fGenGammaMultiplicity(0),
+fEneDep(ene), fTime(time), fPosition(hit), fPolarizationIn(polIn),
+fPolarizationOut(polOut), fMomentumIn(momeIn), fMomentumOut(momeOut) {}
 
 void JPetGeantScinHits::Fill(
   int evID, int scinID, int trkID, int trkPDG, int nInter, float ene, float time

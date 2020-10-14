@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,9 +20,8 @@
 #include <G4UIcmdWithADoubleAndUnit.hh>
 #include <G4UIcmdWithoutParameter.hh>
 #include <G4UIcmdWithAnInteger.hh>
-#include <G4UIcmdWithAString.hh>
 #include <G4UIcmdWithADouble.hh>
-#include <G4UIcmdWithABool.hh>
+#include <G4UIcmdWithAString.hh>
 #include <G4UIcmdWithABool.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4UIdirectory.hh>
@@ -31,13 +30,12 @@
 
 class MaterialExtension;
 
-class MaterialExtensionMessenger: public G4UImessenger
+class MaterialExtensionMessenger : public G4UImessenger
 {
 public:
   static MaterialExtensionMessenger* GetMaterialExtensionMessenger();
-
   void SetNewValue(G4UIcommand*, G4String);
-  bool GenerateOnly3g() {return fIsOnly3g;}
+  bool GenerateOnly3g() { return fIsOnly3g; }
 
 private:
   static MaterialExtensionMessenger* fInstance;
@@ -53,8 +51,7 @@ private:
   G4UIcmdWithAString* fSetpPsComponent = nullptr;
   G4UIcmdWithAString* fAddDirectComponent = nullptr;
   G4UIcmdWithAString* fReloadMaterials = nullptr;
-
   bool fIsOnly3g = true;
 };
 
-#endif
+#endif /* !MATERIALEXTENSIONMESSENGER_H */

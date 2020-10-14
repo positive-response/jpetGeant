@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,22 +16,26 @@
 #include "../Info/PrimaryParticleInformation.h"
 #include "../Objects/Geant4/DetectorHit.h"
 #include "../Objects/Geant4/Trajectory.h"
+#include "EventAction.h"
+
 #include <G4TrajectoryContainer.hh>
 #include <G4ParticleDefinition.hh>
 #include <G4PrimaryParticle.hh>
 #include <G4EventManager.hh>
 #include <G4SDManager.hh>
-#include "EventAction.h"
 #include <G4Event.hh>
 
-EventAction::EventAction(HistoManager* histo): G4UserEventAction(), fScinCollID(-1)
+EventAction::EventAction() {}
+
+EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID(-1)
 {
   fHisto = histo;
 }
 
 EventAction::~EventAction() {}
 
-void EventAction::BeginOfEventAction(const G4Event* anEvent)
+// cppcheck-suppress unusedFunction
+void EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   if (fScinCollID < 0) {
@@ -41,39 +45,37 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
   fHisto->Clear();
 }
 
+// cppcheck-suppress unusedFunction
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
-
   if (anEvent->GetNumberOfPrimaryVertex() == 0) return;
-  if(fEvtMessenger->KillEventsEscapingWorld()) {
-    if(G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted()){
+  if (fEvtMessenger->KillEventsEscapingWorld()) {
+    if (G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->IsAborted()) {
       return;
     }
   }
-
   WriteToFile(anEvent);
 }
 
 void EventAction::WriteToFile(const G4Event* anEvent)
 {
-  // save information about generated events
-  G4int id =  anEvent->GetEventID();
+  //! save information about generated events
+  G4int id = anEvent->GetEventID();
   fHisto->SetEventNumber(id);
   fHisto->FillHistoGenInfo(anEvent);
 
-  //save information about registered events
+  //! save information about registered events
   G4HCofThisEvent* HCE = anEvent->GetHCofThisEvent();
   DetectorHitsCollection* DHC = 0;
   if (HCE) {
     DHC = dynamic_cast<DetectorHitsCollection*>(HCE->GetHC(fScinCollID));
     int n_hit = DHC->entries();
     for (int i = 0; i < n_hit; i++) {
-      DetectorHit* dh =  dynamic_cast<DetectorHit*>(DHC->GetHit(i));
+      DetectorHit* dh = dynamic_cast<DetectorHit*>(DHC->GetHit(i));
       fHisto->AddNewHit(dh);
     }
   }
 
-  //save to disk
+  //! save to output file
   fHisto->SaveEvtPack();
 }
-

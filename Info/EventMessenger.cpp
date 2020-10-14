@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,18 +20,18 @@ EventMessenger* EventMessenger::fInstance = nullptr;
 
 EventMessenger* EventMessenger::GetEventMessenger()
 {
-  if (fInstance == nullptr)
+  if (fInstance == nullptr) {
     fInstance = new EventMessenger();
+  }
   return fInstance;
 }
-
 
 EventMessenger::EventMessenger()
 {
   fDirectory = new G4UIdirectory("/jpetmc/event/");
   fDirectory->SetGuidance("Define events to save");
 
-  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
+  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc", this);
   fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector");
 
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
@@ -62,11 +62,10 @@ EventMessenger::EventMessenger()
   fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
   fSaveSeed->SetGuidance("Save random seed (default false).");
 
-  fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer",this);
+  fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer", this);
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
-  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV);
+  fCMDAllowedMomentumTransfer->SetDefaultValue(1 * keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
-
 }
 
 EventMessenger::~EventMessenger()
@@ -85,29 +84,27 @@ EventMessenger::~EventMessenger()
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-
-  if (command == fPrintStat)
+  if (command == fPrintStat) {
     fPrintStatistics = fPrintStat->GetNewBoolValue(newValue);
-  else if (command == fPrintStatPower)
+  } else if (command == fPrintStatPower) {
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
-  else if (command == fCMDMinRegMulti)
+  } else if (command == fCMDMinRegMulti) {
     fMinRegisteredMultiplicity = fCMDMinRegMulti->GetNewIntValue(newValue);
-  else if (command == fCMDMaxRegMulti)
+  } else if (command == fCMDMaxRegMulti) {
     fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
-  else if (command == fPrintStatBar)
+  } else if (command == fPrintStatBar) {
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
-  else if (command == fAddDatetime)
+  } else if (command == fAddDatetime) {
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  else if (command == fCMDKillEventsEscapingWorld)
+  } else if (command == fCMDKillEventsEscapingWorld) {
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
-  else if (command == fCMDExcludedMulti)
+  } else if (command == fCMDExcludedMulti) {
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
-  else if (command == fSetSeed)
+  } else if (command == fSetSeed) {
     fSeed = fSetSeed->GetNewIntValue(newValue);
-  else if (command == fSaveSeed)
+  } else if (command == fSaveSeed) {
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-  else if (command == fAddDatetime)
-    fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  else if (command == fCMDAllowedMomentumTransfer)
+  } else if (command == fCMDAllowedMomentumTransfer){
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
+  }
 }
