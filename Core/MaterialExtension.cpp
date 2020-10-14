@@ -113,7 +113,7 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if (MaterialParameters::fAnnihlationMode != "") {
-    if(MaterialParameters::AnnihlationMode == "pPs3G") {
+    if(MaterialParameters::fAnnihlationMode == "pPs3G") {
       frac = {0.,0.,0.,0.,0.,1.};
       return frac;
     } else if (MaterialParameters::fAnnihlationMode == "oPs3G") {
