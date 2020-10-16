@@ -21,12 +21,13 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction() {}
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) :
-G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHisto(histo)
+G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHistoManager(histo)
 {
   fPrimaryGenerator = new PrimaryGenerator();
   fBeam = new BeamParams();
   fIsotope = new SourceParams();
   fMessenger = new PrimaryGeneratorActionMessenger(this);
+  DetectorConstruction::GetInstance()->SetHistoManager(histo);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()

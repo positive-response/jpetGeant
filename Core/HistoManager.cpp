@@ -225,6 +225,11 @@ void HistoManager::BookHistograms()
     ),
     "Gamma quanta multiplicity: 2=2g; 3=3g", "Lifetime (2/3g) [ps]"
   );
+  
+  createHistogramWithAxes(
+    new TH1D("gen_hits_multiplicity", "Multiplicity of the hit", 3000, -0.5, 2999.5),
+    "Multiplicity of the hit", "Entries"
+  );
 }
 
 void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
@@ -249,6 +254,7 @@ void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
   fillHistogram("gen_3g_angles", theta_12, doubleCheck(theta_23));
   fillHistogram("gen_energy", fGeantInfo->GetMomentumGamma(1).Mag(), doubleCheck(fGeantInfo->GetMomentumGamma(2).Mag()));
   fillHistogram("gen_g_ene", fGeantInfo->GetMomentumGamma(1).Mag());
+  
 }
 
 void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
@@ -313,6 +319,8 @@ void HistoManager::AddGenInfo(VtxInformation* info)
       fillHistogram("gen_prompt_YZ", info->GetVtxPositionY() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
     }
   }
+  SetParentIDofPhoton(0);
+  fEndOfEvent = true;
 }
 
 void HistoManager::AddNewHit(DetectorHit* hit)
@@ -346,12 +354,44 @@ void HistoManager::AddNewHit(DetectorHit* hit)
   );
   geantHit->SetGenGammaMultiplicity(hit->GetGenGammaMultiplicity());
   geantHit->SetGenGammaIndex(hit->GetGenGammaIndex());
-
+  
   if (GetMakeControlHisto()) {
     fillHistogram("gen_hit_time", hit->GetTime()/ps);
     fillHistogram("gen_hit_eneDepos", hit->GetEdep()/keV);
     fillHistogram("gen_hits_z_pos", hit->GetPosition().getZ()/cm);
     fillHistogram("gen_hits_xy_pos", hit->GetPosition().getX()/cm, doubleCheck(hit->GetPosition().getY()/cm));
+    fillHistogram("gen_hits_multiplicity", hit->GetGenGammaMultiplicity());
+  }
+}
+
+void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
+{
+  if (!fEvtMessenger->GetCreateDecayTreeFlag())
+    return;
+  
+  InteractionType interactionType = InteractionType::kSecondaryPart;
+  
+  if (nodeID - fParentIDofPhoton == 10)
+    interactionType = InteractionType::kScattNonActivePart;
+  else if (nodeID - fParentIDofPhoton == 100)
+    interactionType = InteractionType::kScattActivePart;
+  
+  bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
+  
+  if ( fEndOfEvent ) {
+    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
+    newDecayTree->Clean();
+    fEndOfEvent = false;
+    if (firstInteraction) {
+      newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+    }
+    newDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
+  } else {
+    JPetGeantDecayTree* decayTree = fEventPack->GetDecayTree(fEventPack->GetNumberOfDecayTrees() - 1);
+    if (firstInteraction) {
+      decayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+    }
+    decayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   }
 }
 

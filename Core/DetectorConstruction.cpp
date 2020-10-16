@@ -54,6 +54,11 @@ fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false)
 
 DetectorConstruction::~DetectorConstruction() { delete fMessenger; }
 
+void DetectorConstruction::SetHistoManager(HistoManager* histo)
+{
+  fHistoManager = histo;
+}
+
 // cppcheck-suppress unusedFunction
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
@@ -106,6 +111,7 @@ void DetectorConstruction::ConstructSDandField()
     DetectorSD* det = new DetectorSD(
       "/mydet/detector", maxScinID, DetectorConstants::GetMergingTimeValueForScin()
     );
+    det->SetHistoManager(fHistoManager);
     fDetectorSD.Put(det);
   }
 

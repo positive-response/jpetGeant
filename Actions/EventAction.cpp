@@ -27,10 +27,8 @@
 
 EventAction::EventAction() {}
 
-EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fScinCollID(-1)
-{
-  fHisto = histo;
-}
+EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fHistoManager(histo), fScinCollID(-1)
+{}
 
 EventAction::~EventAction() {}
 
@@ -42,7 +40,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
     G4String colNam;
     fScinCollID = SDman->GetCollectionID(colNam = "detectorCollection");
   }
-  fHisto->Clear();
+  fHistoManager->Clear();
 }
 
 // cppcheck-suppress unusedFunction
@@ -61,8 +59,8 @@ void EventAction::WriteToFile(const G4Event* anEvent)
 {
   //! save information about generated events
   G4int id = anEvent->GetEventID();
-  fHisto->SetEventNumber(id);
-  fHisto->FillHistoGenInfo(anEvent);
+  fHistoManager->SetEventNumber(id);
+  fHistoManager->FillHistoGenInfo(anEvent);
 
   //! save information about registered events
   G4HCofThisEvent* HCE = anEvent->GetHCofThisEvent();
@@ -72,10 +70,10 @@ void EventAction::WriteToFile(const G4Event* anEvent)
     int n_hit = DHC->entries();
     for (int i = 0; i < n_hit; i++) {
       DetectorHit* dh = dynamic_cast<DetectorHit*>(DHC->GetHit(i));
-      fHisto->AddNewHit(dh);
+      fHistoManager->AddNewHit(dh);
     }
   }
 
   //! save to output file
-  fHisto->SaveEvtPack();
+  fHistoManager->SaveEvtPack();
 }

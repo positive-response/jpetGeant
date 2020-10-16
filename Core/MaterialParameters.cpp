@@ -266,8 +266,10 @@ G4double MaterialParameters::GetoPs2GLifetimeFromVector(double randNumber)
   if (fAnnihlationMode != "") {
     randNumberNorm = randNumber * GetoPs2GTotalIntensity();
   }
+  double intensitySum = 0.;
   for (unsigned i = 0; i < foPsLifetimes.size(); i++) {
-    if (randNumberNorm > foPs2GIntensities[i]){
+    intensitySum += foPs2GIntensities[i];
+    if (randNumberNorm < intensitySum){
       return foPsLifetimes[i];
     }
   }
@@ -280,8 +282,10 @@ G4double MaterialParameters::GetoPs3GLifetimeFromVector(double randNumber)
   if (fAnnihlationMode != "") {
     randNumberNorm = randNumber * GetoPs3GTotalIntensity();
   }
+  double intensitySum = 0.;
   for (unsigned i = 0; i < foPsLifetimes.size(); i++) {
-    if (randNumberNorm > foPs3GIntensities[i]){
+    intensitySum += foPs3GIntensities[i];
+    if (randNumberNorm < intensitySum){
       return foPsLifetimes[i];
     }
   }
@@ -294,8 +298,10 @@ G4double MaterialParameters::GetDirectLifetimeFromVector(double randNumber)
   if (fAnnihlationMode != ""){
     randNumberNorm = randNumber * GetDirect2GTotalIntensity();
   }
+  double intensitySum = 0.;
   for (unsigned i = 0; i < fDirectLifetimes.size(); i++) {
-    if (randNumberNorm > fDirectIntensities[i]){
+    intensitySum += fDirectIntensities[i];
+    if (randNumberNorm < intensitySum){
       return fDirectLifetimes[i];
     }
   }

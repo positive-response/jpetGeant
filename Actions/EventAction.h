@@ -42,7 +42,7 @@ public:
   virtual void EndOfEventAction(const G4Event* anEvent);
 
 private:
-  HistoManager* fHisto = nullptr;
+  HistoManager* fHistoManager = nullptr;
   G4int fScinCollID;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
   void WriteToFile(const G4Event* anEvent);

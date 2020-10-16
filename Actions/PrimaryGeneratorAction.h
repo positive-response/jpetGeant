@@ -61,7 +61,7 @@ private:
   G4String fAllowedSourceTypes[4] = {"run", "beam", "isotope", "nema"};
   PrimaryGeneratorActionMessenger* fMessenger = nullptr;
   PrimaryGenerator* fPrimaryGenerator = nullptr;
-  HistoManager* fHisto = nullptr;
+  HistoManager* fHistoManager = nullptr;
   BeamParams* fBeam = nullptr;
   SourceParams* fIsotope = nullptr;
   G4int fNemaPoint = -1;

@@ -66,6 +66,9 @@ EventMessenger::EventMessenger()
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
   fCMDAllowedMomentumTransfer->SetDefaultValue(1 * keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
+  
+  fCreateDecayTree = new G4UIcmdWithABool("/jpetmc/output/CreateDecayTree", this);
+  fCreateDecayTree->SetGuidance("Creates decay trees for each event.");
 }
 
 EventMessenger::~EventMessenger()
@@ -80,6 +83,7 @@ EventMessenger::~EventMessenger()
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
   delete fCMDExcludedMulti;
+  delete fCreateDecayTree;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -106,5 +110,7 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
   } else if (command == fCMDAllowedMomentumTransfer){
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
+  } else if (command == fCreateDecayTree) {
+    fCreateDecayTreeFlag = fCreateDecayTree->GetNewBoolValue(newValue);
   }
 }

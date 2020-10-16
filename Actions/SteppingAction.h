@@ -16,14 +16,19 @@
 #ifndef STEPPINGACTION_H
 #define STEPPINGACTION_H 1
 
+#include "../Core/HistoManager.h"
+
 #include <G4UserSteppingAction.hh>
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction();
+  explicit SteppingAction(HistoManager*);
   ~SteppingAction();
   virtual void UserSteppingAction(const G4Step*);
+  
+private:
+  HistoManager* fHistoManager = nullptr;
 };
 
 #endif /* !STEPPINGACTION_H */

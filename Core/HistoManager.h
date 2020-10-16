@@ -58,7 +58,7 @@ class HistoManager
 public:
   HistoManager();
   ~HistoManager();
-
+  
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
   void SaveEvtPack() { fTree->Fill(); };
@@ -66,12 +66,15 @@ public:
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
   void AddNewHit(DetectorHit*);
+  void AddNodeToDecayTree(int nodeID, int trackID);
+  void SetParentIDofPhoton(int x) { fParentIDofPhoton = x; };
+  int GetParentIDofPhoton() const { return fParentIDofPhoton; };
   void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
+  int GetEventNumber() { return fEventPack->GetEventNumber(); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
   const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
-
   void createHistogramWithAxes(
     TObject* object,
     TString xAxisName = "Default X axis title [unit]",
@@ -94,6 +97,10 @@ public:
   }
 
 private:
+  HistoManager(const HistoManager &histoManagerToCopy);
+
+  int fParentIDofPhoton = 0;
+  bool fEndOfEvent = true;
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;

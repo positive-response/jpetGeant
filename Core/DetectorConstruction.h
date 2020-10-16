@@ -61,6 +61,7 @@ public:
 
   //! only single instance can exist
   static DetectorConstruction* GetInstance();
+  void SetHistoManager(HistoManager* histo);
   virtual G4VPhysicalVolume* Construct();
   virtual void ConstructSDandField();
   void LoadGeometryForRun(G4int nr);
@@ -100,6 +101,7 @@ private:
   DetectorConstruction();
   virtual ~DetectorConstruction();
   DetectorConstructionMessenger* fMessenger = nullptr;
+  HistoManager* fHistoManager;
 
   //! Load materials from NIST database
   void InitializeMaterials();
