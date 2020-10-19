@@ -21,32 +21,23 @@ set(FOLDERS_WITH_SOURCE
 foreach(dir ${FOLDERS_WITH_SOURCE})
   file(GLOB HEADERS_TMP ${dir}/*.h)
   file(GLOB SOURCES_TMP ${dir}/*.cpp)
-  #list(REMOVE_ITEM FOLDERS_TMP ${HEADERS_TMP} ${SOURCES_TMP})
   list(APPEND HEADERS ${HEADERS_TMP})
   list(APPEND SOURCES ${SOURCES_TMP})
 endforeach()
 
 list(APPEND FOLDERS ${CMAKE_CURRENT_SOURCE_DIR})
-
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
-
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter")
-
-
-
-#old
-#file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
-#file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h)
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter -lboost_system")
 
 ################################################################################
-# Project version number
+## Project version number
 set(VERSION_MAJOR 3 CACHE STRING "Project major version number.")
 set(VERSION_MINOR 0 CACHE STRING "Project minor version number.")
 set(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 
 ################################################################################
-# Provide scripts in a folder with a binary
+## Provide scripts in a folder with a binary
 set(SCRIPT_FILES
   vis.mac
   run3.mac
@@ -57,15 +48,11 @@ set(SCRIPT_FILES
   init_vis.mac
   singleBeam.mac
   extendedSource.mac
+  modSmCh.mac
 )
-
-set(PARAMETERS_FILES
-  PARAMETERS.md
-)
-
 
 ################################################################################
-# Add a target to generate API documentation with Doxygen
+## Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 option(
   BUILD_DOCUMENTATION
@@ -97,24 +84,50 @@ endif()
 ################################################################################
 
 ################################################################################
-# Include GEANT4 WITH VIS DRIVERS
-# remember to compile geant4 with following flags
-# -DGEANT4_USE_QT=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_GDML=ON
+## Include GEANT4 WITH VIS DRIVERS
+## remember to compile geant4 with following flags
+## -DGEANT4_USE_QT=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_GDML=ON
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
 ################################################################################
-# Include CADMesh
+## Include CADMesh
 find_package(cadmesh REQUIRED)
 include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
 
 ################################################################################
-# Include ROOT
+## Include Boost
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.50 REQUIRED
+             COMPONENTS filesystem
+                        program_options
+                        regex
+                        system
+                        log_setup
+                        log
+                        date_time
+                        thread
+                        chrono
+                        atomic
+                        )
+
+if(NOT TARGET Boost::filesystem)
+    add_library(Boost::filesystem IMPORTED INTERFACE)
+    set_property(TARGET Boost::filesystem PROPERTY
+        INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+    set_property(TARGET Boost::filesystem PROPERTY
+        INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
+endif()
+
+################################################################################
+## Include ROOT
 find_package(ROOT REQUIRED)
 message(STATUS "ROOT version: ${ROOT_VERSION}")
 if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
-    message(FATAL_ERROR "ROOT 6.0 is required ")
-    # tested version above 6.10 can not display graphics while /run/beamOn due to llvm problem
+  message(FATAL_ERROR "ROOT 6.0 is required ")
+  # tested version above 6.10 can not display graphics while /run/beamOn due to llvm problem
 endif()
 
 set(ROOT_CXX_FLAGS "-std=c++11 -Wunused-parameter")
@@ -124,7 +137,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 
 ################################################################################
-# Create ROOT dictionaries
+## Create ROOT dictionaries
 ROOT_GENERATE_DICTIONARY(
   JPetMCClasses
   Objects/Framework/JPetGeantEventInformation.h
@@ -134,7 +147,7 @@ ROOT_GENERATE_DICTIONARY(
   LINKDEF
   LinkDef.h
 )
-# Create a shared library with geneated dictionary
+## Create a shared library with geneated dictionary
 add_library(
   JPetMCClassesDict
   SHARED
@@ -146,14 +159,9 @@ add_library(
 )
 target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 
-
 ################################################################################
-# Create a main program using the library
+## Create a main program using the library
 add_executable(jpet_mc JPetMC.cpp ${SOURCES})
-
-# old
-#add_executable(jpet_mc ${sources} ${headers})
-
 target_link_libraries(
   jpet_mc
   ${Geant4_LIBRARIES}
@@ -162,7 +170,7 @@ target_link_libraries(
   ${cadmesh_LIBRARIES}
 )
 
-# Copy script files to bin directory
+## Copy script files to bin directory
 foreach(file_i ${SCRIPT_FILES})
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/scripts/${file_i}
@@ -180,7 +188,7 @@ foreach(file_i ${PARAMETERS_FILES})
 endforeach(file_i)
 
 
-# Copy stl file of frame construction to bin directory
+## Copy stl file of frame construction to bin directory
 add_custom_command(
   TARGET
   ${PROJECT_NAME}
@@ -190,13 +198,12 @@ add_custom_command(
   ${CMAKE_CURRENT_BINARY_DIR}/bin
 )
 
-# Link to manual
+## Link to manual
 add_custom_command(
   TARGET
   ${PROJECT_NAME}
   POST_BUILD
   COMMAND ln -sf
-  ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v3.0.pdf
+  ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v3.1.pdf
   ${CMAKE_CURRENT_BINARY_DIR}/bin
 )
-

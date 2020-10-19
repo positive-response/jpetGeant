@@ -10,9 +10,7 @@
 # units cm
 /jpetmc/source/gammaBeam/setPosition 10 0 0 cm
 
-
 /run/initialize
-
 
 /vis/scene/add/scale   # Simple scale line
 /vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.

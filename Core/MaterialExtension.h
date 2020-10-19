@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -17,11 +17,14 @@
 #define MATERIALEXTENSION_H 1
 
 #include "../Info/MaterialExtensionMessenger.h"
+#include "MaterialParameters.h"
+
 #include <G4VMaterialExtension.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4UnitsTable.hh>
 #include <G4Material.hh>
 #include <globals.hh>
+#include <vector>
 
 /**
  * @class MaterialExtension
@@ -31,60 +34,46 @@
 class MaterialExtension : public G4Material
 {
 public:
-  MaterialExtension(const G4String& name, const G4Material* baseMaterial);
+  enum DecayChannel { 
+    Ortho2G, Ortho3G, Para2G, Direct, Para3G
+  };
+    
+  MaterialExtension(
+    MaterialParameters::MaterialID materialID, 
+    const G4String& name, const G4Material* baseMaterial
+  );
   ~MaterialExtension();
 
-  G4Material* GetMaterial()
-  {
-    return fMaterial;
-  };
+  G4Material* GetMaterial() { return fMaterial; };
+  void AddoPsComponent(G4double lifetime, G4double probability);
+  void AddDirectComponent(G4double lifetime, G4double probability);
+  void SetpPsComponent(G4double lifetime, G4double fraction);
+  G4double GetLifetime(double randNumber, DecayChannel channel) const;
 
-  void SetoPsLifetime(G4double);
+  /*
+   * Changing lifetime and intensity parameters of Material to the parameters from
+   * the dummy object MaterialParameters::Temp that are currently set on it.
+   * This object allows to modify its parameters by the user on the macro level
+   * After every call of ChangeMaterialConstants() object MaterialParameters::Temp
+   * is cleared in the meesenger for further modification of different material
+  */
+  void ChangeMaterialConstants();
+  void FillIntensities() { fMaterialParameters->SetComponentsIntensities(); };
+  //! 2g direct; 2g pickoff (lifetime 3g); 3g direct; 3g oPs (lifetime 3g)
+  std::vector<G4double> GetEventsFraction() const;
 
-  void SetoPsFraction(G4double);
+  G4bool IsTarget() const { return fTarget; };
+  void AllowsAnnihilations(G4bool tf) { fTarget = tf; };
+  void Print() const { ; };
 
-  void SetPickOffFraction(G4double sf)
-  {
-    fPickOffFraction = sf;
-  }
-
-  const G4double Get3gFraction();
-
-  const G4double GetoPsLifetime()
-  {
-    return foPslifetime;
-  };
-
-  //! 2g direct // 2g pickoff (lifetime 3g) // 3g direct // 3g oPs (lifetime 3g)
-  const std::vector<G4double> GetEventsFraction();
-
-  G4bool IsTarget()
-  {
-    return fTarget;
-  };
-
-  void AllowsAnnihilations(G4bool tf)
-  {
-    fTarget = tf;
-  };
-
-  void Print() const {;};
-
-  G4bool IsExtended() const
-  {
-    return true;
-  }
+  G4bool IsExtended() const { return true; }
 
 private:
-  G4Material* fMaterial;
-  MaterialExtensionMessenger* fMaterialExtensionMessenger
-    = MaterialExtensionMessenger::GetMaterialExtensionMessenger();
+  G4Material* fMaterial = nullptr;
+  MaterialExtensionMessenger* fMaterialExtensionMessenger =
+    MaterialExtensionMessenger::GetMaterialExtensionMessenger();
   G4bool fTarget;
-  //! 3g/2g events fraction
-  G4double foPsFraction;
-  G4double foPslifetime;
-  G4double fPickOffFraction;
-
+  MaterialParameters* fMaterialParameters = nullptr;
 };
 
-#endif
+#endif /* !MATERIALEXTENSION_H */

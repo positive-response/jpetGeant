@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,8 +20,8 @@
 #include <G4TrajectoryPoint.hh>
 #include <G4VTrajectory.hh>
 #include <G4Allocator.hh>
-#include <globals.hh>
 #include <G4Track.hh>
+#include <globals.hh>
 
 /**
  * @brief Implementation of virtual trajectory class from Geat4.
@@ -37,69 +37,25 @@ class Trajectory : public G4VTrajectory
 {
 public:
   Trajectory();
-  Trajectory(const G4Track* aTrack);
+  explicit Trajectory(const G4Track* track);
   virtual ~Trajectory();
 
-  inline void* operator new (size_t);
-  inline void  operator delete (void*);
-  inline int operator == (const Trajectory& right) const
-  {
-    return (this == &right);
-  }
+  inline void* operator new(size_t);
+  inline void operator delete(void*);
+  inline int operator==(const Trajectory& right) const { return (this == &right); }
 
   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
-
   virtual void AppendStep(const G4Step* aStep);
-
-  virtual int GetPointEntries() const
-  {
-    return fPositionRecord->size();
-  }
-
-  virtual G4VTrajectoryPoint* GetPoint(G4int i) const
-  {
-    return (*fPositionRecord)[i];
-  }
-
-  virtual G4int GetTrackID() const
-  {
-    return fTrackID;
-  }
-
-  virtual G4int GetParentID() const
-  {
-    return fParentID;
-  }
-
-  virtual G4String GetParticleName() const
-  {
-    return fParticleName;
-  }
-
-  virtual G4double GetCharge() const
-  {
-    return fPDGCharge;
-  }
-
-  virtual G4int GetPDGEncoding() const
-  {
-    return fPDGEncoding;
-  }
-
-  virtual G4ThreeVector GetInitialMomentum() const
-  {
-    return fMomentum;
-  }
-
-  virtual G4ThreeVector GetVertexPosition() const
-  {
-    return fVertexPosition;
-  }
-
-  G4double GetTime() const
-  {
-    return fGlobalTime;
-  }
+  virtual int GetPointEntries() const { return fPositionRecord->size(); }
+  virtual G4VTrajectoryPoint* GetPoint(G4int i) const { return (*fPositionRecord)[i]; }
+  virtual G4int GetTrackID() const { return fTrackID; }
+  virtual G4int GetParentID() const { return fParentID; }
+  virtual G4String GetParticleName() const { return fParticleName; }
+  virtual G4double GetCharge() const { return fPDGCharge; }
+  virtual G4int GetPDGEncoding() const { return fPDGEncoding; }
+  virtual G4ThreeVector GetInitialMomentum() const { return fMomentum; }
+  virtual G4ThreeVector GetVertexPosition() const { return fVertexPosition; }
+  G4double GetTime() const { return fGlobalTime; }
 
 private:
   TrajectoryPointContainer* fPositionRecord;
@@ -113,21 +69,21 @@ private:
   G4ThreeVector fMomentum;
   G4ThreeVector fVertexPosition;
   G4double fGlobalTime;
-
 };
 
 extern G4ThreadLocal G4Allocator<Trajectory>* myTrajectoryAllocator;
 
-inline void* Trajectory::operator new (size_t)
+inline void* Trajectory::operator new(size_t)
 {
-  if (!myTrajectoryAllocator)
+  if (!myTrajectoryAllocator) {
     myTrajectoryAllocator = new G4Allocator<Trajectory>;
-  return (void*)myTrajectoryAllocator->MallocSingle();
+  }
+  return (void*) myTrajectoryAllocator->MallocSingle();
 }
 
-inline void Trajectory::operator delete (void* aTrajectory)
+inline void Trajectory::operator delete(void* trajectory)
 {
-  myTrajectoryAllocator->FreeSingle((Trajectory*) aTrajectory);
+  myTrajectoryAllocator->FreeSingle(static_cast<Trajectory*>(trajectory));
 }
 
-#endif
+#endif /* !TRAJECTORY_H */

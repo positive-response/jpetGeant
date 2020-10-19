@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,6 +20,7 @@
 #include "../Objects/Framework/JPetGeantScinHits.h"
 #include "../Info/EventMessenger.h"
 #include "../Core/HistoManager.h"
+
 #include <G4UserEventAction.hh>
 #include <globals.hh>
 #include <memory>
@@ -34,7 +35,8 @@
 class EventAction : public G4UserEventAction
 {
 public:
-  EventAction(HistoManager* histo);
+  EventAction();
+  explicit EventAction(HistoManager* histo);
   virtual ~EventAction();
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event* anEvent);
@@ -42,7 +44,7 @@ public:
   bool Is3gRegistered();
 
 private:
-  HistoManager* fHisto = nullptr;
+  HistoManager* fHistoManager = nullptr;
   G4int fScinCollID;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
   void WriteToFile(const G4Event* anEvent);
@@ -54,4 +56,4 @@ private:
 
 };
 
-#endif
+#endif /* !EVENTACTION_H */

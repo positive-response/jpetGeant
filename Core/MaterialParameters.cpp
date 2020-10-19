@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -14,72 +14,307 @@
  */
 
 #include "MaterialParameters.h"
+#include "MaterialExtension.h"
 
-const G4double MaterialParameters::oPsTauVaccum = 142 * ns;
-//! data for Al https://doi.org/10.1007/s00339-015-9214-0
-const G4double MaterialParameters::oPsTauAl = 0.32 * ns;
-const G4double MaterialParameters::oPsTauXAD = 2.45 * ns;
-const G4double MaterialParameters::oPsProbabilityAl = 0.12;
-//! 4/3 I; taken only most intense component
-const G4double MaterialParameters::oPsProbabilityXAD = 89.6;
-const G4double MaterialParameters::fractionDirect3g = 0.002688;
-//! doi 10.2478/umcschem-2013-0012
-const G4double MaterialParameters::tauKapton = 0.380 * ns;
-const G4double MaterialParameters::tauBulk = 0.2 * ns;
-const G4double MaterialParameters::sodiumGammaEnergy = 1.2770 * MeV;
-const G4double MaterialParameters::sodiumGammaTau = 3.7 * ps;
+MaterialConstants::MaterialConstants(
+  const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb,
+  G4double pPsLF, G4double pPsFrac, const std::vector<G4double>& dirLF,
+  const std::vector<G4double>& dirProb
+) : oPsLifetimes(oPsLF), oPsProbabilities(oPsProb), pPsLifetime(pPsLF),
+pPsFraction(pPsFrac), directLifetimes(dirLF), directProbabilities(dirProb) {}
 
-G4double MaterialParameters::foPsTauXAD = oPsTauXAD;
-G4double MaterialParameters::foPsFractionXAD = GetoPsFractionPALS(oPsProbabilityXAD, oPsTauXAD);
-G4double MaterialParameters::fpickOffFractionXAD = 10 * foPsFractionXAD;
+const G4double MaterialParameters::fpPsTauVaccum = 0.125 * ns;
+const G4double MaterialParameters::foPsTauVaccum = 142.0 * ns;
+const G4double MaterialParameters::fDirectTauMax = 0.6 * ns;
+const G4double MaterialParameters::fpPsTauMax = 0.2 * ns;
+const G4double MaterialParameters::fTauBulk = 0.3;
+const G4double MaterialParameters::fDirect3Gfraction = 0.002688;
+const G4double MaterialParameters::fSodiumGammaEnergy = 1.2770 * MeV;
+const G4double MaterialParameters::fSodiumGammaTau = 3.7 * ps;
 
-void MaterialParameters::SetXADoPsLifetime(G4double x)
+G4String MaterialParameters::fAnnihlationMode = "";
+MaterialConstants MaterialParameters::fTemp = MaterialConstants({}, {}, 0., 0., {}, {});
+
+const MaterialConstants MaterialParameters::fXAD4 = MaterialConstants(
+  {2.5 * ns, 10 * ns, 90 * ns}, {3.3, 2.8, 44.8}, 0.125 * ns, 1.0 / 3.0, {0.45 * ns}, {100}
+);
+const MaterialConstants MaterialParameters::fAl = MaterialConstants(
+  {142 * ns}, {0}, 0.125 * ns, 0, {0.32 * ns}, {100}
+);
+const MaterialConstants MaterialParameters::fKapton = MaterialConstants(
+  {142 * ns}, {0}, 0.125 * ns, 0, {0.374 * ns}, {100}
+);
+const MaterialConstants MaterialParameters::fPlexiglass = MaterialConstants(
+  {1.8 * ns}, {28}, 0.125 * ns, 1.0 / 3.0, {0.4 * ns}, {100}
+);
+// DOI 10.1063/1.475876 for temperature 293 K
+const MaterialConstants MaterialParameters::fScin = MaterialConstants(
+  {1.95 * ns}, {35}, 0.125 * ns, 1.0 / 3.0, {0.45 * ns}, {100}
+);
+// DOI 10.1515/nuka-2015-0140 for temperature 293 K
+const MaterialConstants MaterialParameters::fPA6 = MaterialConstants(
+  {1.7 * ns}, {19.5}, 0.125 * ns, 1.0 / 3.0, {0.356 * ns}, {100}
+);
+// DOI 10.1002/app.10319 for temperature 293 K
+const MaterialConstants MaterialParameters::fAir = MaterialConstants(
+  {142 * ns}, {75}, 0.125 * ns, 1.0 / 3.0, {0.5 * ns}, {0}
+);
+
+MaterialParameters::MaterialParameters()
 {
-  foPsTauXAD = x;
+  foPsLifetimes.clear();
+  foPsProbabilities.clear();
+  foPs2GIntensities.clear();
+  foPs3GIntensities.clear();
+  fpPsLifetime = 0;
+  fpPsFraction = 0;
+  fpPsIntensity = 0;
+  fDirectLifetimes.clear();
+  fDirectIntensities.clear();
+  fAnnihlationMode = "";
 }
 
-void MaterialParameters::SetXADoPsFraction(G4double x)
+MaterialParameters::MaterialParameters(
+  const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb,
+  G4double pPsLF, G4double pPsFrac, const std::vector<G4double>& directLF,
+  const std::vector<G4double>& directProb
+) : foPsLifetimes(oPsLF), foPsProbabilities(oPsProb), fpPsLifetime(pPsLF),
+fpPsFraction(pPsFrac), fDirectLifetimes(directLF),
+fDirectProbabilities(directProb)
 {
-  foPsFractionXAD = x;
+  SetComponentsIntensities();
 }
 
-void MaterialParameters::SetXADPickOffFraction(G4double x)
+void MaterialParameters::ClearTemp()
 {
-  fpickOffFractionXAD = x;
+  fTemp.oPsLifetimes.clear();
+  fTemp.oPsProbabilities.clear();
+  fTemp.pPsLifetime = 0.;
+  fTemp.pPsFraction = 0.;
+  fTemp.directLifetimes.clear();
+  fTemp.directProbabilities.clear();
 }
 
-G4double MaterialParameters::GetXADoPsTau()
+void MaterialParameters::SetMaterial(MaterialConstants mat)
 {
-  return foPsTauXAD;
-}
-G4double MaterialParameters::GetXADoPsFraction()
-{
-  return foPsFractionXAD;
-}
-G4double MaterialParameters::GetXADPickOffFraction()
-{
-  return fpickOffFractionXAD;
+  foPsLifetimes = mat.oPsLifetimes;
+  foPsProbabilities = mat.oPsProbabilities;
+  fpPsLifetime = mat.pPsLifetime;
+  fpPsFraction = mat.pPsFraction;
+  fDirectLifetimes = mat.directLifetimes;
+  fDirectProbabilities = mat.directProbabilities;
+  SetComponentsIntensities();
 }
 
-void MaterialParameters::SetXADoPsOnly()
+void MaterialParameters::SetMaterialByName(MaterialID materialID)
 {
-  foPsFractionXAD = 1.0f;
-  fpickOffFractionXAD = 0.0f;
+  if (materialID == MaterialID::mXAD4) SetMaterial(fXAD4);
+  else if (materialID == MaterialID::mAl) SetMaterial(fAl);
+  else if (materialID == MaterialID::mKapton) SetMaterial(fKapton);
+  else if (materialID == MaterialID::mPlexiglass) SetMaterial(fPlexiglass);
+  else if (materialID == MaterialID::mScin) SetMaterial(fScin);
+  else if (materialID == MaterialID::mPA6) SetMaterial(fPA6);
+  else if (materialID == MaterialID::mAir) SetMaterial(fAir);
+  else SetMaterial(fTemp);
 }
 
-void MaterialParameters::SetXAD2gOnly()
+void MaterialParameters::SetAnnihilationMode(G4String mode)
 {
-  foPsFractionXAD = 0.0f;
-  fpickOffFractionXAD = 0.0f;
+  fAnnihlationMode = mode;
 }
 
-void MaterialParameters::SetXADPickOffOnly()
+void MaterialParameters::AddoPsComponent(G4double lifetime, G4double probability)
 {
-  foPsFractionXAD = 0.0f;
-  fpickOffFractionXAD = 1.0f;
+  foPsLifetimes.push_back(lifetime);
+  foPsProbabilities.push_back(probability);
 }
 
-G4double MaterialParameters::GetoPsFractionPALS(G4double oPsPobability, G4double oPslifetime)
+// cppcheck-suppress unusedFunction
+void MaterialParameters::SetoPsComponents(
+  const std::vector<G4double>& oPsLF, const std::vector<G4double>& oPsProb
+) {
+  foPsLifetimes = oPsLF;
+  foPsProbabilities = oPsProb;
+}
+
+void MaterialParameters::SetpPsComponent(G4double lifetime, G4double fraction)
 {
-  return (oPslifetime / oPsTauVaccum) * oPsPobability / 100.;
+  fpPsLifetime = lifetime;
+  fpPsFraction = fraction;
+}
+
+void MaterialParameters::AddDirectComponent(G4double lifetime, G4double probability)
+{
+  fDirectLifetimes.push_back(lifetime);
+  fDirectProbabilities.push_back(probability);
+}
+
+// cppcheck-suppress unusedFunction
+void MaterialParameters::SetDirectComponents(
+  const std::vector<G4double>& directLF, const std::vector<G4double>& directProb
+) {
+  fDirectLifetimes = directLF;
+  fDirectProbabilities = directProb;
+}
+
+void MaterialParameters::SetComponentsIntensities()
+{
+  foPs2GIntensities.clear();
+  foPs3GIntensities.clear();
+  fDirectIntensities.clear();
+  G4double oPsTotalProbability = 0., totalIntensity = 0.;
+  for (unsigned i = 0; i < foPsProbabilities.size(); i++) {
+    oPsTotalProbability += foPsProbabilities[i];
+    foPs2GIntensities.push_back(GetoPsIntensity2G(foPsLifetimes[i], foPsProbabilities[i]));
+    foPs3GIntensities.push_back(GetoPsIntensity3G(foPsLifetimes[i], foPsProbabilities[i]));
+  }
+  totalIntensity += oPsTotalProbability / 100.;
+  fpPsIntensity = oPsTotalProbability * fpPsFraction / 100; // Fraction from 0 to whatever;
+  totalIntensity += fpPsIntensity;
+  G4double directTotalProbability = 0., temp = 0.;
+  for (unsigned j = 0; j < fDirectProbabilities.size(); j++) {
+    directTotalProbability = fDirectProbabilities[j];
+  }
+  for (unsigned j = 0; j < fDirectProbabilities.size(); j++) {
+    temp = (100 - oPsTotalProbability - 100 * fpPsIntensity)
+    * fDirectProbabilities[j] / (100 * directTotalProbability);
+    if (temp > 0. && temp <= 1.) {
+      fDirectIntensities.push_back(temp);
+      totalIntensity += temp;
+    } else {
+      fDirectIntensities.push_back(0);
+    }
+  }
+  if (foPsProbabilities.size() == 0) {
+    foPs2GIntensities.push_back(0.);
+    foPs3GIntensities.push_back(0.);
+  }
+  if (fDirectProbabilities.size() == 0){
+    fDirectIntensities.push_back(0.);
+  }
+  if (totalIntensity > 1) {
+    RenormalizeIntensities(totalIntensity);
+  }
+}
+
+void MaterialParameters::RenormalizeIntensities(G4double totalIntensity)
+{
+  for (unsigned i = 0; i < foPs2GIntensities.size(); i++) {
+    foPs2GIntensities[i] = foPs2GIntensities[i] / totalIntensity;
+    foPs3GIntensities[i] = foPs3GIntensities[i] / totalIntensity;
+  }
+  fpPsIntensity = fpPsIntensity / totalIntensity;
+  for (unsigned i = 0; i < fDirectIntensities.size(); i++) {
+    fDirectIntensities[i] = fDirectIntensities[i] / totalIntensity;
+  }
+}
+
+G4double MaterialParameters::GetoPs2GTotalIntensity() const
+{
+  G4double totalIntensity = 0.;
+  for (unsigned i = 0; i < foPs2GIntensities.size(); i++){
+    totalIntensity += foPs2GIntensities[i];
+  }
+  return totalIntensity;
+}
+
+G4double MaterialParameters::GetoPs3GTotalIntensity() const
+{
+  G4double totalIntensity = 0.;
+  for (unsigned i = 0; i < foPs3GIntensities.size(); i++){
+    totalIntensity += foPs3GIntensities[i];
+  }
+  return totalIntensity;
+}
+
+G4double MaterialParameters::GetDirect2GTotalIntensity() const
+{
+  G4double totalIntensity = 0.;
+  for (unsigned i = 0; i < fDirectIntensities.size(); i++) {
+    totalIntensity += fDirectIntensities[i];
+  }
+  return totalIntensity * (1. - fDirect3Gfraction);
+}
+
+G4double MaterialParameters::GetDirect3GTotalIntensity() const
+{
+  G4double totalIntensity = 0.;
+  for (unsigned i = 0; i < fDirectIntensities.size(); i++){
+    totalIntensity += fDirectIntensities[i];
+  }
+  return totalIntensity * fDirect3Gfraction;
+}
+
+G4double MaterialParameters::GetpPs2GTotalIntensity() const
+{
+  return fpPsIntensity;
+}
+
+G4double MaterialParameters::GetoPsIntensity2G(G4double oPsLifetime, G4double oPsProbability)
+{
+  return ((foPsTauVaccum - oPsLifetime) / foPsTauVaccum) * oPsProbability / 100.;
+}
+
+G4double MaterialParameters::GetoPsIntensity3G(G4double oPsLifetime, G4double oPsProbability)
+{
+  return (oPsLifetime / foPsTauVaccum) * oPsProbability / 100.;
+}
+
+G4double MaterialParameters::GetoPs2GLifetimeFromVector(double randNumber)
+{
+  double randNumberNorm = randNumber;
+  if (fAnnihlationMode != "") {
+    randNumberNorm = randNumber * GetoPs2GTotalIntensity();
+  }
+  double intensitySum = 0.;
+  for (unsigned i = 0; i < foPsLifetimes.size(); i++) {
+    intensitySum += foPs2GIntensities[i];
+    if (randNumberNorm < intensitySum){
+      return foPsLifetimes[i];
+    }
+  }
+  return GetLifetimeVector(foPsLifetimes);
+}
+
+G4double MaterialParameters::GetoPs3GLifetimeFromVector(double randNumber)
+{
+  double randNumberNorm = randNumber;
+  if (fAnnihlationMode != "") {
+    randNumberNorm = randNumber * GetoPs3GTotalIntensity();
+  }
+  double intensitySum = 0.;
+  for (unsigned i = 0; i < foPsLifetimes.size(); i++) {
+    intensitySum += foPs3GIntensities[i];
+    if (randNumberNorm < intensitySum){
+      return foPsLifetimes[i];
+    }
+  }
+  return GetLifetimeVector(foPsLifetimes);
+}
+
+G4double MaterialParameters::GetDirectLifetimeFromVector(double randNumber)
+{
+  double randNumberNorm = randNumber;
+  if (fAnnihlationMode != ""){
+    randNumberNorm = randNumber * GetDirect2GTotalIntensity();
+  }
+  double intensitySum = 0.;
+  for (unsigned i = 0; i < fDirectLifetimes.size(); i++) {
+    intensitySum += fDirectIntensities[i];
+    if (randNumberNorm < intensitySum){
+      return fDirectLifetimes[i];
+    }
+  }
+  return GetLifetimeVector(fDirectLifetimes);
+}
+
+G4double MaterialParameters::GetpPsLifetime() const { return fpPsLifetime; }
+
+G4double MaterialParameters::GetLifetimeVector(std::vector<G4double> vectorToCheck)
+{
+  if (vectorToCheck.size()){
+    return vectorToCheck[vectorToCheck.size() - 1];
+  } else {
+    return foPsTauVaccum;
+  }
 }

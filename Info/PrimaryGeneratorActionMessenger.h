@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,8 +16,8 @@
 #ifndef PRIMARYGENERATORACTIONMESSENGER_H
 #define PRIMARYGENERATORACTIONMESSENGER_H 1
 
-#include <G4UIcmdWithADoubleAndUnit.hh>
 #include <G4UIcmdWith3VectorAndUnit.hh>
+#include <G4UIcmdWithADoubleAndUnit.hh>
 #include <G4UIcmdWithoutParameter.hh>
 #include <G4UIcmdWithAnInteger.hh>
 #include <G4UIcmdWith3Vector.hh>
@@ -29,10 +29,11 @@
 
 class PrimaryGeneratorAction;
 
-class PrimaryGeneratorActionMessenger: public G4UImessenger
+class PrimaryGeneratorActionMessenger : public G4UImessenger
 {
 public:
-  PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction);
+  PrimaryGeneratorActionMessenger();
+  explicit PrimaryGeneratorActionMessenger(PrimaryGeneratorAction* primGeneratorAction);
   ~PrimaryGeneratorActionMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 
@@ -56,7 +57,6 @@ private:
   G4UIcmdWithAnInteger* fNemaPosition = nullptr;
   G4UIcmdWith3VectorAndUnit* fSetChamberCenter = nullptr;
   G4UIcmdWithADoubleAndUnit* fSetChamberEffectivePositronRadius = nullptr;
-
 };
 
-#endif
+#endif /* !PRIMARYGENERATORACTIONMESSENGER_H */

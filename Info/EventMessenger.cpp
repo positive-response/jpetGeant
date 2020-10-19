@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -20,20 +20,19 @@ EventMessenger* EventMessenger::fInstance = nullptr;
 
 EventMessenger* EventMessenger::GetEventMessenger()
 {
-  if ( fInstance == nullptr ) {
+  if (fInstance == nullptr) {
     fInstance = new EventMessenger();
   }
   return fInstance;
 }
-
 
 EventMessenger::EventMessenger()
 {
   fDirectory = new G4UIdirectory("/jpetmc/event/");
   fDirectory->SetGuidance("Define events to save");
 
-  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc",this);
-  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector"); 
+  fCMDKillEventsEscapingWorld = new G4UIcmdWithABool("/jpetmc/event/saveEvtsDetAcc", this);
+  fCMDKillEventsEscapingWorld->SetGuidance("Killing events when generated particle escapes detector");
 
   fPrintStat = new G4UIcmdWithABool("/jpetmc/event/printEvtStat", this);
   fPrintStat->SetGuidance("Print how many events was generated");
@@ -56,24 +55,26 @@ EventMessenger::EventMessenger()
   fCMDSave3g = new G4UIcmdWithABool("/jpetmc/event/save3g",this);
   fCMDSave3g->SetGuidance("Events with registered 3g will be saved (default false)");
 
-
   fPrintStatBar = new G4UIcmdWithABool("/jpetmc/event/ShowProgress", this);
   fPrintStatBar->SetGuidance("Print how many events was generated (in %)");
 
   fAddDatetime = new G4UIcmdWithABool("/jpetmc/output/AddDatetime", this);
   fAddDatetime->SetGuidance("Adds to the output file name date and time of simulation start.");
 
-  fRandomSeed = new G4UIcmdWithABool("/jpetmc/SetRandomSeed", this);
-  fRandomSeed->SetGuidance("Use random seed (default true).");
+  fSetSeed = new G4UIcmdWithAnInteger("/jpetmc/SetSeed", this);
+  fSetSeed->SetGuidance("Use specific seed. If 0 provided seed will be random.");
+  fSetSeed->SetDefaultValue(0);
 
   fSaveSeed = new G4UIcmdWithABool("/jpetmc/SaveSeed", this);
   fSaveSeed->SetGuidance("Save random seed (default false).");
 
-  fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer",this);
+  fCMDAllowedMomentumTransfer = new G4UIcmdWithADoubleAndUnit("/jpetmc/setAllowedMomentumTransfer", this);
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
-  fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV); 
+  fCMDAllowedMomentumTransfer->SetDefaultValue(1 * keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
-
+  
+  fCreateDecayTree = new G4UIcmdWithABool("/jpetmc/output/CreateDecayTree", this);
+  fCreateDecayTree->SetGuidance("Creates decay trees for each event.");
 }
 
 EventMessenger::~EventMessenger()
@@ -82,7 +83,7 @@ EventMessenger::~EventMessenger()
   delete fPrintStatPower;
   delete fPrintStatBar;
   delete fAddDatetime;
-  delete fRandomSeed;
+  delete fSetSeed;
   delete fSaveSeed;
   delete fCMDKillEventsEscapingWorld;
   delete fCMDMinRegMulti;
@@ -90,65 +91,38 @@ EventMessenger::~EventMessenger()
   delete fCMDExcludedMulti;
   delete fCMDSave2g;
   delete fCMDSave3g;
+  delete fCreateDecayTree;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-
   if (command == fPrintStat) {
     fPrintStatistics = fPrintStat->GetNewBoolValue(newValue);
-  }
-
-  if (command == fPrintStatPower) {
+  } else if (command == fPrintStatPower) {
     fPrintPower = fPrintStatPower->GetNewIntValue(newValue);
-  }
-
-  if (command == fCMDMinRegMulti) {
+  } else if (command == fCMDMinRegMulti) {
     fMinRegisteredMultiplicity = fCMDMinRegMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fCMDMaxRegMulti) {
+  } else if (command == fCMDMaxRegMulti) {
     fMaxRegisteredMultiplicity = fCMDMaxRegMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fPrintStatBar) {
+  } else if (command == fPrintStatBar) {
     fShowProgress = fPrintStatBar->GetNewBoolValue(newValue);
-  }
-
-  if (command == fAddDatetime) {
+  } else if (command == fAddDatetime) {
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDKillEventsEscapingWorld) { 
+  } else if (command == fCMDKillEventsEscapingWorld) {
     fKillEventsEscapingWorld = fCMDKillEventsEscapingWorld->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDExcludedMulti){
+  } else if (command == fCMDExcludedMulti) {
     fExcludedMultiplicity = fCMDExcludedMulti->GetNewIntValue(newValue);
-  }
-
-  if (command == fRandomSeed) {
-    fSetRandomSeed = fRandomSeed->GetNewBoolValue(newValue);
-  }
-
-  if (command == fSaveSeed) {
+  } else if (command == fSetSeed) {
+    fSeed = fSetSeed->GetNewIntValue(newValue);
+  } else if (command == fSaveSeed) {
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-  }
-
-  if (command == fAddDatetime) {
-    fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDAllowedMomentumTransfer) {
-    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue); 
-  }
-
-  if (command == fCMDSave2g) {
+  } else if (command == fCMDAllowedMomentumTransfer){
+    fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
+  } else if (command == fCreateDecayTree) {
+    fCreateDecayTreeFlag = fCreateDecayTree->GetNewBoolValue(newValue);
+  } else if (command == fCMDSave2g) {
     fSave2g = fCMDSave2g->GetNewBoolValue(newValue);
-  }
-
-  if (command == fCMDSave3g) {
+  } else if (command == fCMDSave3g) {
     fSave3g = fCMDSave3g->GetNewBoolValue(newValue);
   }
-
 }

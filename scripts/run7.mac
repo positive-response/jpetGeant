@@ -1,9 +1,12 @@
-# Initialize kernel
-#
-#/control/execute init_vis.mac
+# Geometry for run 7
+/jpetmc/detector/loadTargetForRun 7
 
-/jpetmc/detector/loadGeomForRun 7 
+# Loading standard scintillators (3 layers)
+/jpetmc/detector/loadJPetBasicGeom
+
+# Loading scintillators without frame
+/jpetmc/detector/loadOnlyScintillators
+
 /run/initialize
 
 /run/beamOn 1000
-#

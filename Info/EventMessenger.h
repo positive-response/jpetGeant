@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -23,85 +23,31 @@
 #include <G4UIcmdWithADouble.hh>
 #include <G4UIcmdWithAString.hh>
 #include <G4UIcmdWithABool.hh>
-#include <G4UIcmdWithABool.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4UIdirectory.hh>
 #include <G4UImessenger.hh>
 #include <globals.hh>
 
-class EventMessenger: public G4UImessenger
+class EventMessenger : public G4UImessenger
 {
 public:
   static EventMessenger* GetEventMessenger();
   void SetNewValue(G4UIcommand*, G4String);
 
-  bool KillEventsEscapingWorld()
-  {
-    return fKillEventsEscapingWorld;
-  }
-
-  bool PrintStatistics()
-  {
-    return fPrintStatistics;
-  }
-
-  bool ShowProgress()
-  {
-    return fShowProgress;
-  }
-
-  G4int GetPowerPrintStat()
-  {
-    return fPrintPower;
-  }
-
-  bool AddDatetime()
-  {
-    return fOutputWithDatetime;
-  }
-
-  G4int GetMinRegMultiplicity()
-  {
-    return fMinRegisteredMultiplicity;
-  }
-
-  G4int GetMaxRegMultiplicity()
-  {
-    return fMaxRegisteredMultiplicity;
-  }
-
-  G4int GetExcludedMultiplicity()
-  {
-    return fExcludedMultiplicity;
-  }
-
-  G4double GetAllowedMomentumTransfer()
-  {
-    return fAllowedMomentumTransfer;
-  }
-
-
-  bool SetRandomSeed()
-  {
-    return fSetRandomSeed;
-  }
-
-  bool SaveSeed()
-  {
-    return fSaveRandomSeed;
-  }
-
-  bool Save2g()
-  {
-    return fSave2g;
-  }
-
-  bool Save3g()
-  {
-    return fSave3g;
-  }
-
-
+  bool KillEventsEscapingWorld() { return fKillEventsEscapingWorld; }
+  bool PrintStatistics() { return fPrintStatistics; }
+  bool ShowProgress() { return fShowProgress; }
+  G4int GetPowerPrintStat() { return fPrintPower; }
+  bool AddDatetime() { return fOutputWithDatetime; }
+  G4int GetMinRegMultiplicity() { return fMinRegisteredMultiplicity; }
+  G4int GetMaxRegMultiplicity() { return fMaxRegisteredMultiplicity; }
+  G4int GetExcludedMultiplicity() { return fExcludedMultiplicity; }
+  G4double GetAllowedMomentumTransfer() { return fAllowedMomentumTransfer; }
+  G4int GetSeed() { return fSeed; }
+  bool SaveSeed() { return fSaveRandomSeed; }
+  bool Save2g() { return fSave2g; }
+  bool Save3g() { return fSave3g; }
+  bool GetCreateDecayTreeFlag() { return fCreateDecayTreeFlag; }
 
 private:
   static EventMessenger* fInstance;
@@ -109,19 +55,21 @@ private:
   ~EventMessenger();
 
   G4UIdirectory* fDirectory = nullptr;
-  G4UIcmdWithABool* fPrintStat;
-  G4UIcmdWithABool* fPrintStatBar;
-  G4UIcmdWithABool* fAddDatetime;
-  G4UIcmdWithABool* fCMDKillEventsEscapingWorld;
-  G4UIcmdWithAnInteger* fPrintStatPower;
-  G4UIcmdWithAnInteger* fCMDMinRegMulti;
-  G4UIcmdWithAnInteger* fCMDMaxRegMulti;
-  G4UIcmdWithAnInteger* fCMDExcludedMulti;
-  G4UIcmdWithABool* fRandomSeed;
-  G4UIcmdWithABool* fSaveSeed;
-  G4UIcmdWithABool* fCMDSave2g;
-  G4UIcmdWithABool* fCMDSave3g;
-  G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer; 
+  G4UIcmdWithABool* fPrintStat = nullptr;
+  G4UIcmdWithABool* fPrintStatBar = nullptr;
+  G4UIcmdWithABool* fAddDatetime = nullptr;
+  G4UIcmdWithABool* fCMDKillEventsEscapingWorld = nullptr;
+  G4UIcmdWithAnInteger* fPrintStatPower = nullptr;
+  G4UIcmdWithAnInteger* fCMDMinRegMulti = nullptr;
+  G4UIcmdWithAnInteger* fCMDMaxRegMulti = nullptr;
+  G4UIcmdWithAnInteger* fCMDExcludedMulti = nullptr;
+  G4UIcmdWithAnInteger* fSetSeed = nullptr;
+  G4UIcmdWithABool* fSaveSeed = nullptr;
+  G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer = nullptr;
+  G4UIcmdWithABool* fCMDSave2g = nullptr;
+  G4UIcmdWithABool* fCMDSave3g = nullptr;
+  G4UIcmdWithABool* fCreateDecayTree = nullptr;
+  
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
@@ -130,12 +78,12 @@ private:
   G4int fMinRegisteredMultiplicity = 0;
   G4int fMaxRegisteredMultiplicity = 10;
   G4int fExcludedMultiplicity = 1;
-  bool fSetRandomSeed = true;
+  G4int fSeed = 0;
   bool fSaveRandomSeed = false;
+  G4double fAllowedMomentumTransfer = 1 * keV;
   bool fSave2g = false;
   bool fSave3g = false;
-  G4double fAllowedMomentumTransfer = 1*keV;
-
+  bool fCreateDecayTreeFlag = false;
 };
 
-#endif
+#endif /* !EVENTMESSENGER_H */
