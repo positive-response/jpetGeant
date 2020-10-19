@@ -40,12 +40,20 @@ public:
   virtual ~EventAction();
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event* anEvent);
+  bool Is2gRegistered();
+  bool Is3gRegistered();
 
 private:
   HistoManager* fHistoManager = nullptr;
   G4int fScinCollID;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
   void WriteToFile(const G4Event* anEvent);
+
+  bool is2gRec;
+  bool is3gRec;
+  void CheckIf3gIsRegistered(const G4Event* anEvent);
+  void CheckIf2gIsRegistered(const G4Event* anEvent);
+
 };
 
 #endif /* !EVENTACTION_H */

@@ -45,6 +45,8 @@ public:
   G4double GetAllowedMomentumTransfer() { return fAllowedMomentumTransfer; }
   G4int GetSeed() { return fSeed; }
   bool SaveSeed() { return fSaveRandomSeed; }
+  bool Save2g() { return fSave2g; }
+  bool Save3g() { return fSave3g; }
   bool GetCreateDecayTreeFlag() { return fCreateDecayTreeFlag; }
 
 private:
@@ -64,7 +66,10 @@ private:
   G4UIcmdWithAnInteger* fSetSeed = nullptr;
   G4UIcmdWithABool* fSaveSeed = nullptr;
   G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer = nullptr;
+  G4UIcmdWithABool* fCMDSave2g = nullptr;
+  G4UIcmdWithABool* fCMDSave3g = nullptr;
   G4UIcmdWithABool* fCreateDecayTree = nullptr;
+  
   bool fPrintStatistics = false;
   G4int fPrintPower = 10;
   bool fShowProgress = false;
@@ -76,6 +81,8 @@ private:
   G4int fSeed = 0;
   bool fSaveRandomSeed = false;
   G4double fAllowedMomentumTransfer = 1 * keV;
+  bool fSave2g = false;
+  bool fSave3g = false;
   bool fCreateDecayTreeFlag = false;
 };
 
