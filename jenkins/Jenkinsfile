@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+	stages {
+	    stage('Build') {
+		environment {
+		    WORKSPACE_JENKINS=sh(returnStdout: true, script: "echo $WORKSPACE | sed --expression='s/r\\/j/r\\/www\\/j/g'").trim()
+		}
+		steps {
+		    echo "Building..\nStarting build job: <${JOB_NAME}> in workspace: <${WORKSPACE}> for root6"
+		    echo "Jenkins workspace: <${WORKSPACE_JENKINS}>"
+		    dir("jenkins/root_6") {
+			sh label: 'docker-build', script: 'docker-compose build'
+		    }
+		    sh label: 'build framework', script: "docker-compose -f jenkins/root_6/docker-compose.yml run --rm geant_rootv6"
+		}
+	    }
+
+	    stage('Test') {
+		steps {
+		    echo 'Testing..'
+		    sh label: 'mkdir', script: 'mkdir -p CPPCheckRaport'
+		    sh label: 'cppcheck', script: 'cppcheck --inline-suppr --enable=all --inconclusive --xml --suppress="*:${WORKSPACE}/build/*.*" --xml-version=2 ${WORKSPACE} 2> CPPCheckRaport/cppcheck.xml'
+		}
+	    }
+	    stage('Deploy') {
+		steps {
+		    echo 'Deploying....'
+		}
+	    }
+	}
+	post { 
+		always { 
+		    cleanWs()
+		}
+	}
+}
