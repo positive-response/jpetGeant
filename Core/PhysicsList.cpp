@@ -26,6 +26,6 @@ PhysicsList::~PhysicsList() {}
 //Range Cut
 void PhysicsList::SetCuts()
 {
-  //SetVerboseLevel(1);     // seelect verbosity
-  //SetCutValue(1.0 * mm, "e-");  // Production threshold on e- ( must produce with energy to travel 1 mm distance)
+//  SetVerboseLevel(1);     // seelect verbosity
+  SetCutValue(fEvtMessenger->GetRangeCut(),"e-");
 }

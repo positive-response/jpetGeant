@@ -18,6 +18,7 @@
 
 #include "../Objects/Geant4/DetectorHit.h"
 #include <G4VSensitiveDetector.hh>
+#include "../Info/EventMessenger.h"
 
 class DetectorSD : public G4VSensitiveDetector
 {
@@ -37,6 +38,7 @@ private:
   G4int totScinNum;
   std::vector<HitParameters> previousHits;
   DetectorHitsCollection* fDetectorCollection;
+  EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
 protected:
   virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);

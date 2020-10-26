@@ -66,6 +66,16 @@ EventMessenger::EventMessenger()
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
   fCMDAllowedMomentumTransfer->SetDefaultValue(1*keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
+	
+  fCMDAppliedEnergyCut = new G4UIcmdWithADoubleAndUnit("/jpetmc/event/GetEnergyCut",this);
+  fCMDAppliedEnergyCut->SetGuidance("Cut on kinetic energy of primary photon after first interaction in scintillator");
+  fCMDAppliedEnergyCut->SetDefaultValue(0.0001*keV);
+  fCMDAppliedEnergyCut->SetUnitCandidates("keV");
+	
+  fCMDAppliedRangeCut = new G4UIcmdWithADoubleAndUnit("/jpetmc/event/GetRangeCut",this);
+  fCMDAppliedRangeCut->SetGuidance(" Compton e- should have sufficient K.E enabling it to travel the given range in material");
+  fCMDAppliedRangeCut->SetDefaultValue(1*mm);
+  fCMDAppliedRangeCut->SetUnitCandidates("mm");
 
 }
 
@@ -81,6 +91,9 @@ EventMessenger::~EventMessenger()
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
   delete fCMDExcludedMulti;
+	
+  delete fCMDAppliedEnergyCut;
+	delete fCMDAppliedRangeCut;
 }
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -110,4 +123,8 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fOutputWithDatetime = fAddDatetime->GetNewBoolValue(newValue);
   else if (command == fCMDAllowedMomentumTransfer)
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
+  else if (command == fCMDAppliedEnergyCut)
+	  fEnergyCut = fCMDAppliedEnergyCut->GetNewDoubleValue(newValue);
+  else if (command == fCMDAppliedRangeCut)
+	  fRangeCut = fCMDAppliedRangeCut->GetNewDoubleValue(newValue);
 }
