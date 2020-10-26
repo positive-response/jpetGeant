@@ -94,7 +94,7 @@ void EventAction::WriteToFile(const G4Event* anEvent)
        // Removing remnants from the energy deposition cut on prim photon
        if (EnergyDeposit < .511 - fEvtMessenger->GetEnergyCut() && fEvtMessenger->GetEnergyCutFlag()) continue;  
      
-       fHisto->AddNewHit(dh);
+       fHistoManager->AddNewHit(dh);
     }
   }
 
