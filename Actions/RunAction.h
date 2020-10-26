@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -17,6 +17,7 @@
 #define RUNACTION_H 1
 
 #include "../Core/HistoManager.h"
+
 #include <G4UserRunAction.hh>
 #include <globals.hh>
 
@@ -29,15 +30,15 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
 public:
-  RunAction(HistoManager*);
+  RunAction();
+  explicit RunAction(HistoManager* histo);
   virtual ~RunAction();
   virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
 
 private:
-  HistoManager* fHistoManager;
+  HistoManager* fHistoManager = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
-
 };
 
-#endif
+#endif /* !RUNACTION_H */

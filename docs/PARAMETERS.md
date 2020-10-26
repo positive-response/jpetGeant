@@ -55,6 +55,11 @@ Following options can be added to macro files, that are read by Geat4. Example f
 * change excluded value of multiplicity (1):
  `/jpetmc/event/excludedMulti`
   (above valid only with: /jpetmc/event/saveEvtsDetAcc)
+* /jpetmc/event/save2g
+  `save event when 2g were registered (default false)`
+* /jpetmc/event/save3g
+  `save event when 3g were registered (default false)`
+  Options save2g/save3g  and saveEvtsDetAcc are  separable !
 * print how many events were generated  
  `/jpetmc/event/printEvtStat`  
 * print out option during execution of the simulation - X in divisor (10^X) for number of printed events  
@@ -72,3 +77,9 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/source/isotope/setPosition`  
 * set number of gamma quanta to generate 1 / 2 / 3 by the isotope  
  `/jpetmc/source/isotope/setNGamma`  
+
+## Creating .json file with geometry setup for J-PET Framework. If one of these two option will be put into macro, the output file will be created.
+* select a type of output file strucure - Big Barrel or Modular format (default "barrel")
+ `jpetmc/detector/createGeometryType`
+* name an output file (default name "mc_geant_setup.json")  
+ `/jpetmc/detector/geometryFileName`  

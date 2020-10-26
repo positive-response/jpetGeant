@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -17,6 +17,8 @@
 #define DETECTORSD_H 1
 
 #include "../Objects/Geant4/DetectorHit.h"
+#include "HistoManager.h"
+
 #include <G4VSensitiveDetector.hh>
 #include "../Info/EventMessenger.h"
 
@@ -26,6 +28,8 @@ public:
   DetectorSD(G4String name, G4int scinSum, G4double timeMergeValue);
   virtual ~DetectorSD();
   virtual void Initialize(G4HCofThisEvent* HCE);
+  
+  void SetHistoManager(HistoManager* histo) {fHistoManager = histo;}
 
 private:
   struct HitParameters {
@@ -33,15 +37,17 @@ private:
       G4int fID = -1;
       G4double fTime = 0.0;
   };
+  
+  HistoManager* fHistoManager = nullptr;
 
   G4double timeIntervals;
   G4int totScinNum;
   std::vector<HitParameters> previousHits;
-  DetectorHitsCollection* fDetectorCollection;
+  DetectorHitsCollection* fDetectorCollection = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
 protected:
   virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
 };
 
-#endif
+#endif /* !DETECTORSD_H */
