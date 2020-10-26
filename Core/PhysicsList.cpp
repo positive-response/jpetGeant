@@ -23,3 +23,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 }
 
 PhysicsList::~PhysicsList() {}
+
+// cppcheck-suppress unusedFunction
+void PhysicsList::SetCuts()
+{
+//  SetVerboseLevel(1);     // select verbosity
+  SetCutValue(fEvtMessenger->GetRangeCut(),"e-");
+}

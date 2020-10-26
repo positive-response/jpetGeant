@@ -87,7 +87,13 @@ void EventAction::WriteToFile(const G4Event* anEvent)
     int n_hit = DHC->entries();
     for (int i = 0; i < n_hit; i++) {
       DetectorHit* dh = dynamic_cast<DetectorHit*>(DHC->GetHit(i));
-      fHistoManager->AddNewHit(dh);
+     
+      // Forcefully cut the remnants from the cut on photon durinng first interaction----     
+      double EnergyDeposit = dh->GetEdep();
+      // Removing remnants from the energy deposition cut on prim photon
+      if (EnergyDeposit < .511 - fEvtMessenger->GetEnergyCut() && fEvtMessenger->GetEnergyCutFlag()) continue;  
+     
+       fHistoManager->AddNewHit(dh);
     }
   }
 
@@ -139,7 +145,6 @@ void EventAction::CheckIf3gIsRegistered(const G4Event* anEvent)
   for(int i=1; i<=3; i++) {
     isReconstructed = isReconstructed && isGammaRec[i];
   }
-  
   is3gRec = isReconstructed;
 }
 

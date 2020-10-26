@@ -20,6 +20,7 @@
 #include "HistoManager.h"
 
 #include <G4VSensitiveDetector.hh>
+#include "../Info/EventMessenger.h"
 
 class DetectorSD : public G4VSensitiveDetector
 {
@@ -43,6 +44,7 @@ private:
   G4int fToTScinNum;
   std::vector<HitParameters> fPreviousHits;
   DetectorHitsCollection* fDetectorCollection = nullptr;
+  EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
 protected:
   virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);

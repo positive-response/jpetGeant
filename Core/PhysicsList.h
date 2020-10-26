@@ -17,6 +17,7 @@
 #define PHYSICSLIST_H 1
 
 #include <G4VModularPhysicsList.hh>
+#include "../Info/EventMessenger.h"
 
 /**
  * @class PhysicsList
@@ -29,6 +30,11 @@ class PhysicsList : public G4VModularPhysicsList
 public:
   PhysicsList();
   virtual ~PhysicsList();
+  void SetCuts() override;
+	
+private:
+EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
+	
 };
 
 #endif /* !PHYSICSLIST_H */

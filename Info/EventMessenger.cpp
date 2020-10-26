@@ -72,7 +72,17 @@ EventMessenger::EventMessenger()
   fCMDAllowedMomentumTransfer->SetGuidance("Limit on momentum transfer that will classify interaction as background (10keV)");
   fCMDAllowedMomentumTransfer->SetDefaultValue(1 * keV);
   fCMDAllowedMomentumTransfer->SetUnitCandidates("keV");
-  
+	
+  fCMDAppliedEnergyCut = new G4UIcmdWithADoubleAndUnit("/jpetmc/event/SetEnergyCut",this);
+  fCMDAppliedEnergyCut->SetGuidance("Cut on kinetic energy of primary photon after first interaction in scintillator");
+  fCMDAppliedEnergyCut->SetDefaultValue(0.0001 * keV);
+  fCMDAppliedEnergyCut->SetUnitCandidates("keV");
+	
+  fCMDAppliedRangeCut = new G4UIcmdWithADoubleAndUnit("/jpetmc/event/SetRangeCut",this);
+  fCMDAppliedRangeCut->SetGuidance(" Compton e- should have sufficient K.E enabling it to travel the given range in material");
+  fCMDAppliedRangeCut->SetDefaultValue(1 * mm);
+  fCMDAppliedRangeCut->SetUnitCandidates("mm");
+
   fCreateDecayTree = new G4UIcmdWithABool("/jpetmc/output/CreateDecayTree", this);
   fCreateDecayTree->SetGuidance("Creates decay trees for each event.");
 }
@@ -89,6 +99,8 @@ EventMessenger::~EventMessenger()
   delete fCMDMinRegMulti;
   delete fCMDMaxRegMulti;
   delete fCMDExcludedMulti;
+  delete fCMDAppliedEnergyCut;
+  delete fCMDAppliedRangeCut;
   delete fCMDSave2g;
   delete fCMDSave3g;
   delete fCreateDecayTree;
@@ -116,8 +128,14 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fSeed = fSetSeed->GetNewIntValue(newValue);
   } else if (command == fSaveSeed) {
     fSaveRandomSeed = fSaveSeed->GetNewBoolValue(newValue);
-  } else if (command == fCMDAllowedMomentumTransfer){
+  } else if (command == fCMDAllowedMomentumTransfer) {
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
+  } else if (command == fCMDAppliedEnergyCut) {
+    fEnergyCut = fCMDAppliedEnergyCut->GetNewDoubleValue(newValue);
+    fUseEnergyCut = true;
+  } else if (command == fCMDAppliedRangeCut) {
+    fRangeCut = fCMDAppliedRangeCut->GetNewDoubleValue(newValue);
+    fUseRangeCut = true;
   } else if (command == fCreateDecayTree) {
     fCreateDecayTreeFlag = fCreateDecayTree->GetNewBoolValue(newValue);
   } else if (command == fCMDSave2g) {

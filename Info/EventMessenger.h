@@ -43,6 +43,10 @@ public:
   G4int GetMaxRegMultiplicity() { return fMaxRegisteredMultiplicity; }
   G4int GetExcludedMultiplicity() { return fExcludedMultiplicity; }
   G4double GetAllowedMomentumTransfer() { return fAllowedMomentumTransfer; }
+  G4double GetEnergyCut() { return fEnergyCut; }
+  G4double GetRangeCut() { return fRangeCut; }
+  bool GetEnergyCutFlag() { return fUseEnergyCut; }
+  bool GetRangeCutFlag() { return fUseRangeCut; }
   G4int GetSeed() { return fSeed; }
   bool SaveSeed() { return fSaveRandomSeed; }
   bool Save2g() { return fSave2g; }
@@ -66,6 +70,8 @@ private:
   G4UIcmdWithAnInteger* fSetSeed = nullptr;
   G4UIcmdWithABool* fSaveSeed = nullptr;
   G4UIcmdWithADoubleAndUnit* fCMDAllowedMomentumTransfer = nullptr;
+  G4UIcmdWithADoubleAndUnit* fCMDAppliedEnergyCut = nullptr;
+  G4UIcmdWithADoubleAndUnit* fCMDAppliedRangeCut  = nullptr;
   G4UIcmdWithABool* fCMDSave2g = nullptr;
   G4UIcmdWithABool* fCMDSave3g = nullptr;
   G4UIcmdWithABool* fCreateDecayTree = nullptr;
@@ -81,6 +87,10 @@ private:
   G4int fSeed = 0;
   bool fSaveRandomSeed = false;
   G4double fAllowedMomentumTransfer = 1 * keV;
+  bool fUseEnergyCut = false;
+  bool fUseRangeCut = false;
+  G4double fEnergyCut = 0 * keV;
+  G4double fRangeCut  = 1 * mm;
   bool fSave2g = false;
   bool fSave3g = false;
   bool fCreateDecayTreeFlag = false;
