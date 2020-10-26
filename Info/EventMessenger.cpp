@@ -100,7 +100,7 @@ EventMessenger::~EventMessenger()
   delete fCMDMaxRegMulti;
   delete fCMDExcludedMulti;
   delete fCMDAppliedEnergyCut;
-	delete fCMDAppliedRangeCut;
+  delete fCMDAppliedRangeCut;
   delete fCMDSave2g;
   delete fCMDSave3g;
   delete fCreateDecayTree;
@@ -131,10 +131,10 @@ void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   } else if (command == fCMDAllowedMomentumTransfer) {
     fAllowedMomentumTransfer = fCMDAllowedMomentumTransfer->GetNewDoubleValue(newValue);
   } else if (command == fCMDAppliedEnergyCut) {
-	  fEnergyCut = fCMDAppliedEnergyCut->GetNewDoubleValue(newValue);
+    fEnergyCut = fCMDAppliedEnergyCut->GetNewDoubleValue(newValue);
     fUseEnergyCut = true;
   } else if (command == fCMDAppliedRangeCut) {
-	  fRangeCut = fCMDAppliedRangeCut->GetNewDoubleValue(newValue);
+    fRangeCut = fCMDAppliedRangeCut->GetNewDoubleValue(newValue);
     fUseRangeCut = true;
   } else if (command == fCreateDecayTree) {
     fCreateDecayTreeFlag = fCreateDecayTree->GetNewBoolValue(newValue);
