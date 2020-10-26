@@ -40,9 +40,9 @@ private:
   
   HistoManager* fHistoManager = nullptr;
 
-  G4double timeIntervals;
-  G4int totScinNum;
-  std::vector<HitParameters> previousHits;
+  G4double fTimeIntervals;
+  G4int fTotScinNum;
+  std::vector<HitParameters> fPreviousHits;
   DetectorHitsCollection* fDetectorCollection = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
