@@ -45,15 +45,10 @@ public:
   void SetSourceTypeInfo(G4String);
 
   BeamParams* GetBeamParams() { return fBeam; }
-
   SourceParams* GetIsotopeParams() { return fIsotope; }
-
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
-
   void SetNemaPoint(G4int i) { fNemaPoint = i; }
-
   G4int GetNemaPoint() { return fNemaPoint; }
-
   void SetEffectivePositronRadius(G4double);
 
 private:

@@ -93,7 +93,7 @@ void EventAction::WriteToFile(const G4Event* anEvent)
       // Removing remnants from the energy deposition cut on prim photon
       if (EnergyDeposit < .511 - fEvtMessenger->GetEnergyCut() && fEvtMessenger->GetEnergyCutFlag()) continue;  
      
-       fHistoManager->AddNewHit(dh);
+      fHistoManager->AddNewHit(dh);
     }
   }
 
@@ -156,7 +156,7 @@ void EventAction::CheckIf2gIsRegistered(const G4Event* anEvent)
   std::vector<bool> isGammaRec{false,false,false};
 
   for (int i=0; i<anEvent->GetNumberOfPrimaryVertex(); i++) {
-    VtxInformation* info =  dynamic_cast<VtxInformation*>( anEvent->GetPrimaryVertex(i)->GetUserInformation());    
+    VtxInformation* info =  dynamic_cast<VtxInformation*>(anEvent->GetPrimaryVertex(i)->GetUserInformation());    
     if (info != nullptr) {
       isGenerated = isGenerated || info->GetTwoGammaGen();
     }

@@ -31,7 +31,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter -lboost_system")
 
 ################################################################################
 ## Project version number
-set(VERSION_MAJOR 3 CACHE STRING "Project major version number.")
+set(VERSION_MAJOR 4 CACHE STRING "Project major version number.")
 set(VERSION_MINOR 0 CACHE STRING "Project minor version number.")
 set(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
@@ -42,6 +42,7 @@ set(SCRIPT_FILES
   vis.mac
   run3.mac
   run5.mac
+  run5_lifetime.mac
   run6.mac
   run7.mac
   nema.mac
@@ -204,6 +205,6 @@ add_custom_command(
   ${PROJECT_NAME}
   POST_BUILD
   COMMAND ln -sf
-  ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v3.1.pdf
+  ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v4.pdf
   ${CMAKE_CURRENT_BINARY_DIR}/bin
 )

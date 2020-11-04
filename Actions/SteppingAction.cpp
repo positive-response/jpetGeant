@@ -85,11 +85,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if (momentumChange > EventMessenger::GetEventMessenger()->GetAllowedMomentumTransfer()) {
       if (fHistoManager) {
         fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity());
-        fHistoManager->AddNodeToDecayTree(info->GetGammaMultiplicity() + 10, 
+        fHistoManager->AddNodeToDecayTree(info->GetGammaMultiplicity() + PrimaryParticleInformation::kScatteringInNonActivePartAddition, 
                                           aStep->GetTrack()->GetDynamicParticle()->GetPrimaryParticle()->GetTrackID());
-        fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity() + 10);
+        fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity() + PrimaryParticleInformation::kScatteringInNonActivePartAddition);
       }
-      info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 10);
+      info->SetGammaMultiplicity(info->GetGammaMultiplicity() + PrimaryParticleInformation::kScatteringInNonActivePartAddition);
     }
   }
 }
