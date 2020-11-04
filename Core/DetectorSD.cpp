@@ -109,9 +109,9 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         newHit->SetGenGammaMultiplicity(info->GetGammaMultiplicity());
         newHit->SetGenGammaIndex(info->GetIndex());
         //! should be marked as scattering
-        info->SetGammaMultiplicity(info->GetGammaMultiplicity() + 100);
+        info->SetGammaMultiplicity(info->GetGammaMultiplicity() + PrimaryParticleInformation::kScatteringInActivePartAddition);
         if (fHistoManager) {
-          fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity() - 100);
+          fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity() - PrimaryParticleInformation::kScatteringInActivePartAddition);
           fHistoManager->AddNodeToDecayTree(info->GetGammaMultiplicity(), 
                                         aStep->GetTrack()->GetTrackID());
           fHistoManager->SetParentIDofPhoton(info->GetGammaMultiplicity());
@@ -122,10 +122,11 @@ G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     {
     // This is multiple scattering and compton that does not come from primary gamma generated (pair creation, electron scattering, ...)
       if (fHistoManager) {
-        fHistoManager->AddNodeToDecayTree(fHistoManager->GetParentIDofPhoton() * 10, aStep->GetTrack()->GetTrackID());
-        fHistoManager->SetParentIDofPhoton(fHistoManager->GetParentIDofPhoton() * 10);
+        fHistoManager->AddNodeToDecayTree(fHistoManager->GetParentIDofPhoton() * PrimaryParticleInformation::kSecondaryParticleMultiplication, 
+                                          aStep->GetTrack()->GetTrackID());
+        fHistoManager->SetParentIDofPhoton(fHistoManager->GetParentIDofPhoton() * PrimaryParticleInformation::kSecondaryParticleMultiplication);
       }
-      newHit->SetGenGammaMultiplicity(fHistoManager->GetParentIDofPhoton() * 10);
+      newHit->SetGenGammaMultiplicity(fHistoManager->GetParentIDofPhoton() * PrimaryParticleInformation::kSecondaryParticleMultiplication);
     }
     G4int id = fDetectorCollection->insert(newHit);
     fPreviousHits[currentScinCopy].fID = id - 1;

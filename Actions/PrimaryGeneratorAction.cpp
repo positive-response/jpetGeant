@@ -91,7 +91,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
 {
   if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSourceType)
-  != std::end(fAllowedSourceTypes)) {
+                != std::end(fAllowedSourceTypes)) {
     //! setup found
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if ((nRun == 0) && (newSourceType != "run")) {

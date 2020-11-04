@@ -125,12 +125,8 @@ void DetectorConstruction::ConstructSDandField()
 void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
   fRunNumber = nr;
-  if (
-    fRunNumber == 3 || fRunNumber == 5 || fRunNumber == 6
-    || fRunNumber == 7 || fRunNumber == 0
-  ){
-    LoadFrame(false);
-  } else {
+  if (fRunNumber != 3 && fRunNumber != 5 && fRunNumber != 6
+    && fRunNumber != 7 && fRunNumber != 0) {
     G4Exception(
       "DetectorConstruction", "DC02", FatalException,
       "This run setup is not implemented "

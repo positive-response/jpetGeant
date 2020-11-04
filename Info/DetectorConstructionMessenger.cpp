@@ -91,7 +91,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     fDetector->UpdateGeometry();
   } else if (command == fGeometryFileName) {
     fDetector->CreateGeometryFileFlag(true);
-    if(!newValue.contains(".json")){
+    if(!newValue.contains(".json")) {
       newValue.append(".json");
     }
     fDetector->SetGeometryFileName(newValue);

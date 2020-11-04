@@ -1,12 +1,16 @@
-# Authors - alphabetically
+# Authors
 
-- [Jyoti Chhokar](https://github.com/Jchhokar)
+# General development
 - [Kamil Dulski](https://github.com/kdulski)
-- [Aleksander Gajos](https://github.com/alekgajos)
 - [Krzysztof Kacprzak](https://github.com/kkacprzak)
+
+# Support
+- [Jyoti Chhokar](https://github.com/Jchhokar)
+- [Aleksander Gajos](https://github.com/alekgajos)
 - [Nikodem Krawczyk](https://github.com/Alvarness)
 - [Wojciech Krzemień](https://github.com/wkrzemien)
 - [Kamil Rakoczy](https://github.com/grey277)
 - [Sushil Sharma](https://github.com/pnp-sushil)
 
-- [Daria Kisielewska](https://github.com/daria137)  former main developer
+# Former developers
+- [Daria Kisielewska](https://github.com/daria137)
