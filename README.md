@@ -22,7 +22,7 @@ Please choose among the following options:
 * [Installation](docs/install.md)
 * [Introduction](docs/intro.md)
 * [API overview and examples](docs/user_intro.md)
-* [Manual.pdf](docs/manual_v3.1.pdf)
+* [Manual.pdf](docs/manual_v4.pdf)
 * [Authors](docs/authors.md)
 
 ### Support \& bug reporting 
