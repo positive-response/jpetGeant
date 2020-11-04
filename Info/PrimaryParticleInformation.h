@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -28,20 +28,23 @@ public:
   void Clear();
   virtual void Print() const;
 
-  G4int GetIndex() {return fIndex;}
-  G4int GetGammaMultiplicity() {return fDecayMultiplicity;}
-  G4int GetGeneratedGammaMultiplicity() {return fGeneratedMultiplicity;}
-  void SetGeneratedGammaMultiplicity(G4int i) {fGeneratedMultiplicity = i;}
-  void SetIndex(G4int i) {fIndex = i;}
+  G4int GetIndex() { return fIndex; }
+  G4int GetGammaMultiplicity() { return fDecayMultiplicity; }
+  G4int GetGeneratedGammaMultiplicity() { return fGeneratedMultiplicity; }
+  void SetGeneratedGammaMultiplicity(G4int i) { fGeneratedMultiplicity = i; }
+  void SetIndex(G4int i) { fIndex = i; }
   void SetGammaMultiplicity(G4int i) { fDecayMultiplicity = i; }
   void SetGenMomentum(G4double x, G4double y, G4double z);
-  G4ThreeVector GenGenMomentum() {return fGenMomentum;}
+  G4ThreeVector GenGenMomentum() { return fGenMomentum; }
 
   //! Multiplicity flags
   static const G4int kBackground = 0;
   static const G4int kPromptGamma = 1;
   static const G4int kBackToBackGamma = 2;
   static const G4int koPsGamma = 3;
+  static const G4int kScatteringInNonActivePartAddition = 10;
+  static const G4int kSecondaryParticleMultiplication = 10;
+  static const G4int kScatteringInActivePartAddition = 100;
 
 private:
   G4int fIndex;
@@ -50,4 +53,4 @@ private:
   G4ThreeVector fGenMomentum;
 };
 
-#endif
+#endif /* !PRIMARY_PARTICLE_INFORMATION_H */

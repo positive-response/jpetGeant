@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -15,15 +15,19 @@
 
 #include "../Core/DetectorConstruction.h"
 #include "PrimaryGeneratorAction.h"
+
 #include <G4PrimaryVertex.hh>
 
+PrimaryGeneratorAction::PrimaryGeneratorAction() {}
+
 PrimaryGeneratorAction::PrimaryGeneratorAction(HistoManager* histo) :
-  G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHisto(histo)
+G4VUserPrimaryGeneratorAction(), fPrimaryGenerator(0), fHistoManager(histo)
 {
   fPrimaryGenerator = new PrimaryGenerator();
   fBeam = new BeamParams();
   fIsotope = new SourceParams();
   fMessenger = new PrimaryGeneratorActionMessenger(this);
+  DetectorConstruction::GetInstance()->SetHistoManager(histo);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -46,17 +50,18 @@ void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
   }
 }
 
+// cppcheck-suppress unusedFunction
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   //! if setup for dedicated run is set then ignore its modifications made by user
   G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
-  if ( nRun != 0) {
+  if (nRun != 0) {
     if (GetSourceTypeInfo() != "run") {
       SetSourceTypeInfo("run");
     }
   }
 
-  if ( GetSourceTypeInfo() == ("run")) {
+  if (GetSourceTypeInfo() == ("run")) {
     if (nRun == 3) {
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
     } else if (nRun == 5) {
@@ -64,8 +69,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     } else if (nRun == 6 || nRun == 7) {
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
     } else {
-      G4Exception("PrimaryGeneratorAction", "PG05", FatalException,
-                  "Called run with non-exisitng geometry");
+      G4Exception(
+        "PrimaryGeneratorAction", "PG05", FatalException,
+        "Called run with non-exisitng geometry"
+      );
     }
   } else if (GetSourceTypeInfo() == ("beam")) {
     fPrimaryGenerator->GenerateBeam(fBeam, event);
@@ -74,17 +81,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("nema")) {
     fPrimaryGenerator->GenerateNema(GetNemaPoint(), event);
   } else {
-    G4Exception("PrimaryGeneratorAction", "PG05", FatalException,
-                "Called run with non-exisitng geometry");
+    G4Exception(
+      "PrimaryGeneratorAction", "PG05", FatalException,
+      "Called run with non-exisitng geometry"
+    );
   }
 }
 
 void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
 {
-  if (
-    std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSourceType)
-    != std::end(fAllowedSourceTypes)
-  ) {
+  if (std::find(std::begin(fAllowedSourceTypes), std::end(fAllowedSourceTypes), newSourceType)
+                != std::end(fAllowedSourceTypes)) {
     //! setup found
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if ((nRun == 0) && (newSourceType != "run")) {

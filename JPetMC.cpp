@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -15,21 +15,19 @@
 
 #include "Actions/ActionInitialization.h"
 #include "Core/DetectorConstruction.h"
+#include "Info/EventMessenger.h"
 #include "Core/PhysicsList.h"
-#include <G4VisExecutive.hh>
 #include "Core/RunManager.h"
+
+#include <G4VisExecutive.hh>
 #include <G4UIExecutive.hh>
 #include <G4INCLRandom.hh>
 #include <G4UImanager.hh>
-#include "Info/EventMessenger.h"
 #include <fstream>
 #include <random>
 
-
-
 int main (int argc, char** argv)
 {
-
   G4Random::setTheEngine(new CLHEP::MTwistEngine());
 
   G4UIExecutive* ui = 0;
@@ -58,7 +56,6 @@ int main (int argc, char** argv)
     delete ui;
   }
 
-
   delete visManager;
   delete runManager;
 
@@ -69,9 +66,5 @@ int main (int argc, char** argv)
     file << seed << "\n";
     file.close();
   }
-
-
   return 0;
 }
-
-

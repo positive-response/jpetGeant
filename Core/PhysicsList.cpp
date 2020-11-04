@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -13,8 +13,8 @@
  *  @file PhysicsList.cpp
  */
 
-#include <G4EmLivermorePolarizedPhysics.hh>
 #include "PhysicsList.h"
+#include <G4EmLivermorePolarizedPhysics.hh>
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
@@ -23,3 +23,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 }
 
 PhysicsList::~PhysicsList() {}
+
+// cppcheck-suppress unusedFunction
+void PhysicsList::SetCuts()
+{
+//  SetVerboseLevel(1);     // select verbosity
+  SetCutValue(fEvtMessenger->GetRangeCut(),"e-");
+}

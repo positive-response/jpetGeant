@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -17,16 +17,17 @@
 #define HISTOMANAGER_H 1
 
 #include "../Objects/Framework/JPetGeantEventInformation.h"
-#include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantDecayTree.h"
+#include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantScinHits.h"
 #include "../Objects/Geant4/DetectorHit.h"
-#include "../Info/VtxInformation.h"
 #include "../Info/EventMessenger.h"
+#include "../Info/VtxInformation.h"
+
 #include <G4PrimaryParticle.hh>
+#include <THashTable.h>
 #include <G4Event.hh>
 #include <globals.hh>
-#include <THashTable.h>
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1F.h>
@@ -40,8 +41,11 @@ struct doubleCheck
 {
   bool isChanged = false;
   double value = 0.;
-  doubleCheck(){}
-  doubleCheck(double newValue) {value=newValue; isChanged=true;}
+  doubleCheck() {}
+  explicit doubleCheck(double newValue) {
+    value = newValue;
+    isChanged = true;
+  }
 };
 
 /**
@@ -54,36 +58,51 @@ class HistoManager
 public:
   HistoManager();
   ~HistoManager();
-
+  
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
-  void SaveEvtPack() {fTree->Fill();};
-  void Clear() {fEventPack->Clear();};
+  void SaveEvtPack() { fTree->Fill(); };
+  void Clear() { fEventPack->Clear(); };
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
   void AddNewHit(DetectorHit*);
-  void SetEventNumber(int x) {fEventPack->SetEventNumber(x);};
-  void SetHistogramCreation(bool tf) {fMakeControlHisto = tf;};
-  bool GetMakeControlHisto() {return fMakeControlHisto;};
+  void AddNodeToDecayTree(int nodeID, int trackID);
+  void SetParentIDofPhoton(int x) { fParentIDofPhoton = x; };
+  int GetParentIDofPhoton() const { return fParentIDofPhoton; };
+  void SetEventNumber(int x) { fEventPack->SetEventNumber(x); };
+  int GetEventNumber() { return fEventPack->GetEventNumber(); };
+  void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
+  bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void FillHistoGenInfo(const G4Event* anEvent);
-  const JPetGeantEventInformation* GetGeantInfo() {return fGeantInfo;}
-  
-  void createHistogramWithAxes(TObject* object, TString xAxisName="Default X axis title [unit]", 
-                               TString yAxisName="Default Y axis title [unit]", TString zAxisName="Default Z axis title [unit]");
-  void fillHistogram(const char* name, double xValue, doubleCheck yValue=doubleCheck(), doubleCheck zValue=doubleCheck());
-  void writeError(const char* nameOfHistogram, const char* messageEnd );
-  
+  const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
+  void createHistogramWithAxes(
+    TObject* object,
+    TString xAxisName = "Default X axis title [unit]",
+    TString yAxisName = "Default Y axis title [unit]",
+    TString zAxisName = "Default Z axis title [unit]"
+  );
+
+  void fillHistogram(
+    const char* name, double xValue, doubleCheck yValue = doubleCheck(), doubleCheck zValue = doubleCheck()
+  );
+  void writeError(const char* nameOfHistogram, const char* messageEnd);
+
   template <typename T>
-  T* getObject(const char* name)
-  {
+  T* getObject(const char* name) {
     TObject* tmp = fStats.FindObject(name);
-    if (!tmp) {return nullptr;}
+    if (!tmp) {
+      return nullptr;
+    }
     return dynamic_cast<T*>(tmp);
   }
-  
+
 private:
-  bool fbookStatus = false;
-  bool fMakeControlHisto;
+  HistoManager(const HistoManager &histoManagerToCopy);
+
+  int fParentIDofPhoton = 0;
+  bool fEndOfEvent = true;
+  bool fBookStatus = false;
+  bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;
   TTree* fTree = nullptr;
   TBranch* fBranchTrk = nullptr;
@@ -95,10 +114,10 @@ private:
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
 
   void BookHistograms();
-  
+
 protected:
   THashTable fStats;
   std::set<std::string> fErrorCounts;
 };
 
-#endif
+#endif /* !HISTOMANAGER_H */

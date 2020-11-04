@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2019 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,24 +16,64 @@
 #ifndef JPETGEANTDECAYTREE_H
 #define JPETGEANTDECAYTREE_H 1
 
-#include <TVector3.h>
 #include <TObject.h>
+#include <TVector3.h>
+#include <iostream>
 #include <vector>
+#include <map>
 
 /**
  * @class JPetGeantDecayTree
  * @brief Class stores decay tree structures (in form of vertices and tracks)
  * Class is not yet implemented
  */
+
+enum InteractionType
+{
+  kPrimaryGamma,
+  kScattActivePart,
+  kScattNonActivePart,
+  kSecondaryPart,
+  kUnknownInteractionType
+};
+
+struct Branch {
+  Branch() {};
+  Branch(int trackID, int primaryBranch);
+  int fTrackID = -1;             //ID of the track corresponding to this branch
+  std::vector<int> fNodeIDs;    //container for all of the nodes
+  std::vector<InteractionType> fInteractionType;
+  int fPrimaryBranchID = -1;       //-1 for branch coming from primary photon, primary branchId otherwise
+  
+  void AddNodeID(int nodeID, InteractionType interactionType);
+  int GetTrackID() const { return fTrackID; };
+  int GetPrimaryNodeID() const { return fNodeIDs[0]; };
+  int GetLastNodeID() const { return fNodeIDs[fNodeIDs.size()-1]; };
+  int GetPrimaryBranchID() const { return fPrimaryBranchID; };
+  int GetPreviousNodeID(int nodeID) const;
+  InteractionType GetInteractionType(int nodeID) const;
+};
+
 class JPetGeantDecayTree : public TObject
 {
 
 public:
   JPetGeantDecayTree();
   ~JPetGeantDecayTree();
+  
+  void Clean();
+  void ClearVectors();
+  
+  int FindPrimaryPhoton(int nodeID);
+  void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
+  Branch GetBranch(unsigned trackID) const;
 
 private:
-  ClassDef(JPetGeantDecayTree, 1)
+  std::vector<Branch> fBranches;
+  std::map<int, int> fTrackBranchConnection;
+     
+  ClassDef(JPetGeantDecayTree,3)
+
 };
 
-#endif
+#endif /* !JPETGEANTDECAYTREE_H */
