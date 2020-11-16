@@ -29,7 +29,7 @@
 EventAction::EventAction() : is2gRec(false), is3gRec(false)
 {}
 
-EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fHistoManager(histo), fScinCollID(-1), is2gRec(false), is3gRec(false)
+EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fHistoManager(histo), fScinCollID(-1), is2gRec(false), is3gRec(false), fEventID(0)
 {}
 
 EventAction::~EventAction() {}
@@ -43,6 +43,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
     fScinCollID = SDman->GetCollectionID(colNam = "detectorCollection");
   }
   fHistoManager->Clear();
+  fHistoManager->SetEventNumber(fEventID);
+  fEventID++;
 }
 
 // cppcheck-suppress unusedFunction

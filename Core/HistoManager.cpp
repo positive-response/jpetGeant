@@ -382,6 +382,8 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
     JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
     newDecayTree->Clean();
     fEndOfEvent = false;
+    newDecayTree->SetEventNumber(GetEventNumber());
+    newDecayTree->SetDecayChannel(fDecayChannel);
     if (firstInteraction) {
       newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }

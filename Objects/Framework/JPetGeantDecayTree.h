@@ -16,6 +16,8 @@
 #ifndef JPETGEANTDECAYTREE_H
 #define JPETGEANTDECAYTREE_H 1
 
+#include "../../Core/MaterialExtension.h"
+
 #include <TObject.h>
 #include <TVector3.h>
 #include <iostream>
@@ -64,11 +66,17 @@ public:
   void Clean();
   void ClearVectors();
   
+  void SetEventNumber(int eventID) { fEventID = eventID; };
+  void SetDecayChannel(MaterialExtension::DecayChannel decayChannel) { fDecayChannel = decayChannel; };
   int FindPrimaryPhoton(int nodeID);
   void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
   Branch GetBranch(unsigned trackID) const;
+  int GetEventNumber() { return fEventID; };
+  MaterialExtension::DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
+  int fEventID;
+  MaterialExtension::DecayChannel fDecayChannel;
   std::vector<Branch> fBranches;
   std::map<int, int> fTrackBranchConnection;
      

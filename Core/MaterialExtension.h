@@ -35,7 +35,7 @@ class MaterialExtension : public G4Material
 {
 public:
   enum DecayChannel { 
-    Ortho2G, Ortho3G, Para2G, Direct, Para3G
+    Ortho2G, Ortho3G, Para2G, Para3G, Direct2G, Direct3G, Unknown
   };
     
   MaterialExtension(

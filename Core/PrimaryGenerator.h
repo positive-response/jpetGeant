@@ -39,8 +39,10 @@ public:
   void GenerateEvtSmallChamber(G4Event* event, const G4double);
   void GenerateEvtLargeChamber(G4Event* event);
   virtual void GeneratePrimaryVertex(G4Event*){};
+  MaterialExtension::DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
+  MaterialExtension::DecayChannel fDecayChannel = MaterialExtension::DecayChannel::Unknown;
   //! return: vtx position, 2/3g ratio, meanlifetime;
   //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionInFilledSphere(

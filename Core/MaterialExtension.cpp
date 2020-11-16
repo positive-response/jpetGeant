@@ -91,9 +91,9 @@ G4double MaterialExtension::GetLifetime(double randNumber, DecayChannel channel)
     return fMaterialParameters->GetoPs2GLifetimeFromVector(randNumber);
   } else if (channel == DecayChannel::Ortho3G) {
     return fMaterialParameters->GetoPs3GLifetimeFromVector(randNumber);
-  } else if (channel == DecayChannel::Para2G) {
+  } else if (channel == DecayChannel::Para2G || channel == DecayChannel::Para3G) {
     return fMaterialParameters->GetpPsLifetime();
-  } else if (channel == DecayChannel::Direct) {
+  } else if (channel == DecayChannel::Direct2G || channel == DecayChannel::Direct3G ) {
     return fMaterialParameters->GetDirectLifetimeFromVector(randNumber);
   } else {
     G4Exception(
@@ -128,15 +128,14 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
     }
   }
 
-  G4double pPs = fMaterialParameters->GetpPs2GTotalIntensity();
+  G4double pPs2G = fMaterialParameters->GetpPs2GTotalIntensity();
   G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();
   G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
   G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
   G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
   G4double pPs3G = 0; //fMaterialParameters->GetpPs3GTotalIntensity();
 
-  //! 2g direct // 2g pickoff // 3g direct // 3g oPs
-  frac = { pPs, direct2g, oPs2G, direct3g, oPs3G, pPs3G };
+  frac = { pPs2G, direct2g, oPs2G, direct3g, oPs3G, pPs3G };
   return frac;
 }
  
