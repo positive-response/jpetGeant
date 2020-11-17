@@ -21,7 +21,6 @@
 #include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantScinHits.h"
 #include "../Objects/Geant4/DetectorHit.h"
-#include "../Core/MaterialExtension.h"
 #include "../Info/EventMessenger.h"
 #include "../Info/VtxInformation.h"
 
@@ -74,7 +73,7 @@ public:
   int GetEventNumber() { return fEventPack->GetEventNumber(); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
-  void SetDecayChannel(MaterialExtension::DecayChannel decayChannel) { fDecayChannel = decayChannel; };
+  void SetDecayChannel(DecayChannel decayChannel) { fDecayChannel = decayChannel; };
   void FillHistoGenInfo(const G4Event* anEvent);
   const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
   void createHistogramWithAxes(
@@ -103,7 +102,7 @@ private:
 
   int fParentIDofPhoton = 0;
   bool fEndOfEvent = true;
-  MaterialExtension::DecayChannel fDecayChannel;
+  DecayChannel fDecayChannel;
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;

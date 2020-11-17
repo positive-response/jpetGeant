@@ -26,7 +26,7 @@
 #include <G4Event.hh>
 #include "G4RunManager.hh"
 
-EventAction::EventAction() : is2gRec(false), is3gRec(false)
+EventAction::EventAction() : is2gRec(false), is3gRec(false), fEventID(0)
 {}
 
 EventAction::EventAction(HistoManager* histo) : G4UserEventAction(), fHistoManager(histo), fScinCollID(-1), is2gRec(false), is3gRec(false), fEventID(0)

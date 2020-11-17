@@ -16,8 +16,6 @@
 #ifndef JPETGEANTDECAYTREE_H
 #define JPETGEANTDECAYTREE_H 1
 
-#include "../../Core/MaterialExtension.h"
-
 #include <TObject.h>
 #include <TVector3.h>
 #include <iostream>
@@ -26,8 +24,7 @@
 
 /**
  * @class JPetGeantDecayTree
- * @brief Class stores decay tree structures (in form of vertices and tracks)
- * Class is not yet implemented
+ * @brief Class stores decay tree structures (in form of nodes and tracks)
  */
 
 enum InteractionType
@@ -37,6 +34,10 @@ enum InteractionType
   kScattNonActivePart,
   kSecondaryPart,
   kUnknownInteractionType
+};
+
+enum DecayChannel { 
+  Ortho2G, Ortho3G, Para2G, Para3G, Direct2G, Direct3G, Unknown
 };
 
 struct Branch {
@@ -67,16 +68,16 @@ public:
   void ClearVectors();
   
   void SetEventNumber(int eventID) { fEventID = eventID; };
-  void SetDecayChannel(MaterialExtension::DecayChannel decayChannel) { fDecayChannel = decayChannel; };
+  void SetDecayChannel(DecayChannel decayChannel) { fDecayChannel = decayChannel; };
   int FindPrimaryPhoton(int nodeID);
   void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
   Branch GetBranch(unsigned trackID) const;
   int GetEventNumber() { return fEventID; };
-  MaterialExtension::DecayChannel GetDecayChannel() { return fDecayChannel; };
+  DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
   int fEventID;
-  MaterialExtension::DecayChannel fDecayChannel;
+  DecayChannel fDecayChannel;
   std::vector<Branch> fBranches;
   std::map<int, int> fTrackBranchConnection;
      

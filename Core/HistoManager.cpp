@@ -24,6 +24,7 @@ HistoManager::HistoManager() : fMakeControlHisto(true)
 {
   fEventPack = new JPetGeantEventPack();
   fGeantInfo = fEventPack->GetEventInformation();
+  fDecayChannel = DecayChannel::Unknown;
 }
 
 HistoManager::~HistoManager() {}
