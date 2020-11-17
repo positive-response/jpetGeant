@@ -152,6 +152,8 @@ private:
   MaterialExtension* fAluminiumMaterial = nullptr;
   MaterialExtension* fSmallChamberMaterial = nullptr;
   MaterialExtension* fSmallChamberRun7Material = nullptr;
+  //! Vacuum
+  G4Material* vacuum = nullptr;
 
   G4LogicalVolume* fScinLog = nullptr;
   G4LogicalVolume* fScinLogInModule = nullptr;
