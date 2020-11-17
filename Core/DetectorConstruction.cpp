@@ -238,6 +238,25 @@ void DetectorConstruction::InitializeMaterials()
     G4Material::GetMaterial("G4_NYLON-6-6")
   );
   fSmallChamberRun7Material->AllowsAnnihilations(true);
+  
+  
+  //! Vacuum
+  G4double z, a;
+  G4String name;
+  G4double density = 1.e-25 *g/cm3;
+  G4double temperature = 295. *kelvin;
+  G4double pressure =  1.e-19 *pascal;
+  
+  nistManager->FindOrBuildMaterial("G4_Galactic");
+  vacuum = new G4Material( 
+    name="G4_Galactic", z=1., a=1.01*g/mole, density, 
+    kStateGas, temperature, pressure
+  );
+  fVacuum = new MaterialExtension(
+    MaterialParameters::MaterialID::mAir, "vacuum", vacuum
+  );
+  
+  
 }
 
 /**
@@ -590,6 +609,18 @@ void DetectorConstruction::ConstructTargetRun3()
     transform, unionSolid_logical, "bigChamberInnerStructure",
     fWorldLogical, true, 0, checkOverlaps
   );
+  
+  // Vacuum
+  G4Tubs* bigChamberRun3_vac = new G4Tubs(
+    "bigChamberRun3_vac", 0 * cm, chamber_radius_inner - 0.01 * cm,
+    31. * cm , 0 * degree, 360 * degree);
+  
+  G4LogicalVolume* Run3Vac_logical = new G4LogicalVolume(
+    bigChamberRun3_vac, fVacuum, "Run3Vac_logical");
+  
+  new G4PVPlacement(
+    transform, Run3Vac_logical, "bigChamberRun3_vacuum",
+    bigChamber_logical, true, 0, checkOverlaps);
 }
 
 /**
@@ -673,6 +704,18 @@ void DetectorConstruction::ConstructTargetRun5()
     transform, xadFilling_logical, "xadFillingGeom",
     fWorldLogical, true, 0, checkOverlaps
   );
+  
+  // Vacuum
+  G4Tubs* smallChamber_vac = new G4Tubs(
+    "smallChamber_vac", 0 * cm, chamber_radius_inner - 0.01 * cm, 
+    halfZ , 0 * degree, 360 * degree);
+  
+  G4LogicalVolume* Run5Vac_logical = new G4LogicalVolume(
+    smallChamber_vac, fVacuum, "Run5Vac_logical");
+  
+  new G4PVPlacement(transform, Run5Vac_logical, "smallChamber_vacuum",
+                    smallChamber_logical, true, 0, checkOverlaps);
+  
 }
 
 /**
@@ -818,6 +861,20 @@ void DetectorConstruction::ConstructTargetRun6()
     transform, kaptonFilling_logical, "kaptonFillingGeom",
     fWorldLogical, true, 0, checkOverlaps
   );
+  
+  // Vacuum
+  G4Tubs* bigChamber_Vacuum = new G4Tubs(
+    "bigChamber_Vacuum", 0. *cm,
+    chamber_radius_inner - 0.1 * cm - xad_halfthickness - 0.1* cm, 
+    xad_z_coverage, 0 * degree, 360 * degree );
+
+  G4LogicalVolume* bigChamberVac_logical = new G4LogicalVolume( 
+    bigChamber_Vacuum, fVacuum, "bigChamberVac_logical");
+  
+  new G4PVPlacement( 
+    transform, bigChamberVac_logical, "bigChamberVac", 
+    bigChamber_logical, true, 0, checkOverlaps);
+  
 }
 
 void DetectorConstruction::ConstructTargetRun7()
@@ -879,6 +936,19 @@ void DetectorConstruction::ConstructTargetRun7()
     transform, xadFilling_logical, "xadFillingGeom",
     fWorldLogical, true, 0, checkOverlaps
   );
+  
+  // Vacuum
+  G4Tubs* smallChamberRun7_vac = new G4Tubs(
+    "smallChamberRun7_vac", 0 * cm, 0.53 * cm, 2.7 * cm , 
+    0 * degree, 360 * degree);
+  
+  G4LogicalVolume* Run7Vac_logical = new G4LogicalVolume(
+    smallChamberRun7_vac, fVacuum, "Run7Vac_logical");
+  
+  new G4PVPlacement(
+    transform, Run7Vac_logical, "smallChamberRun7_vacuum", 
+    smallChamber_logical, true, 0, checkOverlaps);
+  
 }
 
 void DetectorConstruction::CreateGeometryFile()
