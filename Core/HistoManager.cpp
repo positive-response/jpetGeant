@@ -254,8 +254,6 @@ void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
 
   fillHistogram("gen_3g_angles", theta_12, doubleCheck(theta_23));
   fillHistogram("gen_energy", fGeantInfo->GetMomentumGamma(1).Mag(), doubleCheck(fGeantInfo->GetMomentumGamma(2).Mag()));
-  fillHistogram("gen_g_ene", fGeantInfo->GetMomentumGamma(1).Mag());
-  
 }
 
 void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
