@@ -188,11 +188,11 @@ void DetectorConstruction::InitializeMaterials()
     MaterialParameters::MaterialID::mKapton, "kapton",
     G4Material::GetMaterial("G4_KAPTON")
   );
-  nistManager->FindOrBuildMaterial("G4_Galactic");
-  fVacuum = new MaterialExtension(
-    MaterialParameters::MaterialID::mAir, "vacuum",
-    G4Material::GetMaterial("G4_Galactic")
-  );
+  //nistManager->FindOrBuildMaterial("G4_Galactic");
+  //fVacuum = new MaterialExtension(
+   // MaterialParameters::MaterialID::mAir, "vacuum",
+   // G4Material::GetMaterial("G4_Galactic")
+  //);
 
   //! Plexiglass
   nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
@@ -647,6 +647,7 @@ void DetectorConstruction::ConstructTargetRun5()
   const double chamber_radius_outer_3 = 1.8 * cm;
   const double chamber_radius_outer_4 = 1.57 * cm;
   const double xadFilling_halfthickness = 0.6 * cm;
+  const double halfZ = 2.6 * cm;
 
   G4RotationMatrix rot = G4RotationMatrix();
   G4double z[] = {
