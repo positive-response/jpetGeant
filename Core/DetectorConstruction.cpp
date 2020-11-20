@@ -241,22 +241,22 @@ void DetectorConstruction::InitializeMaterials()
   
   
   //! Vacuum
-  G4double EffAtomNumbZ, EffMolMassA;
+  G4double EffAtomNumbZ = 1. ;
+  G4double EffMolMassA = 1.01 *g/mole;
   G4String name = "G4_Galactic";
-  G4double density = 1.e-25 *g/cm3;
+  G4double density = (fPressure/1.e-19 *pascal) * 1.209e-24 *g/cm3;
+  //! Density linearly extrapolated from the air density and pressure
   G4double temperature = 295. *kelvin;
-  G4double pressure =  1.e-19 *pascal;
   
   nistManager->FindOrBuildMaterial("G4_Galactic");
   vacuum = new G4Material( 
-    name, EffAtomNumbZ =1., EffMolMassA =1.01*g/mole, density, 
-    kStateGas, temperature, pressure
+    name, EffAtomNumbZ, EffMolMassA, density, 
+    kStateGas, temperature, fPressure
   );
   fVacuum = new MaterialExtension(
     MaterialParameters::MaterialID::mAir, "vacuum", vacuum
   );
-  
-  
+    
 }
 
 /**
