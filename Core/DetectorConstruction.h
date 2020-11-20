@@ -68,6 +68,7 @@ public:
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
+  void SetPressureInChamber(G4double pressure) {fPressure = pressure;};
 
   //! Basic geometry with 3 layers of scintillators
   void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
@@ -162,6 +163,8 @@ private:
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
   G4int maxScinID = 512;
+  //! Pressure in chamber
+  G4double fPressure = 1.e-19 *pascal;
 
   std::vector<Layer> fLayerContainer;
   std::vector<Scin> fScinContainer;
