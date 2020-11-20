@@ -188,11 +188,11 @@ void DetectorConstruction::InitializeMaterials()
     MaterialParameters::MaterialID::mKapton, "kapton",
     G4Material::GetMaterial("G4_KAPTON")
   );
-  //nistManager->FindOrBuildMaterial("G4_Galactic");
-  //fVacuum = new MaterialExtension(
-   // MaterialParameters::MaterialID::mAir, "vacuum",
-   // G4Material::GetMaterial("G4_Galactic")
-  //);
+  nistManager->FindOrBuildMaterial("G4_Galactic");
+  fVacuum = new MaterialExtension(
+    MaterialParameters::MaterialID::mAir, "vacuum",
+    G4Material::GetMaterial("G4_Galactic")
+  );
 
   //! Plexiglass
   nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
@@ -241,15 +241,15 @@ void DetectorConstruction::InitializeMaterials()
   
   
   //! Vacuum
-  G4double z, a;
-  G4String name;
+  G4double EffAtomNumbZ, EffMolMassA;
+  G4String name = "G4_Galactic";
   G4double density = 1.e-25 *g/cm3;
   G4double temperature = 295. *kelvin;
   G4double pressure =  1.e-19 *pascal;
   
   nistManager->FindOrBuildMaterial("G4_Galactic");
   vacuum = new G4Material( 
-    name="G4_Galactic", z=1., a=1.01*g/mole, density, 
+    name, EffAtomNumbZ =1., EffMolMassA =1.01*g/mole, density, 
     kStateGas, temperature, pressure
   );
   fVacuum = new MaterialExtension(
@@ -525,6 +525,8 @@ void DetectorConstruction::ConstructTargetRun3()
   const double chamber_radius_outer = 7.5 * cm;
   const double chamber_endcup_min = 3.0 * cm;
   const double chamber_endcup_max = 10.0 * cm;
+  const double vacuumChamber_halfLength = 31.0 * cm;
+  const double vacuumChamber_outerRadius = chamber_radius_inner - 0.01 * cm; 
 
   G4RotationMatrix rot = G4RotationMatrix();
 
@@ -612,8 +614,8 @@ void DetectorConstruction::ConstructTargetRun3()
   
   // Vacuum
   G4Tubs* bigChamberRun3_vac = new G4Tubs(
-    "bigChamberRun3_vac", 0 * cm, chamber_radius_inner - 0.01 * cm,
-    31. * cm , 0 * degree, 360 * degree);
+    "bigChamberRun3_vac", 0 * cm, vacuumChamber_outerRadius,
+    vacuumChamber_halfLength , 0 * degree, 360 * degree);
   
   G4LogicalVolume* Run3Vac_logical = new G4LogicalVolume(
     bigChamberRun3_vac, fVacuum, "Run3Vac_logical");
@@ -647,7 +649,8 @@ void DetectorConstruction::ConstructTargetRun5()
   const double chamber_radius_outer_3 = 1.8 * cm;
   const double chamber_radius_outer_4 = 1.57 * cm;
   const double xadFilling_halfthickness = 0.6 * cm;
-  const double halfZ = 2.6 * cm;
+  const double vacuumChamber_halfLength = 2.6 * cm;
+  const double vacuumChamber_outerRadius = chamber_radius_inner - 0.01 * cm;
 
   G4RotationMatrix rot = G4RotationMatrix();
   G4double z[] = {
@@ -708,8 +711,8 @@ void DetectorConstruction::ConstructTargetRun5()
   
   // Vacuum
   G4Tubs* smallChamber_vac = new G4Tubs(
-    "smallChamber_vac", 0 * cm, chamber_radius_inner - 0.01 * cm, 
-    halfZ , 0 * degree, 360 * degree);
+    "smallChamber_vac", 0 * cm, vacuumChamber_outerRadius, 
+    vacuumChamber_halfLength , 0 * degree, 360 * degree);
   
   G4LogicalVolume* Run5Vac_logical = new G4LogicalVolume(
     smallChamber_vac, fVacuum, "Run5Vac_logical");
@@ -939,9 +942,14 @@ void DetectorConstruction::ConstructTargetRun7()
   );
   
   // Vacuum
+  const double vacuumChamber_halfLength = 2.79 * cm;
+  //! vacuumChamber_halfLength is slightly less than effective half length of target chamber (2.8 cm)
+  const double vacuumChamber_outerRadius = 0.53 * cm;
+  //! vacuumChamber_halfLength is slightly less than inner radius of target chamber (0.54 cm)
+    
   G4Tubs* smallChamberRun7_vac = new G4Tubs(
-    "smallChamberRun7_vac", 0 * cm, 0.53 * cm, 2.7 * cm , 
-    0 * degree, 360 * degree);
+    "smallChamberRun7_vac", 0 * cm, vacuumChamber_outerRadius, 
+    vacuumChamber_halfLength, 0 * degree, 360 * degree);
   
   G4LogicalVolume* Run7Vac_logical = new G4LogicalVolume(
     smallChamberRun7_vac, fVacuum, "Run7Vac_logical");
