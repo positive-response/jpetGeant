@@ -105,6 +105,6 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
     fDetector->CreateGeometryFileFlag(true);
     fDetector->SetGeometryFileType(newValue);
   } else if (command == fPressureInChamber) {
-    fDetector->SetPressureInChamber(newValue);
+    fDetector->SetPressureInChamber(fPressureInChamber->GetNewDoubleValue(newValue));
   }
 }
