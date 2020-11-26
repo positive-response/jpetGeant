@@ -135,7 +135,6 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
   }
 }
 
-// cppcheck-suppress unusedFunction
 G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
   if (fLoadModularLayer) return 504;
