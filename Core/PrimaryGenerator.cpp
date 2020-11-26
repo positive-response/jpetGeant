@@ -347,6 +347,67 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   ));
 }
 
+void PrimaryGenerator::GenerateEvtSphChamber(G4Event* event)
+{
+  G4ThreeVector chamberCenter = DetectorConstants::GetChamberCenter();
+  G4ThreeVector vtxPosition;
+  MaterialExtension* material;
+  std::tie(vtxPosition, material) = GetVerticesDistributionAlongStepVector(
+    chamberCenter, GetRandomPointInFilledSphere(1.0f * mm)
+  );
+  std::vector<G4double> evtFractions = material->GetEventsFraction();
+  G4double random = G4UniformRand();
+
+  //! for sodium: emitted positrons have up to 100~keV velocity
+  //! therefore their speed v=sqrt(2*e/m) = 0.6c
+  G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
+
+  if (evtFractions[0] > random) {
+  // pPs
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, T0,
+      material->GetLifetime(random, MaterialExtension::DecayChannel::Para2G)
+    ));
+  } else if (evtFractions[0] + evtFractions[1] > random) {
+  // Direct 2G
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0], MaterialExtension::DecayChannel::Direct)
+    ));   
+  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
+  // oPs 2G
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1], MaterialExtension::DecayChannel::Ortho2G)
+    ));    
+  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
+  // Direct 3G
+    event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      MaterialExtension::DecayChannel::Direct, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], MaterialExtension::DecayChannel::Direct)
+    ));
+  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
+  // oPs 3G
+    event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      MaterialExtension::DecayChannel::Ortho3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], MaterialExtension::DecayChannel::Ortho3G)
+    ));
+  } else {
+  // pPs 3G
+    event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      MaterialExtension::DecayChannel::Para3G, vtxPosition, T0,
+      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3]- evtFractions[4], MaterialExtension::DecayChannel::Para3G)
+    ));
+  }
+
+  //! Add prompt gamma from sodium
+  G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
+  event->AddPrimaryVertex(GeneratePromptGammaVertex(
+    promptVtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
+    MaterialParameters::fSodiumGammaEnergy
+  ));
+}
+
 void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
 {
   G4ThreeVector vtxCoor = beamParams->GetVtx();
