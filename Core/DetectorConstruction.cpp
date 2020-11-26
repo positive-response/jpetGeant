@@ -1105,9 +1105,13 @@ void DetectorConstruction::ConstructTargetRun12()
   // SphericalChamber
   const double kapton_foil_radius_outer = 24 * mm;
   const double kapton_foil_halfthickness = 0.1 * cm;
+  const double sphChamber_radius_inner = 97. * mm
+  const double sphChamber_radius_outer = 100. * mm
+  const double silica_filling_radius_inner = 95. * mm
   
   G4Sphere* sphericalChamber = new G4Sphere(
-    "Sphere", 97*mm, 100*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+    "Sphere", sphChamber_radius_inner, sphChamber_radius_outer,
+    0*degree, 360*degree, 0*degree, 360*degree);
 
   G4LogicalVolume* sphericalChamber_logical = new G4LogicalVolume(
     sphericalChamber, fPlexiglass, "sphericalChamber_logical");
@@ -1127,7 +1131,8 @@ void DetectorConstruction::ConstructTargetRun12()
   sphericalChamber_logical->SetVisAttributes(sphChamberVisAtt);
 
   G4Sphere* silicaFilling = new G4Sphere(
-    "silicaFilling", 95*mm, 97*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+    "silicaFilling", silica_filling_radius_inner, sphChamber_radius_inner - 0.1 * mm , 
+    0*degree, 360*degree, 0*degree, 360*degree);
 
   G4LogicalVolume* silicaFilling_logical = new G4LogicalVolume(
     silicaFilling, fSiliconDioxide, "silicaFilling_logical");
@@ -1142,7 +1147,8 @@ void DetectorConstruction::ConstructTargetRun12()
   silicaFilling_logical->SetVisAttributes(silicaVisAtt);
 
   G4Sphere* sphere_vacuum = new G4Sphere(
-    "vacuumSphere", 0*mm, 95*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+    "vacuumSphere", 0*mm, silica_filling_radius_inner - 0.1 *mm, 
+    0*degree, 360*degree, 0*degree, 360*degree);
 
   G4LogicalVolume* sphereVacuum_logical = new G4LogicalVolume(
     sphere_vacuum, fVacuum, "vacuumSphere");
