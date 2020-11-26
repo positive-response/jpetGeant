@@ -120,6 +120,8 @@ private:
   void ConstructTargetRun6();
   //! Create target used in run7
   void ConstructTargetRun7();
+  //! Create target for run12
+  void ConstructTargetRun12();
 
   void ConstructLayers(
     std::vector<G4double>& radius_dynamic, G4int& numberofModules,
@@ -155,6 +157,11 @@ private:
   MaterialExtension* fSmallChamberRun7Material = nullptr;
   //! Vacuum
   G4Material* vacuum = nullptr;
+  
+  MaterialExtension* fPolycarbonate = nullptr;
+  MaterialExtension* fPolyoxymethylene = nullptr;
+  MaterialExtension* fSiliconDioxide = nullptr;
+  MaterialExtension* fStainlessSteel = nullptr;
 
   G4LogicalVolume* fScinLog = nullptr;
   G4LogicalVolume* fScinLogInModule = nullptr;
