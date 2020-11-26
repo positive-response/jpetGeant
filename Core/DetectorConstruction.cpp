@@ -29,6 +29,7 @@
 #include <boost/optional.hpp>
 #include <G4RegionStore.hh>
 #include <G4SolidStore.hh>
+#include <G4Sphere.hh>
 #include <G4UnionSolid.hh>
 #include <G4Polycone.hh>
 #include <G4Tubs.hh>
@@ -95,6 +96,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ConstructTargetRun6();
   } else if (fRunNumber == 7) {
     ConstructTargetRun7();
+  } else if (fRunNumber == 12) {
+     ConstructTargetRun12();
   }
 
   if (fCreateGeometryFile) {
@@ -126,7 +129,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 {
   fRunNumber = nr;
   if (fRunNumber != 3 && fRunNumber != 5 && fRunNumber != 6
-    && fRunNumber != 7 && fRunNumber != 0) {
+    && fRunNumber != 7 && fRunNumber != 12 && fRunNumber != 0) {
     G4Exception(
       "DetectorConstruction", "DC02", FatalException,
       "This run setup is not implemented "
@@ -164,7 +167,19 @@ void DetectorConstruction::ReloadMaterials(const G4String& material)
     fPlexiglass->FillIntensities();
   } else if (material == "pa6") {
     fSmallChamberRun7Material->ChangeMaterialConstants();
-    fSmallChamberRun7Material->FillIntensities();
+    fSmallChamberRun7Material->FillIntensities(); 
+  } else if (material == "StainlessSteel"){
+    fStainlessSteel->ChangeMaterialConstants();
+    fStainlessSteel->FillIntensities();
+  } else if (material == "SiliconDioxide"){
+    fSiliconDioxide->ChangeMaterialConstants();
+    fSiliconDioxide->FillIntensities();
+  } else if (material == "polycarbonate") {
+    fPolycarbonate->ChangeMaterialConstants();
+    fPolycarbonate->FillIntensities();
+  } else if (material == "polyoxymethylene"){
+    fPolyoxymethylene->ChangeMaterialConstants();
+    fPolyoxymethylene->FillIntensities();
   } else {
     G4Exception(
       "DetectorConstruction", "DC01", FatalException, "Wrong material ID given to reload"
@@ -239,7 +254,6 @@ void DetectorConstruction::InitializeMaterials()
   );
   fSmallChamberRun7Material->AllowsAnnihilations(true);
   
-  
   //! Vacuum
   G4double EffAtomNumbZ = 1. ;
   G4double EffMolMassA = 1.01 *g/mole;
@@ -255,6 +269,37 @@ void DetectorConstruction::InitializeMaterials()
   );
   fVacuum = new MaterialExtension(
     MaterialParameters::MaterialID::mAir, "vacuum", vacuum
+  );
+  
+  //! Polycarbonate
+  nistManager->FindOrBuildMaterial("G4_POLYCARBONATE");
+  fPolycarbonate = new MaterialExtension(
+    MaterialParameters::MaterialID::mPolycarbonate, "cydChamber", 
+    G4Material::GetMaterial("G4_POLYCARBONATE")
+  );
+  fPolycarbonate->AllowsAnnihilations(true);
+  
+  //! Polyoxymethylene
+  nistManager->FindOrBuildMaterial("G4_POLYOXYMETHYLENE");
+  fPolyoxymethylene = new MaterialExtension(
+    MaterialParameters::MaterialID::mPolyoxymethylene, "boltsMaterial", 
+    G4Material::GetMaterial("G4_POLYOXYMETHYLENE")
+  );
+  fPolyoxymethylene->AllowsAnnihilations(true);
+
+  //! Silicon-dioxide
+  nistManager->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
+  fSiliconDioxide = new MaterialExtension(
+    MaterialParameters::MaterialID::mSiliconDioxide, "SilicaCoating", 
+    G4Material::GetMaterial("G4_SILICON_DIOXIDE")
+  );
+  fSiliconDioxide->AllowsAnnihilations(true);
+
+  //! Stainless-steel
+  nistManager->FindOrBuildMaterial("G4_STAINLESS-STEEL");
+  fStainlessSteel = new MaterialExtension(
+    MaterialParameters::MaterialID::mStainlessSteel, "StainlessSteel",
+    G4Material::GetMaterial("G4_STAINLESS-STEEL")
   );
     
 }
@@ -957,6 +1002,256 @@ void DetectorConstruction::ConstructTargetRun7()
   new G4PVPlacement(
     transform, Run7Vac_logical, "smallChamberRun7_vacuum", 
     smallChamber_logical, true, 0, checkOverlaps);
+  
+}
+
+/**
+ * Method for construction of setup used for cylinder and endcaps 
+ * in sphericalChamber construction. Parameters taken from fig: 3.3.5
+ * http://koza.if.uj.edu.pl/petwiki/images/2/25/PET_UJ_Report_no_13_2017_-_13_2017.pdf
+ * below main values are written. Please note that chamber is symmetric in z,
+ * therefore only half of the table is presented.
+ *  z        | r Inner  | r Outer | Comment
+ * ----------|----------|---------|-------
+ *  -21.9*cm | 0*cm     | 12.7*cm | endcap end
+ *  -21.8*cm | 0*cm     | 14*cm   | stop slope before endcap end
+ *  -20.2*cm | 0*cm     | 14*cm   | start slope after endcap
+ *  -20.1*cm | 0*cm     | 12.7*cm | endcap start
+ *  -20.8*cm | 12*cm    | 12.3*cm | outer cylinder
+ */
+
+void DetectorConstruction::ConstructTargetRun12()
+{
+  const double cyd_radius_inner = 12.0 * cm;
+  const double cyd_radius_outer = 12.3 * cm;
+  const double cyd_endcap_min = 12.7 * cm;
+  const double cyd_endcap_max = 14.0 * cm;
+  
+  G4double z_cyd[] = { -20.8 *cm,  20.8 * cm};
+  G4double rInner_cyd[] = { cyd_radius_inner, cyd_radius_inner };
+  G4double rOuter_cyd[] = { cyd_radius_outer, cyd_radius_outer};
+
+  G4Polycone* cydChamber = new G4Polycone(
+    "cydChamber", 0 * degree, 360 * degree, 2,
+    z_cyd, rInner_cyd, rOuter_cyd);
+
+  G4LogicalVolume* cydChamber_logical = new G4LogicalVolume(
+    cydChamber, fSiliconDioxide, "cydChamber_logical");
+
+  G4VisAttributes* detVisAtt = new G4VisAttributes(
+    G4Colour(0.8, 0.8, 0.0)
+  ); 
+  detVisAtt->SetForceWireframe(true);
+  detVisAtt->SetForceSolid(false);
+  cydChamber_logical->SetVisAttributes(detVisAtt);
+  
+  G4RotationMatrix rot = G4RotationMatrix();
+  G4ThreeVector loc = DetectorConstants::GetChamberCenter();
+  G4Transform3D transform(rot, loc);
+
+  new G4PVPlacement(
+     transform, cydChamber_logical, "cydChamberGeom",
+     fWorldLogical, true, 0, checkOverlaps);
+
+  G4double z_cydVacuum[] = { -20. *cm,  20. * cm };
+  G4double rOuter_cydVacuum[] = { cyd_radius_inner, cyd_radius_inner };
+  G4double rInner_cydVacuum[] = { 0 * cm, 0* cm};  
+
+  G4Polycone* cydChamberVacuum = new G4Polycone(
+    "cydChamberVacuum", 0 * degree, 360 * degree, 2,
+    z_cydVacuum, rInner_cydVacuum, rOuter_cydVacuum);
+
+  G4LogicalVolume* cydChamberVac_logical = new G4LogicalVolume(
+    cydChamberVacuum, fVacuum, "cydChamberVac_logical");
+
+  new G4PVPlacement( 
+    transform, cydChamberVac_logical, "cydChamberVac", 
+    cydChamber_logical, true, 0, checkOverlaps);
+
+  //  End Caps 
+  G4double z_endCap[] = {
+    -21.9 *cm, -21.8 *cm, -20.2 *cm, -20.1 *cm }; 
+  G4double rInner_endCap[] = {
+    0. *cm,  0. *cm, 0. *cm,  0. *cm};
+  G4double rOuter_endCap[] = {
+    cyd_endcap_min, cyd_endcap_max,  cyd_endcap_max, cyd_radius_outer};
+
+  G4Polycone* endCap = new G4Polycone(
+    "endCap", 0 * degree, 360 * degree, 4,
+    z_endCap, rInner_endCap, rOuter_endCap);
+
+  G4LogicalVolume* endCap_logical = new G4LogicalVolume(
+    endCap, fStainlessSteel, "endCap_logical");
+
+  G4VisAttributes* endCapVisAtt = new G4VisAttributes(
+    G4Colour(0.2, 0.4, 0.0)
+  );    
+  endCapVisAtt->SetForceWireframe(true);
+  endCapVisAtt->SetForceSolid(false);
+  endCap_logical->SetVisAttributes(endCapVisAtt);
+
+  new G4PVPlacement( 
+    transform, endCap_logical, "endCapGeom", 
+    fWorldLogical, true, 0, checkOverlaps);
+
+  G4RotationMatrix rot_endCap = G4RotationMatrix();
+  rot_endCap.rotateY(180 * degree);
+  G4Transform3D transform_endCap(rot_endCap, loc);
+  
+  new G4PVPlacement( 
+    transform_endCap, endCap_logical, "endCapGeom", 
+    fWorldLogical, true, 0, checkOverlaps);
+
+  // SphericalChamber
+  const double kapton_foil_radius_outer = 24 * mm;
+  const double kapton_foil_halfthickness = 0.1 * cm;
+  
+  G4Sphere* sphericalChamber = new G4Sphere(
+    "Sphere", 97*mm, 100*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+
+  G4LogicalVolume* sphericalChamber_logical = new G4LogicalVolume(
+    sphericalChamber, fPlexiglass, "sphericalChamber_logical");
+
+  G4ThreeVector loc_sphere = G4ThreeVector(0. * mm, 0. * mm, 0. * mm); 
+  G4Transform3D transform_sphere(rot, loc_sphere);
+  
+  new G4PVPlacement( 
+    transform_sphere, sphericalChamber_logical, "Sphere",
+    fWorldLogical, true, 0, checkOverlaps);   
+
+  G4VisAttributes* sphChamberVisAtt = new G4VisAttributes(
+    G4Colour(1., 0., 0.));  
+  sphChamberVisAtt->SetForceWireframe(true);
+  sphChamberVisAtt->SetForceSolid(false);
+
+  sphericalChamber_logical->SetVisAttributes(sphChamberVisAtt);
+
+  G4Sphere* silicaFilling = new G4Sphere(
+    "silicaFilling", 95*mm, 97*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+
+  G4LogicalVolume* silicaFilling_logical = new G4LogicalVolume(
+    silicaFilling, fSiliconDioxide, "silicaFilling_logical");
+
+  new G4PVPlacement(
+    transform_sphere, silicaFilling_logical, "silicaFillingGeom",
+    fWorldLogical, true, 0, checkOverlaps);
+
+  G4VisAttributes* silicaVisAtt = new G4VisAttributes(G4Colour(0.2, 0.3, 0.5)); 
+  silicaVisAtt->SetForceWireframe(true);
+  silicaVisAtt->SetForceSolid(false);
+  silicaFilling_logical->SetVisAttributes(silicaVisAtt);
+
+  G4Sphere* sphere_vacuum = new G4Sphere(
+    "vacuumSphere", 0*mm, 95*mm, 0*degree, 360*degree, 0*degree, 360*degree);
+
+  G4LogicalVolume* sphereVacuum_logical = new G4LogicalVolume(
+    sphere_vacuum, fVacuum, "vacuumSphere");
+
+  new G4PVPlacement(
+    transform_sphere, sphereVacuum_logical, "vacuumSphere",
+    sphericalChamber_logical, true, 0, checkOverlaps);
+
+  // 4 Chamber Bolts
+  G4double z[] = {-14.0 * mm, 14.0 * mm};
+  G4double rInner[] = {0 * mm, 0 * mm};
+  G4double rOuter[] = {2.0 * mm,  2.0 * mm};
+
+  G4Polycone* bolt = new G4Polycone(
+    "Bolts", 0 * degree, 360 * degree, 2, 
+    z, rInner, rOuter);
+
+  G4LogicalVolume* bolt_logical = new G4LogicalVolume(
+    bolt, fPolyoxymethylene, "bolt_logical");
+
+  G4VisAttributes* boltsVisAtt = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8));
+  boltsVisAtt->SetForceWireframe(true);
+  boltsVisAtt->SetForceSolid(false);
+  bolt_logical->SetVisAttributes(boltsVisAtt);
+
+  G4ThreeVector loc1, loc2, loc3, loc4;
+  G4Transform3D transform1, transform2, transform3, transform4;
+
+  loc1 = G4ThreeVector(79. * mm, 78. * mm, 0.0);
+  G4RotationMatrix rot1 = G4RotationMatrix();
+  rot1.rotateX(90 * degree);
+  rot1.rotateY(45* degree);
+  rot1.rotateZ(-45* degree);
+  transform1 = G4Transform3D(rot1, loc1);
+  
+  new G4PVPlacement( 
+    transform1, bolt_logical, "Bolts", 
+    fWorldLogical, true, 0, checkOverlaps); 
+
+  loc2 = G4ThreeVector(-79. * mm, 78. * mm, 0.0);
+  G4RotationMatrix rot2 = G4RotationMatrix();
+  rot2.rotateX(90 * degree);
+  rot2.rotateY(45* degree);
+  rot2.rotateZ(45* degree);
+  transform2 = G4Transform3D(rot2, loc2);
+  
+  new G4PVPlacement( 
+    transform2, bolt_logical, "Bolts", 
+    fWorldLogical, true, 0, checkOverlaps); 
+
+  loc3 = G4ThreeVector(-79. * mm, -78. * mm, 0.0);
+  G4RotationMatrix rot3 = G4RotationMatrix();
+  rot3.rotateX(90 * degree);
+  rot3.rotateY(45* degree);
+  rot3.rotateZ(-45* degree);
+  transform3 = G4Transform3D(rot3, loc3);
+  
+  new G4PVPlacement( 
+    transform3, bolt_logical, "Bolts", 
+    fWorldLogical, true, 0, checkOverlaps); 
+
+  loc4 = G4ThreeVector(79. * mm, -78. * mm, 0.0);
+  G4RotationMatrix rot4 = G4RotationMatrix();
+  rot4.rotateX(90 * degree);
+  rot4.rotateY(45* degree);
+  rot4.rotateZ(45* degree);
+  transform4 = G4Transform3D(rot4, loc4);
+  
+  new G4PVPlacement( 
+    transform4, bolt_logical, "Bolts", 
+    fWorldLogical, true, 0, checkOverlaps); 
+  
+  //Kapton Foil
+  G4Tubs* kaptonFilling = new G4Tubs(
+      "kaptonFilling", 0.*cm, source_holder_radius_inner - 0.01 * mm,
+      kapton_foil_halfthickness, 0 * degree, 360 * degree );
+  
+  G4LogicalVolume* kaptonFilling_logical = new G4LogicalVolume(
+    kaptonFilling, fKapton, "kaptonFilling_logical");
+  
+  G4VisAttributes* kaptonVisAtt = new G4VisAttributes(G4Colour(0.65, 0.7, 0.0));
+  kaptonVisAtt->SetForceWireframe(true);
+  kaptonVisAtt->SetForceSolid(false);
+  kaptonFilling_logical->SetVisAttributes(kaptonVisAtt);
+
+  new G4PVPlacement(
+    transform, kaptonFilling_logical, "kaptonFillingGeom", 
+    fWorldLogical, true, 0, checkOverlaps);
+  
+  // Ring between Spherical Chamber and outer cylinder
+  CADMesh* mesh2 = new CADMesh((char*)"stl_geometry/Ring_SphericalChamber.stl");
+  mesh2->SetScale(cm);
+  G4VSolid* cadRing = mesh2->TessellatedMesh();
+  G4LogicalVolume* cadRing_logical = new G4LogicalVolume( 
+    cadRing,fPolyoxymethylene , "cadRing_logical");
+
+  G4VisAttributes* ringVisAtt =  new G4VisAttributes(G4Colour(0.8, 0.8, 0.8));
+  ringVisAtt->SetForceWireframe(true);
+  ringVisAtt->SetForceSolid(false);
+  cadRing_logical->SetVisAttributes(ringVisAtt);
+  
+  G4RotationMatrix rot_ring = G4RotationMatrix();
+  rot_ring.rotateZ(45 * deg);
+  G4ThreeVector loc_ring = DetectorConstants::GetChamberCenter();   
+  G4Transform3D transform_ring(rot_ring, loc_ring);
+  
+  new G4PVPlacement(
+    transform_ring, cadRing_logical, "cadRingGeom", 
+    fWorldLogical, true, 0, checkOverlaps);
   
 }
 
