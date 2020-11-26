@@ -38,6 +38,7 @@ public:
   void GenerateNema(G4int, G4Event*);
   void GenerateEvtSmallChamber(G4Event* event, const G4double);
   void GenerateEvtLargeChamber(G4Event* event);
+  void GenerateEvtSphChamber(G4Event* event);
   virtual void GeneratePrimaryVertex(G4Event*){};
 
 private:
