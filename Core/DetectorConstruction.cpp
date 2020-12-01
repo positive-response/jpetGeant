@@ -168,10 +168,10 @@ void DetectorConstruction::ReloadMaterials(const G4String& material)
   } else if (material == "pa6") {
     fSmallChamberRun7Material->ChangeMaterialConstants();
     fSmallChamberRun7Material->FillIntensities(); 
-  } else if (material == "StainlessSteel"){
+  } else if (material == "stainlessSteel"){
     fStainlessSteel->ChangeMaterialConstants();
     fStainlessSteel->FillIntensities();
-  } else if (material == "SiliconDioxide"){
+  } else if (material == "siliconDioxide"){
     fSiliconDioxide->ChangeMaterialConstants();
     fSiliconDioxide->FillIntensities();
   } else if (material == "polycarbonate") {
@@ -1105,9 +1105,9 @@ void DetectorConstruction::ConstructTargetRun12()
   // SphericalChamber
   const double kapton_foil_radius_outer = 24 * mm;
   const double kapton_foil_halfthickness = 0.1 * cm;
-  const double sphChamber_radius_inner = 97. * mm
-  const double sphChamber_radius_outer = 100. * mm
-  const double silica_filling_radius_inner = 95. * mm
+  const double sphChamber_radius_inner = 97. * mm;
+  const double sphChamber_radius_outer = 100. * mm;
+  const double silica_filling_radius_inner = 95. * mm;
   
   G4Sphere* sphericalChamber = new G4Sphere(
     "Sphere", sphChamber_radius_inner, sphChamber_radius_outer,
@@ -1223,7 +1223,7 @@ void DetectorConstruction::ConstructTargetRun12()
   
   //Kapton Foil
   G4Tubs* kaptonFilling = new G4Tubs(
-      "kaptonFilling", 0.*cm, source_holder_radius_inner - 0.01 * mm,
+      "kaptonFilling", 0.*cm, kapton_foil_radius_outer - 0.01 * mm,
       kapton_foil_halfthickness, 0 * degree, 360 * degree );
   
   G4LogicalVolume* kaptonFilling_logical = new G4LogicalVolume(
