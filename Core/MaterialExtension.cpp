@@ -113,29 +113,25 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
 {
   std::vector<G4double> frac;
   if (MaterialParameters::fAnnihlationMode != "") {
-    if(MaterialParameters::fAnnihlationMode == "pPs3G") {
-      frac = {0., 0., 0., 0., 0., 1.};
-      return frac;
-    } else if (MaterialParameters::fAnnihlationMode == "oPs3G") {
-      frac = {0., 0., 0., 0., 1., 0.};
-      return frac;
+    if (MaterialParameters::fAnnihlationMode == "pPs2G") {
+      frac = {1., 0., 0., 0., 0., 0.};
     } else if (MaterialParameters::fAnnihlationMode == "oPs2G") {
       frac = {0., 0., 1., 0., 0., 0.};
-      return frac;
-    } else if (MaterialParameters::fAnnihlationMode == "pPs2G") {
-      frac = {1., 0., 0., 0., 0., 0.};
-      return frac;
-    }
-  }
-
-  G4double pPs2G = fMaterialParameters->GetpPs2GTotalIntensity();
-  G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();
-  G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
-  G4double pPs3G = fMaterialParameters->GetpPs3GTotalIntensity();
-  G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
-  G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
+    } else if(MaterialParameters::fAnnihlationMode == "pPs3G") {
+      frac = {0., 0., 0., 1., 0., 0.};
+    } else if (MaterialParameters::fAnnihlationMode == "oPs3G") {
+      frac = {0., 0., 0., 0., 0., 1.};
+    } 
+  } else {
+    G4double pPs2G = fMaterialParameters->GetpPs2GTotalIntensity();
+    G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();
+    G4double oPs2G = fMaterialParameters->GetoPs2GTotalIntensity();
+    G4double pPs3G = fMaterialParameters->GetpPs3GTotalIntensity();
+    G4double direct3g = fMaterialParameters->GetDirect3GTotalIntensity();
+    G4double oPs3G = fMaterialParameters->GetoPs3GTotalIntensity();
   
-  frac = { pPs2G, direct2g, oPs2G, direct3g, oPs3G, pPs3G };
+    frac = {pPs2G, direct2g, oPs2G, pPs3G, direct3g, oPs3G};
+  }
   return frac;
 }
  

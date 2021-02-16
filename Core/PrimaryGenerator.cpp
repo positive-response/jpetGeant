@@ -66,7 +66,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
   Double_t rwt = 1;
   Double_t M_max = 1;
   if (channel == DecayChannel::Para3G) {
-    M_max = 2.00967*pow(10,25);
+    M_max = 2.00967 * pow(10, 25);
   } else {
     M_max = 7.65928 * pow(10, -6);
   }

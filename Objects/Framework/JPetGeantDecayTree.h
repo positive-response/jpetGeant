@@ -37,7 +37,7 @@ enum InteractionType
 };
 
 enum DecayChannel { 
-  Ortho2G, Ortho3G, Para2G, Para3G, Direct2G, Direct3G, Unknown
+  Para2G, Direct2G, Ortho2G, Para3G, Direct3G, Ortho3G, Unknown
 };
 
 struct Branch {
