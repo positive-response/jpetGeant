@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2021 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -18,6 +18,7 @@
 
 #include "../Objects/Framework/JPetGeantDecayTree.h"
 #include "MaterialExtension.h"
+#include "HistoManager.h"
 #include "SourceParams.h"
 #include "BeamParams.h"
 
@@ -28,6 +29,8 @@
 #include <TLorentzVector.h>
 #include <G4Navigator.hh>
 #include <G4Event.hh>
+#include <TH1F.h>
+#include <TH2F.h>
 
 class PrimaryGenerator : public G4VPrimaryGenerator
 {
@@ -39,6 +42,7 @@ public:
   void GenerateNema(G4int, G4Event*);
   void GenerateEvtSmallChamber(G4Event* event, const G4double);
   void GenerateEvtLargeChamber(G4Event* event);
+  void GenerateCosmicVertex(SourceParams* sourceParams, G4Event* event, HistoManager* histo);
   virtual void GeneratePrimaryVertex(G4Event*){};
   DecayChannel GetDecayChannel() { return fDecayChannel; };
 
@@ -61,7 +65,11 @@ private:
   G4PrimaryVertex* GeneratePromptGammaVertex(
     const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetimePrompt, const G4double energy
   );
-  G4ThreeVector VertexUniformInCylinder(G4double, G4double);
+  G4ThreeVector GenerateVertexUniformInCylinder(G4double, G4double);
+  G4ThreeVector GenerateVertexUniformInCuboid(G4double xMax, G4double yMax, G4double zMax);
+  G4PrimaryVertex* projectPointToWorldRoof(
+    const G4ThreeVector& posInDetector, G4double theta, G4double phi
+  );
   G4double calculate_mQED(
     const DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3
   );
