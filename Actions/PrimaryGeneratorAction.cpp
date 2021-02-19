@@ -79,7 +79,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("isotope")) {
     fPrimaryGenerator->GenerateIsotope(fIsotope, event);
   } else if (GetSourceTypeInfo() == ("nema")) {
-    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event);
+    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, weightedNemaPoints);
+  } else if (GetSourceTypeInfo() == ("nema-mixed")) {
+    fPrimaryGenerator->GenerateNema(-1, event, weightedNemaPoints);
   } else {
     G4Exception(
       "PrimaryGeneratorAction", "PG05", FatalException,
@@ -97,6 +99,11 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if ((nRun == 0) && (newSourceType != "run")) {
       fGenerateSourceType = newSourceType;
+      if (newSourceType == "nema-mixed") {
+        for (int i=1; i<7; i++) {
+          weightedNemaPoints.push_back(i);
+        }
+      }
     } else if (nRun > 0) {
       fGenerateSourceType = "run";
     } else {
@@ -110,5 +117,38 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
       "PrimaryGeneratorAction", "PG02", JustWarning,
       "Please pick from avaliable setups: beam/isotope"
     );
+  }
+}
+
+void PrimaryGeneratorAction::SetPositionWeight(int pos, int weight)
+{
+  unsigned removedElements = 0;
+  if (weight == 0) {
+    for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
+      if (weightedNemaPoints.at(i-removedElements) == pos) {
+        weightedNemaPoints.erase(weightedNemaPoints.begin()+i-removedElements);
+        removedElements++;
+      }
+    }
+  } else {
+    int count = 0;
+    for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
+      if (weightedNemaPoints.at(i) == pos)
+        count++;
+    }
+    if (weight >= count) {
+      for (unsigned i=0; i<weight-count; i++)
+        weightedNemaPoints.push_back(pos);
+    } else {
+      int nmbOfPointToErase = count - weight;
+      for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
+        if (weightedNemaPoints.at(i-removedElements) == pos) {
+          if ((int)removedElements < nmbOfPointToErase) {
+            weightedNemaPoints.erase(weightedNemaPoints.begin()+i-removedElements);
+            removedElements++;
+          }
+        }
+      }
+    }
   }
 }

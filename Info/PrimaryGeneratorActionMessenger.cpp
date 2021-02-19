@@ -80,6 +80,12 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaPosition = new G4UIcmdWithAnInteger("/jpetmc/source/nema", this);
   fNemaPosition->SetGuidance("Give nema point number to simulate (1-6)");
   fNemaPosition->SetDefaultValue(1);
+  
+  fNemaMixed = new G4UIcmdWithoutParameter("/jpetmc/source/nema/mixed", this);
+  fNemaMixed->SetGuidance("Generate nema with all sources at once");
+  
+  fNemaSetPositionWeight = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setWeight", this);
+  fNemaSetPositionWeight->SetGuidance("Setting the weight of a given point in nema generation (int - point, int - weight), if 0 it removes a point from generation");
 
   fSetChamberCenter = new G4UIcmdWith3VectorAndUnit("/jpetmc/run/setChamberCenter", this);
   fSetChamberCenter->SetGuidance("Set position of the annihilation chamber");
@@ -106,6 +112,8 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fGammaBeamSetMomentum;
   delete fIsotopeSetCenter;
   delete fNemaPosition;
+  delete fNemaMixed;
+  delete fNemaSetPositionWeight;
   delete fSetChamberCenter;
   delete fSetChamberEffectivePositronRadius;
 }
@@ -141,6 +149,15 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
   } else if (command == fNemaPosition) {
     fPrimGen->SetSourceTypeInfo("nema");
     fPrimGen->SetNemaPoint(fNemaPosition->GetNewIntValue(newValue));
+  } else if (command == fNemaMixed) {
+    fPrimGen->SetSourceTypeInfo("nema-mixed");
+  } else if (command == fNemaSetPositionWeight) {
+    G4String paramString = newValue;
+    std::istringstream is(paramString);
+    G4double position;
+    G4double weight;
+    is >> position >> weight;
+    fPrimGen->SetPositionWeight(position, weight);
   } else if (command == fSetChamberCenter) {
     if (!CheckIfRun()) { ChangeToRun(); }
     DetectorConstants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));

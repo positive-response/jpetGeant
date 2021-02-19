@@ -2,10 +2,17 @@
 #/control/execute init_vis.mac
 
 # Initialize kernel
-#/jpetmc/detector/loadOnlyScintillators
 /jpetmc/detector/loadJPetBasicGeom 
+/jpetmc/detector/loadOnlyScintillators
 
-/jpetmc/source/nema 4 
+#/jpetmc/source/nema 4
+/jpetmc/source/nema/mixed
+/jpetmc/source/nema/mixed/setWeight 1 1
+/jpetmc/source/nema/mixed/setWeight 2 1
+/jpetmc/source/nema/mixed/setWeight 3 2
+/jpetmc/source/nema/mixed/setWeight 4 2
+/jpetmc/source/nema/mixed/setWeight 5 1
+/jpetmc/source/nema/mixed/setWeight 6 0
 
 /run/initialize
 

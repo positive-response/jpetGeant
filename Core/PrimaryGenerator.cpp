@@ -428,25 +428,34 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
  *  1       1       4
  *  z ------0------3/4L ------
  */
-void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
+void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<int> weightPositions)
 {
   G4double x_creation = 0.0 * cm;
   G4double y_creation = 0.0 * cm;
   G4double z_creation = 0.0 * cm;
+  
+  int newNemaPoint = nemaPoint;
 
-  if (nemaPoint > 3){
+  if (nemaPoint == -1 && weightPositions.size() > 0) {
+    srand (time(NULL));
+    unsigned indexOfPoint = rand() % (int)weightPositions.size();
+    newNemaPoint = weightPositions[indexOfPoint];
+  }
+//Else simualting 0,0,0 as newNemaPoint will be -1
+
+  if (newNemaPoint > 3){
     z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
   }
 
-  if (nemaPoint == 1 || nemaPoint == 4) {
+  if (newNemaPoint == 1 || newNemaPoint == 4) {
     y_creation = y_creation + 1.0 * cm;
   }
 
-  if (nemaPoint == 2 || nemaPoint == 5) {
+  if (newNemaPoint == 2 || newNemaPoint == 5) {
     y_creation = y_creation + 10.0 * cm;
   }
 
-  if (nemaPoint == 3 || nemaPoint == 6) {
+  if (newNemaPoint == 3 || newNemaPoint == 6) {
     y_creation = y_creation + 20.0 * cm;
   }
 

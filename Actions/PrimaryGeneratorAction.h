@@ -49,17 +49,19 @@ public:
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
   void SetNemaPoint(G4int i) { fNemaPoint = i; }
   G4int GetNemaPoint() { return fNemaPoint; }
+  void SetPositionWeight(int pos, int weight);
   void SetEffectivePositronRadius(G4double);
 
 private:
   G4String fGenerateSourceType;
-  G4String fAllowedSourceTypes[4] = {"run", "beam", "isotope", "nema"};
+  G4String fAllowedSourceTypes[5] = {"run", "beam", "isotope", "nema", "nema-mixed"};
   PrimaryGeneratorActionMessenger* fMessenger = nullptr;
   PrimaryGenerator* fPrimaryGenerator = nullptr;
   HistoManager* fHistoManager = nullptr;
   BeamParams* fBeam = nullptr;
   SourceParams* fIsotope = nullptr;
   G4int fNemaPoint = -1;
+  std::vector<int> weightedNemaPoints;
   G4double fEffectivePositronRadius = 0.5 * cm;
 };
 

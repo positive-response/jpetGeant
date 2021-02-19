@@ -68,6 +68,10 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/event/ShowProgress`  
 * Give nema point number to simulate (1-6):  
  `/jpetmc/source/nema`  
+* Simulate all nema points at once with the same acitivity:  
+ `/jpetmc/source/nema/mixed`  
+* Set weight of a given nema point, when simulating all points:  
+ /jpetmc/source/nema/mixed/setWeight [point] [weight - int from 0 to infty, when 0 is removing given point]`  
 * set parameters of gamma beam:  
  `/jpetmc/source/gammaBeam/setEnergy setPosition setMomentum`  
 * set parameters of the isotope source, shape, if cylinder: radius, z-lenght (half):  
