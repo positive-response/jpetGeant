@@ -119,7 +119,7 @@ void DetectorConstruction::ConstructSDandField()
   G4SDManager::GetSDMpointer()->AddNewDetector(fDetectorSD.Get());
   if (fScinLog)
     SetSensitiveDetector(fScinLog, fDetectorSD.Get());
-  if (fScinLogInModule)
+  if (fLoadModularLayer)
     SetSensitiveDetector(fScinLogInModule, fDetectorSD.Get());
 }
 
@@ -137,8 +137,7 @@ void DetectorConstruction::LoadGeometryForRun(G4int nr)
 
 G4int DetectorConstruction::ReturnNumberOfScintillators()
 {
-  if (fLoadModularLayer) return 504;
-  else return 192;
+  return fMaxScinID;
 }
 
 void DetectorConstruction::UpdateGeometry()
@@ -302,7 +301,6 @@ void DetectorConstruction::ConstructScintillators()
   boxVisAttWrapping->SetForceWireframe(true);
   boxVisAttWrapping->SetForceSolid(true);
 
-  G4int icopy = 1;
   G4int oldLayerNumber = fLayerNumber;
   G4int moduleNumber = 0;
   for (int j = 0; j < DetectorConstants::layers; j++) {
@@ -326,7 +324,7 @@ void DetectorConstruction::ConstructScintillators()
       );
 
       G4Transform3D transform(rot, loc);
-      G4String name = "scin_" + G4UIcommand::ConvertToString(icopy);
+      G4String name = "scin_" + G4UIcommand::ConvertToString(fMaxScinID);
 
       if (fCreateGeometryFile) {
         Scin scinTemp(
@@ -339,7 +337,7 @@ void DetectorConstruction::ConstructScintillators()
       }
 
       new G4PVPlacement(
-        transform, fScinLog, name, fWorldLogical, true, icopy, checkOverlaps
+        transform, fScinLog, name, fWorldLogical, true, fMaxScinID, checkOverlaps
       );
 
       if (fLoadWrapping) {
@@ -348,12 +346,12 @@ void DetectorConstruction::ConstructScintillators()
         );
         wrappingLog = new G4LogicalVolume(unionSolid, fKapton, "wrappingLogical");
         wrappingLog->SetVisAttributes(boxVisAttWrapping);
-        G4String nameWrapping = "wrapping_" + G4UIcommand::ConvertToString(icopy);
+        G4String nameWrapping = "wrapping_" + G4UIcommand::ConvertToString(fMaxScinID);
         new G4PVPlacement(
-          transform, wrappingLog, nameWrapping, fWorldLogical, true, icopy, checkOverlaps
+          transform, wrappingLog, nameWrapping, fWorldLogical, true, fMaxScinID, checkOverlaps
         );
       }
-      icopy++;
+      fMaxScinID++;
     }
   }
 }
@@ -481,8 +479,9 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
 
       new G4PVPlacement(
         transform, fScinLogInModule, nameNewI, fWorldLogical,
-        true, icopyI + i * 13 + j + 6, checkOverlaps
+        true, fMaxScinID, checkOverlaps
       );
+      fMaxScinID++;
     }
   }
 }

@@ -137,7 +137,7 @@ void PrimaryGeneratorAction::SetPositionWeight(int pos, int weight)
         count++;
     }
     if (weight >= count) {
-      for (unsigned i=0; i<weight-count; i++)
+      for (int i=0; i<weight-count; i++)
         weightedNemaPoints.push_back(pos);
     } else {
       int nmbOfPointToErase = count - weight;

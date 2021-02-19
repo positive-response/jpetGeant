@@ -159,7 +159,7 @@ private:
   //! Geometry Kind for the modular layer
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
-  G4int maxScinID = 512;
+  G4int fMaxScinID = 1;
 
   std::vector<Layer> fLayerContainer;
   std::vector<Scin> fScinContainer;
