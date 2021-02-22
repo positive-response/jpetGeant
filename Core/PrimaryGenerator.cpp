@@ -195,56 +195,63 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
-  if (evtFractions[0] > random) {
-  // pPs 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random, DecayChannel::Para2G)
-    ));
-    fDecayChannel = DecayChannel::Para2G;
-  } else if (evtFractions[0] + evtFractions[1] > random) {
-  // Direct 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0], DecayChannel::Direct2G)
-    ));
-    fDecayChannel = DecayChannel::Direct2G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
-  // oPs 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1], DecayChannel::Ortho2G)
-    ));
-    fDecayChannel = DecayChannel::Ortho2G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
-  // pPs 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Para3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], DecayChannel::Para3G)
-    ));
-    fDecayChannel = DecayChannel::Para3G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
-  // Direct 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Direct3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], DecayChannel::Direct3G)
-    ));
-    fDecayChannel = DecayChannel::Direct3G;
-  } else {
-  // oPs 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Ortho3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::Ortho3G)
-    ));
-    fDecayChannel = DecayChannel::Ortho3G;
-  } 
+  G4double decayRandom = G4UniformRand();
+  //Not all Na decays lead to the emission of positron
+  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPositron) {
+    if (evtFractions[0] > random) {
+      // pPs 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random, DecayChannel::Para2G)
+        ));
+      fDecayChannel = DecayChannel::Para2G;
+    } else if (evtFractions[0] + evtFractions[1] > random) {
+      // Direct 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0], DecayChannel::Direct2G)
+        ));
+      fDecayChannel = DecayChannel::Direct2G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
+      // oPs 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1], DecayChannel::Ortho2G)
+        ));
+      fDecayChannel = DecayChannel::Ortho2G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
+      // pPs 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Para3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], DecayChannel::Para3G)
+        ));
+      fDecayChannel = DecayChannel::Para3G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
+      // Direct 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Direct3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], DecayChannel::Direct3G)
+        ));
+      fDecayChannel = DecayChannel::Direct3G;
+    } else {
+      // oPs 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Ortho3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::Ortho3G)
+        ));
+      fDecayChannel = DecayChannel::Ortho3G;
+    } 
+  }
 
-  //! Add prompt gamma from sodium
-  G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
-  event->AddPrimaryVertex(GeneratePromptGammaVertex(
-    promptVtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
-    MaterialParameters::fSodiumGammaEnergy
-  ));
+  //Not all Na decays lead to the emission of prompt photon
+  if (decayRandom > MaterialParameters::fSodiumChanceNoPositron) {
+    //! Add prompt gamma from sodium
+    G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
+    event->AddPrimaryVertex(GeneratePromptGammaVertex(
+        promptVtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
+        MaterialParameters::fSodiumGammaEnergy
+    ));
+  }
 }
 
 /**
@@ -307,56 +314,63 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
-  if (evtFractions[0] > random) {
-  // pPs 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random, DecayChannel::Para2G)
-    ));
-    fDecayChannel = DecayChannel::Para2G;
-  } else if (evtFractions[0] + evtFractions[1] > random) {
-  // Direct 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0], DecayChannel::Direct2G)
-    ));
-    fDecayChannel = DecayChannel::Direct2G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
-  // oPs 2G
-    event->AddPrimaryVertex(GenerateTwoGammaVertex(
-      vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1], DecayChannel::Ortho2G)
-    ));
-    fDecayChannel = DecayChannel::Ortho2G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
-  // pPs 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Para3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], DecayChannel::Para3G)
-    ));
-    fDecayChannel = DecayChannel::Para3G;
-  } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
-  // Direct 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Direct3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], DecayChannel::Direct3G)
-    ));
-    fDecayChannel = DecayChannel::Direct3G;
-  } else {
-  // oPs 3G
-    event->AddPrimaryVertex(GenerateThreeGammaVertex(
-      DecayChannel::Ortho3G, vtxPosition, T0,
-      material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::Ortho3G)
-    ));
-    fDecayChannel = DecayChannel::Ortho3G;
-  } 
+  G4double decayRandom = G4UniformRand();
+  //Not all Na decays lead to the emission of positron
+  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPositron) {
+    if (evtFractions[0] > random) {
+      // pPs 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random, DecayChannel::Para2G)
+        ));
+      fDecayChannel = DecayChannel::Para2G;
+    } else if (evtFractions[0] + evtFractions[1] > random) {
+      // Direct 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0], DecayChannel::Direct2G)
+        ));
+      fDecayChannel = DecayChannel::Direct2G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] > random) {
+      // oPs 2G
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1], DecayChannel::Ortho2G)
+        ));
+      fDecayChannel = DecayChannel::Ortho2G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
+      // pPs 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Para3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], DecayChannel::Para3G)
+        ));
+      fDecayChannel = DecayChannel::Para3G;
+    } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
+      // Direct 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Direct3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], DecayChannel::Direct3G)
+        ));
+      fDecayChannel = DecayChannel::Direct3G;
+    } else {
+      // oPs 3G
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Ortho3G, vtxPosition, T0,
+        material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::Ortho3G)
+        ));
+      fDecayChannel = DecayChannel::Ortho3G;
+    } 
+  }
 
-  //! Add prompt gamma from sodium
-  G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
-  event->AddPrimaryVertex(GeneratePromptGammaVertex(
-    promptVtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
-    MaterialParameters::fSodiumGammaEnergy
-  ));
+  //Not all Na decays lead to the emission of prompt photon
+  if (decayRandom > MaterialParameters::fSodiumChanceNoPositron) {
+    //! Add prompt gamma from sodium
+    G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
+    event->AddPrimaryVertex(GeneratePromptGammaVertex(
+        promptVtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
+        MaterialParameters::fSodiumGammaEnergy
+    ));
+  }
 }
 
 void PrimaryGenerator::GenerateBeam(BeamParams* beamParams, G4Event* event)
