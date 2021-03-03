@@ -375,6 +375,8 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
   else if (nodeID - fParentIDofPhoton == 100)
     interactionType = InteractionType::kScattActivePart;
   
+  if (interactionType == InteractionType::kScattActivePart)
+    fEmptyEvent = false;
   bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
   
   if (fEndOfEvent) {

@@ -197,7 +197,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
 
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
-  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPositron) {
+  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {
     if (evtFractions[0] > random) {
       // pPs 2G
       event->AddPrimaryVertex(GenerateTwoGammaVertex(
@@ -244,7 +244,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   }
 
   //Not all Na decays lead to the emission of prompt photon
-  if (decayRandom > MaterialParameters::fSodiumChanceNoPositron) {
+  if (decayRandom > MaterialParameters::fSodiumChanceNoPrompt) {
     //! Add prompt gamma from sodium
     G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
     event->AddPrimaryVertex(GeneratePromptGammaVertex(
@@ -316,7 +316,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
 
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
-  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPositron) {
+  if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {
     if (evtFractions[0] > random) {
       // pPs 2G
       event->AddPrimaryVertex(GenerateTwoGammaVertex(
@@ -363,7 +363,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   }
 
   //Not all Na decays lead to the emission of prompt photon
-  if (decayRandom > MaterialParameters::fSodiumChanceNoPositron) {
+  if (decayRandom > MaterialParameters::fSodiumChanceNoPrompt) {
     //! Add prompt gamma from sodium
     G4ThreeVector promptVtxPosition = VertexUniformInCylinder(0.2 * cm, 0.2 * cm) + chamberCenter;
     event->AddPrimaryVertex(GeneratePromptGammaVertex(

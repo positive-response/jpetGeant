@@ -94,7 +94,7 @@ public:
   static const G4double fSodiumGammaEnergy;
   static const G4double fSodiumGammaTau;
   static const G4double fSodiumChanceEC;
-  static const G4double fSodiumChanceNoPositron;
+  static const G4double fSodiumChanceNoPrompt;
   static G4String fAnnihlationMode;
   static G4double fpPs3Gfraction;
 
