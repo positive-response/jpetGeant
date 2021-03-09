@@ -61,7 +61,7 @@ public:
   
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
-  void SaveEvtPack() { /*if (!fEmptyEvent)*/ fTree->Fill(); fEmptyEvent = true; };
+  void SaveEvtPack() { if (!fEmptyEvent) fTree->Fill(); fEmptyEvent = true; };
   void Clear() { fEventPack->Clear(); };
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);

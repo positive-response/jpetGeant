@@ -45,7 +45,6 @@ void EventAction::BeginOfEventAction(const G4Event*)
   fHistoManager->Clear();
   fHistoManager->SetEventNumber(fEventID);
   fEventID++;
-  //std::cout << " | ";
 }
 
 // cppcheck-suppress unusedFunction
