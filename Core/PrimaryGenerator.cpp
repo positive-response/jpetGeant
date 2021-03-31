@@ -35,7 +35,7 @@ PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 PrimaryGenerator::~PrimaryGenerator() {}
 
 G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex( 
-  const DecayChannel channel, const G4ThreeVector vtxPosition, 
+  DecayChannel channel, const G4ThreeVector vtxPosition, 
   const G4double T0, const G4double lifetime3g
 ) {
 
@@ -510,7 +510,7 @@ const G4ThreeVector PrimaryGenerator::GetRandomPointOnSphere(G4double radius)
   return G4ThreeVector(x, y, z);
 }
 
-G4double PrimaryGenerator::calculate_mQED(const DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3)
+G4double PrimaryGenerator::calculate_mQED(DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3)
 {
   if (channel == DecayChannel::Para3G) {
     return pow(w1*w2*w3,2)* pow(sin(acos((-pow(w1,2) - pow(w2,2) + pow(w3,2))/(2*w1*w2))) +

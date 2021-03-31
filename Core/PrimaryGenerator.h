@@ -56,14 +56,14 @@ private:
     const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime2g
   );
   G4PrimaryVertex* GenerateThreeGammaVertex(
-    const DecayChannel channel, const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime3g
+    DecayChannel channel, const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime3g
   );
   G4PrimaryVertex* GeneratePromptGammaVertex(
     const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetimePrompt, const G4double energy
   );
   G4ThreeVector VertexUniformInCylinder(G4double, G4double);
   G4double calculate_mQED(
-    const DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3
+    DecayChannel channel, Double_t mass_e, Double_t w1, Double_t w2, Double_t w3
   );
   const G4ThreeVector GetRandomPointInFilledSphere(G4double radius);
   const G4ThreeVector GetRandomPointOnSphere(G4double radius);

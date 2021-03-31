@@ -47,7 +47,6 @@ void JPetGeantEventPack::Clear(Option_t *)
 {
   fMCHits.Clear("C");
   fMCDecayTrees.Clear("C");
-  fEvtIndex = 0;
   fHitIndex = 0;
   fMCDecayTreesIndex = 0;
   fGenInfo->Clear();
