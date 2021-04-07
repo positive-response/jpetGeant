@@ -48,9 +48,11 @@ public:
   SourceParams* GetIsotopeParams() { return fIsotope; }
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
   void SetNemaPoint(G4int i) { fNemaPoint = i; }
-  G4int GetNemaPoint() { return fNemaPoint; }
-  void SetPositionWeight(int pos, int weight);
+  void SetNemaPointLifetime(int position, double lifetime);
+  void SetPositionWeight(int position, int weight);
   void SetEffectivePositronRadius(G4double);
+  
+  G4int GetNemaPoint() { return fNemaPoint; }
 
 private:
   G4String fGenerateSourceType;
@@ -61,7 +63,8 @@ private:
   BeamParams* fBeam = nullptr;
   SourceParams* fIsotope = nullptr;
   G4int fNemaPoint = -1;
-  std::vector<int> weightedNemaPoints;
+  std::vector<int> fWeightedNemaPoints;
+  std::vector<double> fLifetimesNemaPoints = {0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
   G4double fEffectivePositronRadius = 0.5 * cm;
 };
 

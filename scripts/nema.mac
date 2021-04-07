@@ -14,6 +14,13 @@
 /jpetmc/source/nema/mixed/setWeight 5 1
 /jpetmc/source/nema/mixed/setWeight 6 0
 
+/jpetmc/source/nema/mixed/setLifetime 1 1
+/jpetmc/source/nema/mixed/setLifetime 2 5
+/jpetmc/source/nema/mixed/setLifetime 3 10
+/jpetmc/source/nema/mixed/setLifetime 4 10
+/jpetmc/source/nema/mixed/setLifetime 5 5
+/jpetmc/source/nema/mixed/setLifetime 6 1
+
 /run/initialize
 
 /run/beamOn 10000

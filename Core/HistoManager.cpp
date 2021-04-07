@@ -189,6 +189,21 @@ void HistoManager::BookHistograms()
   );
 
   createHistogramWithAxes(
+    new TH2D("gen_X_vs_lifetime", "Generated X coordinates of annihilation point vs lifetime", 50, -24.5, 25.5, 2000, -50.0, 199950.0),
+    "Annihilation point X [cm]", "Generated lifetime [ns]"
+  );
+  
+  createHistogramWithAxes(
+    new TH2D("gen_Y_vs_lifetime", "Generated Y coordinates of annihilation point vs lifetime", 50, -24.5, 25.5, 2000, -50.0, 199950.0),
+    "Annihilation point Y [cm]", "Generated lifetime [ns]"
+  );
+  
+  createHistogramWithAxes(
+    new TH2D("gen_Z_vs_lifetime", "Generated Z coordinates of annihilation point vs lifetime", 120, -59.5, 60.5, 2000, -50.0, 199950.0),
+    "Annihilation point Z [cm]", "Generated lifetime [ns]"
+  );
+  
+  createHistogramWithAxes(
     new TH2D("gen_prompt_XY", "Generated XY coordinates of annihilation point", 50, -24.5, 25.5, 50, -24.5, 25.5),
     "Prompt emission point X [cm]", "Prompt emission point Y [cm]"
   );
@@ -299,6 +314,9 @@ void HistoManager::AddGenInfo(VtxInformation* info)
       fillHistogram("gen_XY", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionY() / cm));
       fillHistogram("gen_XZ", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
       fillHistogram("gen_YZ", info->GetVtxPositionY() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
+      fillHistogram("gen_X_vs_lifetime", info->GetVtxPositionX() / cm, doubleCheck(info->GetLifetime() / ps));
+      fillHistogram("gen_Y_vs_lifetime", info->GetVtxPositionY() / cm, doubleCheck(info->GetLifetime() / ps));
+      fillHistogram("gen_Z_vs_lifetime", info->GetVtxPositionZ() / cm, doubleCheck(info->GetLifetime() / ps));
     }
   }
 

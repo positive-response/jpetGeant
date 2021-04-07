@@ -86,6 +86,9 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   
   fNemaSetPositionWeight = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setWeight", this);
   fNemaSetPositionWeight->SetGuidance("Setting the weight of a given point in nema generation (int - point, int - weight), if 0 it removes a point from generation");
+  
+  fNemaSetPositionLifetime = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setLifetime", this);
+  fNemaSetPositionLifetime->SetGuidance("Setting the mean lifetime of a given point in nema generation (int - point, int - lifetime), lifetime should be positive, instead generated with default value 0.3 ns");
 
   fSetChamberCenter = new G4UIcmdWith3VectorAndUnit("/jpetmc/run/setChamberCenter", this);
   fSetChamberCenter->SetGuidance("Set position of the annihilation chamber");
@@ -114,6 +117,7 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fNemaPosition;
   delete fNemaMixed;
   delete fNemaSetPositionWeight;
+  delete fNemaSetPositionLifetime;
   delete fSetChamberCenter;
   delete fSetChamberEffectivePositronRadius;
 }
@@ -122,8 +126,7 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
 {
   if (command == fSourceType) {
     fPrimGen->SetSourceTypeInfo(newValue);
-  }
-  if (command == fGammaBeamSetEnergy) {
+  } else if (command == fGammaBeamSetEnergy) {
     ChangeToBeam();
     fPrimGen->GetBeamParams()->SetEnergy(fGammaBeamSetEnergy->GetNewDoubleValue(newValue));
   } else if (command == fGammaBeamSetPosition) {
@@ -158,6 +161,13 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     G4double weight;
     is >> position >> weight;
     fPrimGen->SetPositionWeight(position, weight);
+  } else if (command == fNemaSetPositionLifetime) {
+    G4String paramString = newValue;
+    std::istringstream is(paramString);
+    G4double position;
+    G4double lifetime;
+    is >> position >> lifetime;
+    fPrimGen->SetNemaPointLifetime(position, lifetime);
   } else if (command == fSetChamberCenter) {
     if (!CheckIfRun()) { ChangeToRun(); }
     DetectorConstants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));

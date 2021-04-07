@@ -79,9 +79,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("isotope")) {
     fPrimaryGenerator->GenerateIsotope(fIsotope, event);
   } else if (GetSourceTypeInfo() == ("nema")) {
-    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, weightedNemaPoints);
+    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, fWeightedNemaPoints, fLifetimesNemaPoints);
   } else if (GetSourceTypeInfo() == ("nema-mixed")) {
-    fPrimaryGenerator->GenerateNema(-1, event, weightedNemaPoints);
+    fPrimaryGenerator->GenerateNema(-1, event, fWeightedNemaPoints, fLifetimesNemaPoints);
   } else {
     G4Exception(
       "PrimaryGeneratorAction", "PG05", FatalException,
@@ -101,7 +101,7 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
       fGenerateSourceType = newSourceType;
       if (newSourceType == "nema-mixed") {
         for (int i=1; i<7; i++) {
-          weightedNemaPoints.push_back(i);
+          fWeightedNemaPoints.push_back(i);
         }
       }
     } else if (nRun > 0) {
@@ -120,35 +120,47 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
   }
 }
 
-void PrimaryGeneratorAction::SetPositionWeight(int pos, int weight)
+void PrimaryGeneratorAction::SetPositionWeight(int position, int weight)
 {
   unsigned removedElements = 0;
   if (weight == 0) {
-    for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
-      if (weightedNemaPoints.at(i-removedElements) == pos) {
-        weightedNemaPoints.erase(weightedNemaPoints.begin()+i-removedElements);
+    for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
+      if (fWeightedNemaPoints.at(i-removedElements) == position) {
+        fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
         removedElements++;
       }
     }
   } else {
     int count = 0;
-    for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
-      if (weightedNemaPoints.at(i) == pos)
+    for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
+      if (fWeightedNemaPoints.at(i) == position)
         count++;
     }
     if (weight >= count) {
       for (int i=0; i<weight-count; i++)
-        weightedNemaPoints.push_back(pos);
+        fWeightedNemaPoints.push_back(position);
     } else {
       int nmbOfPointToErase = count - weight;
-      for (unsigned i=0; i<weightedNemaPoints.size(); i++) {
-        if (weightedNemaPoints.at(i-removedElements) == pos) {
+      for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
+        if (fWeightedNemaPoints.at(i-removedElements) == position) {
           if ((int)removedElements < nmbOfPointToErase) {
-            weightedNemaPoints.erase(weightedNemaPoints.begin()+i-removedElements);
+            fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
             removedElements++;
           }
         }
       }
     }
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPointLifetime(int position, double lifetime)
+{
+  if (position < 1 || position > 6) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG06", JustWarning,
+      "Nema position for which you want to set lifetime is less than 1 or greater than 6. Not setting it."
+    );
+  } else {
+    fLifetimesNemaPoints.at(position - 1) = lifetime;
   }
 }

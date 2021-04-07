@@ -428,7 +428,7 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
  *  1       1       4
  *  z ------0------3/4L ------
  */
-void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<int> weightPositions)
+void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<int> weightPositions, std::vector<double> lifetimePositions)
 {
   G4double x_creation = 0.0 * cm;
   G4double y_creation = 0.0 * cm;
@@ -441,7 +441,7 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
     unsigned indexOfPoint = rand() % (int)weightPositions.size();
     newNemaPoint = weightPositions[indexOfPoint];
   }
-//Else simualting 0,0,0 as newNemaPoint will be -1
+//Else simulating 0,0,0 as newNemaPoint will be -1
 
   if (newNemaPoint > 3){
     z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
@@ -462,8 +462,12 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
   G4ThreeVector vtxPosition = VertexUniformInCylinder(0.1 * mm, 0.1 * mm)
   + G4ThreeVector(x_creation, y_creation, z_creation);
 
+  double lifetime = MaterialParameters::fTauBulk;
+  if (newNemaPoint > 0 && newNemaPoint < 7) {
+    lifetime = lifetimePositions.at(newNemaPoint-1);
+  }
   event->AddPrimaryVertex(GenerateTwoGammaVertex(
-    vtxPosition, 0.0f, MaterialParameters::fTauBulk
+    vtxPosition, 0.0f, lifetime
   ));
   event->AddPrimaryVertex(GeneratePromptGammaVertex(
     vtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,

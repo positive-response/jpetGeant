@@ -36,7 +36,7 @@ public:
   ~PrimaryGenerator();
   void GenerateBeam(BeamParams*, G4Event*);
   void GenerateIsotope(SourceParams*, G4Event*);
-  void GenerateNema(G4int, G4Event*, std::vector<int>);
+  void GenerateNema(G4int, G4Event*, std::vector<int>, std::vector<double>);
   void GenerateEvtSmallChamber(G4Event* event, const G4double);
   void GenerateEvtLargeChamber(G4Event* event);
   virtual void GeneratePrimaryVertex(G4Event*){};
