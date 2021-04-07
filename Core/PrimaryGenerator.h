@@ -43,6 +43,8 @@ public:
   DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
+  long fPreviousSeed = 0;
+  long fPreviousTime = 0;
   DecayChannel fDecayChannel = DecayChannel::Unknown;
   //! return: vtx position, 2/3g ratio, meanlifetime;
   //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)

@@ -437,10 +437,21 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
   int newNemaPoint = nemaPoint;
 
   if (nemaPoint == -1 && weightPositions.size() > 0) {
-    srand (time(NULL));
+    int seed = time(NULL);
+    if (seed == fPreviousTime) {
+      seed = 3*fPreviousSeed - seed;
+      fPreviousSeed = seed;
+    } else {
+      fPreviousTime = seed;
+      fPreviousSeed = seed;
+    }
+ //   std::cout << seed << std::endl;
+    srand (seed);
     unsigned indexOfPoint = rand() % (int)weightPositions.size();
     newNemaPoint = weightPositions[indexOfPoint];
   }
+ // std::cout << newNemaPoint << std::endl;
+// std::cin >> x_creation;
 //Else simulating 0,0,0 as newNemaPoint will be -1
 
   if (newNemaPoint > 3){
