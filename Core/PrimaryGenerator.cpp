@@ -438,6 +438,7 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
 
   if (nemaPoint == -1 && weightPositions.size() > 0) {
     int seed = time(NULL);
+    // sometimes seeds are too close to each other. This part is mixing seeds in order to proper choose nema point ID
     if (seed == fPreviousTime) {
       seed = 3*fPreviousSeed - seed;
       fPreviousSeed = seed;
@@ -445,13 +446,10 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
       fPreviousTime = seed;
       fPreviousSeed = seed;
     }
- //   std::cout << seed << std::endl;
     srand (seed);
     unsigned indexOfPoint = rand() % (int)weightPositions.size();
     newNemaPoint = weightPositions[indexOfPoint];
   }
- // std::cout << newNemaPoint << std::endl;
-// std::cin >> x_creation;
 //Else simulating 0,0,0 as newNemaPoint will be -1
 
   if (newNemaPoint > 3){
