@@ -51,6 +51,11 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
 
   fCreateGeometryType = new G4UIcmdWithAString("/jpetmc/detector/createGeometryType", this);
   fCreateGeometryType->SetGuidance("Set structure of output JSON file: barrel or modular.");
+  
+  fPressureInChamber = new G4UIcmdWithADoubleAndUnit("/jpetmc/detector/chamberPressure", this);
+  fPressureInChamber->SetGuidance("Define pressure in the chamber");
+  fPressureInChamber->SetDefaultUnit("Pa");
+  fPressureInChamber->SetUnitCandidates("Pa");
 }
 
 DetectorConstructionMessenger::~DetectorConstructionMessenger()
@@ -63,6 +68,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fScinHitMergingTime;
   delete fGeometryFileName;
   delete fCreateGeometryType;
+  delete fPressureInChamber;
 }
 
 // cppcheck-suppress unusedFunction
@@ -98,5 +104,7 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
   } else if (command == fCreateGeometryType) {
     fDetector->CreateGeometryFileFlag(true);
     fDetector->SetGeometryFileType(newValue);
+  } else if (command == fPressureInChamber) {
+    fDetector->SetPressureInChamber(fPressureInChamber->GetNewDoubleValue(newValue));
   }
 }

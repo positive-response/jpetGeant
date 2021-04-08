@@ -50,6 +50,7 @@ private:
   G4UIcmdWithADoubleAndUnit* fScinHitMergingTime = nullptr;
   G4UIcmdWithAString* fGeometryFileName = nullptr;
   G4UIcmdWithAString* fCreateGeometryType = nullptr;
+  G4UIcmdWithADoubleAndUnit* fPressureInChamber = nullptr;
 };
 
 #endif /* !DETECTORCONSTRUCTIONMESSENGER_H */
