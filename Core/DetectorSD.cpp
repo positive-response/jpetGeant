@@ -48,8 +48,8 @@ void DetectorSD::Initialize(G4HCofThisEvent* HCE)
 G4bool DetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-    
-   // Judging the fate of primary particles +++++    
+  
+  // Judging the fate of primary particles +++++    
   if (aStep->GetTrack()->GetKineticEnergy() > fEvtMessenger->GetEnergyCut() && aStep->GetTrack()->GetParentID() == 0 &&
                 fEvtMessenger->GetEnergyCutFlag()
   ) {
