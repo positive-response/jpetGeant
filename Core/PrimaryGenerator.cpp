@@ -65,6 +65,7 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
   Double_t weight_max = event.GetWtMax() * pow(10, -1);
   Double_t rwt = 1;
   Double_t M_max = 1;
+  //Manual how to obtain amplitude for the 3G decays are in the manual_v4.pdf in appendix section
   if (channel == DecayChannel::Para3G) {
     M_max = 2.00967 * pow(10, 25);
   } else {
