@@ -14,6 +14,7 @@
  */
 
 #include "../Core/DetectorConstruction.h"
+#include "../Core/DetectorConstants.h"
 #include "PrimaryGeneratorAction.h"
 
 #include <G4PrimaryVertex.hh>
@@ -36,6 +37,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete fBeam;
   delete fPrimaryGenerator;
   delete fMessenger;
+  fPositionsNemaPoints.clear();
+  fWeightedNemaPoints.clear();
+  fLifetimesNemaPoints.clear();
 }
 
 void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
@@ -79,9 +83,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("isotope")) {
     fPrimaryGenerator->GenerateIsotope(fIsotope, event);
   } else if (GetSourceTypeInfo() == ("nema")) {
-    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, fWeightedNemaPoints, fLifetimesNemaPoints);
+    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, fPositionsNemaPoints, fWeightedNemaPoints, fLifetimesNemaPoints);
   } else if (GetSourceTypeInfo() == ("nema-mixed")) {
-    fPrimaryGenerator->GenerateNema(-1, event, fWeightedNemaPoints, fLifetimesNemaPoints);
+    fPrimaryGenerator->GenerateNema(-1, event, fPositionsNemaPoints, fWeightedNemaPoints, fLifetimesNemaPoints);
   } else {
     G4Exception(
       "PrimaryGeneratorAction", "PG05", FatalException,
@@ -99,6 +103,9 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if ((nRun == 0) && (newSourceType != "run")) {
       fGenerateSourceType = newSourceType;
+      if (newSourceType == "nema-mixed" || newSourceType == "nema") {
+        GenerateDefaultNemaPositions();
+      }
       if (newSourceType == "nema-mixed") {
         for (int i=1; i<7; i++) {
           fWeightedNemaPoints.push_back(i);
@@ -120,12 +127,49 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
   }
 }
 
-void PrimaryGeneratorAction::SetPositionWeight(int position, int weight)
+void PrimaryGeneratorAction::GenerateDefaultNemaPositions()
+{
+  for (unsigned nemaPoint=1; nemaPoint<7; nemaPoint++) {
+    G4double x_creation = 0.0 * cm;
+    G4double y_creation = 0.0 * cm;
+    G4double z_creation = 0.0 * cm;
+    
+    if (nemaPoint > 3) {
+      z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
+    }
+
+    if (nemaPoint == 1 || nemaPoint == 4) {
+      y_creation = y_creation + 1.0 * cm;
+    } else if (nemaPoint == 2 || nemaPoint == 5) {
+      y_creation = y_creation + 10.0 * cm;
+    } else if (nemaPoint == 3 || nemaPoint == 6) {
+      y_creation = y_creation + 20.0 * cm;
+    }
+    
+    fPositionsNemaPoints.push_back(G4ThreeVector(x_creation, y_creation, z_creation));
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPointPosition(int nemaPoint, G4ThreeVector position)
+{
+  if ((nemaPoint < 1 || nemaPoint - 1 > (int)fPositionsNemaPoints.size())) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG06", JustWarning,
+      "Nema point for which you want to set position is less than 1 or greater than the size of the pointsVector more than one. Not setting it."
+    );
+  } else if (nemaPoint - 1 == (int)fPositionsNemaPoints.size()) {
+    fPositionsNemaPoints.push_back(position);
+  } else {
+    fPositionsNemaPoints.at(nemaPoint - 1) = position;
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPositionWeight(int nemaPoint, int weight)
 {
   unsigned removedElements = 0;
   if (weight == 0) {
     for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-      if (fWeightedNemaPoints.at(i-removedElements) == position) {
+      if (fWeightedNemaPoints.at(i-removedElements) == nemaPoint) {
         fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
         removedElements++;
       }
@@ -133,16 +177,16 @@ void PrimaryGeneratorAction::SetPositionWeight(int position, int weight)
   } else {
     int count = 0;
     for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-      if (fWeightedNemaPoints.at(i) == position)
+      if (fWeightedNemaPoints.at(i) == nemaPoint)
         count++;
     }
     if (weight >= count) {
       for (int i=0; i<weight-count; i++)
-        fWeightedNemaPoints.push_back(position);
+        fWeightedNemaPoints.push_back(nemaPoint);
     } else {
       int nmbOfPointToErase = count - weight;
       for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-        if (fWeightedNemaPoints.at(i-removedElements) == position) {
+        if (fWeightedNemaPoints.at(i-removedElements) == nemaPoint) {
           if ((int)removedElements < nmbOfPointToErase) {
             fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
             removedElements++;
@@ -153,14 +197,16 @@ void PrimaryGeneratorAction::SetPositionWeight(int position, int weight)
   }
 }
 
-void PrimaryGeneratorAction::SetNemaPointLifetime(int position, double lifetime)
+void PrimaryGeneratorAction::SetNemaPointLifetime(int nemaPoint, double lifetime)
 {
-  if (position < 1 || position > 6) {
+  if ((nemaPoint < 1 || nemaPoint - 1 > (int)fLifetimesNemaPoints.size())) {
     G4Exception(
-      "PrimaryGeneratorAction", "PG06", JustWarning,
-      "Nema position for which you want to set lifetime is less than 1 or greater than 6. Not setting it."
+      "PrimaryGeneratorAction", "PG07", JustWarning,
+      "Nema point for which you want to set lifetime is less than 1 or greater than the size of the pointsVector more than one. Not setting it."
     );
+  } else if (nemaPoint - 1 == (int)fLifetimesNemaPoints.size()) {
+    fLifetimesNemaPoints.push_back(lifetime);
   } else {
-    fLifetimesNemaPoints.at(position - 1) = lifetime;
+    fLifetimesNemaPoints.at(nemaPoint - 1) = lifetime;
   }
 }

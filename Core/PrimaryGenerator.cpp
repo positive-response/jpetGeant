@@ -428,12 +428,9 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
  *  1       1       4
  *  z ------0------3/4L ------
  */
-void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<int> weightPositions, std::vector<double> lifetimePositions)
+void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<G4ThreeVector> positionsNemaPoints, 
+                                    std::vector<int> weightPositions, std::vector<double> lifetimePositions)
 {
-  G4double x_creation = 0.0 * cm;
-  G4double y_creation = 0.0 * cm;
-  G4double z_creation = 0.0 * cm;
-  
   int newNemaPoint = nemaPoint;
 
   if (nemaPoint == -1 && weightPositions.size() > 0) {
@@ -450,29 +447,18 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
     unsigned indexOfPoint = rand() % (int)weightPositions.size();
     newNemaPoint = weightPositions[indexOfPoint];
   }
-//Else simulating 0,0,0 as newNemaPoint will be -1
-
-  if (newNemaPoint > 3){
-    z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
+  //Else simulating 0,0,0 as newNemaPoint will be -1
+  G4ThreeVector nemaPosition = G4ThreeVector(0, 0, 0);
+  
+  if (newNemaPoint > 0 && newNemaPoint <= (int)positionsNemaPoints.size()) {
+    nemaPosition = positionsNemaPoints.at(newNemaPoint-1);
   }
-
-  if (newNemaPoint == 1 || newNemaPoint == 4) {
-    y_creation = y_creation + 1.0 * cm;
-  }
-
-  if (newNemaPoint == 2 || newNemaPoint == 5) {
-    y_creation = y_creation + 10.0 * cm;
-  }
-
-  if (newNemaPoint == 3 || newNemaPoint == 6) {
-    y_creation = y_creation + 20.0 * cm;
-  }
-
+  
   G4ThreeVector vtxPosition = VertexUniformInCylinder(0.1 * mm, 0.1 * mm)
-  + G4ThreeVector(x_creation, y_creation, z_creation);
+  + nemaPosition;
 
   double lifetime = MaterialParameters::fTauBulk;
-  if (newNemaPoint > 0 && newNemaPoint < 7) {
+  if (newNemaPoint > 0 && newNemaPoint < (int)lifetimePositions.size()-1) {
     lifetime = lifetimePositions.at(newNemaPoint-1);
   }
   event->AddPrimaryVertex(GenerateTwoGammaVertex(
@@ -483,7 +469,7 @@ void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector
     MaterialParameters::fSodiumGammaEnergy
   ));
 }
-
+  
 G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rIn, G4double zmax)
 {
   G4double r = std::sqrt(pow(rIn, 2) * G4UniformRand());

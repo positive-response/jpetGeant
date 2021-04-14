@@ -45,7 +45,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 }
 
 DetectorConstruction::DetectorConstruction() :
-G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(true),
+G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(false),
 fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false)
 {
   InitializeMaterials();
@@ -402,7 +402,7 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
 
   //! starting ID for modular layer
   G4int icopyI = 201;
-
+  fMaxScinID = icopyI;
   G4double angDisp_8 = 0.0531204920;  // 3.0435^0
   G4double angDisp_16 = 0.0272515011; // 1.561396^0
   G4double angDisp_24 = 0.01815;      // 1.04^0
@@ -413,7 +413,6 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   // Assume: enum GeometryKind { Geo24ModulesLayer, Geo24ModulesLayerDistributed};
   // Single : for 24 modules layer
   // Double : for 8 and 16 layer configuration
-
   switch (fGeoKind) {
     case GeometryKind::Geo24ModulesLayer:
       for (int i = 0; i < 13; i++) {
@@ -481,6 +480,7 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
         transform, fScinLogInModule, nameNewI, fWorldLogical,
         true, fMaxScinID, checkOverlaps
       );
+      std::cout << fMaxScinID << std::endl;
       fMaxScinID++;
     }
   }

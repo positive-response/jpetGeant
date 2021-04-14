@@ -84,6 +84,9 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaMixed = new G4UIcmdWithoutParameter("/jpetmc/source/nema/mixed", this);
   fNemaMixed->SetGuidance("Generate nema with all sources at once");
   
+  fNemaSetPosition = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setPosition", this);
+  fNemaSetPosition->SetGuidance("Setting the position of a given point in nema generation (int - point, 3Dvector - x, y, z). Use it when do you not want default positions of the nema points");
+  
   fNemaSetPositionWeight = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setWeight", this);
   fNemaSetPositionWeight->SetGuidance("Setting the weight of a given point in nema generation (int - point, int - weight), if 0 it removes a point from generation");
   
@@ -116,6 +119,7 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fIsotopeSetCenter;
   delete fNemaPosition;
   delete fNemaMixed;
+  delete fNemaSetPosition;
   delete fNemaSetPositionWeight;
   delete fNemaSetPositionLifetime;
   delete fSetChamberCenter;
@@ -154,20 +158,29 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     fPrimGen->SetNemaPoint(fNemaPosition->GetNewIntValue(newValue));
   } else if (command == fNemaMixed) {
     fPrimGen->SetSourceTypeInfo("nema-mixed");
+  } else if (command == fNemaSetPosition) {
+    G4String paramString = newValue;
+    std::istringstream is(paramString);
+    G4int nemaPoint;
+    G4double x;
+    G4double y;
+    G4double z;
+    is >> nemaPoint >> x >> y >> z;
+    fPrimGen->SetNemaPointPosition(nemaPoint, G4ThreeVector(x*cm, y*cm, z*cm));
   } else if (command == fNemaSetPositionWeight) {
     G4String paramString = newValue;
     std::istringstream is(paramString);
-    G4double position;
+    G4int nemaPoint;
     G4double weight;
-    is >> position >> weight;
-    fPrimGen->SetPositionWeight(position, weight);
+    is >> nemaPoint >> weight;
+    fPrimGen->SetNemaPositionWeight(nemaPoint, weight);
   } else if (command == fNemaSetPositionLifetime) {
     G4String paramString = newValue;
     std::istringstream is(paramString);
-    G4double position;
+    G4int nemaPoint;
     G4double lifetime;
-    is >> position >> lifetime;
-    fPrimGen->SetNemaPointLifetime(position, lifetime);
+    is >> nemaPoint >> lifetime;
+    fPrimGen->SetNemaPointLifetime(nemaPoint, lifetime);
   } else if (command == fSetChamberCenter) {
     if (!CheckIfRun()) { ChangeToRun(); }
     DetectorConstants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));
