@@ -41,7 +41,8 @@ class MaterialParameters
 {
 public:
   enum MaterialID {
-    mUnknown, mXAD4, mAl, mKapton, mPlexiglass, mScin, mPA6, mAir
+    mUnknown, mXAD4, mAl, mKapton, mPlexiglass, mScin, mPA6, mAir,
+    mPolycarbonate, mPolyoxymethylene, mSiliconDioxide, mStainlessSteel 
   };
 
   MaterialParameters();
@@ -105,6 +106,10 @@ public:
   static const MaterialConstants fScin;
   static const MaterialConstants fPA6;
   static const MaterialConstants fAir;
+  static const MaterialConstants fPolycarbonate;
+  static const MaterialConstants fPolyoxymethylene;
+  static const MaterialConstants fSiliconDioxide;
+  static const MaterialConstants fStainlessSteel;
   static MaterialConstants fTemp;
 
 private:

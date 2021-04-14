@@ -1,0 +1,12 @@
+# Geometry for run 12
+/jpetmc/detector/loadTargetForRun 12
+
+# Loading standard scintillators (3 layers)
+/jpetmc/detector/loadJPetBasicGeom
+
+# Loading scintillators without frame
+/jpetmc/detector/loadOnlyScintillators
+
+/run/initialize
+
+/run/beamOn 1000000
