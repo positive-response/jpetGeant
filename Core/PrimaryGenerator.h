@@ -43,7 +43,7 @@ public:
   DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
-  DecayChannel fDecayChannel = DecayChannel::Unknown;
+  DecayChannel fDecayChannel = DecayChannel::kUnknown;
   //! return: vtx position, 2/3g ratio, meanlifetime;
   //! as input the maximal dimension(/2) of annihilation chamber are taken (to speed up simulatons)
   std::tuple<G4ThreeVector, MaterialExtension*> GetVerticesDistributionInFilledSphere(

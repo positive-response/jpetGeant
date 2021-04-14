@@ -37,7 +37,7 @@ enum InteractionType
 };
 
 enum DecayChannel { 
-  Para2G, Direct2G, Ortho2G, Para3G, Direct3G, Ortho3G, Unknown
+  kPara2G, kDirect2G, kOrtho2G, kPara3G, kDirect3G, kOrtho3G, kUnknown
 };
 
 struct Branch {
@@ -76,8 +76,8 @@ public:
   DecayChannel GetDecayChannel() { return fDecayChannel; };
 
 private:
-  int fEventID;
-  DecayChannel fDecayChannel;
+  int fEventID = 0;
+  DecayChannel fDecayChannel = DecayChannel::kUnknown;
   std::vector<Branch> fBranches;
   std::map<int, int> fTrackBranchConnection;
      

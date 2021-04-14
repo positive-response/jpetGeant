@@ -87,13 +87,13 @@ void MaterialExtension::SetpPsComponent(G4double lifetime, G4double fraction)
 
 G4double MaterialExtension::GetLifetime(double randNumber, DecayChannel channel) const
 {
-  if (channel == DecayChannel::Ortho2G) {
+  if (channel == DecayChannel::kOrtho2G) {
     return fMaterialParameters->GetoPs2GLifetimeFromVector(randNumber);
-  } else if (channel == DecayChannel::Ortho3G) {
+  } else if (channel == DecayChannel::kOrtho3G) {
     return fMaterialParameters->GetoPs3GLifetimeFromVector(randNumber);
-  } else if (channel == DecayChannel::Para2G || channel == DecayChannel::Para3G) {
+  } else if (channel == DecayChannel::kPara2G || channel == DecayChannel::kPara3G) {
     return fMaterialParameters->GetpPsLifetime();
-  } else if (channel == DecayChannel::Direct2G || channel == DecayChannel::Direct3G ) {
+  } else if (channel == DecayChannel::kDirect2G || channel == DecayChannel::kDirect3G ) {
     return fMaterialParameters->GetDirectLifetimeFromVector(randNumber);
   } else {
     G4Exception(
