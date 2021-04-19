@@ -480,7 +480,6 @@ void DetectorConstruction::ConstructLayers(std::vector<G4double>& radius_dynamic
         transform, fScinLogInModule, nameNewI, fWorldLogical,
         true, fMaxScinID, checkOverlaps
       );
-      std::cout << fMaxScinID << std::endl;
       fMaxScinID++;
     }
   }
