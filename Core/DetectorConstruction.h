@@ -68,6 +68,7 @@ public:
   G4int ReturnNumberOfScintillators();
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
+  void SetPressureInChamber(G4double pressure) {fPressure = pressure;};
 
   //! Basic geometry with 3 layers of scintillators
   void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
@@ -119,6 +120,8 @@ private:
   void ConstructTargetRun6();
   //! Create target used in run7
   void ConstructTargetRun7();
+  //! Create target for run12
+  void ConstructTargetRun12();
 
   void ConstructLayers(
     std::vector<G4double>& radius_dynamic, G4int& numberofModules,
@@ -152,6 +155,13 @@ private:
   MaterialExtension* fAluminiumMaterial = nullptr;
   MaterialExtension* fSmallChamberMaterial = nullptr;
   MaterialExtension* fSmallChamberRun7Material = nullptr;
+  //! Vacuum
+  G4Material* vacuum = nullptr;
+  
+  MaterialExtension* fPolycarbonate = nullptr;
+  MaterialExtension* fPolyoxymethylene = nullptr;
+  MaterialExtension* fSiliconDioxide = nullptr;
+  MaterialExtension* fStainlessSteel = nullptr;
 
   G4LogicalVolume* fScinLog = nullptr;
   G4LogicalVolume* fScinLogInModule = nullptr;
@@ -160,6 +170,7 @@ private:
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
   G4int fMaxScinID = 1;
+  G4double fPressure = 1.e-19 *pascal;
 
   std::vector<Layer> fLayerContainer;
   std::vector<Scin> fScinContainer;
