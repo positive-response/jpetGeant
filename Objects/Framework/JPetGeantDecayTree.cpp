@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2021 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -14,7 +14,6 @@
  */
 
 #include "JPetGeantDecayTree.h"
-#include <iostream>
 
 ClassImp(JPetGeantDecayTree)
 
@@ -53,10 +52,9 @@ InteractionType Branch::GetInteractionType(int nodeID) const
   return kUnknownInteractionType;
 }
 
-JPetGeantDecayTree::JPetGeantDecayTree()
-{}
+JPetGeantDecayTree::JPetGeantDecayTree() {}
 
-JPetGeantDecayTree::~JPetGeantDecayTree() 
+JPetGeantDecayTree::~JPetGeantDecayTree()
 {
   fBranches.clear();
   fTrackBranchConnection.clear();
@@ -64,6 +62,8 @@ JPetGeantDecayTree::~JPetGeantDecayTree()
 
 void JPetGeantDecayTree::Clean()
 {
+  fEventID = 0;
+  fDecayChannel = DecayChannel::kUnknown;
   this->ClearVectors();
 }
 
@@ -71,6 +71,16 @@ void JPetGeantDecayTree::ClearVectors()
 {
   fBranches.clear();
   fTrackBranchConnection.clear();
+}
+
+void JPetGeantDecayTree::CopyDecayTree(JPetGeantDecayTree* decayTree)
+{
+  this->SetEventNumber(decayTree->GetEventNumber());
+  this->SetDecayChannel(decayTree->GetDecayChannel());
+  this->SetTrackBranchConnections(decayTree->GetTrackBranchConnections());
+  for (auto it = fTrackBranchConnection.begin(); it != fTrackBranchConnection.end(); it++) {
+    this->AddBranch(decayTree->GetBranch(it->first));
+  }
 }
 
 int JPetGeantDecayTree::FindPrimaryPhoton(int nodeID)

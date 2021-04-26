@@ -22,6 +22,7 @@
 
 HistoManager::HistoManager() : fMakeControlHisto(true)
 {
+  fTempDecayTree = new JPetGeantDecayTree();
   fEventPack = new JPetGeantEventPack();
   fGeantInfo = fEventPack->GetEventInformation();
   fDecayChannel = DecayChannel::kUnknown;
@@ -134,6 +135,18 @@ void HistoManager::Book()
 
   if (GetMakeControlHisto()) BookHistograms();
   fBookStatus = true;
+}
+
+void HistoManager::SaveEvtPack() 
+{
+  if (!fEmptyEvent) {
+    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
+    newDecayTree->Clean();
+    newDecayTree->CopyDecayTree(fTempDecayTree);
+  }
+  fTree->Fill();
+  fTempDecayTree->Clean();
+  fEmptyEvent = true;
 }
 
 void HistoManager::BookHistograms()
@@ -378,23 +391,20 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
   if (interactionType == InteractionType::kScattActivePart)
     fEmptyEvent = false;
   bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
-  
   if (fEndOfEvent) {
-    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
-    newDecayTree->Clean();
     fEndOfEvent = false;
-    newDecayTree->SetEventNumber(GetEventNumber());
-    newDecayTree->SetDecayChannel(fDecayChannel);
+    fTempDecayTree->Clean();
+    fTempDecayTree->SetEventNumber(GetEventNumber());
+    fTempDecayTree->SetDecayChannel(fDecayChannel);
     if (firstInteraction) {
-      newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+      fTempDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
-    newDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
+    fTempDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   } else {
-    JPetGeantDecayTree* decayTree = fEventPack->GetDecayTree(fEventPack->GetNumberOfDecayTrees() - 1);
     if (firstInteraction) {
-      decayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+      fTempDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
-    decayTree->AddNodeToBranch(nodeID, trackID, interactionType);
+    fTempDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   }
 }
 
