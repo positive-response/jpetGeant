@@ -141,11 +141,11 @@ void HistoManager::SaveEvtPack()
 {
   if (!fEmptyEvent) {
     JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
-    newDecayTree->Clean();
+    newDecayTree->Clear("C");
     newDecayTree->CopyDecayTree(fTempDecayTree);
   }
   fTree->Fill();
-  fTempDecayTree->Clean();
+  fTempDecayTree->Clear("C");
   fEmptyEvent = true;
 }
 
@@ -393,7 +393,7 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
   bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
   if (fEndOfEvent) {
     fEndOfEvent = false;
-    fTempDecayTree->Clean();
+    fTempDecayTree->Clear("C");
     fTempDecayTree->SetEventNumber(GetEventNumber());
     fTempDecayTree->SetDecayChannel(fDecayChannel);
     if (firstInteraction) {

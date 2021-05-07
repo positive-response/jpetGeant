@@ -16,6 +16,8 @@
 #ifndef JPETGEANTDECAYTREE_H
 #define JPETGEANTDECAYTREE_H 1
 
+#include "JPetGeantDecayTreeBranch.h"
+#include <TClonesArray.h>
 #include <TObject.h>
 #include <vector>
 #include <map>
@@ -25,35 +27,8 @@
  * @brief Class stores decay tree structures (in form of nodes and tracks)
  */
 
-enum InteractionType
-{
-  kPrimaryGamma,
-  kScattActivePart,
-  kScattNonActivePart,
-  kSecondaryPart,
-  kUnknownInteractionType
-};
-
 enum DecayChannel { 
   kPara2G, kDirect2G, kOrtho2G, kPara3G, kDirect3G, kOrtho3G, kUnknown
-};
-
-struct Branch {
-  Branch() {};
-  Branch(int trackID, int primaryBranch);
-  int fTrackID = -1;             //ID of the track corresponding to this branch
-  int fPrimaryBranchID = -1;       //-1 for branch coming from primary photon, primary branchId otherwise
-  std::vector<int> fNodeIDs = {};    //container for all of the nodes
-  std::vector<InteractionType> fInteractionType = {};
-  
-  void AddNodeID(int nodeID, InteractionType interactionType);
-  int GetTrackID() const { return fTrackID; };
-  int GetPrimaryBranchID() const { return fPrimaryBranchID; };
-  int GetNumberOfNodes() { return fNodeIDs.size(); };
-  int GetPrimaryNodeID() const { if (fNodeIDs.size()) return fNodeIDs[0]; else return -1; };
-  int GetLastNodeID() const { if (fNodeIDs.size()) return fNodeIDs[fNodeIDs.size()-1]; else return -1; };
-  int GetPreviousNodeID(int nodeID) const;
-  InteractionType GetInteractionType(int nodeID) const;
 };
 
 class JPetGeantDecayTree : public TObject
@@ -63,27 +38,33 @@ public:
   JPetGeantDecayTree();
   ~JPetGeantDecayTree();
   
-  void Clean();
-  void ClearVectors();
+  void Clear(Option_t *);
   void CopyDecayTree(JPetGeantDecayTree* decayTree);
+  void CopyDecayTreeBranch(JPetGeantDecayTreeBranch* branchToCopy);
   
   void SetEventNumber(int eventID) { fEventID = eventID; };
   void SetDecayChannel(DecayChannel decayChannel) { fDecayChannel = decayChannel; };
-  int FindPrimaryPhoton(int nodeID);
-  void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
-  void AddBranch(Branch branch) {fBranches.push_back(branch); };
+  void SetNumberOfBranches(int branchesIndex) {fDecayTreeBranchesIndex = branchesIndex; };
   void SetTrackBranchConnections(std::map<int, int> trackBranchConnections) {fTrackBranchConnection = trackBranchConnections; };
+  JPetGeantDecayTreeBranch* ConstructNextDecayTreeBranch();
+  void AddNodeToBranch(int nodeID, int trackID, InteractionType interactionType);
+  
+  JPetGeantDecayTreeBranch* GetDecayTreeBranch(int i) {
+    return dynamic_cast<JPetGeantDecayTreeBranch*>(fDecayTreeBranches[i]);
+  };
+  JPetGeantDecayTreeBranch* GetDecayTreeBranchByTrack(unsigned trackID);
+  int FindPrimaryPhoton(int nodeID);
   int GetEventNumber() { return fEventID; };
-  Branch GetBranch(unsigned trackID) const;
-  int GetNumberOfBranches() { return fBranches.size(); };
+  int GetNumberOfBranches() { return fDecayTreeBranchesIndex; };
   DecayChannel GetDecayChannel() { return fDecayChannel; };
-  std::map<int, int> GetTrackBranchConnections() {return fTrackBranchConnection; };
+  std::map<int, int> GetTrackBranchConnections() { return fTrackBranchConnection; };
 
 private:
   int fEventID = 0;
   DecayChannel fDecayChannel = DecayChannel::kUnknown;
   std::map<int, int> fTrackBranchConnection = {};
-  std::vector<Branch> fBranches = {};
+  TClonesArray fDecayTreeBranches;
+  unsigned int fDecayTreeBranchesIndex = 0;
      
   ClassDef(JPetGeantDecayTree,3)
 

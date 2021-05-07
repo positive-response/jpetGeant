@@ -142,6 +142,7 @@ include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 ROOT_GENERATE_DICTIONARY(
   JPetMCClasses
   Objects/Framework/JPetGeantEventInformation.h
+  Objects/Framework/JPetGeantDecayTreeBranch.h
   Objects/Framework/JPetGeantDecayTree.h
   Objects/Framework/JPetGeantEventPack.h
   Objects/Framework/JPetGeantScinHits.h
@@ -153,6 +154,7 @@ add_library(
   JPetMCClassesDict
   SHARED
   Objects/Framework/JPetGeantEventInformation.cpp
+  Objects/Framework/JPetGeantDecayTreeBranch.cpp
   Objects/Framework/JPetGeantDecayTree.cpp
   Objects/Framework/JPetGeantEventPack.cpp
   Objects/Framework/JPetGeantScinHits.cpp

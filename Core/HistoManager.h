@@ -17,6 +17,7 @@
 #define HISTOMANAGER_H 1
 
 #include "../Objects/Framework/JPetGeantEventInformation.h"
+#include "../Objects/Framework/JPetGeantDecayTreeBranch.h"
 #include "../Objects/Framework/JPetGeantDecayTree.h"
 #include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantScinHits.h"
