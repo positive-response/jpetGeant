@@ -22,8 +22,10 @@
 
 HistoManager::HistoManager() : fMakeControlHisto(true)
 {
+  fTempDecayTree = new JPetGeantDecayTree();
   fEventPack = new JPetGeantEventPack();
   fGeantInfo = fEventPack->GetEventInformation();
+  fDecayChannel = DecayChannel::kUnknown;
 }
 
 HistoManager::~HistoManager() {}
@@ -133,6 +135,18 @@ void HistoManager::Book()
 
   if (GetMakeControlHisto()) BookHistograms();
   fBookStatus = true;
+}
+
+void HistoManager::SaveEvtPack() 
+{
+  if (!fEmptyEvent) {
+    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
+    newDecayTree->Clear("C");
+    newDecayTree->CopyDecayTree(fTempDecayTree);
+  }
+  fTree->Fill();
+  fTempDecayTree->Clear("C");
+  fEmptyEvent = true;
 }
 
 void HistoManager::BookHistograms()
@@ -253,8 +267,6 @@ void HistoManager::FillHistoGenInfo(const G4Event* anEvent)
 
   fillHistogram("gen_3g_angles", theta_12, doubleCheck(theta_23));
   fillHistogram("gen_energy", fGeantInfo->GetMomentumGamma(1).Mag(), doubleCheck(fGeantInfo->GetMomentumGamma(2).Mag()));
-  fillHistogram("gen_g_ene", fGeantInfo->GetMomentumGamma(1).Mag());
-  
 }
 
 void HistoManager::AddGenInfoParticles(G4PrimaryParticle* particle)
@@ -376,22 +388,23 @@ void HistoManager::AddNodeToDecayTree(int nodeID, int trackID)
   else if (nodeID - fParentIDofPhoton == 100)
     interactionType = InteractionType::kScattActivePart;
   
+  if (interactionType == InteractionType::kScattActivePart)
+    fEmptyEvent = false;
   bool firstInteraction = (fParentIDofPhoton < 10 ? true : false);
-  
   if (fEndOfEvent) {
-    JPetGeantDecayTree* newDecayTree = fEventPack->ConstructNextDecayTree();
-    newDecayTree->Clean();
     fEndOfEvent = false;
+    fTempDecayTree->Clear("C");
+    fTempDecayTree->SetEventNumber(GetEventNumber());
+    fTempDecayTree->SetDecayChannel(fDecayChannel);
     if (firstInteraction) {
-      newDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+      fTempDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
-    newDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
+    fTempDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   } else {
-    JPetGeantDecayTree* decayTree = fEventPack->GetDecayTree(fEventPack->GetNumberOfDecayTrees() - 1);
     if (firstInteraction) {
-      decayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
+      fTempDecayTree->AddNodeToBranch(fParentIDofPhoton, trackID, InteractionType::kPrimaryGamma);
     }
-    decayTree->AddNodeToBranch(nodeID, trackID, interactionType);
+    fTempDecayTree->AddNodeToBranch(nodeID, trackID, interactionType);
   }
 }
 

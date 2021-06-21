@@ -86,6 +86,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
       "Called run with non-exisitng geometry"
     );
   }
+  fHistoManager->SetDecayChannel(fPrimaryGenerator->GetDecayChannel());
 }
 
 void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)

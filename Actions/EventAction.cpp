@@ -55,6 +55,9 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
     }
   }
 
+  CheckIf2gIsRegistered(anEvent);
+  CheckIf3gIsRegistered(anEvent);
+
   if (fEvtMessenger->Save2g()) {
     CheckIf2gIsRegistered(anEvent);
     if ( ! Is2gRegistered() ) {
@@ -70,6 +73,7 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
   }
 
   WriteToFile(anEvent);
+  fHistoManager->SetEventNumber(anEvent->GetEventID() + 1);
 }
 
 void EventAction::WriteToFile(const G4Event* anEvent)
@@ -91,7 +95,7 @@ void EventAction::WriteToFile(const G4Event* anEvent)
       // Forcefully cut the remnants from the cut on photon durinng first interaction----     
       double EnergyDeposit = dh->GetEdep();
       // Removing remnants from the energy deposition cut on prim photon
-      if (EnergyDeposit < .511 - fEvtMessenger->GetEnergyCut() && fEvtMessenger->GetEnergyCutFlag()) continue;  
+      if (EnergyDeposit < .511 - fEvtMessenger->GetEnergyCut() && fEvtMessenger->GetEnergyCutFlag()) continue;
      
       fHistoManager->AddNewHit(dh);
     }

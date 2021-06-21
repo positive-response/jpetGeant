@@ -17,6 +17,7 @@
 #define HISTOMANAGER_H 1
 
 #include "../Objects/Framework/JPetGeantEventInformation.h"
+#include "../Objects/Framework/JPetGeantDecayTreeBranch.h"
 #include "../Objects/Framework/JPetGeantDecayTree.h"
 #include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantScinHits.h"
@@ -61,7 +62,7 @@ public:
   
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
-  void SaveEvtPack() { fTree->Fill(); };
+  void SaveEvtPack();
   void Clear() { fEventPack->Clear(); };
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
@@ -73,6 +74,7 @@ public:
   int GetEventNumber() { return fEventPack->GetEventNumber(); };
   void SetHistogramCreation(bool tf) { fMakeControlHisto = tf; };
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
+  void SetDecayChannel(DecayChannel decayChannel) { fDecayChannel = decayChannel; };
   void FillHistoGenInfo(const G4Event* anEvent);
   const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
   void createHistogramWithAxes(
@@ -101,6 +103,8 @@ private:
 
   int fParentIDofPhoton = 0;
   bool fEndOfEvent = true;
+  bool fEmptyEvent = true;
+  DecayChannel fDecayChannel;
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
   TFile* fRootFile = nullptr;
@@ -109,6 +113,7 @@ private:
   TBranch* fBranchScin = nullptr;
   TBranch* fBranchEventPack = nullptr;
 
+  JPetGeantDecayTree* fTempDecayTree = nullptr;
   JPetGeantEventPack* fEventPack = nullptr;
   JPetGeantEventInformation* fGeantInfo = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();
