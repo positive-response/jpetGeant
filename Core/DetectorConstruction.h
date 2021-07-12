@@ -73,6 +73,7 @@ public:
   //! Basic geometry with 3 layers of scintillators
   void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
   void LoadFrame(G4bool tf) { fLoadCADFrame = tf; };
+  void LoadWrapping(G4bool tf) { fLoadWrapping = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
   void ConstructModularLayer(const G4String& module_name) {
