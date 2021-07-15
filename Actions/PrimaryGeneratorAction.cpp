@@ -37,9 +37,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete fBeam;
   delete fPrimaryGenerator;
   delete fMessenger;
-  fPositionsNemaPoints.clear();
-  fWeightedNemaPoints.clear();
-  fLifetimesNemaPoints.clear();
+  fNemaGenerator.Clear();
 }
 
 void PrimaryGeneratorAction::SetEffectivePositronRadius(G4double radius)
@@ -83,9 +81,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   } else if (GetSourceTypeInfo() == ("isotope")) {
     fPrimaryGenerator->GenerateIsotope(fIsotope, event);
   } else if (GetSourceTypeInfo() == ("nema")) {
-    fPrimaryGenerator->GenerateNema(GetNemaPoint(), event, fPositionsNemaPoints, fWeightedNemaPoints, fLifetimesNemaPoints);
+    fPrimaryGenerator->GenerateNema(event, &fNemaGenerator);
   } else if (GetSourceTypeInfo() == ("nema-mixed")) {
-    fPrimaryGenerator->GenerateNema(-1, event, fPositionsNemaPoints, fWeightedNemaPoints, fLifetimesNemaPoints);
+    fPrimaryGenerator->GenerateNema(event, &fNemaGenerator);
   } else {
     G4Exception(
       "PrimaryGeneratorAction", "PG05", FatalException,
@@ -103,13 +101,8 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
     G4int nRun = DetectorConstruction::GetInstance()->GetRunNumber();
     if ((nRun == 0) && (newSourceType != "run")) {
       fGenerateSourceType = newSourceType;
-      if (newSourceType == "nema-mixed" || newSourceType == "nema") {
+      if (newSourceType == "nema") {
         GenerateDefaultNemaPositions();
-      }
-      if (newSourceType == "nema-mixed") {
-        for (int i=1; i<7; i++) {
-          fWeightedNemaPoints.push_back(i);
-        }
       }
     } else if (nRun > 0) {
       fGenerateSourceType = "run";
@@ -130,6 +123,9 @@ void PrimaryGeneratorAction::SetSourceTypeInfo(G4String newSourceType)
 void PrimaryGeneratorAction::GenerateDefaultNemaPositions()
 {
   for (unsigned nemaPoint=1; nemaPoint<7; nemaPoint++) {
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.AddPointWeight(nemaPoint, 1);
+    
     G4double x_creation = 0.0 * cm;
     G4double y_creation = 0.0 * cm;
     G4double z_creation = 0.0 * cm;
@@ -146,67 +142,111 @@ void PrimaryGeneratorAction::GenerateDefaultNemaPositions()
       y_creation = y_creation + 20.0 * cm;
     }
     
-    fPositionsNemaPoints.push_back(G4ThreeVector(x_creation, y_creation, z_creation));
+    fNemaGenerator.SetPointPosition(nemaPoint, G4ThreeVector(x_creation, y_creation, z_creation));
+    fNemaGenerator.SetPointSize(nemaPoint, G4ThreeVector(0.1 * mm, 0.1 * mm, 0.1 * mm));
   }
 }
 
 void PrimaryGeneratorAction::SetNemaPointPosition(int nemaPoint, G4ThreeVector position)
 {
-  if ((nemaPoint < 1 || nemaPoint - 1 > (int)fPositionsNemaPoints.size())) {
+  if (nemaPoint < 1) {
     G4Exception(
       "PrimaryGeneratorAction", "PG06", JustWarning,
-      "Nema point for which you want to set position is less than 1 or greater than the size of the pointsVector more than one. Not setting it."
+      "Nema point for which you want to set position is less than 1. Canno set it now properly."
     );
-  } else if (nemaPoint - 1 == (int)fPositionsNemaPoints.size()) {
-    fPositionsNemaPoints.push_back(position);
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    fNemaGenerator.SetPointPosition(nemaPoint, position);
   } else {
-    fPositionsNemaPoints.at(nemaPoint - 1) = position;
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.SetPointPosition(nemaPoint, position);
   }
 }
 
 void PrimaryGeneratorAction::SetNemaPositionWeight(int nemaPoint, int weight)
 {
-  unsigned removedElements = 0;
-  if (weight == 0) {
-    for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-      if (fWeightedNemaPoints.at(i-removedElements) == nemaPoint) {
-        fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
-        removedElements++;
-      }
-    }
-  } else {
-    int count = 0;
-    for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-      if (fWeightedNemaPoints.at(i) == nemaPoint)
-        count++;
-    }
-    if (weight >= count) {
-      for (int i=0; i<weight-count; i++)
-        fWeightedNemaPoints.push_back(nemaPoint);
-    } else {
-      int nmbOfPointToErase = count - weight;
-      for (unsigned i=0; i<fWeightedNemaPoints.size(); i++) {
-        if (fWeightedNemaPoints.at(i-removedElements) == nemaPoint) {
-          if ((int)removedElements < nmbOfPointToErase) {
-            fWeightedNemaPoints.erase(fWeightedNemaPoints.begin()+i-removedElements);
-            removedElements++;
-          }
-        }
-      }
-    }
-  }
+  fNemaGenerator.AddPointWeight(nemaPoint, weight);
 }
 
 void PrimaryGeneratorAction::SetNemaPointLifetime(int nemaPoint, double lifetime)
 {
-  if ((nemaPoint < 1 || nemaPoint - 1 > (int)fLifetimesNemaPoints.size())) {
+  if (nemaPoint < 1) {
     G4Exception(
       "PrimaryGeneratorAction", "PG07", JustWarning,
-      "Nema point for which you want to set lifetime is less than 1 or greater than the size of the pointsVector more than one. Not setting it."
+      "Nema point for which you want to set lifetime is less than 1. Canno set it now properly."
     );
-  } else if (nemaPoint - 1 == (int)fLifetimesNemaPoints.size()) {
-    fLifetimesNemaPoints.push_back(lifetime);
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    fNemaGenerator.SetPointLifetime(nemaPoint, lifetime);
   } else {
-    fLifetimesNemaPoints.at(nemaPoint - 1) = lifetime;
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.SetPointLifetime(nemaPoint, lifetime);
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPoint3GOption(int nemaPoint)
+{
+  if (nemaPoint < 1) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG08", JustWarning,
+      "Nema point for which you want to set 3G option is less than 1. Canno set it now properly."
+    );
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    fNemaGenerator.SetPoint3GOption(nemaPoint, true);
+  } else {
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.SetPoint3GOption(nemaPoint, true);
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPointSize(int nemaPoint, double radius, double length)
+{
+  if (nemaPoint < 1) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG09", JustWarning,
+      "Nema point for which you want to set size is less than 1. Canno set it now properly."
+    );
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    fNemaGenerator.SetPointSize(nemaPoint, G4ThreeVector(radius, radius, length));
+  } else {
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.SetPointSize(nemaPoint, G4ThreeVector(radius, radius, length));
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPointOrientation(int nemaPoint, double theta, double phi)
+{
+  if (nemaPoint < 1) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG10", JustWarning,
+      "Nema point for which you want to set size is less than 1. Canno set it now properly."
+    );
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    fNemaGenerator.SetPointOrientation(nemaPoint, G4ThreeVector(theta, phi, 0));
+  } else {
+    fNemaGenerator.AddPoint(nemaPoint);
+    fNemaGenerator.SetPointOrientation(nemaPoint, G4ThreeVector(theta, phi, 0));
+  }
+}
+
+void PrimaryGeneratorAction::SetNemaPointShape(int nemaPoint, Dimension dim, double direction, double power, double length)
+{
+  double lengthN = length;
+  if (fabs(length) > 1)
+    lengthN = lengthN/fabs(lengthN);
+  if (nemaPoint < 1) {
+    G4Exception(
+      "PrimaryGeneratorAction", "PG11", JustWarning,
+      "Nema point for which you want to set shape is less than 1. Canno set it now properly."
+    );
+  } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
+    if (dim == Dimension::dimX)
+      fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
+    else if (dim == Dimension::dimY)
+      fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
+  } else {
+    fNemaGenerator.AddPoint(nemaPoint);
+    if (dim == Dimension::dimX)
+      fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
+    else if (dim == Dimension::dimY)
+      fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
   }
 }

@@ -174,17 +174,17 @@ void HistoManager::BookHistograms()
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_XY", "Generated XY coordinates of annihilation point", 50, -24.5, 25.5, 50, -24.5, 25.5),
+    new TH2D("gen_XY", "Generated XY coordinates of annihilation point", 500, -24.95, 25.05, 500, -24.95, 25.05),
     "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Y [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_XZ", "Generated XZ coordinates of annihilation point", 50, -24.5, 25.5, 120, -59.5, 60.5),
+    new TH2D("gen_XZ", "Generated XZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
     "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_YZ", "Generated YZ coordinates of annihilation point", 50, -24.5, 25.5, 120, -59.5, 60.5),
+    new TH2D("gen_YZ", "Generated YZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
     "Annihilation point (2/3g) Y [cm]", "Annihilation point (2/3g) Z [cm]"
   );
 
@@ -204,17 +204,17 @@ void HistoManager::BookHistograms()
   );
   
   createHistogramWithAxes(
-    new TH2D("gen_prompt_XY", "Generated XY coordinates of annihilation point", 50, -24.5, 25.5, 50, -24.5, 25.5),
+    new TH2D("gen_prompt_XY", "Generated XY coordinates of annihilation point", 500, -24.95, 25.05, 500, -24.95, 25.05),
     "Prompt emission point X [cm]", "Prompt emission point Y [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_prompt_XZ", "Generated XZ coordinates of annihilation point", 50, -24.5, 25.5, 120, -59.5, 60.5),
+    new TH2D("gen_prompt_XZ", "Generated XZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
     "Prompt emission point X [cm]", "Prompt emission point Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_prompt_YZ", "Generated YZ coordinates of annihilation point", 50, -24.5, 25.5, 120, -59.5, 60.5),
+    new TH2D("gen_prompt_YZ", "Generated YZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
     "Prompt emission point Y [cm]", "Prompt emission point Z [cm]"
   );
 

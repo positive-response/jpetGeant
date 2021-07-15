@@ -30,6 +30,103 @@
 #include <Randomize.hh>
 #include <globals.hh>
 
+NemaPoint::NemaPoint()
+{
+  G4ThreeVector temp(0,0,0);
+  position = temp;
+  lifetime = MaterialParameters::fTauBulk;
+  is3GAllowed = false;
+  G4ThreeVector temp2(0.1,0.1,0.1);
+  sizeOfPoint = temp2;
+  orientationOfPoint = temp;
+  shapeOfPointInX = temp;
+  shapeOfPointInY = temp;
+}
+
+void NemaGenerator::AddPoint(int pointID)
+{
+  auto search = fIDPointsConnection.find(pointID);
+  if (search == fIDPointsConnection.end()) {
+    int genPointSize = fGeneratedPoints.size();
+    NemaPoint newPoint;
+    fGeneratedPoints.push_back(newPoint);
+    fIDPointsConnection.insert(std::make_pair(pointID, genPointSize));
+  }
+}
+
+void NemaGenerator::AddPointWeight(int pointID, int weight)
+{
+  unsigned removedElements = 0;
+  if (weight == 0) {
+    for (unsigned i=0; i<fWeightPositions.size(); i++) {
+      if (fWeightPositions.at(i-removedElements) == pointID) {
+        fWeightPositions.erase(fWeightPositions.begin()+i-removedElements);
+        removedElements++;
+      }
+    }
+  } else {
+    int count = 0;
+    for (unsigned i=0; i<fWeightPositions.size(); i++) {
+      if (fWeightPositions.at(i) == pointID)
+        count++;
+    }
+    if (weight >= count) {
+      for (int i=0; i<weight-count; i++)
+        fWeightPositions.push_back(pointID);
+    } else {
+      int nmbOfPointToErase = count - weight;
+      for (unsigned i=0; i<fWeightPositions.size(); i++) {
+        if (fWeightPositions.at(i-removedElements) == pointID) {
+          if ((int)removedElements < nmbOfPointToErase) {
+            fWeightPositions.erase(fWeightPositions.begin()+i-removedElements);
+            removedElements++;
+          }
+        }
+      }
+    }
+  }
+}
+
+void NemaGenerator::SetOnePointOnly(int pointID)
+{
+  NemaPoint tempPoint = GetPoint(pointID);
+  Clear();
+  fGeneratedPoints.push_back(tempPoint);
+  fWeightPositions.push_back(pointID);
+  fIDPointsConnection.insert(std::make_pair(pointID, 0));
+}
+
+bool NemaGenerator::DoesPointExistAlready(int pointID) 
+{
+  auto search = fIDPointsConnection.find(pointID);
+  if (search == fIDPointsConnection.end()) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+NemaPoint NemaGenerator::GetPoint(int pointID) const
+{
+  auto search = fIDPointsConnection.find(pointID);
+  if (search != fIDPointsConnection.end()) {
+    return fGeneratedPoints.at(fIDPointsConnection.at(pointID));
+  } else {
+    NemaPoint newPoint;
+    return newPoint;
+  }
+}
+
+NemaPoint NemaGenerator::GetRandomPoint() const
+{
+  if (fGeneratedPoints.size() == 1)
+    return fGeneratedPoints.at(0);
+  
+  unsigned indexOfPoint = rand() % (int)fWeightPositions.size();
+  int pointID = fWeightPositions.at(indexOfPoint);
+  return GetPoint(pointID);
+}
+
 PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 
 PrimaryGenerator::~PrimaryGenerator() {}
@@ -428,42 +525,67 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
  *  1       1       4
  *  z ------0------3/4L ------
  */
-void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event, std::vector<G4ThreeVector> positionsNemaPoints, 
-                                    std::vector<int> weightPositions, std::vector<double> lifetimePositions)
+void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
 {
-  int newNemaPoint = nemaPoint;
-
-  if (nemaPoint == -1 && weightPositions.size() > 0) {
-    int seed = time(NULL);
-    // sometimes seeds are too close to each other. This part is mixing seeds in order to proper choose nema point ID
-    if (seed == fPreviousTime) {
-      seed = 3*fPreviousSeed - seed;
-      fPreviousSeed = seed;
-    } else {
-      fPreviousTime = seed;
-      fPreviousSeed = seed;
+  NemaPoint nemaPoint = nemaGen->GetRandomPoint();
+  
+  G4ThreeVector nemaPosition = nemaPoint.position;
+  G4ThreeVector vtxPosition = VertexUniformInCylinder(nemaPoint.sizeOfPoint.getX(), nemaPoint.sizeOfPoint.getZ());
+  if (nemaPoint.shapeOfPointInX.getX() != 0) {
+    double directionX = nemaPoint.shapeOfPointInX.getX();
+    double lengthX = nemaPoint.shapeOfPointInX.getZ()*nemaPoint.sizeOfPoint.getZ();
+    double normLengthX = 1 + fabs(lengthX/(2*nemaPoint.sizeOfPoint.getZ()-fabs(lengthX)));
+    normLengthX = normLengthX*nemaPoint.sizeOfPoint.getZ();
+    double xAdd = pow(1 - fabs(vtxPosition.getZ() - nemaPoint.sizeOfPoint.getZ())/normLengthX, nemaPoint.shapeOfPointInX.getY());
+    vtxPosition = vtxPosition - G4ThreeVector(directionX*xAdd, 0, 0);
+  }
+  if (nemaPoint.shapeOfPointInY.getX() != 0) {
+    double directionY = nemaPoint.shapeOfPointInY.getX();
+    double lengthY = nemaPoint.shapeOfPointInY.getZ()*nemaPoint.sizeOfPoint.getZ();
+    double normLengthY = 1 + fabs(lengthY/(2*nemaPoint.sizeOfPoint.getZ()-fabs(lengthY)));
+    normLengthY = normLengthY*nemaPoint.sizeOfPoint.getZ();
+    double yAdd = pow(1 - fabs(vtxPosition.getZ() - nemaPoint.sizeOfPoint.getZ())/normLengthY, nemaPoint.shapeOfPointInY.getY());
+    vtxPosition = vtxPosition - G4ThreeVector(0, directionY*yAdd, 0);
+  }
+  if (nemaPoint.orientationOfPoint.mag() > 0) {
+    double theta = nemaPoint.orientationOfPoint.getX() * M_PI/180.;
+    double phi = nemaPoint.orientationOfPoint.getY() * M_PI/180.;
+    if (theta != 0. || phi != 0.) {
+      TVector3 normal(cos(theta)*sin(phi), sin(theta)*sin(phi), cos(phi));
+      TVector3 z(0.,0.,1.);
+      TVector3 rotAxis = z.Cross(normal);
+      double angle = normal.Angle(z); // radians
+      TRotation rot;
+      rot.Rotate(angle, rotAxis);
+      TVector3 tempVector(vtxPosition.getX(), vtxPosition.getY(), vtxPosition.getZ());
+      tempVector = rot*tempVector;
+      vtxPosition.setX(tempVector.X());
+      vtxPosition.setY(tempVector.Y());
+      vtxPosition.setY(tempVector.Z());
     }
-    srand (seed);
-    unsigned indexOfPoint = rand() % (int)weightPositions.size();
-    newNemaPoint = weightPositions[indexOfPoint];
   }
-  //Else simulating 0,0,0 as newNemaPoint will be -1
-  G4ThreeVector nemaPosition = G4ThreeVector(0, 0, 0);
-  
-  if (newNemaPoint > 0 && newNemaPoint <= (int)positionsNemaPoints.size()) {
-    nemaPosition = positionsNemaPoints.at(newNemaPoint-1);
-  }
-  
-  G4ThreeVector vtxPosition = VertexUniformInCylinder(0.1 * mm, 0.1 * mm)
-  + nemaPosition;
+  vtxPosition = vtxPosition + nemaPosition;
 
-  double lifetime = MaterialParameters::fTauBulk;
-  if (newNemaPoint > 0 && newNemaPoint < (int)lifetimePositions.size()-1) {
-    lifetime = lifetimePositions.at(newNemaPoint-1);
+  double lifetime = nemaPoint.lifetime;
+  bool is3GAllowed = nemaPoint.is3GAllowed;
+  if (is3GAllowed) {
+    double randLF = G4UniformRand();
+    double lfTest = MaterialParameters::GetoPsIntensity3G(lifetime * ns, 100);
+    if (randLF > lfTest) {
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, 0.0f, lifetime
+      ));
+    } else {
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::Ortho3G, vtxPosition, 0.0f, lifetime
+      ));
+    }
+  } else {
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, 0.0f, lifetime
+    ));
   }
-  event->AddPrimaryVertex(GenerateTwoGammaVertex(
-    vtxPosition, 0.0f, lifetime
-  ));
+  
   event->AddPrimaryVertex(GeneratePromptGammaVertex(
     vtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
     MaterialParameters::fSodiumGammaEnergy
