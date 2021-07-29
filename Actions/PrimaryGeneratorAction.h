@@ -57,9 +57,9 @@ public:
   void SetNemaPositionWeight(int position, int weight);
   void SetNemaPointLifetime(int position, double lifetime);
   void SetNemaPoint3GOption(int position);
-  void SetNemaPointSize(int position, double radius, double length);
+  void SetNemaPointSize(int position, G4double radius, G4double length);
   void SetNemaPointOrientation(int position, double theta, double phi);
-  void SetNemaPointShape(int position, Dimension dim, double direction, double power, double length);
+  void SetNemaPointShape(int position, Dimension dim, double G4double, double power, double length);
   void SetEffectivePositronRadius(G4double);
   
   G4int GetNemaPoint() { return fNemaPoint; }

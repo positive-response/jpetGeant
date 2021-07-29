@@ -30,19 +30,24 @@
 #include <TRotation.h>
 #include <G4Event.hh>
 #include <TVector3.h>
+#include <TGraph.h>
 #include <vector>
+#include <TF1.h>
 #include <map>
 
 struct NemaPoint
 {
   NemaPoint();
+  
   G4ThreeVector position;
-  G4double lifetime;
-  bool is3GAllowed;
+  G4double lifetime = 2;
+  bool is3GAllowed = false;
   G4ThreeVector sizeOfPoint;
   G4ThreeVector orientationOfPoint;
   G4ThreeVector shapeOfPointInX;
   G4ThreeVector shapeOfPointInY;
+  TF1* elipseXNorm = nullptr;
+  TF1* elipseYNorm = nullptr;
 };
 
 class NemaGenerator
@@ -75,6 +80,10 @@ public:
   bool DoesPointExistAlready(int pointID);
   NemaPoint GetPoint(int pointID) const;
   NemaPoint GetRandomPoint() const;
+
+  void GenerateElipseXNorm(int pointID);
+  void GenerateElipseYNorm(int pointID);
+  
 private:
   int fSeed;
   std::vector<NemaPoint> fGeneratedPoints;

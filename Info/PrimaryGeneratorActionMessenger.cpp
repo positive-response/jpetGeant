@@ -85,7 +85,7 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaMixed->SetGuidance("Generate nema with all sources at once");
   
   fNemaSetPosition = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setPosition", this);
-  fNemaSetPosition->SetGuidance("Setting the position of a given point in nema generation (int - point, 3Dvector - x, y, z). Use it when do you not want default positions of the nema points");
+  fNemaSetPosition->SetGuidance("Setting the position of a given point in nema generation (int - point, 3Dvector - x, y, z [cm3]). Use it when do you not want default positions of the nema points");
   
   fNemaSetPositionWeight = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setWeight", this);
   fNemaSetPositionWeight->SetGuidance("Setting the weight of a given point in nema generation (int - point, int - weight), if 0 it removes a point from generation");
@@ -97,7 +97,7 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaSetPosition3GOption->SetGuidance("Setting if the position of a given point in nema generation should have possibility to decay into three photons");
   
   fNemaSetPositionCylinderSize = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderSize", this);
-  fNemaSetPositionCylinderSize->SetGuidance("Setting the radius and length of the cylinder in which annihilation position is simulated (int - point, double - radius [mm], double - length [mm])");
+  fNemaSetPositionCylinderSize->SetGuidance("Setting the radius and length of the cylinder in which annihilation position is simulated (int - point, double - radius [cm], double - length [cm])");
   
   fNemaSetPositionCylinderRotation = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderRotation", this);
   fNemaSetPositionCylinderRotation->SetGuidance("Setting the orientation angles of the cylinder in which annihilation position is simulated (int - point, double - theta [deg], double - phi [deg])");
@@ -209,7 +209,7 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     G4int nemaPoint;
     G4double radius, length;
     is >> nemaPoint >> radius >> length;
-    fPrimGen->SetNemaPointSize(nemaPoint, radius, length);
+    fPrimGen->SetNemaPointSize(nemaPoint, radius*cm, length*cm);
   } else if (command == fNemaSetPositionCylinderRotation) {
     G4String paramString = newValue;
     std::istringstream is(paramString);
@@ -223,14 +223,14 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     G4int nemaPoint;
     G4double direction, power, length;
     is >> nemaPoint >> direction >> power >> length;
-    fPrimGen->SetNemaPointShape(nemaPoint, Dimension::dimX, direction, power, length);
+    fPrimGen->SetNemaPointShape(nemaPoint, Dimension::dimX, direction*cm, power, length);
   } else if (command == fNemaSetPositionCylinderShapeY) {
     G4String paramString = newValue;
     std::istringstream is(paramString);
     G4int nemaPoint;
     G4double direction, power, length;
     is >> nemaPoint >> direction >> power >> length;
-    fPrimGen->SetNemaPointShape(nemaPoint, Dimension::dimY, direction, power, length);
+    fPrimGen->SetNemaPointShape(nemaPoint, Dimension::dimY, direction*cm, power, length);
   } else if (command == fSetChamberCenter) {
     if (!CheckIfRun()) { ChangeToRun(); }
     DetectorConstants::SetChamberCenter(fSetChamberCenter->GetNew3VectorValue(newValue));

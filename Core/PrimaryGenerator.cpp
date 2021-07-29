@@ -127,6 +127,58 @@ NemaPoint NemaGenerator::GetRandomPoint() const
   return GetPoint(pointID);
 }
 
+void NemaGenerator::GenerateElipseXNorm(int pointID)
+{
+  Int_t pointNumber = 1000;
+  Double_t thetaStep = M_PI/(2*pointNumber);
+  Double_t maxVal = 1;
+  unsigned pointVectorID = fIDPointsConnection.at(pointID);
+  double xMax = fGeneratedPoints.at(pointVectorID).shapeOfPointInX.getX();
+  double zMax = fGeneratedPoints.at(pointVectorID).sizeOfPoint.getZ();
+  if (fabs(xMax) > fabs(zMax)) {
+    maxVal = fabs(xMax);
+  }
+  else {
+    maxVal = fabs(zMax);
+  }
+  Double_t arg = 0, val = 0;
+  TGraph* newGraph = new TGraph(pointNumber);
+  for (Int_t i=0; i<pointNumber; i++) {
+    arg = thetaStep*i;
+    val = sqrt(pow(xMax*sin(thetaStep*i),2) + pow(zMax*cos(thetaStep*i),2))/maxVal;
+    newGraph -> SetPoint(i, arg, val);
+  }
+  fGeneratedPoints.at(pointVectorID).elipseXNorm = new TF1("elipseY", "pol8", 0, M_PI/2);
+  newGraph -> Fit(fGeneratedPoints.at(pointVectorID).elipseXNorm, "Q");
+  delete newGraph;
+}
+
+void NemaGenerator::GenerateElipseYNorm(int pointID)
+{
+  Int_t pointNumber = 1000;
+  Double_t thetaStep = M_PI/(2*pointNumber);
+  Double_t maxVal = 1;
+  unsigned pointVectorID = fIDPointsConnection.at(pointID);
+  double yMax = fGeneratedPoints.at(pointVectorID).shapeOfPointInY.getX();
+  double zMax = fGeneratedPoints.at(pointVectorID).sizeOfPoint.getZ();
+  if (fabs(yMax) > fabs(zMax)) {
+    maxVal = fabs(yMax);
+  }
+  else {
+    maxVal = fabs(zMax);
+  }
+  Double_t arg = 0, val = 0;
+  TGraph* newGraph = new TGraph(pointNumber);
+  for (Int_t i=0; i<pointNumber; i++) {
+    arg = thetaStep*i;
+    val = sqrt(pow(yMax*sin(thetaStep*i),2) + pow(zMax*cos(thetaStep*i),2))/maxVal;
+    newGraph -> SetPoint(i, arg, val);
+  }
+  fGeneratedPoints.at(pointVectorID).elipseYNorm = new TF1("elipseY", "pol8", 0, M_PI/2);
+  newGraph -> Fit(fGeneratedPoints.at(pointVectorID).elipseYNorm, "Q");
+  delete newGraph;
+}
+
 PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 
 PrimaryGenerator::~PrimaryGenerator() {}
@@ -532,26 +584,57 @@ void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
   G4ThreeVector nemaPosition = nemaPoint.position;
   G4ThreeVector vtxPosition = VertexUniformInCylinder(nemaPoint.sizeOfPoint.getX(), nemaPoint.sizeOfPoint.getZ());
   if (nemaPoint.shapeOfPointInX.getX() != 0) {
+    double previousX = vtxPosition.getX();
     double directionX = nemaPoint.shapeOfPointInX.getX();
-    double lengthX = nemaPoint.shapeOfPointInX.getZ()*nemaPoint.sizeOfPoint.getZ();
-    double normLengthX = 1 + fabs(lengthX/(2*nemaPoint.sizeOfPoint.getZ()-fabs(lengthX)));
-    normLengthX = normLengthX*nemaPoint.sizeOfPoint.getZ();
-    double xAdd = pow(1 - fabs(vtxPosition.getZ() - nemaPoint.sizeOfPoint.getZ())/normLengthX, nemaPoint.shapeOfPointInX.getY());
-    vtxPosition = vtxPosition - G4ThreeVector(directionX*xAdd, 0, 0);
+    double cutOffX = 1-nemaPoint.shapeOfPointInX.getZ();
+    bool badElipsePoint = true;
+    while (badElipsePoint) {
+      double randNum = G4UniformRand();
+      double randNum2 = cutOffX*(M_PI * G4UniformRand() - M_PI/2);
+      if (randNum <= nemaPoint.elipseYNorm -> Eval(fabs(randNum2))) {
+        G4double xP = directionX*cos(randNum2);
+        G4double zP = nemaPoint.sizeOfPoint.getZ()*sin(randNum2);
+        double signZ = zP/fabs(zP);
+        double theta = acos(xP/fabs(directionX));
+        xP = fabs(directionX)*cos(theta);
+        zP = signZ*nemaPoint.sizeOfPoint.getZ()*sin(theta);
+        xP = xP + previousX*cos(theta);
+        zP = zP + signZ*previousX*sin(theta);
+        vtxPosition.setX(xP);
+        vtxPosition.setZ(zP);
+        badElipsePoint = false;
+      }
+    }
   }
   if (nemaPoint.shapeOfPointInY.getX() != 0) {
+    double previousY = vtxPosition.getY();
     double directionY = nemaPoint.shapeOfPointInY.getX();
-    double lengthY = nemaPoint.shapeOfPointInY.getZ()*nemaPoint.sizeOfPoint.getZ();
-    double normLengthY = 1 + fabs(lengthY/(2*nemaPoint.sizeOfPoint.getZ()-fabs(lengthY)));
-    normLengthY = normLengthY*nemaPoint.sizeOfPoint.getZ();
-    double yAdd = pow(1 - fabs(vtxPosition.getZ() - nemaPoint.sizeOfPoint.getZ())/normLengthY, nemaPoint.shapeOfPointInY.getY());
-    vtxPosition = vtxPosition - G4ThreeVector(0, directionY*yAdd, 0);
+    double cutOffY = 1-nemaPoint.shapeOfPointInY.getZ();
+    bool badElipsePoint = true;
+    while (badElipsePoint) {
+      double randNum = G4UniformRand();
+      double randNum2 = cutOffY*(M_PI * G4UniformRand() - M_PI/2);
+      if (randNum <= nemaPoint.elipseYNorm -> Eval(fabs(randNum2))) {
+        G4double yP = directionY*cos(randNum2);
+        G4double zP = nemaPoint.sizeOfPoint.getZ()*sin(randNum2);
+        double signZ = zP/fabs(zP);
+        double theta = acos(yP/fabs(directionY));
+        yP = fabs(directionY)*cos(theta);
+        zP = signZ*nemaPoint.sizeOfPoint.getZ()*sin(theta);
+        yP = yP + previousY*cos(theta);
+        zP = zP + signZ*previousY*sin(theta);
+        vtxPosition.setY(yP);
+        vtxPosition.setZ(zP);
+        badElipsePoint = false;
+      }
+    }
   }
   if (nemaPoint.orientationOfPoint.mag() > 0) {
     double theta = nemaPoint.orientationOfPoint.getX() * M_PI/180.;
     double phi = nemaPoint.orientationOfPoint.getY() * M_PI/180.;
     if (theta != 0. || phi != 0.) {
       TVector3 normal(cos(theta)*sin(phi), sin(theta)*sin(phi), cos(phi));
+      normal = normal.Unit();
       TVector3 z(0.,0.,1.);
       TVector3 rotAxis = z.Cross(normal);
       double angle = normal.Angle(z); // radians
@@ -561,7 +644,7 @@ void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
       tempVector = rot*tempVector;
       vtxPosition.setX(tempVector.X());
       vtxPosition.setY(tempVector.Y());
-      vtxPosition.setY(tempVector.Z());
+      vtxPosition.setZ(tempVector.Z());
     }
   }
   vtxPosition = vtxPosition + nemaPosition;
@@ -604,7 +687,6 @@ G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rIn, G4double z
   G4ThreeVector positionA(r * ux, r * uy, z);
   return positionA;
 }
-
 const G4ThreeVector PrimaryGenerator::GetRandomPointInFilledSphere(G4double radius)
 {
   G4double theta = 2 * M_PI * G4UniformRand();

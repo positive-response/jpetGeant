@@ -197,7 +197,7 @@ void PrimaryGeneratorAction::SetNemaPoint3GOption(int nemaPoint)
   }
 }
 
-void PrimaryGeneratorAction::SetNemaPointSize(int nemaPoint, double radius, double length)
+void PrimaryGeneratorAction::SetNemaPointSize(int nemaPoint, G4double radius, G4double length)
 {
   if (nemaPoint < 1) {
     G4Exception(
@@ -227,7 +227,7 @@ void PrimaryGeneratorAction::SetNemaPointOrientation(int nemaPoint, double theta
   }
 }
 
-void PrimaryGeneratorAction::SetNemaPointShape(int nemaPoint, Dimension dim, double direction, double power, double length)
+void PrimaryGeneratorAction::SetNemaPointShape(int nemaPoint, Dimension dim, G4double direction, double power, double length)
 {
   double lengthN = length;
   if (fabs(length) > 1)
@@ -238,15 +238,23 @@ void PrimaryGeneratorAction::SetNemaPointShape(int nemaPoint, Dimension dim, dou
       "Nema point for which you want to set shape is less than 1. Canno set it now properly."
     );
   } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
-    if (dim == Dimension::dimX)
+    if (dim == Dimension::dimX) {
       fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
-    else if (dim == Dimension::dimY)
+      fNemaGenerator.GenerateElipseXNorm(nemaPoint);
+    }
+    else if (dim == Dimension::dimY) {
       fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
+      fNemaGenerator.GenerateElipseYNorm(nemaPoint);
+    }
   } else {
     fNemaGenerator.AddPoint(nemaPoint);
-    if (dim == Dimension::dimX)
+    if (dim == Dimension::dimX) {
       fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
-    else if (dim == Dimension::dimY)
+      fNemaGenerator.GenerateElipseXNorm(nemaPoint);
+    }
+    else if (dim == Dimension::dimY) {
       fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
+      fNemaGenerator.GenerateElipseYNorm(nemaPoint);
+    }
   }
 }
