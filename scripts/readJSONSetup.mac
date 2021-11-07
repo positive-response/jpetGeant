@@ -5,6 +5,8 @@
 
 # Name of the file with detector setup in JSON format
 /jpetmc/detector/jsonSetupFile modular_24_ring.json
+
+#/jpetmc/detector/jsonSetupFile endcap_example.json
 #/jpetmc/detector/jsonSetupFile big_barrel_3layers.json
 #/jpetmc/detector/jsonSetupFile trento_2mods.json
 #/jpetmc/detector/jsonSetupFile dual_head_ccb.json

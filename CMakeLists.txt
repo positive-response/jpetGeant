@@ -37,7 +37,7 @@ set(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 
 ################################################################################
-## Provide scripts and setups in a folder with a binary
+## Provide scripts in a folder with a binary
 set(SCRIPT_FILES
   vis.mac
   run3.mac
@@ -50,15 +50,8 @@ set(SCRIPT_FILES
   singleBeam.mac
   extendedSource.mac
   modSmCh.mac
-  readJSONSetup.mac
 )
 
-set(SETUP_FILES
-  big_barrel_3layers.json
-  dual_head_ccb.json
-  modular_24_ring.json
-  trento_2mods.json
-)
 ################################################################################
 ## Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
@@ -139,7 +132,7 @@ if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
 endif()
 
 set(ROOT_CXX_FLAGS "-std=c++11 -Wunused-parameter")
-#include(${ROOT_USE_FILE})
+include(${ROOT_USE_FILE})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
@@ -180,18 +173,10 @@ target_link_libraries(
   ${cadmesh_LIBRARIES}
 )
 
-## Copy script and setup files to bin directory
+## Copy script files to bin directory
 foreach(file_i ${SCRIPT_FILES})
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/scripts/${file_i}
-    ${CMAKE_CURRENT_BINARY_DIR}/bin/${file_i}
-    COPYONLY
-  )
-endforeach(file_i)
-
-foreach(file_i ${SETUP_FILES})
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/setups/${file_i}
     ${CMAKE_CURRENT_BINARY_DIR}/bin/${file_i}
     COPYONLY
   )
