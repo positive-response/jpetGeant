@@ -569,9 +569,7 @@ void DetectorConstruction::ConstructFromSetupFile(G4String fileName)
     G4String name = "scin_" + G4UIcommand::ConvertToString(id);
     G4Box* scinBox = new G4Box(name + "_box", height / 2.0, width / 2.0, length / 2.0);
     G4LogicalVolume* scinLog = new G4LogicalVolume(scinBox, fScinMaterial, name + "_logical");
-    // fScinLog = new G4LogicalVolume(scinBox, fScinMaterial, name + "_logical");
     scinLog->SetVisAttributes(boxVisAtt);
-    // fScinLog->SetVisAttributes(boxVisAtt);
 
     //! Rotation matrix and translation of the strip
     //! Angles in the file are writtern in degrees, converting to radians
@@ -583,11 +581,8 @@ void DetectorConstruction::ConstructFromSetupFile(G4String fileName)
     G4ThreeVector loc = G4ThreeVector(xcenter, ycenter, zcenter);
     G4Transform3D transform(rot, loc);
 
-    // std::cout << " json it " << fMaxCreatedScinID << " ID " << id << std::endl;
-
     //! Adding scintillator to detector construction
     new G4PVPlacement(transform, scinLog, name + "_phys", fWorldLogical, true, id, checkOverlaps);
-    // new G4PVPlacement(transform, fScinLog, name + "_phys", fWorldLogical, true, fMaxCreatedScinID, checkOverlaps);
     fStripsFromSetup.push_back(scinLog);
 
     //! Additional wrapping of the strips
