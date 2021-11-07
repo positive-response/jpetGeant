@@ -60,7 +60,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
       "Name of JSON setup file with detector construction, that will be used to create scintillators instead of hardcoded procedure.");
 
   fJSONSetupRunNum = new G4UIcmdWithAnInteger("/jpetmc/detector/jsonSetupRunNum", this);
-  fJSONSetupRunNum->SetGuidance("Set number of Run that is to be loaded from JSON file.");
+  fJSONSetupRunNum->SetGuidance("Set the number of Run that is to be loaded from JSON file.");
 
   fPressureInChamber = new G4UIcmdWithADoubleAndUnit("/jpetmc/detector/chamberPressure", this);
   fPressureInChamber->SetGuidance("Define pressure in the chamber");
