@@ -67,8 +67,8 @@ public:
   NemaPoint GetRandomPoint() const;
 
   void GenerateElipseYNorm(int pointID);
-  G4ThreeVector GetPointShapedInY(G4ThreeVector vtxPosition, NemaPoint nemaPoint);
-  G4ThreeVector GetRotatedPoint(G4ThreeVector vtxPosition, NemaPoint nemaPoint);
+  static G4ThreeVector GetPointShapedInY(G4ThreeVector vtxPosition, NemaPoint nemaPoint);
+  static G4ThreeVector GetRotatedPoint(G4ThreeVector vtxPosition, NemaPoint nemaPoint);
   
 private:
   int fSeed;
