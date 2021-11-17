@@ -102,11 +102,8 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaSetPositionCylinderRotation = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderRotation", this);
   fNemaSetPositionCylinderRotation->SetGuidance("Setting the orientation angles of the cylinder in which annihilation position is simulated (int - point, double - theta [deg], double - phi [deg])");
   
-  fNemaSetPositionCylinderShapeX = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderShapeParametersX", this);
-  fNemaSetPositionCylinderShapeX->SetGuidance("Setting the shape of the cylinder in X directory in which annihilation position is simulated (int - point, double - direction of the change, double - power of the shape change, double (0,1) - cut-off of the shape)");
-  
   fNemaSetPositionCylinderShapeY = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderShapeParametersY", this);
-  fNemaSetPositionCylinderShapeY->SetGuidance("Setting the shape of the cylinder in Y directory in which annihilation position is simulated (int - point, double - direction of the change, double - power of the shape change, double (-1,1) - cut-off of the shape)");
+  fNemaSetPositionCylinderShapeY->SetGuidance("Setting the shape of the cylinder in Y directory in which annihilation position is simulated (int - point, double - direction of the change, double - power of the shape change, double (0,1) - cut-off of the shape)");
   
   fSetChamberCenter = new G4UIcmdWith3VectorAndUnit("/jpetmc/run/setChamberCenter", this);
   fSetChamberCenter->SetGuidance("Set position of the annihilation chamber");
@@ -140,7 +137,6 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fNemaSetPosition3GOption;
   delete fNemaSetPositionCylinderSize;
   delete fNemaSetPositionCylinderRotation;
-  delete fNemaSetPositionCylinderShapeX;
   delete fNemaSetPositionCylinderShapeY;
   delete fSetChamberCenter;
   delete fSetChamberEffectivePositronRadius;
@@ -217,13 +213,6 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     G4double theta, phi;
     is >> nemaPoint >> theta >> phi;
     fPrimGen->SetNemaPointOrientation(nemaPoint, theta, phi);
-  } else if (command == fNemaSetPositionCylinderShapeX) {
-    G4String paramString = newValue;
-    std::istringstream is(paramString);
-    G4int nemaPoint;
-    G4double direction, power, length;
-    is >> nemaPoint >> direction >> power >> length;
-    fPrimGen->SetNemaPointShape(nemaPoint, Dimension::dimX, direction*cm, power, length);
   } else if (command == fNemaSetPositionCylinderShapeY) {
     G4String paramString = newValue;
     std::istringstream is(paramString);

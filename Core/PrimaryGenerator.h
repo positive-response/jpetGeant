@@ -18,6 +18,7 @@
 
 #include "../Objects/Framework/JPetGeantDecayTree.h"
 #include "MaterialExtension.h"
+#include "NemaGenerator.h"
 #include "SourceParams.h"
 #include "BeamParams.h"
 
@@ -34,62 +35,6 @@
 #include <vector>
 #include <TF1.h>
 #include <map>
-
-struct NemaPoint
-{
-  NemaPoint();
-  
-  G4ThreeVector position;
-  G4double lifetime = 2;
-  bool is3GAllowed = false;
-  G4ThreeVector sizeOfPoint;
-  G4ThreeVector orientationOfPoint;
-  G4ThreeVector shapeOfPointInX;
-  G4ThreeVector shapeOfPointInY;
-  TF1* elipseXNorm = nullptr;
-  TF1* elipseYNorm = nullptr;
-};
-
-class NemaGenerator
-{
-public:
-  NemaGenerator() {
-    fSeed = time(NULL);
-    srand (fSeed);
-  };
-  ~NemaGenerator() {
-    fGeneratedPoints.clear();
-    fWeightPositions.clear();
-    fIDPointsConnection.clear();
-  };
-  void Clear() {
-    fGeneratedPoints.clear();
-    fWeightPositions.clear();
-    fIDPointsConnection.clear();
-  };
-  void AddPoint(int pointID);
-  void AddPointWeight(int pointID, int weight);
-  void SetOnePointOnly(int pointID);
-  void SetPointPosition(int pointID, G4ThreeVector pos) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).position = pos; };
-  void SetPointLifetime(int pointID, G4double lf) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).lifetime = lf; };
-  void SetPoint3GOption(int pointID, bool is3G) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).is3GAllowed = is3G; };
-  void SetPointSize(int pointID, G4ThreeVector size) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).sizeOfPoint = size; };
-  void SetPointOrientation(int pointID, G4ThreeVector orient) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).orientationOfPoint = orient; };
-  void SetPointShapeX(int pointID, G4ThreeVector shape) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).shapeOfPointInX = shape; };
-  void SetPointShapeY(int pointID, G4ThreeVector shape) { fGeneratedPoints.at(fIDPointsConnection.at(pointID)).shapeOfPointInY = shape; };
-  bool DoesPointExistAlready(int pointID);
-  NemaPoint GetPoint(int pointID) const;
-  NemaPoint GetRandomPoint() const;
-
-  void GenerateElipseXNorm(int pointID);
-  void GenerateElipseYNorm(int pointID);
-  
-private:
-  int fSeed;
-  std::vector<NemaPoint> fGeneratedPoints;
-  std::vector<int> fWeightPositions;
-  std::map<int, int> fIDPointsConnection;
-};
 
 class PrimaryGenerator : public G4VPrimaryGenerator
 {

@@ -83,8 +83,6 @@ Following options can be added to macro files, that are read by Geat4. Example f
 * Rotating the shape of the nema point:  
  `/jpetmc/source/nema/mixed/setCylinderRotation [point] [phi] [theta]`  
 * Changing the shape of the nema point by shifting position in X:  
- `/jpetmc/source/nema/mixed/setCylinderShapeParametersX [point] [direction and spread] [shape parameter1 - power] [shape parameter2 - range]`  
-* Changing the shape of the nema point by shifting position in Y:  
  `/jpetmc/source/nema/mixed/setCylinderShapeParametersY [point] [direction and spread] [shape parameter1 - power] [shape parameter2 - range]`  
 * set parameters of gamma beam:  
  `/jpetmc/source/gammaBeam/setEnergy setPosition setMomentum`  

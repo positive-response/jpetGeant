@@ -1,0 +1,42 @@
+# Visualization setting
+#/control/execute init_vis.mac
+
+# Initialize kernel
+/jpetmc/detector/loadJPetBasicGeom 
+/jpetmc/detector/loadOnlyScintillators
+
+#/jpetmc/source/nema 4
+/jpetmc/source/nema/mixed
+
+/jpetmc/source/nema/mixed/setPosition 1 0 6 2.5
+/jpetmc/source/nema/mixed/setPosition 2 0 -7 -3.75
+/jpetmc/source/nema/mixed/setPosition 3 0 -0.5 -5
+
+/jpetmc/source/nema/mixed/setWeight 1 12
+/jpetmc/source/nema/mixed/setWeight 2 2
+/jpetmc/source/nema/mixed/setWeight 3 21
+/jpetmc/source/nema/mixed/setWeight 4 0
+/jpetmc/source/nema/mixed/setWeight 5 0
+/jpetmc/source/nema/mixed/setWeight 6 0
+
+/jpetmc/source/nema/mixed/setLifetime 1 2
+/jpetmc/source/nema/mixed/setLifetime 2 2
+/jpetmc/source/nema/mixed/setLifetime 3 2
+
+/jpetmc/source/nema/mixed/setCylinderSize 1 0.1 7.5
+/jpetmc/source/nema/mixed/setCylinderSize 2 0.1 1.25
+/jpetmc/source/nema/mixed/setCylinderSize 3 0.1 6.5
+
+/jpetmc/source/nema/mixed/setCylinderRotation 1 90 0
+/jpetmc/source/nema/mixed/setCylinderRotation 2 90 0
+/jpetmc/source/nema/mixed/setCylinderRotation 3 90 -90
+
+#/jpetmc/source/nema/mixed/allow3G 1
+#/jpetmc/source/nema/mixed/allow3G 2
+#/jpetmc/source/nema/mixed/allow3G 3
+
+/jpetmc/source/nema/mixed/setCylinderShapeParametersY 3 -10 2 0
+
+/run/initialize
+
+/run/beamOn 1000000

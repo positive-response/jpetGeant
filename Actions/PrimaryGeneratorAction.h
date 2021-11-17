@@ -18,6 +18,7 @@
 
 #include "../Info/PrimaryGeneratorActionMessenger.h"
 #include "../Core/PrimaryGenerator.h"
+#include "../Core/NemaGenerator.h"
 #include "../Core/HistoManager.h"
 #include "../Core/SourceParams.h"
 #include "../Core/BeamParams.h"
@@ -53,7 +54,7 @@ public:
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
   void SetNemaPoint(G4int pointID) { fNemaGenerator.SetOnePointOnly(pointID); fNemaPoint = pointID; };
   void GenerateDefaultNemaPositions();
-  void SetNemaPointPosition(int nemaPoint, G4ThreeVector position);
+  void SetNemaPointPosition(int nemaPoint, const G4ThreeVector& position);
   void SetNemaPositionWeight(int position, int weight);
   void SetNemaPointLifetime(int position, double lifetime);
   void SetNemaPoint3GOption(int position);

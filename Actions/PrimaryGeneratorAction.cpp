@@ -130,6 +130,24 @@ void PrimaryGeneratorAction::GenerateDefaultNemaPositions()
     G4double y_creation = 0.0 * cm;
     G4double z_creation = 0.0 * cm;
     
+    /* Nema predefined points definition (X = 0)
+     * according to standard NEMA-NU-2-2012
+     * DOI: 10.12693/APhysPolA.132.1645
+     * 
+     *      -3/8      0
+     *    ---------------> Z
+     *   Y
+     *   |    4'      1'
+     * 1 |    o       o
+     *   |
+     *   |    5'      2'
+     * 10|    o       o
+     *   |
+     *   |    6'      3'
+     * 20|    o       o
+     *   V 
+     */
+    
     if (nemaPoint > 3) {
       z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
     }
@@ -147,7 +165,7 @@ void PrimaryGeneratorAction::GenerateDefaultNemaPositions()
   }
 }
 
-void PrimaryGeneratorAction::SetNemaPointPosition(int nemaPoint, G4ThreeVector position)
+void PrimaryGeneratorAction::SetNemaPointPosition(int nemaPoint, const G4ThreeVector& position)
 {
   if (nemaPoint < 1) {
     G4Exception(
@@ -238,22 +256,14 @@ void PrimaryGeneratorAction::SetNemaPointShape(int nemaPoint, Dimension dim, G4d
       "Nema point for which you want to set shape is less than 1. Canno set it now properly."
     );
   } else if (fNemaGenerator.DoesPointExistAlready(nemaPoint)) {
-    if (dim == Dimension::dimX) {
-      fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
-      fNemaGenerator.GenerateElipseXNorm(nemaPoint);
-    }
-    else if (dim == Dimension::dimY) {
-      fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
+    if (dim == Dimension::dimY) {
+      fNemaGenerator.SetNemaPointShapeInY(nemaPoint, G4ThreeVector(direction, power, lengthN));
       fNemaGenerator.GenerateElipseYNorm(nemaPoint);
     }
   } else {
     fNemaGenerator.AddPoint(nemaPoint);
-    if (dim == Dimension::dimX) {
-      fNemaGenerator.SetPointShapeX(nemaPoint, G4ThreeVector(direction, power, lengthN));
-      fNemaGenerator.GenerateElipseXNorm(nemaPoint);
-    }
-    else if (dim == Dimension::dimY) {
-      fNemaGenerator.SetPointShapeY(nemaPoint, G4ThreeVector(direction, power, lengthN));
+    if (dim == Dimension::dimY) {
+      fNemaGenerator.SetNemaPointShapeInY(nemaPoint, G4ThreeVector(direction, power, lengthN));
       fNemaGenerator.GenerateElipseYNorm(nemaPoint);
     }
   }

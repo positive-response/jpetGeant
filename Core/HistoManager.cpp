@@ -139,111 +139,112 @@ void HistoManager::Book()
 void HistoManager::BookHistograms()
 {
   createHistogramWithAxes(
-    new TH1D("gen_gamma_multiplicity", "Generated gammas multiplicity", 10, -0.5, 9.5),
+    new TH1D("gen_gamma_multiplicity", "Generated gammas multiplicity. Bin size: 1", 10, -0.5, 9.5),
     "Gamma quanta multiplicity: 1=prompt; 2=2g; 3=3g", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_hit_time", "Generated hit time", 100, -75.0, 14925.0),
+    new TH1D("gen_hit_time", "Generated hit time. Bin size: 150 ps", 100, -75.0, 14925.0),
     "Hit-times in scintillators [ps]", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_hit_eneDepos", "Generated hit energy deposition", 750, -1.0, 1499.0),
+    new TH1D("gen_hit_eneDepos", "Generated hit energy deposition. Bin size: 2 keV", 750, -1.0, 1499.0),
     "Deposited energy in scintillators [keV]", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_hits_z_pos", "Generated hits Z position", 120, -59.5, 60.5),
+    new TH1D("gen_hits_z_pos", "Generated hits Z position. Bin size: 1 cm", 120, -59.5, 60.5),
     "Hit-position along Z [cm]", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_hits_xy_pos", "Generated hits XY positions", 120, -59.5, 60.5, 120, -59.5, 60.5),
+    new TH2D("gen_hits_xy_pos", "Generated hits XY positions. Bin size: 1 cm x 1 cm", 120, -59.5, 60.5, 120, -59.5, 60.5),
     "Hit-position X [cm]", "Hit-position Y [cm]"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_lifetime", "Generated lifetime", 2000, -50.0, 199950.0),
+    new TH1D("gen_lifetime", "Generated lifetime. Bin size: 100 ps", 2000, -50.0, 199950.0),
     "Lifetime (2/3g) [ps]", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_prompt_lifetime", "Gen prompt lifetime", 100, -5.0, 995.0),
+    new TH1D("gen_prompt_lifetime", "Gen prompt lifetime. Bin size: 10 ps", 100, -5.0, 995.0),
     "Lifetime prompt gamma [ps]", "Entries"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_XY", "Generated XY coordinates of annihilation point", 500, -24.95, 25.05, 500, -24.95, 25.05),
-    "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Y [cm]"
+    new TH2D("gen_XY", "Generated XY coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 500, -24.95, 25.05), "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Y [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_XZ", "Generated XZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
-    "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Z [cm]"
+    new TH2D("gen_XZ", "Generated XZ coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 1200, -59.95, 60.05), "Annihilation point (2/3g) X [cm]", "Annihilation point (2/3g) Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_YZ", "Generated YZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
-    "Annihilation point (2/3g) Y [cm]", "Annihilation point (2/3g) Z [cm]"
+    new TH2D("gen_YZ", "Generated YZ coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 1200, -59.95, 60.05), "Annihilation point (2/3g) Y [cm]", "Annihilation point (2/3g) Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_X_vs_lifetime", "Generated X coordinates of annihilation point vs lifetime", 50, -24.5, 25.5, 2000, -50.0, 199950.0),
-    "Annihilation point X [cm]", "Generated lifetime [ns]"
+    new TH2D("gen_X_vs_lifetime", "Generated X coordinates of annihilation point vs lifetime. Bin size: 1 cm x 100 ns", 
+             50, -24.5, 25.5, 2000, -50.0, 199950.0), "Annihilation point X [cm]", "Generated lifetime [ns]"
   );
   
   createHistogramWithAxes(
-    new TH2D("gen_Y_vs_lifetime", "Generated Y coordinates of annihilation point vs lifetime", 50, -24.5, 25.5, 2000, -50.0, 199950.0),
-    "Annihilation point Y [cm]", "Generated lifetime [ns]"
+    new TH2D("gen_Y_vs_lifetime", "Generated Y coordinates of annihilation point vs lifetime. Bin size: 1 cm x 100 ns", 
+             50, -24.5, 25.5, 2000, -50.0, 199950.0), "Annihilation point Y [cm]", "Generated lifetime [ns]"
   );
   
   createHistogramWithAxes(
-    new TH2D("gen_Z_vs_lifetime", "Generated Z coordinates of annihilation point vs lifetime", 120, -59.5, 60.5, 2000, -50.0, 199950.0),
-    "Annihilation point Z [cm]", "Generated lifetime [ns]"
+    new TH2D("gen_Z_vs_lifetime", "Generated Z coordinates of annihilation point vs lifetime. Bin size: 1 cm x 100 ns", 
+             120, -59.5, 60.5, 2000, -50.0, 199950.0), "Annihilation point Z [cm]", "Generated lifetime [ns]"
   );
   
   createHistogramWithAxes(
-    new TH2D("gen_prompt_XY", "Generated XY coordinates of annihilation point", 500, -24.95, 25.05, 500, -24.95, 25.05),
-    "Prompt emission point X [cm]", "Prompt emission point Y [cm]"
+    new TH2D("gen_prompt_XY", "Generated XY coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 500, -24.95, 25.05), "Prompt emission point X [cm]", "Prompt emission point Y [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_prompt_XZ", "Generated XZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
-    "Prompt emission point X [cm]", "Prompt emission point Z [cm]"
+    new TH2D("gen_prompt_XZ", "Generated XZ coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 1200, -59.95, 60.05), "Prompt emission point X [cm]", "Prompt emission point Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_prompt_YZ", "Generated YZ coordinates of annihilation point", 500, -24.95, 25.05, 1200, -59.95, 60.05),
-    "Prompt emission point Y [cm]", "Prompt emission point Z [cm]"
+    new TH2D("gen_prompt_YZ", "Generated YZ coordinates of annihilation point. Bin size: 0.1 cm x 0.1 cm", 
+             500, -24.95, 25.05, 1200, -59.95, 60.05), "Prompt emission point Y [cm]", "Prompt emission point Z [cm]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_3g_angles", "Generated angles of 3g", 190, -0.5, 189.5, 190, -0.5, 189.5),
+    new TH2D("gen_3g_angles", "Generated angles of 3g. Bin size: 1 deg x 1 deg", 190, -0.5, 189.5, 190, -0.5, 189.5),
     "#Theta_{12} [degree]", "#Theta_{23} [degree]"
   );
 
   createHistogramWithAxes(
-    new TH2D("gen_energy", "Generated energy of 3g", 120, -2.5, 597.5, 120, -2.5, 597.5),
+    new TH2D("gen_energy", "Generated energy of 3g. Bin size: 5 keV x 5 keV", 120, -2.5, 597.5, 120, -2.5, 597.5),
     "E_1 [keV]", "E_2 [keV]"
   );
 
   createHistogramWithAxes(
-    new TH1D("gen_g_ene", "Generated energy", 300, -2.5, 1497.5),
+    new TH1D("gen_g_ene", "Generated energy. Bin size: 5 keV", 300, -2.5, 1497.5),
     "E_1 generated [keV]", "Entries"
   );
+
 
   createHistogramWithAxes(
     new TH2D(
       "gen_gamma_multiplicity_vs_lifetime",
-      "Generated gammas multiplicity vs generated lifetime",
+      "Generated gammas multiplicity vs generated lifetime. Bin size: 1 x 100 ps",
       10, -0.5, 9.5, 1000, -50.0, 99950.0
     ),
     "Gamma quanta multiplicity: 2=2g; 3=3g", "Lifetime (2/3g) [ps]"
   );
   
   createHistogramWithAxes(
-    new TH1D("gen_hits_multiplicity", "Multiplicity of the hit", 3000, -0.5, 2999.5),
+    new TH1D("gen_hits_multiplicity", "Multiplicity of the hit. Bin size: 1", 3000, -0.5, 2999.5),
     "Multiplicity of the hit", "Entries"
   );
 }
