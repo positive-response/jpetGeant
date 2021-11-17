@@ -464,7 +464,7 @@ void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
       ));
     } else {
       event->AddPrimaryVertex(GenerateThreeGammaVertex(
-        DecayChannel::Ortho3G, vtxPosition, 0.0f, lifetime
+        DecayChannel::kOrtho3G, vtxPosition, 0.0f, lifetime
       ));
     }
   } else {
