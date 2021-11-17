@@ -57,9 +57,8 @@ void JPetGeantDecayTree::CopyDecayTreeBranch(JPetGeantDecayTreeBranch* branchToC
   InteractionType primaryInterType = branchToCopy->GetInteractionType(primaryNodeID);
   newBranch->AddNodeID(primaryNodeID, primaryInterType);
   int lastNodeID = branchToCopy->GetLastNodeID();
-  int currentNodeID;
   while (newBranch->GetNumberOfNodes() < branchToCopy->GetNumberOfNodes()) {
-    currentNodeID = lastNodeID;
+    int currentNodeID; = lastNodeID;
     while (branchToCopy->GetPreviousNodeID(currentNodeID) > primaryNodeID) {
       currentNodeID = branchToCopy->GetPreviousNodeID(currentNodeID);
     }
