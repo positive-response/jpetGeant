@@ -94,6 +94,8 @@ public:
   //! doi 10.2478/umcschem-2013-0012 1/372
   static const G4double fSodiumGammaEnergy;
   static const G4double fSodiumGammaTau;
+  static const G4double fSodiumChanceEC;
+  static const G4double fSodiumChanceNoPrompt;
   static G4String fAnnihlationMode;
   static G4double fpPs3Gfraction;
 

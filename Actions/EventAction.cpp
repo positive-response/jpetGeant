@@ -75,6 +75,7 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
   }
 
   WriteToFile(anEvent);
+  fHistoManager->SetEventNumber(anEvent->GetEventID() + 1);
 }
 
 void EventAction::WriteToFile(const G4Event* anEvent)

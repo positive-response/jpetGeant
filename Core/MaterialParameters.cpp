@@ -31,6 +31,8 @@ const G4double MaterialParameters::fTauBulk = 0.3;
 const G4double MaterialParameters::fDirect3Gfraction = 0.002688;
 const G4double MaterialParameters::fSodiumGammaEnergy = 1.2770 * MeV;
 const G4double MaterialParameters::fSodiumGammaTau = 3.7 * ps;
+const G4double MaterialParameters::fSodiumChanceEC = 0.095;
+const G4double MaterialParameters::fSodiumChanceNoPrompt = 0.005;
 
 G4String MaterialParameters::fAnnihlationMode = "";
 G4double MaterialParameters::fpPs3Gfraction = 0;

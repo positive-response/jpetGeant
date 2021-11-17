@@ -46,7 +46,7 @@ DetectorConstruction* DetectorConstruction::GetInstance()
 }
 
 DetectorConstruction::DetectorConstruction() :
-G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(false),
+G4VUserDetectorConstruction(), fRunNumber(0), fLoadScintillators(true),
 fLoadCADFrame(false), fLoadWrapping(true), fLoadModularLayer(false)
 {
   InitializeMaterials();
@@ -122,7 +122,7 @@ void DetectorConstruction::ConstructSDandField()
   G4SDManager::GetSDMpointer()->AddNewDetector(fDetectorSD.Get());
   if (fScinLog)
     SetSensitiveDetector(fScinLog, fDetectorSD.Get());
-  if (fLoadModularLayer)
+  if (fScinLogInModule)
     SetSensitiveDetector(fScinLogInModule, fDetectorSD.Get());
 }
 

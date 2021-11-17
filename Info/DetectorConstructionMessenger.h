@@ -45,6 +45,7 @@ private:
   G4UIcmdWithAnInteger* fLoadIdealGeometry = nullptr;
   G4UIcmdWithoutParameter* fLoadJPetBasicGeometry = nullptr;
   G4UIcmdWithoutParameter* fLoadOnlyScintillators = nullptr;
+  G4UIcmdWithABool* fLoadWrapping = nullptr;
   //! Null pointer assigned to the modular layer -
   G4UIcmdWithAString* fLoadModularLayer = nullptr;
   G4UIcmdWithoutParameter* fLoadModularLayerOnly = nullptr;
