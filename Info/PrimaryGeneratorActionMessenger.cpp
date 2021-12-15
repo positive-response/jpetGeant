@@ -99,6 +99,12 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fNemaSetPositionCylinderSize = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderSize", this);
   fNemaSetPositionCylinderSize->SetGuidance("Setting the radius and length of the cylinder in which annihilation position is simulated (int - point, double - radius [cm], double - length [cm])");
   
+  fNemaSetPositionPromptOption = new G4UIcmdWithAnInteger("/jpetmc/source/nema/mixed/allowPrompt", this);
+  fNemaSetPositionPromptOption->SetGuidance("Setting if the position of a given point in nema generation should have possibility to emit prompt photon");
+  
+  fNemaSetPositionPromptSize = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setPromptSourceSize", this);
+  fNemaSetPositionPromptSize->SetGuidance("Setting the radius and length of the cylinder in which prompt photon emission position is simulated (int - point, double - radius [cm], double - length [cm])");
+  
   fNemaSetPositionCylinderRotation = new G4UIcmdWithAString("/jpetmc/source/nema/mixed/setCylinderRotation", this);
   fNemaSetPositionCylinderRotation->SetGuidance("Setting the orientation angles of the cylinder in which annihilation position is simulated (int - point, double - theta [deg], double - phi [deg])");
   
@@ -136,6 +142,8 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fNemaSetPositionLifetime;
   delete fNemaSetPosition3GOption;
   delete fNemaSetPositionCylinderSize;
+  delete fNemaSetPositionPromptOption;
+  delete fNemaSetPositionPromptSize;
   delete fNemaSetPositionCylinderRotation;
   delete fNemaSetPositionCylinderShapeY;
   delete fSetChamberCenter;
@@ -206,6 +214,15 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     G4double radius, length;
     is >> nemaPoint >> radius >> length;
     fPrimGen->SetNemaPointSize(nemaPoint, radius*cm, length*cm);
+  } else if (command == fNemaSetPositionPromptOption) {
+    fPrimGen->SetNemaPointPromptOption(fNemaPosition->GetNewIntValue(newValue));
+  } else if (command == fNemaSetPositionPromptSize) {
+    G4String paramString = newValue;
+    std::istringstream is(paramString);
+    G4int nemaPoint;
+    G4double radius, length;
+    is >> nemaPoint >> radius >> length;
+    fPrimGen->SetNemaPointPromptSize(nemaPoint, radius*cm, length*cm);
   } else if (command == fNemaSetPositionCylinderRotation) {
     G4String paramString = newValue;
     std::istringstream is(paramString);

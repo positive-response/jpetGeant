@@ -61,6 +61,8 @@ private:
   G4UIcmdWithAString* fNemaSetPositionLifetime = nullptr;
   G4UIcmdWithAnInteger* fNemaSetPosition3GOption = nullptr;
   G4UIcmdWithAString* fNemaSetPositionCylinderSize = nullptr;
+  G4UIcmdWithAnInteger* fNemaSetPositionPromptOption = nullptr;
+  G4UIcmdWithAString* fNemaSetPositionPromptSize = nullptr;
   G4UIcmdWithAString* fNemaSetPositionCylinderRotation = nullptr;
   G4UIcmdWithAString* fNemaSetPositionCylinderShapeY = nullptr;
   G4UIcmdWith3VectorAndUnit* fSetChamberCenter = nullptr;

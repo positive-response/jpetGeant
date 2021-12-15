@@ -54,19 +54,21 @@ public:
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
   void SetNemaPoint(G4int pointID) { fNemaGenerator.SetOnePointOnly(pointID); fNemaPoint = pointID; };
   void GenerateDefaultNemaPositions();
-  void SetNemaPointPosition(int nemaPoint, const G4ThreeVector& position);
-  void SetNemaPositionWeight(int position, int weight);
-  void SetNemaPointLifetime(int position, double lifetime);
-  void SetNemaPoint3GOption(int position);
-  void SetNemaPointSize(int position, G4double radius, G4double length);
-  void SetNemaPointOrientation(int position, double theta, double phi);
-  void SetNemaPointShape(int position, Dimension dim, double G4double, double power, double length);
+  void SetNemaPointPosition(G4int nemaPoint, const G4ThreeVector& position);
+  void SetNemaPositionWeight(G4int position, G4int weight);
+  void SetNemaPointLifetime(G4int position, G4double lifetime);
+  void SetNemaPoint3GOption(G4int position);
+  void SetNemaPointSize(G4int position, G4double radius, G4double length);
+  void SetNemaPointPromptOption(G4int position);
+  void SetNemaPointPromptSize(G4int position, G4double radius, G4double length);
+  void SetNemaPointOrientation(G4int position, G4double theta, G4double phi);
+  void SetNemaPointShape(G4int position, Dimension dim, G4double direction, G4double power, G4double length);
   void SetEffectivePositronRadius(G4double);
   
   G4int GetNemaPoint() { return fNemaPoint; }
 
 private:
-  int fNemaPoint = -1;
+  G4int fNemaPoint = -1;
   G4String fGenerateSourceType;
   G4String fAllowedSourceTypes[5] = {"run", "beam", "isotope", "nema", "nema-mixed"};
   PrimaryGeneratorActionMessenger* fMessenger = nullptr;

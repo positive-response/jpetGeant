@@ -473,10 +473,17 @@ void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
     ));
   }
   
-  event->AddPrimaryVertex(GeneratePromptGammaVertex(
-    vtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
-    MaterialParameters::fSodiumGammaEnergy
-  ));
+  bool isPromptAllowed = nemaPoint.isPromptAllowed;
+  if (isPromptAllowed) {
+    G4ThreeVector vtxPromptPosition = VertexUniformInCylinder(nemaPoint.sizeOfPointPrompt.getX(), nemaPoint.sizeOfPointPrompt.getZ());
+    vtxPromptPosition = nemaGen->GetPointShapedInY(vtxPromptPosition, nemaPoint);
+    vtxPromptPosition = nemaGen->GetRotatedPoint(vtxPromptPosition, nemaPoint);
+    vtxPromptPosition = vtxPromptPosition + nemaPosition;
+    event->AddPrimaryVertex(GeneratePromptGammaVertex(
+      vtxPromptPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
+      MaterialParameters::fSodiumGammaEnergy
+    ));
+  }
 }
   
 G4ThreeVector PrimaryGenerator::VertexUniformInCylinder(G4double rIn, G4double zmax)

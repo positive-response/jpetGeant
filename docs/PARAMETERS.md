@@ -80,6 +80,10 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/source/nema/mixed/allow3G [point]'  
 * Points are simulated at now only as cylinders. Setting size of that cylinder:  
  `/jpetmc/source/nema/mixed/setCylinderSize [point] [radius] [length]`  
+* Allow a given point to generate prompt photon (by default it is true):  
+ `/jpetmc/source/nema/mixed/allowPrompt [point]'  
+* Points are simulated at now only as cylinders. Setting size of the cylinder for prompt:  
+ `/jpetmc/source/nema/mixed/setPromptSourceSize [point] [radius] [length]`  
 * Rotating the shape of the nema point:  
  `/jpetmc/source/nema/mixed/setCylinderRotation [point] [phi] [theta]`  
 * Changing the shape of the nema point by shifting position in X:  
