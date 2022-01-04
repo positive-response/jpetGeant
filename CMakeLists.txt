@@ -164,6 +164,11 @@ target_link_libraries(JPetMCClassesDict ${ROOT_LIBRARIES})
 ################################################################################
 ## Create a main program using the library
 add_executable(jpet_mc JPetMC.cpp ${SOURCES})
+
+# needed to suppress warnings about ROOT's locals
+#  shadowing Geant4's global variables
+target_compile_options(jpet_mc PRIVATE -Wno-shadow)
+
 target_link_libraries(
   jpet_mc
   ${Geant4_LIBRARIES}
