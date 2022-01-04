@@ -92,9 +92,8 @@ find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
 ################################################################################
-## Include CADMesh
-find_package(cadmesh REQUIRED)
-include_directories(SYSTEM ${CADMESH_INCLUDE_DIRS})
+## Include header-only CADMesh library
+include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/CADMesh/)
 
 ################################################################################
 ## Include Boost
@@ -170,7 +169,6 @@ target_link_libraries(
   ${Geant4_LIBRARIES}
   ${ROOT_LIBRARIES}
   JPetMCClassesDict
-  ${cadmesh_LIBRARIES}
 )
 
 ## Copy script files to bin directory
