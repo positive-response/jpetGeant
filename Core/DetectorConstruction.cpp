@@ -37,6 +37,7 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
+#include <CADMesh.hh>
 
 namespace pt = boost::property_tree;
 
@@ -321,22 +322,22 @@ void DetectorConstruction::InitializeMaterials()
  */
 void DetectorConstruction::ConstructFrameCAD()
 {
-  CADMesh* mesh1 = new CADMesh((char*)"stl_geometry/Frame_JPET.stl");
-  mesh1->SetScale(mm);
+  auto cad_frame_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Frame_JPET.stl");
+  cad_frame_mesh->SetScale(mm);
 
-  G4VSolid* cad_solid1 = mesh1->TessellatedMesh();
-  G4LogicalVolume* cad_logical = new G4LogicalVolume(cad_solid1, fAluminiumMaterial, "cad_logical");
+  G4VSolid* cad_frame_solid = cad_frame_mesh->GetSolid();
+  G4LogicalVolume* cad_frame_logical = new G4LogicalVolume(cad_frame_solid, fAluminiumMaterial, "cad_frame_logical");
 
   G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.9));
   detVisAtt->SetForceWireframe(true);
   detVisAtt->SetForceSolid(true);
-  cad_logical->SetVisAttributes(detVisAtt);
+  cad_frame_logical->SetVisAttributes(detVisAtt);
 
   G4RotationMatrix rot = G4RotationMatrix();
   rot.rotateY(90 * deg);
   G4ThreeVector loc = G4ThreeVector(0 * cm, 306.5 * cm, -23 * cm);
   G4Transform3D transform(rot, loc);
-  new G4PVPlacement(transform, cad_logical, "cadGeom", fWorldLogical, true, 0, checkOverlaps);
+  new G4PVPlacement(transform, cad_frame_logical, "cadGeom", fWorldLogical, true, 0, checkOverlaps);
 }
 
 void DetectorConstruction::ConstructScintillators()
@@ -1112,10 +1113,11 @@ void DetectorConstruction::ConstructTargetRun12()
   new G4PVPlacement(transform, kaptonFilling_logical, "kaptonFillingGeom", fWorldLogical, true, 0, checkOverlaps);
 
   // Ring between Spherical Chamber and outer cylinder
-  CADMesh* mesh2 = new CADMesh((char*)"stl_geometry/Ring_SphericalChamber.stl");
-  mesh2->SetScale(cm);
-  G4VSolid* cadRing = mesh2->TessellatedMesh();
-  G4LogicalVolume* cadRing_logical = new G4LogicalVolume(cadRing, fPolyoxymethylene, "cadRing_logical");
+  auto cad_ring_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Ring_SphericalChamber.stl");
+  cad_ring_mesh->SetScale(mm);
+
+  G4VSolid* cad_ring_solid = cad_ring_mesh->GetSolid();
+  G4LogicalVolume* cadRing_logical = new G4LogicalVolume(cad_ring_solid, fPolyoxymethylene, "cadRing_logical");
 
   G4VisAttributes* ringVisAtt = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8));
   ringVisAtt->SetForceWireframe(true);
