@@ -1,9 +1,9 @@
-################################################################################
+ ################################################################################
 ## CMake script for J-PET Geant4 Monte Carlo simulation software
 ################################################################################
 
 cmake_minimum_required (VERSION 2.6)
-project(jpet_mc)
+project(jpet_mc LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
@@ -27,7 +27,6 @@ endforeach()
 
 list(APPEND FOLDERS ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wunused-parameter -lboost_system")
 
 ################################################################################
 ## Project version number
@@ -130,10 +129,9 @@ if(ROOT_FOUND AND ROOT_VERSION VERSION_LESS "6.0")
   # tested version above 6.10 can not display graphics while /run/beamOn due to llvm problem
 endif()
 
-set(ROOT_CXX_FLAGS "-std=c++11 -Wunused-parameter")
 include(${ROOT_USE_FILE})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
 include_directories(SYSTEM ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
 
 ################################################################################
@@ -213,3 +211,4 @@ add_custom_command(
   ${CMAKE_CURRENT_SOURCE_DIR}/docs/manual_v4.pdf
   ${CMAKE_CURRENT_BINARY_DIR}/bin
 )
+
