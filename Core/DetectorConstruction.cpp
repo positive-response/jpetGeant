@@ -322,7 +322,7 @@ void DetectorConstruction::InitializeMaterials()
  */
 void DetectorConstruction::ConstructFrameCAD()
 {
-  auto cad_frame_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Frame_JPET.stl");
+  auto cad_frame_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Frame_JPET.ascii.stl");
   cad_frame_mesh->SetScale(mm);
 
   G4VSolid* cad_frame_solid = cad_frame_mesh->GetSolid();
@@ -1113,8 +1113,8 @@ void DetectorConstruction::ConstructTargetRun12()
   new G4PVPlacement(transform, kaptonFilling_logical, "kaptonFillingGeom", fWorldLogical, true, 0, checkOverlaps);
 
   // Ring between Spherical Chamber and outer cylinder
-  auto cad_ring_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Ring_SphericalChamber.stl");
-  cad_ring_mesh->SetScale(mm);
+  auto cad_ring_mesh = CADMesh::TessellatedMesh::FromSTL((char*)"stl_geometry/Ring_SphericalChamber.ascii.stl");
+  cad_ring_mesh->SetScale(cm);
 
   G4VSolid* cad_ring_solid = cad_ring_mesh->GetSolid();
   G4LogicalVolume* cadRing_logical = new G4LogicalVolume(cad_ring_solid, fPolyoxymethylene, "cadRing_logical");
