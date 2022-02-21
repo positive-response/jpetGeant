@@ -19,7 +19,6 @@
 #include "DetectorSD.h"
 #include "MaterialExtension.h"
 
-#include <CADMesh.hh>
 #include <G4Box.hh>
 #include <G4Cache.hh>
 #include <G4Colour.hh>
