@@ -57,6 +57,7 @@ set(SCRIPT_FILES
   run6.mac
   run7.mac
   nema.mac
+  cosmics.mac
   init_vis.mac
   singleBeam.mac
   extendedSource.mac

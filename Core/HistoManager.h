@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2021 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -78,6 +78,7 @@ public:
   bool GetMakeControlHisto() const { return fMakeControlHisto; };
   void SetDecayChannel(DecayChannel decayChannel) { fDecayChannel = decayChannel; };
   void FillHistoGenInfo(const G4Event* anEvent);
+  void FillCosmicInfo(G4double theta, G4ThreeVector init, G4ThreeVector vtx);
   const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
   void createHistogramWithAxes(TObject* object, TString xAxisName = "Default X axis title [unit]", TString yAxisName = "Default Y axis title [unit]",
                                TString zAxisName = "Default Z axis title [unit]");
