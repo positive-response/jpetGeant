@@ -66,6 +66,7 @@ public:
   void SetMomentumOut(float x, float y, float z) { fMomentumOut.SetXYZ(x, y, z); };
   void SetGenGammaMultiplicity(int i) { fGenGammaMultiplicity = i; }
   void SetGenGammaIndex(int i) { fGenGammaIndex = i; }
+  
   int GetEvtID() { return fEvtID; };
   int GetScinID() { return fScinID; };
   int GetTrackID() { return fTrackID; };

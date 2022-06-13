@@ -41,7 +41,8 @@ class MaterialParameters
 {
 public:
   enum MaterialID {
-    mUnknown, mXAD4, mAl, mKapton, mPlexiglass, mScin, mPA6, mAir
+    mUnknown, mXAD4, mAl, mKapton, mPlexiglass, mScin, mPA6, mAir,
+    mPolycarbonate, mPolyoxymethylene, mSiliconDioxide, mStainlessSteel 
   };
 
   MaterialParameters();
@@ -93,6 +94,8 @@ public:
   //! doi 10.2478/umcschem-2013-0012 1/372
   static const G4double fSodiumGammaEnergy;
   static const G4double fSodiumGammaTau;
+  static const G4double fSodiumChanceEC;
+  static const G4double fSodiumChanceNoPrompt;
   static G4String fAnnihlationMode;
   static G4double fpPs3Gfraction;
 
@@ -103,6 +106,10 @@ public:
   static const MaterialConstants fScin;
   static const MaterialConstants fPA6;
   static const MaterialConstants fAir;
+  static const MaterialConstants fPolycarbonate;
+  static const MaterialConstants fPolyoxymethylene;
+  static const MaterialConstants fSiliconDioxide;
+  static const MaterialConstants fStainlessSteel;
   static MaterialConstants fTemp;
 
 private:

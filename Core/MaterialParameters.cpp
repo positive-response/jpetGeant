@@ -31,6 +31,8 @@ const G4double MaterialParameters::fTauBulk = 0.3;
 const G4double MaterialParameters::fDirect3Gfraction = 0.002688;
 const G4double MaterialParameters::fSodiumGammaEnergy = 1.2770 * MeV;
 const G4double MaterialParameters::fSodiumGammaTau = 3.7 * ps;
+const G4double MaterialParameters::fSodiumChanceEC = 0.095;
+const G4double MaterialParameters::fSodiumChanceNoPrompt = 0.005;
 
 G4String MaterialParameters::fAnnihlationMode = "";
 G4double MaterialParameters::fpPs3Gfraction = 0;
@@ -59,6 +61,22 @@ const MaterialConstants MaterialParameters::fPA6 = MaterialConstants(
 // DOI 10.1002/app.10319 for temperature 293 K
 const MaterialConstants MaterialParameters::fAir = MaterialConstants(
   {142 * ns}, {75}, 0.125 * ns, 1.0 / 3.0, {0.5 * ns}, {0}
+);
+
+const MaterialConstants MaterialParameters::fPolycarbonate = MaterialConstants( 
+  {3 * ns}, {25}, 0.125 * ns, 1.0/3.0, {0.3 * ns}, {100}
+);
+
+const MaterialConstants MaterialParameters::fPolyoxymethylene = MaterialConstants(
+  {1.6 * ns}, {20}, 0.125 * ns, 1.0/3.0, {0.3 * ns}, {100}
+);
+
+const MaterialConstants MaterialParameters::fSiliconDioxide = MaterialConstants( 
+  {2 * ns}, {30}, 0.125 * ns, 1.0/3.0, {0.35 * ns}, {100}
+);
+
+const MaterialConstants MaterialParameters::fStainlessSteel = MaterialConstants(
+  {}, {}, 0.125 * ns, 1.0/3.0, {0.18 * ns, 0.22 * ns}, {40, 60}
 );
 
 MaterialParameters::MaterialParameters()
@@ -117,6 +135,11 @@ void MaterialParameters::SetMaterialByName(MaterialID materialID)
   else if (materialID == MaterialID::mScin) SetMaterial(fScin);
   else if (materialID == MaterialID::mPA6) SetMaterial(fPA6);
   else if (materialID == MaterialID::mAir) SetMaterial(fAir);
+  else if (materialID == MaterialID::mPolycarbonate) SetMaterial(fPolycarbonate);
+  else if (materialID == MaterialID::mPolyoxymethylene) SetMaterial(fPolyoxymethylene);
+  else if (materialID == MaterialID::mSiliconDioxide) SetMaterial(fSiliconDioxide);
+  else if (materialID == MaterialID::mStainlessSteel) SetMaterial(fStainlessSteel);
+
   else SetMaterial(fTemp);
 }
 

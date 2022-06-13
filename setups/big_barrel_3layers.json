@@ -1,0 +1,3682 @@
+{
+  "999": {
+    "setup": [
+      {
+        "description": "J-PET Big Barrel Detector with 3 layers",
+        "id": "1"
+      }
+    ],
+    "layer": [
+      {
+        "id": "1",
+        "name": "Layer 1",
+        "radius": "42.5",
+        "setup_id": "1"
+      },
+      {
+        "id": "2",
+        "name": "Layer 2",
+        "radius": "46.75",
+        "setup_id": "1"
+      },
+      {
+        "id": "3",
+        "name": "Layer 3",
+        "radius": "57.5",
+        "setup_id": "1"
+      }
+    ],
+    "slot": [
+      {
+        "id": 1,
+        "theta": 0,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 2,
+        "theta": 7.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 3,
+        "theta": 15,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 4,
+        "theta": 22.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 5,
+        "theta": 30,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 6,
+        "theta": 37.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 7,
+        "theta": 45,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 8,
+        "theta": 52.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 9,
+        "theta": 60,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 10,
+        "theta": 67.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 11,
+        "theta": 75,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 12,
+        "theta": 82.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 13,
+        "theta": 90,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 14,
+        "theta": 97.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 15,
+        "theta": 105,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 16,
+        "theta": 112.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 17,
+        "theta": 120,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 18,
+        "theta": 127.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 19,
+        "theta": 135,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 20,
+        "theta": 142.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 21,
+        "theta": 150,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 22,
+        "theta": 157.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 23,
+        "theta": 165,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 24,
+        "theta": 172.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 25,
+        "theta": 180,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 26,
+        "theta": 187.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 27,
+        "theta": 195,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 28,
+        "theta": 202.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 29,
+        "theta": 210,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 30,
+        "theta": 217.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 31,
+        "theta": 225,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 32,
+        "theta": 232.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 33,
+        "theta": 240,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 34,
+        "theta": 247.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 35,
+        "theta": 255,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 36,
+        "theta": 262.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 37,
+        "theta": 270,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 38,
+        "theta": 277.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 39,
+        "theta": 285,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 40,
+        "theta": 292.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 41,
+        "theta": 300,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 42,
+        "theta": 307.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 43,
+        "theta": 315,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 44,
+        "theta": 322.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 45,
+        "theta": 330,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 46,
+        "theta": 337.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 47,
+        "theta": 345,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 48,
+        "theta": 352.5,
+        "type": "barrel",
+        "layer_id": 1
+      },
+      {
+        "id": 49,
+        "theta": 3.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 50,
+        "theta": 11.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 51,
+        "theta": 18.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 52,
+        "theta": 26.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 53,
+        "theta": 33.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 54,
+        "theta": 41.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 55,
+        "theta": 48.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 56,
+        "theta": 56.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 57,
+        "theta": 63.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 58,
+        "theta": 71.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 59,
+        "theta": 78.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 60,
+        "theta": 86.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 61,
+        "theta": 93.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 62,
+        "theta": 101.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 63,
+        "theta": 108.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 64,
+        "theta": 116.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 65,
+        "theta": 123.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 66,
+        "theta": 131.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 67,
+        "theta": 138.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 68,
+        "theta": 146.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 69,
+        "theta": 153.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 70,
+        "theta": 161.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 71,
+        "theta": 168.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 72,
+        "theta": 176.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 73,
+        "theta": 183.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 74,
+        "theta": 191.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 75,
+        "theta": 198.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 76,
+        "theta": 206.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 77,
+        "theta": 213.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 78,
+        "theta": 221.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 79,
+        "theta": 228.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 80,
+        "theta": 236.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 81,
+        "theta": 243.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 82,
+        "theta": 251.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 83,
+        "theta": 258.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 84,
+        "theta": 266.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 85,
+        "theta": 273.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 86,
+        "theta": 281.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 87,
+        "theta": 288.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 88,
+        "theta": 296.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 89,
+        "theta": 303.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 90,
+        "theta": 311.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 91,
+        "theta": 318.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 92,
+        "theta": 326.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 93,
+        "theta": 333.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 94,
+        "theta": 341.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 95,
+        "theta": 348.75,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 96,
+        "theta": 356.25,
+        "type": "barrel",
+        "layer_id": 2
+      },
+      {
+        "id": 97,
+        "theta": 1.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 98,
+        "theta": 5.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 99,
+        "theta": 9.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 100,
+        "theta": 13.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 101,
+        "theta": 16.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 102,
+        "theta": 20.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 103,
+        "theta": 24.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 104,
+        "theta": 28.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 105,
+        "theta": 31.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 106,
+        "theta": 35.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 107,
+        "theta": 39.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 108,
+        "theta": 43.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 109,
+        "theta": 46.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 110,
+        "theta": 50.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 111,
+        "theta": 54.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 112,
+        "theta": 58.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 113,
+        "theta": 61.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 114,
+        "theta": 65.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 115,
+        "theta": 69.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 116,
+        "theta": 73.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 117,
+        "theta": 76.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 118,
+        "theta": 80.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 119,
+        "theta": 84.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 120,
+        "theta": 88.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 121,
+        "theta": 91.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 122,
+        "theta": 95.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 123,
+        "theta": 99.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 124,
+        "theta": 103.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 125,
+        "theta": 106.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 126,
+        "theta": 110.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 127,
+        "theta": 114.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 128,
+        "theta": 118.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 129,
+        "theta": 121.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 130,
+        "theta": 125.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 131,
+        "theta": 129.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 132,
+        "theta": 133.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 133,
+        "theta": 136.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 134,
+        "theta": 140.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 135,
+        "theta": 144.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 136,
+        "theta": 148.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 137,
+        "theta": 151.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 138,
+        "theta": 155.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 139,
+        "theta": 159.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 140,
+        "theta": 163.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 141,
+        "theta": 166.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 142,
+        "theta": 170.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 143,
+        "theta": 174.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 144,
+        "theta": 178.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 145,
+        "theta": 181.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 146,
+        "theta": 185.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 147,
+        "theta": 189.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 148,
+        "theta": 193.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 149,
+        "theta": 196.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 150,
+        "theta": 200.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 151,
+        "theta": 204.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 152,
+        "theta": 208.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 153,
+        "theta": 211.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 154,
+        "theta": 215.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 155,
+        "theta": 219.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 156,
+        "theta": 223.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 157,
+        "theta": 226.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 158,
+        "theta": 230.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 159,
+        "theta": 234.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 160,
+        "theta": 238.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 161,
+        "theta": 241.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 162,
+        "theta": 245.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 163,
+        "theta": 249.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 164,
+        "theta": 253.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 165,
+        "theta": 256.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 166,
+        "theta": 260.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 167,
+        "theta": 264.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 168,
+        "theta": 268.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 169,
+        "theta": 271.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 170,
+        "theta": 275.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 171,
+        "theta": 279.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 172,
+        "theta": 283.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 173,
+        "theta": 286.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 174,
+        "theta": 290.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 175,
+        "theta": 294.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 176,
+        "theta": 298.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 177,
+        "theta": 301.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 178,
+        "theta": 305.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 179,
+        "theta": 309.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 180,
+        "theta": 313.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 181,
+        "theta": 316.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 182,
+        "theta": 320.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 183,
+        "theta": 324.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 184,
+        "theta": 328.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 185,
+        "theta": 331.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 186,
+        "theta": 335.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 187,
+        "theta": 339.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 188,
+        "theta": 343.125,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 189,
+        "theta": 346.875,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 190,
+        "theta": 350.625,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 191,
+        "theta": 354.375,
+        "type": "barrel",
+        "layer_id": 3
+      },
+      {
+        "id": 192,
+        "theta": 358.125,
+        "type": "barrel",
+        "layer_id": 3
+      }
+    ],
+    "scin": [
+      {
+        "id": 1,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 42.5,
+        "ycenter": 0,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 0,
+        "slot_id": 1
+      },
+      {
+        "id": 2,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 42.1364,
+        "ycenter": 5.54736,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 7.5,
+        "slot_id": 2
+      },
+      {
+        "id": 3,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.0518,
+        "ycenter": 10.9998,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 15,
+        "slot_id": 3
+      },
+      {
+        "id": 4,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 39.2649,
+        "ycenter": 16.264,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 22.5,
+        "slot_id": 4
+      },
+      {
+        "id": 5,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 36.8061,
+        "ycenter": 21.25,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 30,
+        "slot_id": 5
+      },
+      {
+        "id": 6,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 33.7175,
+        "ycenter": 25.8724,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 37.5,
+        "slot_id": 6
+      },
+      {
+        "id": 7,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.052,
+        "ycenter": 30.052,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 45,
+        "slot_id": 7
+      },
+      {
+        "id": 8,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 25.8724,
+        "ycenter": 33.7175,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 52.5,
+        "slot_id": 8
+      },
+      {
+        "id": 9,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 21.25,
+        "ycenter": 36.8061,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 60,
+        "slot_id": 9
+      },
+      {
+        "id": 10,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 16.264,
+        "ycenter": 39.2649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 67.5,
+        "slot_id": 10
+      },
+      {
+        "id": 11,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 10.9998,
+        "ycenter": 41.0518,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 75,
+        "slot_id": 11
+      },
+      {
+        "id": 12,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 5.54736,
+        "ycenter": 42.1364,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 82.5,
+        "slot_id": 12
+      },
+      {
+        "id": 13,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 0,
+        "ycenter": 42.5,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 90,
+        "slot_id": 13
+      },
+      {
+        "id": 14,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -5.54736,
+        "ycenter": 42.1364,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 97.5,
+        "slot_id": 14
+      },
+      {
+        "id": 15,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -10.9998,
+        "ycenter": 41.0518,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 105,
+        "slot_id": 15
+      },
+      {
+        "id": 16,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -16.264,
+        "ycenter": 39.2649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 112.5,
+        "slot_id": 16
+      },
+      {
+        "id": 17,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -21.25,
+        "ycenter": 36.8061,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 120,
+        "slot_id": 17
+      },
+      {
+        "id": 18,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -25.8724,
+        "ycenter": 33.7175,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 127.5,
+        "slot_id": 18
+      },
+      {
+        "id": 19,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.052,
+        "ycenter": 30.052,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 135,
+        "slot_id": 19
+      },
+      {
+        "id": 20,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -33.7175,
+        "ycenter": 25.8724,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 142.5,
+        "slot_id": 20
+      },
+      {
+        "id": 21,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -36.8061,
+        "ycenter": 21.25,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 150,
+        "slot_id": 21
+      },
+      {
+        "id": 22,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -39.2649,
+        "ycenter": 16.264,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 157.5,
+        "slot_id": 22
+      },
+      {
+        "id": 23,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.0518,
+        "ycenter": 10.9998,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 165,
+        "slot_id": 23
+      },
+      {
+        "id": 24,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -42.1364,
+        "ycenter": 5.54736,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 172.5,
+        "slot_id": 24
+      },
+      {
+        "id": 25,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -42.5,
+        "ycenter": 0,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 180,
+        "slot_id": 25
+      },
+      {
+        "id": 26,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -42.1364,
+        "ycenter": -5.54736,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 187.5,
+        "slot_id": 26
+      },
+      {
+        "id": 27,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.0518,
+        "ycenter": -10.9998,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 195,
+        "slot_id": 27
+      },
+      {
+        "id": 28,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -39.2649,
+        "ycenter": -16.264,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 202.5,
+        "slot_id": 28
+      },
+      {
+        "id": 29,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -36.8061,
+        "ycenter": -21.25,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 210,
+        "slot_id": 29
+      },
+      {
+        "id": 30,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -33.7175,
+        "ycenter": -25.8724,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 217.5,
+        "slot_id": 30
+      },
+      {
+        "id": 31,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.052,
+        "ycenter": -30.052,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 225,
+        "slot_id": 31
+      },
+      {
+        "id": 32,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -25.8724,
+        "ycenter": -33.7175,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 232.5,
+        "slot_id": 32
+      },
+      {
+        "id": 33,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -21.25,
+        "ycenter": -36.8061,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 240,
+        "slot_id": 33
+      },
+      {
+        "id": 34,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -16.264,
+        "ycenter": -39.2649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 247.5,
+        "slot_id": 34
+      },
+      {
+        "id": 35,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -10.9998,
+        "ycenter": -41.0518,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 255,
+        "slot_id": 35
+      },
+      {
+        "id": 36,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -5.54736,
+        "ycenter": -42.1364,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 262.5,
+        "slot_id": 36
+      },
+      {
+        "id": 37,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 0,
+        "ycenter": -42.5,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 270,
+        "slot_id": 37
+      },
+      {
+        "id": 38,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 5.54736,
+        "ycenter": -42.1364,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 277.5,
+        "slot_id": 38
+      },
+      {
+        "id": 39,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 10.9998,
+        "ycenter": -41.0518,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 285,
+        "slot_id": 39
+      },
+      {
+        "id": 40,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 16.264,
+        "ycenter": -39.2649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 292.5,
+        "slot_id": 40
+      },
+      {
+        "id": 41,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 21.25,
+        "ycenter": -36.8061,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 300,
+        "slot_id": 41
+      },
+      {
+        "id": 42,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 25.8724,
+        "ycenter": -33.7175,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 307.5,
+        "slot_id": 42
+      },
+      {
+        "id": 43,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.052,
+        "ycenter": -30.052,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 315,
+        "slot_id": 43
+      },
+      {
+        "id": 44,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 33.7175,
+        "ycenter": -25.8724,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 322.5,
+        "slot_id": 44
+      },
+      {
+        "id": 45,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 36.8061,
+        "ycenter": -21.25,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 330,
+        "slot_id": 45
+      },
+      {
+        "id": 46,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 39.2649,
+        "ycenter": -16.264,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 337.5,
+        "slot_id": 46
+      },
+      {
+        "id": 47,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.0518,
+        "ycenter": -10.9998,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 345,
+        "slot_id": 47
+      },
+      {
+        "id": 48,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 42.1364,
+        "ycenter": -5.54736,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 352.5,
+        "slot_id": 48
+      },
+      {
+        "id": 49,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 46.6499,
+        "ycenter": 3.0576,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 3.75,
+        "slot_id": 49
+      },
+      {
+        "id": 50,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 45.8517,
+        "ycenter": 9.12047,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 11.25,
+        "slot_id": 50
+      },
+      {
+        "id": 51,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 44.269,
+        "ycenter": 15.0273,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 18.75,
+        "slot_id": 51
+      },
+      {
+        "id": 52,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.9288,
+        "ycenter": 20.677,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 26.25,
+        "slot_id": 52
+      },
+      {
+        "id": 53,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 38.8712,
+        "ycenter": 25.9729,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 33.75,
+        "slot_id": 53
+      },
+      {
+        "id": 54,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 35.1485,
+        "ycenter": 30.8244,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 41.25,
+        "slot_id": 54
+      },
+      {
+        "id": 55,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.8244,
+        "ycenter": 35.1485,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 48.75,
+        "slot_id": 55
+      },
+      {
+        "id": 56,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 25.9729,
+        "ycenter": 38.8712,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 56.25,
+        "slot_id": 56
+      },
+      {
+        "id": 57,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 20.677,
+        "ycenter": 41.9288,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 63.75,
+        "slot_id": 57
+      },
+      {
+        "id": 58,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 15.0273,
+        "ycenter": 44.269,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 71.25,
+        "slot_id": 58
+      },
+      {
+        "id": 59,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 9.12047,
+        "ycenter": 45.8517,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 78.75,
+        "slot_id": 59
+      },
+      {
+        "id": 60,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 3.0576,
+        "ycenter": 46.6499,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 86.25,
+        "slot_id": 60
+      },
+      {
+        "id": 61,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -3.0576,
+        "ycenter": 46.6499,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 93.75,
+        "slot_id": 61
+      },
+      {
+        "id": 62,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -9.12047,
+        "ycenter": 45.8517,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 101.25,
+        "slot_id": 62
+      },
+      {
+        "id": 63,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -15.0273,
+        "ycenter": 44.269,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 108.75,
+        "slot_id": 63
+      },
+      {
+        "id": 64,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -20.677,
+        "ycenter": 41.9288,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 116.25,
+        "slot_id": 64
+      },
+      {
+        "id": 65,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -25.9729,
+        "ycenter": 38.8712,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 123.75,
+        "slot_id": 65
+      },
+      {
+        "id": 66,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.8244,
+        "ycenter": 35.1485,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 131.25,
+        "slot_id": 66
+      },
+      {
+        "id": 67,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -35.1485,
+        "ycenter": 30.8244,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 138.75,
+        "slot_id": 67
+      },
+      {
+        "id": 68,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -38.8712,
+        "ycenter": 25.9729,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 146.25,
+        "slot_id": 68
+      },
+      {
+        "id": 69,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.9288,
+        "ycenter": 20.677,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 153.75,
+        "slot_id": 69
+      },
+      {
+        "id": 70,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -44.269,
+        "ycenter": 15.0273,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 161.25,
+        "slot_id": 70
+      },
+      {
+        "id": 71,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -45.8517,
+        "ycenter": 9.12047,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 168.75,
+        "slot_id": 71
+      },
+      {
+        "id": 72,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -46.6499,
+        "ycenter": 3.0576,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 176.25,
+        "slot_id": 72
+      },
+      {
+        "id": 73,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -46.6499,
+        "ycenter": -3.0576,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 183.75,
+        "slot_id": 73
+      },
+      {
+        "id": 74,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -45.8517,
+        "ycenter": -9.12047,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 191.25,
+        "slot_id": 74
+      },
+      {
+        "id": 75,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -44.269,
+        "ycenter": -15.0273,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 198.75,
+        "slot_id": 75
+      },
+      {
+        "id": 76,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.9288,
+        "ycenter": -20.677,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 206.25,
+        "slot_id": 76
+      },
+      {
+        "id": 77,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -38.8712,
+        "ycenter": -25.9729,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 213.75,
+        "slot_id": 77
+      },
+      {
+        "id": 78,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -35.1485,
+        "ycenter": -30.8244,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 221.25,
+        "slot_id": 78
+      },
+      {
+        "id": 79,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.8244,
+        "ycenter": -35.1485,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 228.75,
+        "slot_id": 79
+      },
+      {
+        "id": 80,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -25.9729,
+        "ycenter": -38.8712,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 236.25,
+        "slot_id": 80
+      },
+      {
+        "id": 81,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -20.677,
+        "ycenter": -41.9288,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 243.75,
+        "slot_id": 81
+      },
+      {
+        "id": 82,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -15.0273,
+        "ycenter": -44.269,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 251.25,
+        "slot_id": 82
+      },
+      {
+        "id": 83,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -9.12047,
+        "ycenter": -45.8517,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 258.75,
+        "slot_id": 83
+      },
+      {
+        "id": 84,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -3.0576,
+        "ycenter": -46.6499,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 266.25,
+        "slot_id": 84
+      },
+      {
+        "id": 85,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 3.0576,
+        "ycenter": -46.6499,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 273.75,
+        "slot_id": 85
+      },
+      {
+        "id": 86,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 9.12047,
+        "ycenter": -45.8517,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 281.25,
+        "slot_id": 86
+      },
+      {
+        "id": 87,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 15.0273,
+        "ycenter": -44.269,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 288.75,
+        "slot_id": 87
+      },
+      {
+        "id": 88,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 20.677,
+        "ycenter": -41.9288,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 296.25,
+        "slot_id": 88
+      },
+      {
+        "id": 89,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 25.9729,
+        "ycenter": -38.8712,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 303.75,
+        "slot_id": 89
+      },
+      {
+        "id": 90,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.8244,
+        "ycenter": -35.1485,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 311.25,
+        "slot_id": 90
+      },
+      {
+        "id": 91,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 35.1485,
+        "ycenter": -30.8244,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 318.75,
+        "slot_id": 91
+      },
+      {
+        "id": 92,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 38.8712,
+        "ycenter": -25.9729,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 326.25,
+        "slot_id": 92
+      },
+      {
+        "id": 93,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.9288,
+        "ycenter": -20.677,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 333.75,
+        "slot_id": 93
+      },
+      {
+        "id": 94,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 44.269,
+        "ycenter": -15.0273,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 341.25,
+        "slot_id": 94
+      },
+      {
+        "id": 95,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 45.8517,
+        "ycenter": -9.12047,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 348.75,
+        "slot_id": 95
+      },
+      {
+        "id": 96,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 46.6499,
+        "ycenter": -3.0576,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 356.25,
+        "slot_id": 96
+      },
+      {
+        "id": 97,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 57.4692,
+        "ycenter": 1.88135,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 1.875,
+        "slot_id": 97
+      },
+      {
+        "id": 98,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 57.2231,
+        "ycenter": 5.63599,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 5.625,
+        "slot_id": 98
+      },
+      {
+        "id": 99,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 56.732,
+        "ycenter": 9.36649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 9.375,
+        "slot_id": 99
+      },
+      {
+        "id": 100,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 55.9979,
+        "ycenter": 13.0569,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 13.125,
+        "slot_id": 100
+      },
+      {
+        "id": 101,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 55.0241,
+        "ycenter": 16.6914,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 16.875,
+        "slot_id": 101
+      },
+      {
+        "id": 102,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 53.8146,
+        "ycenter": 20.2544,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 20.625,
+        "slot_id": 102
+      },
+      {
+        "id": 103,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 52.3747,
+        "ycenter": 23.7307,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 24.375,
+        "slot_id": 103
+      },
+      {
+        "id": 104,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 50.7105,
+        "ycenter": 27.1053,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 28.125,
+        "slot_id": 104
+      },
+      {
+        "id": 105,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 48.8291,
+        "ycenter": 30.3639,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 31.875,
+        "slot_id": 105
+      },
+      {
+        "id": 106,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 46.7387,
+        "ycenter": 33.4925,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 35.625,
+        "slot_id": 106
+      },
+      {
+        "id": 107,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 44.4481,
+        "ycenter": 36.4776,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 39.375,
+        "slot_id": 107
+      },
+      {
+        "id": 108,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.9672,
+        "ycenter": 39.3066,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 43.125,
+        "slot_id": 108
+      },
+      {
+        "id": 109,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 39.3066,
+        "ycenter": 41.9672,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 46.875,
+        "slot_id": 109
+      },
+      {
+        "id": 110,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 36.4776,
+        "ycenter": 44.4481,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 50.625,
+        "slot_id": 110
+      },
+      {
+        "id": 111,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 33.4925,
+        "ycenter": 46.7387,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 54.375,
+        "slot_id": 111
+      },
+      {
+        "id": 112,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.3639,
+        "ycenter": 48.8291,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 58.125,
+        "slot_id": 112
+      },
+      {
+        "id": 113,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 27.1053,
+        "ycenter": 50.7105,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 61.875,
+        "slot_id": 113
+      },
+      {
+        "id": 114,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 23.7307,
+        "ycenter": 52.3747,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 65.625,
+        "slot_id": 114
+      },
+      {
+        "id": 115,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 20.2544,
+        "ycenter": 53.8146,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 69.375,
+        "slot_id": 115
+      },
+      {
+        "id": 116,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 16.6914,
+        "ycenter": 55.0241,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 73.125,
+        "slot_id": 116
+      },
+      {
+        "id": 117,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 13.0569,
+        "ycenter": 55.9979,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 76.875,
+        "slot_id": 117
+      },
+      {
+        "id": 118,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 9.36649,
+        "ycenter": 56.732,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 80.625,
+        "slot_id": 118
+      },
+      {
+        "id": 119,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 5.63599,
+        "ycenter": 57.2231,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 84.375,
+        "slot_id": 119
+      },
+      {
+        "id": 120,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 1.88135,
+        "ycenter": 57.4692,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 88.125,
+        "slot_id": 120
+      },
+      {
+        "id": 121,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -1.88135,
+        "ycenter": 57.4692,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 91.875,
+        "slot_id": 121
+      },
+      {
+        "id": 122,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -5.63599,
+        "ycenter": 57.2231,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 95.625,
+        "slot_id": 122
+      },
+      {
+        "id": 123,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -9.36649,
+        "ycenter": 56.732,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 99.375,
+        "slot_id": 123
+      },
+      {
+        "id": 124,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -13.0569,
+        "ycenter": 55.9979,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 103.125,
+        "slot_id": 124
+      },
+      {
+        "id": 125,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -16.6914,
+        "ycenter": 55.0241,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 106.875,
+        "slot_id": 125
+      },
+      {
+        "id": 126,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -20.2544,
+        "ycenter": 53.8146,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 110.625,
+        "slot_id": 126
+      },
+      {
+        "id": 127,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -23.7307,
+        "ycenter": 52.3747,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 114.375,
+        "slot_id": 127
+      },
+      {
+        "id": 128,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -27.1053,
+        "ycenter": 50.7105,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 118.125,
+        "slot_id": 128
+      },
+      {
+        "id": 129,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.3639,
+        "ycenter": 48.8291,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 121.875,
+        "slot_id": 129
+      },
+      {
+        "id": 130,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -33.4925,
+        "ycenter": 46.7387,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 125.625,
+        "slot_id": 130
+      },
+      {
+        "id": 131,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -36.4776,
+        "ycenter": 44.4481,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 129.375,
+        "slot_id": 131
+      },
+      {
+        "id": 132,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -39.3066,
+        "ycenter": 41.9672,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 133.125,
+        "slot_id": 132
+      },
+      {
+        "id": 133,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.9672,
+        "ycenter": 39.3066,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 136.875,
+        "slot_id": 133
+      },
+      {
+        "id": 134,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -44.4481,
+        "ycenter": 36.4776,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 140.625,
+        "slot_id": 134
+      },
+      {
+        "id": 135,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -46.7387,
+        "ycenter": 33.4925,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 144.375,
+        "slot_id": 135
+      },
+      {
+        "id": 136,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -48.8291,
+        "ycenter": 30.3639,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 148.125,
+        "slot_id": 136
+      },
+      {
+        "id": 137,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -50.7105,
+        "ycenter": 27.1053,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 151.875,
+        "slot_id": 137
+      },
+      {
+        "id": 138,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -52.3747,
+        "ycenter": 23.7307,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 155.625,
+        "slot_id": 138
+      },
+      {
+        "id": 139,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -53.8146,
+        "ycenter": 20.2544,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 159.375,
+        "slot_id": 139
+      },
+      {
+        "id": 140,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -55.0241,
+        "ycenter": 16.6914,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 163.125,
+        "slot_id": 140
+      },
+      {
+        "id": 141,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -55.9979,
+        "ycenter": 13.0569,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 166.875,
+        "slot_id": 141
+      },
+      {
+        "id": 142,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -56.732,
+        "ycenter": 9.36649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 170.625,
+        "slot_id": 142
+      },
+      {
+        "id": 143,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -57.2231,
+        "ycenter": 5.63599,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 174.375,
+        "slot_id": 143
+      },
+      {
+        "id": 144,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -57.4692,
+        "ycenter": 1.88135,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 178.125,
+        "slot_id": 144
+      },
+      {
+        "id": 145,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -57.4692,
+        "ycenter": -1.88135,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 181.875,
+        "slot_id": 145
+      },
+      {
+        "id": 146,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -57.2231,
+        "ycenter": -5.63599,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 185.625,
+        "slot_id": 146
+      },
+      {
+        "id": 147,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -56.732,
+        "ycenter": -9.36649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 189.375,
+        "slot_id": 147
+      },
+      {
+        "id": 148,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -55.9979,
+        "ycenter": -13.0569,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 193.125,
+        "slot_id": 148
+      },
+      {
+        "id": 149,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -55.0241,
+        "ycenter": -16.6914,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 196.875,
+        "slot_id": 149
+      },
+      {
+        "id": 150,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -53.8146,
+        "ycenter": -20.2544,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 200.625,
+        "slot_id": 150
+      },
+      {
+        "id": 151,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -52.3747,
+        "ycenter": -23.7307,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 204.375,
+        "slot_id": 151
+      },
+      {
+        "id": 152,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -50.7105,
+        "ycenter": -27.1053,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 208.125,
+        "slot_id": 152
+      },
+      {
+        "id": 153,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -48.8291,
+        "ycenter": -30.3639,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 211.875,
+        "slot_id": 153
+      },
+      {
+        "id": 154,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -46.7387,
+        "ycenter": -33.4925,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 215.625,
+        "slot_id": 154
+      },
+      {
+        "id": 155,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -44.4481,
+        "ycenter": -36.4776,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 219.375,
+        "slot_id": 155
+      },
+      {
+        "id": 156,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -41.9672,
+        "ycenter": -39.3066,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 223.125,
+        "slot_id": 156
+      },
+      {
+        "id": 157,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -39.3066,
+        "ycenter": -41.9672,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 226.875,
+        "slot_id": 157
+      },
+      {
+        "id": 158,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -36.4776,
+        "ycenter": -44.4481,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 230.625,
+        "slot_id": 158
+      },
+      {
+        "id": 159,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -33.4925,
+        "ycenter": -46.7387,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 234.375,
+        "slot_id": 159
+      },
+      {
+        "id": 160,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -30.3639,
+        "ycenter": -48.8291,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 238.125,
+        "slot_id": 160
+      },
+      {
+        "id": 161,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -27.1053,
+        "ycenter": -50.7105,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 241.875,
+        "slot_id": 161
+      },
+      {
+        "id": 162,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -23.7307,
+        "ycenter": -52.3747,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 245.625,
+        "slot_id": 162
+      },
+      {
+        "id": 163,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -20.2544,
+        "ycenter": -53.8146,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 249.375,
+        "slot_id": 163
+      },
+      {
+        "id": 164,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -16.6914,
+        "ycenter": -55.0241,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 253.125,
+        "slot_id": 164
+      },
+      {
+        "id": 165,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -13.0569,
+        "ycenter": -55.9979,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 256.875,
+        "slot_id": 165
+      },
+      {
+        "id": 166,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -9.36649,
+        "ycenter": -56.732,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 260.625,
+        "slot_id": 166
+      },
+      {
+        "id": 167,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -5.63599,
+        "ycenter": -57.2231,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 264.375,
+        "slot_id": 167
+      },
+      {
+        "id": 168,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": -1.88135,
+        "ycenter": -57.4692,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 268.125,
+        "slot_id": 168
+      },
+      {
+        "id": 169,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 1.88135,
+        "ycenter": -57.4692,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 271.875,
+        "slot_id": 169
+      },
+      {
+        "id": 170,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 5.63599,
+        "ycenter": -57.2231,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 275.625,
+        "slot_id": 170
+      },
+      {
+        "id": 171,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 9.36649,
+        "ycenter": -56.732,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 279.375,
+        "slot_id": 171
+      },
+      {
+        "id": 172,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 13.0569,
+        "ycenter": -55.9979,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 283.125,
+        "slot_id": 172
+      },
+      {
+        "id": 173,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 16.6914,
+        "ycenter": -55.0241,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 286.875,
+        "slot_id": 173
+      },
+      {
+        "id": 174,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 20.2544,
+        "ycenter": -53.8146,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 290.625,
+        "slot_id": 174
+      },
+      {
+        "id": 175,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 23.7307,
+        "ycenter": -52.3747,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 294.375,
+        "slot_id": 175
+      },
+      {
+        "id": 176,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 27.1053,
+        "ycenter": -50.7105,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 298.125,
+        "slot_id": 176
+      },
+      {
+        "id": 177,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 30.3639,
+        "ycenter": -48.8291,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 301.875,
+        "slot_id": 177
+      },
+      {
+        "id": 178,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 33.4925,
+        "ycenter": -46.7387,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 305.625,
+        "slot_id": 178
+      },
+      {
+        "id": 179,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 36.4776,
+        "ycenter": -44.4481,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 309.375,
+        "slot_id": 179
+      },
+      {
+        "id": 180,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 39.3066,
+        "ycenter": -41.9672,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 313.125,
+        "slot_id": 180
+      },
+      {
+        "id": 181,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 41.9672,
+        "ycenter": -39.3066,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 316.875,
+        "slot_id": 181
+      },
+      {
+        "id": 182,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 44.4481,
+        "ycenter": -36.4776,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 320.625,
+        "slot_id": 182
+      },
+      {
+        "id": 183,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 46.7387,
+        "ycenter": -33.4925,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 324.375,
+        "slot_id": 183
+      },
+      {
+        "id": 184,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 48.8291,
+        "ycenter": -30.3639,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 328.125,
+        "slot_id": 184
+      },
+      {
+        "id": 185,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 50.7105,
+        "ycenter": -27.1053,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 331.875,
+        "slot_id": 185
+      },
+      {
+        "id": 186,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 52.3747,
+        "ycenter": -23.7307,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 335.625,
+        "slot_id": 186
+      },
+      {
+        "id": 187,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 53.8146,
+        "ycenter": -20.2544,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 339.375,
+        "slot_id": 187
+      },
+      {
+        "id": 188,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 55.0241,
+        "ycenter": -16.6914,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 343.125,
+        "slot_id": 188
+      },
+      {
+        "id": 189,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 55.9979,
+        "ycenter": -13.0569,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 346.875,
+        "slot_id": 189
+      },
+      {
+        "id": 190,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 56.732,
+        "ycenter": -9.36649,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 350.625,
+        "slot_id": 190
+      },
+      {
+        "id": 191,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 57.2231,
+        "ycenter": -5.63599,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 354.375,
+        "slot_id": 191
+      },
+      {
+        "id": 192,
+        "height": 1.9,
+        "length": 50.0,
+        "width": 0.7,
+        "xcenter": 57.4692,
+        "ycenter": -1.88135,
+        "zcenter": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 358.125,
+        "slot_id": 192
+      }
+    ]
+  }
+}

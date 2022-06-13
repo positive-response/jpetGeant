@@ -16,23 +16,25 @@
 #ifndef HISTOMANAGER_H
 #define HISTOMANAGER_H 1
 
-#include "../Objects/Framework/JPetGeantEventInformation.h"
+#include "../Info/EventMessenger.h"
+#include "../Info/VtxInformation.h"
 #include "../Objects/Framework/JPetGeantDecayTree.h"
+#include "../Objects/Framework/JPetGeantDecayTreeBranch.h"
+#include "../Objects/Framework/JPetGeantEventInformation.h"
 #include "../Objects/Framework/JPetGeantEventPack.h"
 #include "../Objects/Framework/JPetGeantScinHits.h"
 #include "../Objects/Geant4/DetectorHit.h"
-#include "../Info/EventMessenger.h"
-#include "../Info/VtxInformation.h"
 
-#include <G4PrimaryParticle.hh>
-#include <THashTable.h>
 #include <G4Event.hh>
-#include <globals.hh>
+#include <G4PrimaryParticle.hh>
 #include <TFile.h>
-#include <TTree.h>
 #include <TH1F.h>
 #include <TH2F.h>
 #include <TH3F.h>
+#include <THashTable.h>
+#include <TTree.h>
+#include <globals.hh>
+#include <set>
 
 class TFile;
 class TTree;
@@ -42,7 +44,8 @@ struct doubleCheck
   bool isChanged = false;
   double value = 0.;
   doubleCheck() {}
-  explicit doubleCheck(double newValue) {
+  explicit doubleCheck(double newValue)
+  {
     value = newValue;
     isChanged = true;
   }
@@ -58,10 +61,10 @@ class HistoManager
 public:
   HistoManager();
   ~HistoManager();
-  
+
   void Book(); //! call once; book (create) all trees and histograms
   void Save(); //! call once; save all trees and histograms
-  void SaveEvtPack() { fTree->Fill(); };
+  void SaveEvtPack();
   void Clear() { fEventPack->Clear(); };
   void AddGenInfo(VtxInformation* info);
   void AddGenInfoParticles(G4PrimaryParticle* particle);
@@ -77,32 +80,29 @@ public:
   void FillHistoGenInfo(const G4Event* anEvent);
   void FillCosmicInfo(G4double theta, G4ThreeVector init, G4ThreeVector vtx);
   const JPetGeantEventInformation* GetGeantInfo() const { return fGeantInfo; }
-  void createHistogramWithAxes(
-    TObject* object,
-    TString xAxisName = "Default X axis title [unit]",
-    TString yAxisName = "Default Y axis title [unit]",
-    TString zAxisName = "Default Z axis title [unit]"
-  );
+  void createHistogramWithAxes(TObject* object, TString xAxisName = "Default X axis title [unit]", TString yAxisName = "Default Y axis title [unit]",
+                               TString zAxisName = "Default Z axis title [unit]");
 
-  void fillHistogram(
-    const char* name, double xValue, doubleCheck yValue = doubleCheck(), doubleCheck zValue = doubleCheck()
-  );
+  void fillHistogram(const char* name, double xValue, doubleCheck yValue = doubleCheck(), doubleCheck zValue = doubleCheck());
   void writeError(const char* nameOfHistogram, const char* messageEnd);
 
   template <typename T>
-  T* getObject(const char* name) {
+  T* getObject(const char* name)
+  {
     TObject* tmp = fStats.FindObject(name);
-    if (!tmp) {
+    if (!tmp)
+    {
       return nullptr;
     }
     return dynamic_cast<T*>(tmp);
   }
 
 private:
-  HistoManager(const HistoManager &histoManagerToCopy);
+  HistoManager(const HistoManager& histoManagerToCopy);
 
   int fParentIDofPhoton = 0;
   bool fEndOfEvent = true;
+  bool fEmptyEvent = true;
   DecayChannel fDecayChannel;
   bool fBookStatus = false;
   bool fMakeControlHisto = false;
@@ -112,6 +112,7 @@ private:
   TBranch* fBranchScin = nullptr;
   TBranch* fBranchEventPack = nullptr;
 
+  JPetGeantDecayTree* fTempDecayTree = nullptr;
   JPetGeantEventPack* fEventPack = nullptr;
   JPetGeantEventInformation* fGeantInfo = nullptr;
   EventMessenger* fEvtMessenger = EventMessenger::GetEventMessenger();

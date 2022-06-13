@@ -1,0 +1,19 @@
+# Macro showing how to use JSON setup files to construct a detector
+
+# Run Number in json setup file, default 999
+#/jpetmc/detector/jsonSetupRunNum 444
+
+# Name of the file with detector setup in JSON format
+/jpetmc/detector/jsonSetupFile modular_24_ring.json
+
+#/jpetmc/detector/jsonSetupFile endcap_example.json
+#/jpetmc/detector/jsonSetupFile big_barrel_3layers.json
+#/jpetmc/detector/jsonSetupFile trento_2mods.json
+#/jpetmc/detector/jsonSetupFile dual_head_ccb.json
+
+# Load small chamber source as an example
+/jpetmc/detector/loadTargetForRun 5
+
+/run/initialize
+
+/run/beamOn 1
