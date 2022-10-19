@@ -103,7 +103,7 @@ endif()
 set(GEANT4_LINK_OPTIONS "")
 if(LINK_STATIC_GEANT4)
   set(GEANT4_LINK_OPTIONS static)
-  message(INFO "Linking statically to Geant4 libraries.")
+  message(STATUS "Linking statically to Geant4 libraries.")
 endif()
 
 find_package(Geant4 REQUIRED ${GEANT4_LINK_OPTIONS} ui_all vis_all)
