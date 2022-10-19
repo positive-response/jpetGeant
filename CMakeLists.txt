@@ -100,7 +100,13 @@ endif()
 ## Include GEANT4 WITH VIS DRIVERS
 ## remember to compile geant4 with following flags
 ## -DGEANT4_USE_QT=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_GDML=ON
-find_package(Geant4 REQUIRED static ui_all vis_all)
+set(GEANT4_LINK_OPTIONS "")
+if(LINK_STATIC_GEANT4)
+  set(GEANT4_LINK_OPTIONS static)
+  message(INFO "Linking statically to Geant4 libraries.")
+endif()
+
+find_package(Geant4 REQUIRED ${GEANT4_LINK_OPTIONS} ui_all vis_all)
 include(${Geant4_USE_FILE})
 
 ################################################################################
@@ -183,12 +189,15 @@ target_compile_options(jpet_mc PRIVATE -Wno-shadow)
 target_link_libraries(
   jpet_mc 
   ${ROOT_LIBRARIES}
+  ${Geant4_LIBRARIES}
   JPetMCClassesDict
   )
 
+message(WARNING ${Geant4_LIBRARIES})
+
 target_link_libraries(
   jpet_mc
-  ${Geant4_LIBRARIES}
+
   )
 
 ## Copy script files to bin directory
