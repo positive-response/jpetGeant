@@ -193,13 +193,6 @@ target_link_libraries(
   JPetMCClassesDict
   )
 
-message(WARNING ${Geant4_LIBRARIES})
-
-target_link_libraries(
-  jpet_mc
-
-  )
-
 ## Copy script files to bin directory
 foreach(file_i ${SCRIPT_FILES})
   configure_file(
