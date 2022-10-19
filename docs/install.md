@@ -22,3 +22,24 @@ output file: (in build folder)
 `cmake .. && make doc`  
 - open the `doc/html/index.html` in your favorite web browser  
 
+# Advanced installation options
+
+## Statically linking to Geant4 libraries
+Using a statically-linked binary can speed up the execution of J-PET MC simulations by about 10%.
+
+In order to use static Geant4 linkage:
+
+1. Build Geant4 static libraries alongside with the (default) shared
+libraries by passing the following option to CMake in  addition to other flags:
+    ```
+    -DBUILD_STATIC_LIBS=ON
+    ```
+
+    As a result, in the installation directory of Geant4, in the `lib` sudbirectory
+    files with `*.a` extension should be present besides `*.so` files.
+
+2. When running CMake for J-PET-Geant4, pass in the following additional option:
+
+    ```
+    -DLINK_STATIC_GEANT4=ON
+    ```
