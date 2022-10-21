@@ -397,7 +397,7 @@ void DetectorConstruction::ConstructScintillators()
         fSlotContainer.push_back(slotTemp);
       }
 
-      new G4PVPlacement(transform, fScinLog, name, fWorldLogical, true, icopy, checkOverlaps);
+      new G4PVPlacement(transform, fScinLog, name, fWorldLogical, true, fMaxScinID, checkOverlaps);
 
       if (fLoadWrapping)
       {
@@ -405,8 +405,8 @@ void DetectorConstruction::ConstructScintillators()
         wrappingLog = new G4LogicalVolume(unionSolid, fKapton, "wrappingLogical");
         wrappingLog->SetVisAttributes(boxVisAttWrapping);
         
-        G4String nameWrapping = "wrapping_" + G4UIcommand::ConvertToString(icopy);
-        new G4PVPlacement(transform, wrappingLog, nameWrapping, fWorldLogical, true, icopy, checkOverlaps);
+        G4String nameWrapping = "wrapping_" + G4UIcommand::ConvertToString(fMaxScinID);
+        new G4PVPlacement(transform, wrappingLog, nameWrapping, fWorldLogical, true, fMaxScinID, checkOverlaps);
       }
       fMaxScinID++;
     }
@@ -446,8 +446,7 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
   std::vector<G4double> radius_dynamic = std::vector<G4double>(13, 0.0);
 
   //! starting ID for modular layer
-  G4int icopyI = 201;
-  fMaxScinID = icopyI;
+  fMaxScinID = 201;
   G4double angDisp_8 = 0.0531204920;  // 3.0435^0
   G4double angDisp_16 = 0.0272515011; // 1.561396^0
   G4double angDisp_24 = 0.01815;      // 1.04^0
@@ -468,7 +467,7 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
     }
     numberofModules = 24;
     angDisp_dynamic = angDisp_24;
-    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, icopyI);
+    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, fMaxScinID);
     break;
   case GeometryKind::Geo24ModulesLayerDistributed:
     for (int i = 0; i < 13; i++)
@@ -477,15 +476,15 @@ void DetectorConstruction::ConstructScintillatorsModularLayer()
     }
     numberofModules = 8;
     angDisp_dynamic = angDisp_8;
-    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, icopyI);
+    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, fMaxScinID);
     for (int i = 0; i < 13; i++)
     {
       radius_dynamic[i] = radius_16[i];
     }
     numberofModules = 16;
     angDisp_dynamic = angDisp_16;
-    icopyI += 8 * 13;
-    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, icopyI);
+    fMaxScinID += 8 * 13;
+    ConstructLayers(radius_dynamic, numberofModules, angDisp_dynamic, fMaxScinID);
     break;
   default:
     G4cout << " Wrong option for modular setup: choose either Single or Double" << G4endl;

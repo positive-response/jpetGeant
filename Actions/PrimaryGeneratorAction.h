@@ -70,7 +70,7 @@ public:
 private:
   G4int fNemaPoint = -1;
   G4String fGenerateSourceType;
-  G4String fAllowedSourceTypes[5] = {"run", "beam", "isotope", "nema", "nema-mixed", "cosmics"};
+  G4String fAllowedSourceTypes[6] = {"run", "beam", "isotope", "nema", "nema-mixed", "cosmics"};
   PrimaryGeneratorActionMessenger* fMessenger = nullptr;
   PrimaryGenerator* fPrimaryGenerator = nullptr;
   HistoManager* fHistoManager = nullptr;
