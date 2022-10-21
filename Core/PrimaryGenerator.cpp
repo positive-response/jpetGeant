@@ -316,7 +316,7 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
-
+  
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
   if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {
@@ -511,38 +511,47 @@ void PrimaryGenerator::GenerateIsotope(SourceParams* sourceParams, G4Event* even
  *  1       1       4
  *  z ------0------3/4L ------
  */
-void PrimaryGenerator::GenerateNema(G4int nemaPoint, G4Event* event)
+void PrimaryGenerator::GenerateNema(G4Event* event, NemaGenerator* nemaGen)
 {
-  G4double x_creation = 0.0 * cm;
-  G4double y_creation = 0.0 * cm;
-  G4double z_creation = 0.0 * cm;
+  NemaPoint nemaPoint = nemaGen->GetRandomPoint();
+  
+  G4ThreeVector nemaPosition = nemaPoint.position;
+  G4ThreeVector vtxPosition = GenerateVertexUniformInCylinder(nemaPoint.sizeOfPoint.getX(), nemaPoint.sizeOfPoint.getZ());
+  vtxPosition = nemaGen->GetPointShapedInY(vtxPosition, nemaPoint);
+  vtxPosition = nemaGen->GetRotatedPoint(vtxPosition, nemaPoint);
+  vtxPosition = vtxPosition + nemaPosition;
 
-  if (nemaPoint > 3){
-    z_creation = z_creation - DetectorConstants::scinDim[2] * 3 / 8;
+  double lifetime = nemaPoint.lifetime;
+  bool is3GAllowed = nemaPoint.is3GAllowed;
+  if (is3GAllowed) {
+    double randLF = G4UniformRand();
+    double lfTest = MaterialParameters::GetoPsIntensity3G(lifetime * ns, 100);
+    if (randLF > lfTest) {
+      event->AddPrimaryVertex(GenerateTwoGammaVertex(
+        vtxPosition, 0.0f, lifetime
+      ));
+    } else {
+      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+        DecayChannel::kOrtho3G, vtxPosition, 0.0f, lifetime
+      ));
+    }
+  } else {
+    event->AddPrimaryVertex(GenerateTwoGammaVertex(
+      vtxPosition, 0.0f, lifetime
+    ));
   }
-
-  if (nemaPoint == 1 || nemaPoint == 4) {
-    y_creation = y_creation + 1.0 * cm;
+  
+  bool isPromptAllowed = nemaPoint.isPromptAllowed;
+  if (isPromptAllowed) {
+    G4ThreeVector vtxPromptPosition = GenerateVertexUniformInCylinder(nemaPoint.sizeOfPointPrompt.getX(), nemaPoint.sizeOfPointPrompt.getZ());
+    vtxPromptPosition = nemaGen->GetPointShapedInY(vtxPromptPosition, nemaPoint);
+    vtxPromptPosition = nemaGen->GetRotatedPoint(vtxPromptPosition, nemaPoint);
+    vtxPromptPosition = vtxPromptPosition + nemaPosition;
+    event->AddPrimaryVertex(GeneratePromptGammaVertex(
+      vtxPromptPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
+      MaterialParameters::fSodiumGammaEnergy
+    ));
   }
-
-  if (nemaPoint == 2 || nemaPoint == 5) {
-    y_creation = y_creation + 10.0 * cm;
-  }
-
-  if (nemaPoint == 3 || nemaPoint == 6) {
-    y_creation = y_creation + 20.0 * cm;
-  }
-
-  G4ThreeVector vtxPosition = GenerateVertexUniformInCylinder(0.1 * mm, 0.1 * mm)
-  + G4ThreeVector(x_creation, y_creation, z_creation);
-
-  event->AddPrimaryVertex(GenerateTwoGammaVertex(
-    vtxPosition, 0.0f, MaterialParameters::fTauBulk
-  ));
-  event->AddPrimaryVertex(GeneratePromptGammaVertex(
-    vtxPosition, 0.0f, MaterialParameters::fSodiumGammaTau,
-    MaterialParameters::fSodiumGammaEnergy
-  ));
 }
 
 G4ThreeVector PrimaryGenerator::GenerateVertexUniformInCylinder(G4double rIn, G4double zmax)

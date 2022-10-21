@@ -43,6 +43,9 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
   //! Bool converted into string
   fLoadModularLayer = new G4UIcmdWithAString("/jpetmc/detector/loadModularLayer", this);
   fLoadModularLayer->SetGuidance("Load additional layer made out of modules");
+  
+  fLoadModularLayerOnly = new G4UIcmdWithoutParameter("/jpetmc/detector/loadModularLayerOnly", this);
+  fLoadModularLayerOnly->SetGuidance("Do not load other layers of detectors");
 
   fScinHitMergingTime = new G4UIcmdWithADoubleAndUnit("/jpetmc/detector/hitMergingTime", this);
   fScinHitMergingTime->SetGuidance("Define time range (ns) while merging hits in scintillators");
@@ -76,6 +79,7 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
   delete fLoadOnlyScintillators;
   delete fLoadWrapping;
   delete fLoadModularLayer;
+  delete fLoadModularLayerOnly;
   delete fScinHitMergingTime;
   delete fGeometryFileName;
   delete fCreateGeometryType;
@@ -114,6 +118,10 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
   else if (command == fLoadModularLayer)
   {
     fDetector->ConstructModularLayer(newValue);
+    fDetector->UpdateGeometry();
+  } else if (command == fLoadModularLayerOnly) 
+  {
+    fDetector->ConstructBasicGeometry(false);
     fDetector->UpdateGeometry();
   }
   else if (command == fScinHitMergingTime)

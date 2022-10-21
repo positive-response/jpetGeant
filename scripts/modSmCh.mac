@@ -8,6 +8,8 @@
 
 # Loading modular layers
 /jpetmc/detector/loadModularLayer Single
+# Do not load three layers of standard detector
+#/jpetmc/detector/loadModularLayerOnly
 
 # Loading scintillators without frame
 /jpetmc/detector/loadOnlyScintillators

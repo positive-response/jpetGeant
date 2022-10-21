@@ -72,6 +72,26 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/event/ShowProgress`  
 * Give nema point number to simulate (1-6):  
  `/jpetmc/source/nema`  
+* Simulate couple of nema points at once with the same acitivity:  
+ `/jpetmc/source/nema/mixed`  
+* Setting position of given nema points:  
+ `/jpetmc/source/nema/mixed/setPosition [point] [x position] [y position] [z position]`__
+* Set weight of a given nema point:  
+ `/jpetmc/source/nema/mixed/setWeight [point] [weight - int from 0 to infty, when 0 is removing given point]`  
+* Set mean lifetime of a given nema point:  
+ `/jpetmc/source/nema/mixed/setLifetime [point] [lifetime - int from 0 to infty]`  
+* Allow a given point to annihilate into 3 photons based on the mean lifetime set -> Prob3G = lifetime/oPsLifetimevacuum:  
+ `/jpetmc/source/nema/mixed/allow3G [point]'  
+* Points are simulated at now only as cylinders. Setting size of that cylinder:  
+ `/jpetmc/source/nema/mixed/setCylinderSize [point] [radius] [length]`  
+* Allow a given point to generate prompt photon (by default it is true):  
+ `/jpetmc/source/nema/mixed/allowPrompt [point]'  
+* Points are simulated at now only as cylinders. Setting size of the cylinder for prompt:  
+ `/jpetmc/source/nema/mixed/setPromptSourceSize [point] [radius] [length]`  
+* Rotating the shape of the nema point:  
+ `/jpetmc/source/nema/mixed/setCylinderRotation [point] [phi] [theta]`  
+* Changing the shape of the nema point by shifting position in X:  
+ `/jpetmc/source/nema/mixed/setCylinderShapeParametersY [point] [direction and spread] [shape parameter1 - power] [shape parameter2 - range]`  
 * set parameters of gamma beam:  
  `/jpetmc/source/gammaBeam/setEnergy setPosition setMomentum`  
 * set parameters of the isotope source, shape, if cylinder: radius, z-lenght (half):  

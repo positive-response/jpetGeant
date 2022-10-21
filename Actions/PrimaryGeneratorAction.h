@@ -18,6 +18,7 @@
 
 #include "../Info/PrimaryGeneratorActionMessenger.h"
 #include "../Core/PrimaryGenerator.h"
+#include "../Core/NemaGenerator.h"
 #include "../Core/HistoManager.h"
 #include "../Core/SourceParams.h"
 #include "../Core/BeamParams.h"
@@ -29,6 +30,10 @@
 struct IsotopeParams
 {
   G4String shape;
+};
+
+enum Dimension {
+  dimX, dimY  
 };
 
 /**
@@ -47,19 +52,31 @@ public:
   BeamParams* GetBeamParams() { return fBeam; }
   SourceParams* GetIsotopeParams() { return fIsotope; }
   G4String GetSourceTypeInfo() { return fGenerateSourceType; }
-  void SetNemaPoint(G4int i) { fNemaPoint = i; }
-  G4int GetNemaPoint() { return fNemaPoint; }
+  void SetNemaPoint(G4int pointID) { fNemaGenerator.SetOnePointOnly(pointID); fNemaPoint = pointID; };
+  void GenerateDefaultNemaPositions();
+  void SetNemaPointPosition(G4int nemaPoint, const G4ThreeVector& position);
+  void SetNemaPositionWeight(G4int position, G4int weight);
+  void SetNemaPointLifetime(G4int position, G4double lifetime);
+  void SetNemaPoint3GOption(G4int position);
+  void SetNemaPointSize(G4int position, G4double radius, G4double length);
+  void SetNemaPointPromptOption(G4int position);
+  void SetNemaPointPromptSize(G4int position, G4double radius, G4double length);
+  void SetNemaPointOrientation(G4int position, G4double theta, G4double phi);
+  void SetNemaPointShape(G4int position, Dimension dim, G4double direction, G4double power, G4double length);
   void SetEffectivePositronRadius(G4double);
+  
+  G4int GetNemaPoint() { return fNemaPoint; }
 
 private:
+  G4int fNemaPoint = -1;
   G4String fGenerateSourceType;
-  G4String fAllowedSourceTypes[5] = {"run", "beam", "isotope", "nema", "cosmics"};
+  G4String fAllowedSourceTypes[6] = {"run", "beam", "isotope", "nema", "nema-mixed", "cosmics"};
   PrimaryGeneratorActionMessenger* fMessenger = nullptr;
   PrimaryGenerator* fPrimaryGenerator = nullptr;
   HistoManager* fHistoManager = nullptr;
   BeamParams* fBeam = nullptr;
   SourceParams* fIsotope = nullptr;
-  G4int fNemaPoint = -1;
+  NemaGenerator fNemaGenerator;
   G4double fEffectivePositronRadius = 0.5 * cm;
 };
 

@@ -18,6 +18,7 @@
 
 #include "../Objects/Framework/JPetGeantDecayTree.h"
 #include "MaterialExtension.h"
+#include "NemaGenerator.h"
 #include "HistoManager.h"
 #include "SourceParams.h"
 #include "BeamParams.h"
@@ -28,7 +29,13 @@
 #include <TGenPhaseSpace.h>
 #include <TLorentzVector.h>
 #include <G4Navigator.hh>
+#include <TRotation.h>
 #include <G4Event.hh>
+#include <TVector3.h>
+#include <TGraph.h>
+#include <vector>
+#include <TF1.h>
+#include <map>
 #include <TH1F.h>
 #include <TH2F.h>
 
@@ -39,7 +46,7 @@ public:
   ~PrimaryGenerator();
   void GenerateBeam(BeamParams*, G4Event*);
   void GenerateIsotope(SourceParams*, G4Event*);
-  void GenerateNema(G4int, G4Event*);
+  void GenerateNema(G4Event*, NemaGenerator*);
   void GenerateEvtSmallChamber(G4Event* event, const G4double);
   void GenerateEvtLargeChamber(G4Event* event);
   void GenerateCosmicVertex(SourceParams* sourceParams, G4Event* event, HistoManager* histo);
