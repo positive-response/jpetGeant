@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2021 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -16,26 +16,25 @@
 #ifndef DETECTORCONSTRUCTION_H
 #define DETECTORCONSTRUCTION_H 1
 
-#include "MaterialExtension.h"
 #include "DetectorSD.h"
+#include "MaterialExtension.h"
 
-#include <G4VUserDetectorConstruction.hh>
+#include <G4Box.hh>
+#include <G4Cache.hh>
+#include <G4Colour.hh>
+#include <G4Element.hh>
 #include <G4GeometryManager.hh>
-#include <G4VPhysicalVolume.hh>
 #include <G4LogicalVolume.hh>
+#include <G4Material.hh>
 #include <G4MaterialTable.hh>
-#include <G4SystemOfUnits.hh>
-#include <G4VisAttributes.hh>
 #include <G4NistManager.hh>
 #include <G4PVPlacement.hh>
 #include <G4SDManager.hh>
-#include <G4Material.hh>
-#include <G4Element.hh>
-#include <G4Colour.hh>
-#include <CADMesh.hh>
-#include <G4Cache.hh>
+#include <G4SystemOfUnits.hh>
+#include <G4VPhysicalVolume.hh>
+#include <G4VUserDetectorConstruction.hh>
+#include <G4VisAttributes.hh>
 #include <globals.hh>
-#include <G4Box.hh>
 #include <vector>
 
 class DetectorConstructionMessenger;
@@ -53,7 +52,8 @@ const G4bool checkOverlaps = false;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  enum GeometryKind {
+  enum GeometryKind
+  {
     Unknown,
     Geo24ModulesLayer,
     Geo24ModulesLayerDistributed
@@ -65,10 +65,10 @@ public:
   virtual G4VPhysicalVolume* Construct();
   virtual void ConstructSDandField();
   void LoadGeometryForRun(G4int nr);
-  G4int ReturnNumberOfScintillators();
+  G4int getNumberOfScintillators();
   void UpdateGeometry();
   void ReloadMaterials(const G4String& material);
-  void SetPressureInChamber(G4double pressure) {fPressure = pressure;};
+  void SetPressureInChamber(G4double pressure) { fPressure = pressure; };
 
   //! Basic geometry with 3 layers of scintillators
   void ConstructBasicGeometry(G4bool tf) { fLoadScintillators = tf; };
@@ -76,13 +76,19 @@ public:
   void LoadWrapping(G4bool tf) { fLoadWrapping = tf; };
 
   //! Modular layer (known as 4th layer); 24 modules filled with scintillators
-  void ConstructModularLayer(const G4String& module_name) {
+  void ConstructModularLayer(const G4String& module_name)
+  {
     fLoadModularLayer = true;
-    if (module_name == "Single") {
+    if (module_name == "Single")
+    {
       fGeoKind = GeometryKind::Geo24ModulesLayer;
-    } else if (module_name == "Double") {
+    }
+    else if (module_name == "Double")
+    {
       fGeoKind = GeometryKind::Geo24ModulesLayerDistributed;
-    } else {
+    }
+    else
+    {
       fLoadModularLayer = false;
       fGeoKind = GeometryKind::Unknown;
     }
@@ -93,6 +99,12 @@ public:
   void SetGeometryFileName(G4String fileName) { fGeometryFileName = fileName; };
   void SetGeometryFileType(G4String type) { fGeometryFileType = type; };
   void CreateGeometryFile();
+  // Reading JSON setup
+  void readJSONSetup(G4bool readSetup) { fReadJSONSetup = readSetup; };
+  void setJSONFileName(G4String fileName) { fJSONSetupFileName = fileName; };
+  void setJSONSetupRunNum(G4int setJSONSetupRunNum) { fJSONSetupRunNum = setJSONSetupRunNum; };
+
+  void ConstructFromSetupFile(G4String fileName);
 
   G4int GetRunNumber() const { return fRunNumber; };
 
@@ -124,9 +136,7 @@ private:
   //! Create target for run12
   void ConstructTargetRun12();
 
-  void ConstructLayers(
-    std::vector<G4double>& radius_dynamic, G4int& numberofModules,
-    G4double& AngDisp_dynamic, G4int& icopyI);
+  void ConstructLayers(std::vector<G4double>& radius_dynamic, G4int& numberofModules, G4double& AngDisp_dynamic, G4int& icopyI);
 
   //! Corresponds to JPET measurements; run 0 = user setup
   G4int fRunNumber;
@@ -142,6 +152,12 @@ private:
   G4bool fCreateGeometryFile = false;
   G4String fGeometryFileName = "mc_geant_setup.json";
   G4String fGeometryFileType = "barrel";
+  //! Reading JSON file with detector setup
+  G4bool fReadJSONSetup = false;
+  G4String fJSONSetupFileName = "detector_setup.json";
+  G4int fJSONSetupRunNum = 999;
+  G4int fMaxCreatedScinID = 0;
+  std::vector<G4LogicalVolume*> fStripsFromSetup;
 
   G4Box* fWorldSolid = nullptr;
   G4LogicalVolume* fWorldLogical = nullptr;
@@ -158,7 +174,7 @@ private:
   MaterialExtension* fSmallChamberRun7Material = nullptr;
   //! Vacuum
   G4Material* vacuum = nullptr;
-  
+
   MaterialExtension* fPolycarbonate = nullptr;
   MaterialExtension* fPolyoxymethylene = nullptr;
   MaterialExtension* fSiliconDioxide = nullptr;
@@ -170,8 +186,9 @@ private:
   //! Geometry Kind for the modular layer
   GeometryKind fGeoKind = GeometryKind::Unknown;
   //! Maximum ID of the scintillators
-  G4int fMaxScinID = 1;
-  G4double fPressure = 1.e-19 *pascal;
+  G4int maxScinID = 512;
+  //! Pressure in chamber
+  G4double fPressure = 1.e-19 * pascal;
 
   std::vector<Layer> fLayerContainer;
   std::vector<Scin> fScinContainer;
@@ -179,7 +196,8 @@ private:
   G4int fLayerNumber = 0;
 };
 
-struct Frame {
+struct Frame
+{
   int fID;
   int fCreatorID;
   int fVersion;
@@ -188,25 +206,26 @@ struct Frame {
   bool fActive;
 };
 
-struct Layer {
+struct Layer
+{
   int fID;
   std::string fName;
   double fRadius;
   int fSetupID;
-  Layer(int id, const std::string& name, double radius, int setupID) :
-    fID(id), fName(name), fRadius(radius), fSetupID(setupID) {}
+  Layer(int id, const std::string& name, double radius, int setupID) : fID(id), fName(name), fRadius(radius), fSetupID(setupID) {}
 };
 
-struct Slot {
+struct Slot
+{
   int fID;
   int fLayerID;
   double fTheta;
   std::string fType;
-  Slot(int id, int layerID, double theta, const std::string& type) :
-    fID(id), fLayerID(layerID), fTheta(theta), fType(type) {}
+  Slot(int id, int layerID, double theta, const std::string& type) : fID(id), fLayerID(layerID), fTheta(theta), fType(type) {}
 };
 
-struct Scin {
+struct Scin
+{
   int fID;
   int fSlotID;
   float fHeight;
@@ -215,8 +234,10 @@ struct Scin {
   double fX_center;
   double fY_center;
   double fZ_center;
-  Scin(int id, int slotID, double height, double width, double length, double x_center, double y_center, double z_center) :
-    fID(id), fSlotID(slotID), fHeight(height), fWidth(width), fLength(length), fX_center(x_center), fY_center(y_center), fZ_center(z_center) {}
+  Scin(int id, int slotID, double height, double width, double length, double x_center, double y_center, double z_center)
+      : fID(id), fSlotID(slotID), fHeight(height), fWidth(width), fLength(length), fX_center(x_center), fY_center(y_center), fZ_center(z_center)
+  {
+  }
 };
 
 void replace(std::string& json, const std::string& placeholder);

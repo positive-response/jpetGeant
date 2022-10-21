@@ -1,7 +1,7 @@
 # Parameters for MC simulations with Geant4 macros
 Following options can be added to macro files, that are read by Geat4. Example files are in `scripts` folder, and also those files are copied to `bin` directory during program build.  
 
-## Using different geometries 
+## Using different geometries
 * 3 layers of scintillators (48, 48, 96)  
   each scintillator: 1.9x0.7x50 cm^3 wrapped in kapton foil  
   detector frame: loaded from CAD file  
@@ -11,17 +11,21 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/detector/loadTargetForRun runNr`  
 * shows only scintillator wrapped in a kapton foil:  
  `/jpetmc/detector/loadOnlyScintillators`  
-* not implemented option that should load n-layer fully packed with 
+* not implemented option that should load n-layer fully packed with
   scintillators barrel:  
  `/jpetmc/detector/loadIdealGeom`  
 * loads modular layer in two configurations (Single and Double)
  `/jpetmc/detector/loadModularLayer [option]`  
+* load detector configuration from JSON file
+ `/jpetmc/detector/jsonSetupFile [fileName]`
+* set the number of Run that is to be loaded from JSON file
+ `/jpetmc/detector/jsonSetupRunNum [number]`
 
 ## General parameters:  
 * Hit merging time:  
   define time range, between hits in scintillator, which will be classified as single hit:  
  `/jpetmc/detector/hitMergingTime`  
-* Adding date and time to the name of the output file, so multiple executions of the simulation 
+* Adding date and time to the name of the output file, so multiple executions of the simulation
   does not overwrite the default file (be careful with simulatenous simulations in the same directory)  
  `/jpetmc/output/AddDatetime 1`  
 
@@ -103,6 +107,10 @@ Following options can be added to macro files, that are read by Geat4. Example f
  `/jpetmc/SaveSeed true`  
 * creation decay tree:  
  `/jpetmc/output/CreateDecayTree`  
+* generate only cosmic muons  
+ `/jpetmc/source/cosmicOnly
+* generate cosmic muons in cylinder or cuboid (by default in cuboid)  
+ `/jpetmc/source/cosmicGenShape [parameter - cuboid or cylinder]
 
 ## Creating .json file with geometry setup for J-PET Framework. If one of these two option will be put into macro, the output file will be created.
 * select a type of output file strucure - Big Barrel or Modular format (default "barrel" other possible "modular"):  

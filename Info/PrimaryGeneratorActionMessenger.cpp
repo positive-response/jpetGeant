@@ -1,5 +1,5 @@
 /**
- *  @copyright Copyright 2020 The J-PET Monte Carlo Authors. All rights reserved.
+ *  @copyright Copyright 2021 The J-PET Monte Carlo Authors. All rights reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may find a copy of the License in the LICENCE file.
@@ -123,6 +123,14 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger(PrimaryGenerato
   fSetChamberEffectivePositronRadius->SetDefaultValue(0.5);
   fSetChamberEffectivePositronRadius->SetDefaultUnit("cm");
   fSetChamberEffectivePositronRadius->SetUnitCandidates("cm");
+  
+  fCosmicOnly = new G4UIcmdWithoutParameter("/jpetmc/source/cosmicOnly",this);
+  fCosmicOnly->SetGuidance("Option to generate cosmic rays only");
+  fCosmicOnly->SetGuidance("Generate only cosmics");
+  
+  fCosmicGenShape = new G4UIcmdWithAString("/jpetmc/source/cosmicGenShape", this);
+  fCosmicGenShape->SetGuidance("Cosmics can be generated on a cylinder or in the cuboid");
+  fCosmicGenShape->SetCandidates("cylinder cuboid"); 
 }
 
 PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
@@ -148,6 +156,8 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger()
   delete fNemaSetPositionCylinderShapeY;
   delete fSetChamberCenter;
   delete fSetChamberEffectivePositronRadius;
+  delete fCosmicOnly;
+  delete fCosmicGenShape;
 }
 
 void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -245,6 +255,10 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     fPrimGen->SetEffectivePositronRadius(
       fSetChamberEffectivePositronRadius->GetNewDoubleValue(newValue)
     );
+  } else if (command == fCosmicOnly) {
+    fPrimGen->SetSourceTypeInfo("cosmics");
+  } else if (command == fCosmicGenShape) {
+    fPrimGen->GetIsotopeParams()->SetShape(newValue);
   }
 }
 

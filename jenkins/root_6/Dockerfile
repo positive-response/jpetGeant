@@ -18,10 +18,6 @@ WORKDIR /geant4
 RUN tar xvxf v10.4.2.tar.gz
 RUN mkdir -p geant4-10.4.2/build && cd geant4-10.4.2/build && cmake -DCMAKE_INSTALL_PREFIX=/geant4-install .. && make && make install
 
-WORKDIR /
-RUN mkdir -p /CADMesh-install
-RUN /bin/bash -c "source /geant4-install/bin/geant4.sh" && git clone https://github.com/christopherpoole/CADMesh.git && cd CADMesh && git checkout v1.1 && mkdir -p build && cd build && export Geant4_DIR=/geant4-install && cmake -DCMAKE_INSTALL_PREFIX=/CADMesh-install .. && make && make install
-
 WORKDIR /J-PET-geant4
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh / && ln -s /usr/local/bin/docker-entrypoint.sh /J-PET-geant4

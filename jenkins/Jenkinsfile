@@ -19,7 +19,7 @@ pipeline {
 		steps {
 		    echo 'Testing..'
 		    sh label: 'mkdir', script: 'mkdir -p CPPCheckRaport'
-		    sh label: 'cppcheck', script: 'cppcheck --inline-suppr --enable=all --inconclusive --xml --suppress="*:${WORKSPACE}/build/*.*" --xml-version=2 ${WORKSPACE} 2> CPPCheckRaport/cppcheck.xml'
+		    sh label: 'cppcheck', script: 'cppcheck --inline-suppr --enable=all --inconclusive --xml -i ="${WORKSPACE}/build/" -i "${WORKSPACE}/CADMesh/" --xml-version=2 ${WORKSPACE} 2> CPPCheckRaport/cppcheck.xml'
 		}
 	    }
 	    stage('Deploy') {
