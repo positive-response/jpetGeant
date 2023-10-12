@@ -139,6 +139,9 @@ if(NOT TARGET Boost::filesystem)
         INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
 endif()
 
+include_directories(${Boost_INCLUDE_DIRS})
+add_definitions(${Boost_DEFINITIONS})
+link_directories(${Boost_LIBRARY_DIRS})
 ################################################################################
 ## Include ROOT
 find_package(ROOT REQUIRED)
