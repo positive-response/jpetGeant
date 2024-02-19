@@ -37,7 +37,7 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-#include <CADMesh.hh>
+#include </mnt/home/ptanty/geant/CADMesh.hh>
 
 namespace pt = boost::property_tree;
 
