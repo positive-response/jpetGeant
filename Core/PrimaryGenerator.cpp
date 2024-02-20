@@ -36,6 +36,52 @@ PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 
 PrimaryGenerator::~PrimaryGenerator() {}
 
+G4PrimaryVertex* PrimaryGenerator::GenerateFiveGammaVertex( 
+  DecayChannel channel, const G4ThreeVector vtxPosition, 
+  const G4double T0, const G4double lifetime5g
+) {
+
+  G4PrimaryVertex* vertex = new G4PrimaryVertex();
+  VtxInformation* info = new VtxInformation();
+
+  G4double lifetime = G4RandExponential::shoot(lifetime5g);
+  info->SetThreeGammaGen(true);
+  info->SetLifetime((T0 + lifetime));
+  info->SetVtxPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
+  vertex->SetUserInformation(info);
+  vertex->SetT0(T0 + lifetime);
+  vertex->SetPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
+
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* particleDefinition = particleTable->FindParticle("gamma");
+  Double_t mass_secondaries[5] = {0., 0., 0., 0., 0.};
+
+  TGenPhaseSpace event;
+  TLorentzVector positonium(0.0, 0.0, 0.0, 1022 * keV);
+  Bool_t test = event.SetDecay(positonium, 5, mass_secondaries);
+  if (!test) {
+    G4cout << "error: generate_gamma : createFiveEvts:" << test << G4endl;
+  }
+
+  event.Generate();
+  G4PrimaryParticle* particle[5];
+  for (int i = 0; i < 5; i++) {
+    TLorentzVector* out = event.GetDecay(i);
+    particle[i] = new G4PrimaryParticle(
+      particleDefinition, out->Px(), out->Py(), out->Pz(), out->E()
+    );
+    PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
+    infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
+    infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
+    infoParticle->SetIndex(i + 1);
+    infoParticle->SetGenMomentum(out->Px(), out->Py(), out->Pz());
+    particle[i]->SetUserInformation(infoParticle);
+    vertex->SetPrimary(particle[i]);
+  }
+  return vertex;
+}
+
+
 G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex( 
   DecayChannel channel, const G4ThreeVector vtxPosition, 
   const G4double T0, const G4double lifetime3g
@@ -95,6 +141,8 @@ G4PrimaryVertex* PrimaryGenerator::GenerateThreeGammaVertex(
   }
   return vertex;
 }
+
+
 
 G4PrimaryVertex* PrimaryGenerator::GenerateTwoGammaVertex(
   const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime2g
