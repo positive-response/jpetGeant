@@ -71,8 +71,7 @@ private:
   );
 
   G4PrimaryVertex* GenerateFiveGammaVertex(
-    DecayChannel channel, const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetime5g
-  );
+   const G4ThreeVector vtxPosition  );
 
   G4PrimaryVertex* GeneratePromptGammaVertex(
     const G4ThreeVector vtxPosition, const G4double T0, const G4double lifetimePrompt, const G4double energy

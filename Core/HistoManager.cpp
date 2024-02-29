@@ -348,6 +348,7 @@ void HistoManager::AddGenInfo(VtxInformation* info)
   bool isPrompt = info->GetPromptGammaGen();
   bool isCosmic = info->GetCosmicGammaGen();
 
+  
   if (is2g || is3g) {
     fGeantInfo->SetThreeGammaGen(is3g);
     fGeantInfo->SetTwoGammaGen(is2g);

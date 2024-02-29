@@ -32,6 +32,9 @@ MaterialExtensionMessenger::MaterialExtensionMessenger()
   fDirectory = new G4UIdirectory("/jpetmc/material/");
   fDirectory->SetGuidance("Commands for controling the geometry materials");
 
+  f5GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/fiveGammaOnly", this);
+  f5GammaOnly->SetGuidance("Only 5 gamma events will be generated (lifetime as for oPs)"); 
+
   f3GammaOnly = new G4UIcmdWithoutParameter("/jpetmc/material/threeGammaOnly", this);
   f3GammaOnly->SetGuidance("Only 3 gamma events will be generated (lifetime as for oPs)");
 

@@ -37,19 +37,15 @@ PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 PrimaryGenerator::~PrimaryGenerator() {}
 
 G4PrimaryVertex* PrimaryGenerator::GenerateFiveGammaVertex( 
-  DecayChannel channel, const G4ThreeVector vtxPosition, 
-  const G4double T0, const G4double lifetime5g
-) {
+const G4ThreeVector vtxPosition)
+ {
 
   G4PrimaryVertex* vertex = new G4PrimaryVertex();
   VtxInformation* info = new VtxInformation();
 
-  G4double lifetime = G4RandExponential::shoot(lifetime5g);
-  info->SetThreeGammaGen(true);
-  info->SetLifetime((T0 + lifetime));
+  info->SetFiveGammaGen(true);
   info->SetVtxPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
   vertex->SetUserInformation(info);
-  vertex->SetT0(T0 + lifetime);
   vertex->SetPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();

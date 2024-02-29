@@ -43,6 +43,7 @@ private:
   ~MaterialExtensionMessenger();
   G4UIdirectory* fDirectory = nullptr;
   MaterialExtension* fMaterial = nullptr;
+  G4UIcmdWithoutParameter* f5GammaOnly = nullptr;
   G4UIcmdWithoutParameter* f3GammaOnly = nullptr;
   G4UIcmdWithoutParameter* f3GammapPs = nullptr;
   G4UIcmdWithoutParameter* f2GammaOnly = nullptr;
