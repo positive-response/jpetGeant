@@ -42,6 +42,7 @@ public:
   static const G4int kPromptGamma = 1;
   static const G4int kBackToBackGamma = 2;
   static const G4int koPsGamma = 3;
+  static const G4int koPsFiveGamma = 5;
   static const G4int kScatteringInNonActivePartAddition = 10;
   static const G4int kSecondaryParticleMultiplication = 10;
   static const G4int kScatteringInActivePartAddition = 100;

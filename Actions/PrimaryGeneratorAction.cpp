@@ -66,9 +66,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
   if (GetSourceTypeInfo() == ("run")) {
     if (nRun == 3) {
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
-    } else if (nRun == 5) {
+    } else if (nRun == 5 || nRun == 7) {
       fPrimaryGenerator->GenerateEvtSmallChamber(event, fEffectivePositronRadius);
-    } else if (nRun == 6 || nRun == 7 || nRun == 12) {
+    } else if (nRun == 6 ||  nRun == 12) {
       fPrimaryGenerator->GenerateEvtLargeChamber(event);
     } else {
       G4Exception(

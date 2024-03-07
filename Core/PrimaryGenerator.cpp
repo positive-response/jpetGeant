@@ -37,15 +37,20 @@ PrimaryGenerator::PrimaryGenerator() : G4VPrimaryGenerator() {}
 PrimaryGenerator::~PrimaryGenerator() {}
 
 G4PrimaryVertex* PrimaryGenerator::GenerateFiveGammaVertex( 
-const G4ThreeVector vtxPosition)
+DecayChannel channel, const G4ThreeVector vtxPosition, 
+  const G4double T0, const G4double lifetime3g)
  {
 
+ // G4cout<<"five gamma method"<< G4endl;
   G4PrimaryVertex* vertex = new G4PrimaryVertex();
   VtxInformation* info = new VtxInformation();
 
+  G4double lifetime = G4RandExponential::shoot(lifetime3g);
   info->SetFiveGammaGen(true);
+  info->SetLifetime((T0 + lifetime));
   info->SetVtxPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
   vertex->SetUserInformation(info);
+  vertex->SetT0(T0 + lifetime);
   vertex->SetPosition(vtxPosition.x(), vtxPosition.y(), vtxPosition.z());
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -67,13 +72,14 @@ const G4ThreeVector vtxPosition)
       particleDefinition, out->Px(), out->Py(), out->Pz(), out->E()
     );
     PrimaryParticleInformation* infoParticle = new PrimaryParticleInformation();
-    infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
-    infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::koPsGamma);
+    infoParticle->SetGammaMultiplicity(PrimaryParticleInformation::koPsFiveGamma);
+    infoParticle->SetGeneratedGammaMultiplicity(PrimaryParticleInformation::koPsFiveGamma);
     infoParticle->SetIndex(i + 1);
     infoParticle->SetGenMomentum(out->Px(), out->Py(), out->Pz());
     particle[i]->SetUserInformation(infoParticle);
     vertex->SetPrimary(particle[i]);
   }
+
   return vertex;
 }
 
@@ -242,6 +248,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
+//  G4cout<<"Event fractions: "<<evtFractions[0]<<", "<<evtFractions[2]<<", "<<evtFractions[2]<<", "<<evtFractions[3]<<", "<<evtFractions[4]<<", "<<evtFractions[5]<<", "<<G4endl;
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
   if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {
@@ -282,11 +289,12 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
       fDecayChannel = DecayChannel::kDirect3G;
     } else {
       // oPs 3G
-      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      event->AddPrimaryVertex(GenerateFiveGammaVertex(
         DecayChannel::kOrtho3G, vtxPosition, T0,
         material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::kOrtho3G)
         ));
       fDecayChannel = DecayChannel::kOrtho3G;
+      G4cout<<"inside small chamber2"<<G4endl;
     } 
   }
 
@@ -356,6 +364,8 @@ void PrimaryGenerator::GenerateEvtLargeChamber(G4Event* event)
   );
   std::vector<G4double> evtFractions = material->GetEventsFraction();
   G4double random = G4UniformRand();
+
+//G4cout<<"Events are generated in large chamber" <<G4endl;
 
   //! for sodium: emitted positrons have up to 100~keV velocity
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
