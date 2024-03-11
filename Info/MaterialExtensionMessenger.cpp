@@ -78,8 +78,8 @@ MaterialExtensionMessenger::~MaterialExtensionMessenger()
 
 void MaterialExtensionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == f3GammaOnly) {
-    MaterialParameters::SetAnnihilationMode("oPs3G");
+  if (command == f5GammaOnly) {
+    MaterialParameters::SetAnnihilationMode("oPs5G");
   } else if (command == f3GammapPs) {
     MaterialParameters::SetAnnihilationMode("pPs3G");
   } else if (command == f2GammaOnly) {

@@ -347,9 +347,10 @@ void HistoManager::AddGenInfo(VtxInformation* info)
   bool is2g = info->GetTwoGammaGen();
   bool isPrompt = info->GetPromptGammaGen();
   bool isCosmic = info->GetCosmicGammaGen();
-
+  bool is5g = info->GetFiveGammaGen();
   
   if (is2g || is3g) {
+	  fGeantInfo->SetThreeGammaGen(is5g);
     fGeantInfo->SetThreeGammaGen(is3g);
     fGeantInfo->SetTwoGammaGen(is2g);
     fGeantInfo->SetVtxPosition(info->GetVtxPositionX() / cm, info->GetVtxPositionY() / cm, info->GetVtxPositionZ() / cm);

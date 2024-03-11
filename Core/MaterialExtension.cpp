@@ -119,9 +119,9 @@ std::vector<G4double> MaterialExtension::GetEventsFraction() const
       frac = {0., 0., 1., 0., 0., 0.};
     } else if(MaterialParameters::fAnnihlationMode == "pPs3G") {
       frac = {0., 0., 0., 1., 0., 0.};
-    } else if (MaterialParameters::fAnnihlationMode == "oPs3G") {
+    } else if (MaterialParameters::fAnnihlationMode == "oPs5G") {
       frac = {0., 0., 0., 0., 0., 1.};
-    } 
+	}
   } else {
     G4double pPs2G = fMaterialParameters->GetpPs2GTotalIntensity();
     G4double direct2g = fMaterialParameters->GetDirect2GTotalIntensity();

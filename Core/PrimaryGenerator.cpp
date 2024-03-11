@@ -248,7 +248,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
-//  G4cout<<"Event fractions: "<<evtFractions[0]<<", "<<evtFractions[2]<<", "<<evtFractions[2]<<", "<<evtFractions[3]<<", "<<evtFractions[4]<<", "<<evtFractions[5]<<", "<<G4endl;
+  G4cout<<"Event fractions: "<<evtFractions[0]<<", "<<evtFractions[2]<<", "<<evtFractions[2]<<", "<<evtFractions[3]<<", "<<evtFractions[4]<<", "<<evtFractions[5]<<", "<<G4endl;
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
   if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {
@@ -275,14 +275,14 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
       fDecayChannel = DecayChannel::kOrtho2G;
     } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] > random) {
       // pPs 3G
-      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      event->AddPrimaryVertex(GenerateFiveGammaVertex(
         DecayChannel::kPara3G, vtxPosition, T0,
         material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2], DecayChannel::kPara3G)
         ));
       fDecayChannel = DecayChannel::kPara3G;
     } else if (evtFractions[0] + evtFractions[1] + evtFractions[2] + evtFractions[3] + evtFractions[4] > random) {
       // Direct 3G
-      event->AddPrimaryVertex(GenerateThreeGammaVertex(
+      event->AddPrimaryVertex(GenerateFiveGammaVertex(
         DecayChannel::kDirect3G, vtxPosition, T0,
         material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3], DecayChannel::kDirect3G)
         ));
@@ -294,7 +294,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
         material->GetLifetime(random - evtFractions[0] - evtFractions[1] - evtFractions[2] - evtFractions[3] - evtFractions[4], DecayChannel::kOrtho3G)
         ));
       fDecayChannel = DecayChannel::kOrtho3G;
-      G4cout<<"inside small chamber2"<<G4endl;
+//      G4cout<<"inside small chamber2"<<G4endl;
     } 
   }
 
