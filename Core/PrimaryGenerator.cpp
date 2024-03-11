@@ -248,7 +248,7 @@ void PrimaryGenerator::GenerateEvtSmallChamber(
   //! therefore their speed v=sqrt(2*e/m) = 0.6c
   G4double T0 = (vtxPosition - chamberCenter).mag() / (0.6 * c_light);
 
-  G4cout<<"Event fractions: "<<evtFractions[0]<<", "<<evtFractions[2]<<", "<<evtFractions[2]<<", "<<evtFractions[3]<<", "<<evtFractions[4]<<", "<<evtFractions[5]<<", "<<G4endl;
+//  G4cout<<"Event fractions: "<<evtFractions[0]<<", "<<evtFractions[2]<<", "<<evtFractions[2]<<", "<<evtFractions[3]<<", "<<evtFractions[4]<<", "<<evtFractions[5]<<", "<<G4endl;
   G4double decayRandom = G4UniformRand();
   //Not all Na decays lead to the emission of positron
   if (decayRandom > MaterialParameters::fSodiumChanceEC + MaterialParameters::fSodiumChanceNoPrompt) {

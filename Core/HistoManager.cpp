@@ -154,7 +154,7 @@ void HistoManager::BookHistograms()
 {
   createHistogramWithAxes(
     new TH1D("gen_gamma_multiplicity", "Generated gammas multiplicity. Bin size: 1", 10, -0.5, 9.5),
-    "Gamma quanta multiplicity: 1=prompt; 2=2g; 3=3g", "Entries"
+    "Gamma quanta multiplicity: 1=prompt; 2=2g; 3=3g: 5=5g", "Entries"
   );
 
   createHistogramWithAxes(
@@ -349,8 +349,8 @@ void HistoManager::AddGenInfo(VtxInformation* info)
   bool isCosmic = info->GetCosmicGammaGen();
   bool is5g = info->GetFiveGammaGen();
   
-  if (is2g || is3g) {
-	  fGeantInfo->SetThreeGammaGen(is5g);
+  if (is2g || is3g || is5g) {
+	fGeantInfo->SetThreeGammaGen(is5g);
     fGeantInfo->SetThreeGammaGen(is3g);
     fGeantInfo->SetTwoGammaGen(is2g);
     fGeantInfo->SetVtxPosition(info->GetVtxPositionX() / cm, info->GetVtxPositionY() / cm, info->GetVtxPositionZ() / cm);
@@ -366,6 +366,11 @@ void HistoManager::AddGenInfo(VtxInformation* info)
         fillHistogram("gen_gamma_multiplicity", 3);
         fillHistogram("gen_gamma_multiplicity_vs_lifetime", 3, doubleCheck(info->GetLifetime() / ps));
       }
+	  if (is5g) {
+		  fillHistogram("gen_gamma_multiplicity", 5);
+		  fillHistogram("gen_gamma_multiplicity_vs_lifetime", 5, doubleCheck(info->GetLifetime() / ps));
+	  }
+
       fillHistogram("gen_lifetime", info->GetLifetime() / ps);
       fillHistogram("gen_XY", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionY() / cm));
       fillHistogram("gen_XZ", info->GetVtxPositionX() / cm, doubleCheck(info->GetVtxPositionZ() / cm));
