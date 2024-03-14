@@ -188,6 +188,8 @@ add_executable(jpet_mc JPetMC.cpp ${SOURCES})
 # needed to suppress warnings about ROOT's locals
 #  shadowing Geant4's global variables
 target_compile_options(jpet_mc PRIVATE -Wno-shadow)
+#target_compile_options(jpet_mc PRIVATE -Wall -fbounds-check)
+
 
 target_link_libraries(
   jpet_mc 
